@@ -24,7 +24,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
     {
         return DB::transaction(function () use ($row) {
             if ($row['nome_completo'] != null) {
-                $birth_date = $this->convertDate($row['data_de_nascimento']) ?? '';
+                $birth_date = $this->convertDate($row['data_de_nascimento']) ?? null;
                 $admission = $this->convertDate($row['admissao']);
                 $user = User::firstWhere('cpf', $row['cpf']);
 
@@ -36,10 +36,10 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
                         'occupation' => $row['cargo'],
                         'work_shift' => $row['turno'],
                         'admission' => $admission,
-                        'gender' => $row['sexo'] ?? '',
-                        'marital_status' => $row['estado_civil'] ?? '',
-                        'education_level' => $row['grau_de_instrucao'] ?? '',
-                        'email' => $row['email'] ?? '',
+                        'gender' => $row['sexo'] ?? null,
+                        'marital_status' => $row['estado_civil'] ?? null,
+                        'education_level' => $row['grau_de_instrucao'] ?? null,
+                        'email' => $row['email'] ?? null,
                     ]);
                 
                     $user->companies()->syncWithoutDetaching([

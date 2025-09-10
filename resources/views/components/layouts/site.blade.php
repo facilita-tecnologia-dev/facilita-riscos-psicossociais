@@ -6,8 +6,11 @@
         <title>{{ env('APP_NAME') ?? 'Facilita Riscos Psicossociais' }}</title>
     </head>
 
-    <body class="bg-cover background-gradient h-screen">
-
+    <body class="bg-main-background relative">
+        <livewire:components.site-header-component />
+        
         {{ $slot }}
+
+        <x-structure.site-footer />
     </body>
 </html>
