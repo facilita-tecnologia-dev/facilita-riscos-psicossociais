@@ -29,15 +29,13 @@ use App\Http\Controllers\Private\WelcomeController;
 use App\Http\Controllers\Public\PresentationController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\GuestMiddleware;
-use App\Mail\CampaignEmail;
-use App\Models\CustomControlAction;
-use App\Models\User;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-use Maatwebsite\Excel\Facades\Excel;
+
+Route::view('/', 'site.home.index')->name('site.home');
+Route::view('/privacy-policy', 'site.privacy-policy.index')->name('site.privacy-policy');
+Route::view('/terms-of-use', 'site.terms-of-use.index')->name('site.terms-of-use');
 
 Route::middleware(GuestMiddleware::class)->group(function () {
-    Route::get('/', [PresentationController::class, 'index'])->name('apresentacao');
 
     Route::get('/cadastro/empresa', [RegisterController::class, 'showCompanyRegister'])->name('auth.cadastro.empresa');
     Route::post('/cadastro/empresa', [RegisterController::class, 'attemptCompanyRegister']);
@@ -129,7 +127,6 @@ Route::middleware(AuthMiddleware::class)->group(function () {
 
         Route::get('clima-organizacional', OrganizationalMainController::class)->name('dashboard.organizational-climate');
         Route::post('clima-organizacional', [OrganizationalMainController::class, 'createPDFReport'])->name('dashboard.organizational-climate.report');
-
         Route::get('clima-organizacional/respostas', OrganizationalAnswersController::class)->name('dashboard.organizational-climate.by-answers');
         Route::get('clima-organizacional/respostas/pdf', [OrganizationalAnswersController::class, 'createPDFReport'])->name('dashboard.organizational-climate.by-answers.report');
 
@@ -139,7 +136,6 @@ Route::middleware(AuthMiddleware::class)->group(function () {
         Route::get('psicossocial', PsychosocialMainController::class)->name('dashboard.psychosocial');
         Route::get('psicossocial/riscos', PsychosocialRisksController::class)->name('dashboard.psychosocial.risks');
         Route::get('psicossocial/riscos/pdf', [PsychosocialRisksController::class, 'generatePDF'])->name('dashboard.psychosocial.risks.pdf');
-
         Route::get('psicossocial/{testName}/{riskName}/departamentos', PsychosocialResultsByDepartmentController::class)->name('dashboard.psychosocial.by-department');
         Route::get('psicossocial/{testName}/{riskName}/lista', PsychosocialResultsListController::class)->name('dashboard.psychosocial.list');
     });
