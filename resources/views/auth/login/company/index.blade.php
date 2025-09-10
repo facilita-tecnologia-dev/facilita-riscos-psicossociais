@@ -20,7 +20,7 @@
                     </x-form>
 
                     <div class="w-full flex justify-between gap-2">
-                        <a href="{{ route('apresentacao') }}" class="text-sm underline">Voltar para a Home</a>
+                        <a href="{{ route('site.home') }}" class="text-sm underline">Voltar para a Home</a>
                         <a href="{{ route('company.password.request') }}" class="text-sm underline">Esqueci minha senha</a>
                     </div>
                 </div>

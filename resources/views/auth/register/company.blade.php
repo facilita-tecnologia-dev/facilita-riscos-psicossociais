@@ -20,7 +20,7 @@
                         <x-action tag="button" type="submit" width="full" variant="secondary">Registrar</x-action>
                     </x-form>
 
-                    <a href="{{ route('apresentacao') }}" class="text-sm underline">Voltar para a Home</a>
+                    <a href="{{ route('site.home') }}" class="text-sm underline">Voltar para a Home</a>
                 </div>
             </div>
         </div>

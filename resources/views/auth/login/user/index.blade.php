@@ -1,5 +1,4 @@
 <x-layouts.app>
-
         <div class="flex h-full justify-center">
             <div class="w-full max-w-[600px] bg-gray-100 flex justify-center items-center px-4">
                 <div class="w-full max-w-[400px] flex flex-col items-center gap-8">
@@ -21,7 +20,7 @@
                     </x-form>
 
                     <div class="w-full flex justify-between gap-2">
-                        <a href="{{ route('apresentacao') }}" class="text-sm underline">Voltar para a Home</a>
+                        <a href="{{ route('site.home') }}" class="text-sm underline">Voltar para a Home</a>
                         <a href="{{ route('user.password.request') }}" class="text-sm underline">Esqueci minha senha</a>
                     </div>
                 </div>

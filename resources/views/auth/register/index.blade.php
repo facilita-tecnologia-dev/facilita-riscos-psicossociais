@@ -25,7 +25,7 @@
                         <x-action tag="button" type="submit">Registrar</x-action>
                     </x-form>
 
-                    <x-action href="{{ route('apresentacao') }}" variant="simple">Voltar para a Home</x-action>
+                    <x-action href="{{ route('site.home') }}" variant="simple">Voltar para a Home</x-action>
                 </div>
             </div>
         </div>
