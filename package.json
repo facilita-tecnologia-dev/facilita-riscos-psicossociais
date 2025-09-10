@@ -8,15 +8,17 @@
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.9",
-        "autoprefixer": "^10.4.21",
         "axios": "^1.7.4",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
-        "postcss": "^8.5.3",
-        "tailwindcss": "^3.4.17",
+        "tailwindcss": "^4.1.13",
         "vite": "^6.0.11"
     },
     "dependencies": {
-        "tailwind-scrollbar-hide": "^2.0.0"
+        "aos": "^2.3.4",
+        "swiper": "^11.2.10",
+        "tailwind-scrollbar-hide": "^2.0.0",
+        "tippy.js": "^6.3.7",
+        "typed.js": "^2.1.0"
     }
 }
