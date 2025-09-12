@@ -26,7 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
         `Gestão de Riscos <span class="text-primary-solid">segura</span>.`,
     ]);
 
-    heroSectionSlide();
+    heroSectionSwiper();
+    ourMetodolodySwiper();
 });
 
 function initializeAOS() {
@@ -102,12 +103,14 @@ function scrollToY(event, id, offset = 0) {
     });
 }
 
-function heroSectionSlide() {
-    const sliderContainer = document.querySelector(".swiper");
+function heroSectionSwiper() {
+    const sliderContainer = document.querySelector(".hero-section-swiper");
 
     if (sliderContainer) {
-        const videoPlayer = document.getElementById("video-canvas");
-        const slides = document.querySelectorAll(".swiper-slide");
+        const videoPlayer = document.getElementById(
+            "hero-section-video-canvas"
+        );
+        const slides = sliderContainer.querySelectorAll(".swiper-slide");
 
         const swiper = new Swiper(sliderContainer, {
             modules: [Navigation],
@@ -157,6 +160,18 @@ function heroSectionSlide() {
 
         window.addEventListener("resize", () => {
             swiper.allowTouchMove = window.innerWidth < 640;
+        });
+    }
+}
+
+function ourMetodolodySwiper() {
+    const sliderContainer = document.querySelector(".our-metodology-swiper");
+
+    if (sliderContainer) {
+        const swiper = new Swiper(sliderContainer, {
+            slidesPerView: "auto",
+            spaceBetween: 32,
+            allowTouchMove: true,
         });
     }
 }

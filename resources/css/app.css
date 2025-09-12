@@ -75,6 +75,18 @@
     --container-max-width: 1344px;
     --container-width: "100%";
     --container-margin: auto;
+
+    --animate-scroll-horizontal: scroll-horizontal 2s ease-in-out infinite;
+
+    @keyframes scroll-horizontal {
+        0%,
+        100% {
+            transform: translateX(0px);
+        }
+        50% {
+            transform: translateX(40px);
+        }
+    }
 }
 
 @layer utilities {

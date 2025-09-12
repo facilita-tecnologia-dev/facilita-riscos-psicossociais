@@ -2,9 +2,9 @@
     <h2 class="text-main-text font-heading text-center text-2xl font-semibold md:text-3xl lg:text-4xl" data-aos="zoom-in" data-aos-duration="400" data-aos-offset="150">Como funciona</h2>
 
     <ul class="flex flex-col items-center gap-4 md:gap-8">
-        @include('site.home.how-it-works.list-item.index', ['number' => '1', 'title' => 'Registro da denúncia', 'description' => 'Processo sigiloso, com apuração da denúncia escrita, anexos e respectivas respostas.'])
-        @include('site.home.how-it-works.list-item.index', ['number' => '2', 'title' => 'Definição de poderes', 'description' => 'Eleja o comitê de avaliação da sua empresa para conduzir o processo.'])
-        @include('site.home.how-it-works.list-item.index', ['number' => '3', 'title' => 'Processo de análise', 'description' => 'O comitê terá acesso às informações das denúncias, para poder conduzir a investigação.'])
-        @include('site.home.how-it-works.list-item.index', ['number' => '4', 'title' => 'Encerramento e resultados', 'description' => 'Solução de ocorrências com ética, transparência e conformidade.'])
+        @include('site.home.how-it-works.list-item.index', ['number' => '1', 'title' => 'Diagnóstico Inicial', 'description' => 'Aplicação do questionário de Riscos Psicossociais.'])
+        @include('site.home.how-it-works.list-item.index', ['number' => '2', 'title' => 'Análise Estruturada', 'description' => 'Classificação de riscos conforme normas e metodologias internacionais.'])
+        @include('site.home.how-it-works.list-item.index', ['number' => '3', 'title' => 'Plano de Prevenção', 'description' => 'Definição de medidas preventivas alinhadas ao PGR e diretrizes legais.'])
+        @include('site.home.how-it-works.list-item.index', ['number' => '4', 'title' => 'Monitoramento Contínuo', 'description' => 'Acompanhamento de resultados com relatórios periódicos e auditorias.'])
     </ul>
 </section>

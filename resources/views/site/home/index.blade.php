@@ -7,5 +7,7 @@
         @include('site.home.system-resources.index')
 
         @include('site.home.why-choose-us.index')
+
+        @include('site.home.our-metodology.index')
     </main>
 </x-layouts.site>
