@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div class="flex h-[200px] gap-2 sm:h-[230px] md:h-[245px]">
+        <div class="flex h-[160px] gap-2 sm:h-[210px] md:h-[245px]">
             <button class="custom-prev bg-main-background border-borders hidden w-[45px] cursor-pointer items-center justify-center rounded-lg border-3 shadow-sm transition hover:scale-[102%] sm:flex">
                 <x-icon icon="double-chevron-left" class="text-secondary-text h-6 w-6 object-scale-down" />
             </button>
