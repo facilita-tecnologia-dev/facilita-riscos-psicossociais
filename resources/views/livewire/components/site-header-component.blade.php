@@ -50,7 +50,7 @@
             <nav class="flex w-full flex-col items-start gap-4">
                 <x-nav-item label="Início" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'hero-section\')' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" @click="isMenuMobileOpen = false" />
                 <x-nav-item label="Como funciona" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'how-it-works\', 90)' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" @click="isMenuMobileOpen = false" />
-                <x-nav-item label="Recursos" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'system-resources\', 90)' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" @click="isMenuMobileOpen = false" />
+                <x-nav-item label="Nossa metodologia" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'our-metodology\', 90)' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" @click="isMenuMobileOpen = false" />
             </nav>
 
             <div class="w-full space-y-4">
