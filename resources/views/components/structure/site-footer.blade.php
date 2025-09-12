@@ -12,13 +12,13 @@
                 </nav>
             </div>
 
-            <div class="space-y-6 sm:space-y-7 md:space-y-8">
+            {{-- <div class="space-y-6 sm:space-y-7 md:space-y-8">
                 <h3 class="text-main-text font-heading text-left text-lg font-semibold">Termos e Política</h3>
                 <nav class="space-y-4 sm:space-y-5 md:space-y-6">
                     <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ route('site.privacy-policy') }}">Política de Privacidade</a>
                     <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ route('site.terms-of-use') }}">Termos de uso</a>
                 </nav>
-            </div>
+            </div> --}}
 
             <div class="space-y-6 sm:space-y-7 md:space-y-8">
                 <h3 class="text-main-text font-heading text-left text-lg font-semibold">Contato</h3>
