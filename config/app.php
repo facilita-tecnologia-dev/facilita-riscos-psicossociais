@@ -123,4 +123,14 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'facilita-contact-email' => env('FACILITA_CONTACT_EMAIL'),
+    
+    'facilita-contact-landline' => env('FACILITA_CONTACT_LANDLINE'),
+    
+    'facilita-whatsapp-phone-1' => env('FACILITA_WHATSAPP_PHONE_1'),
+    'facilita-whatsapp-phone-1-url' => env('FACILITA_WHATSAPP_PHONE_1_URL'),
+
+    'facilita-whatsapp-phone-2' => env('FACILITA_WHATSAPP_PHONE_2'),
+    'facilita-whatsapp-phone-2-url' => env('FACILITA_WHATSAPP_PHONE_2_URL'),
+
 ];

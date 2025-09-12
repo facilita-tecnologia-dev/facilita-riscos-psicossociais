@@ -43,7 +43,7 @@
                 <x-icon icon="double-chevron-left" class="text-secondary-text h-6 w-6 object-scale-down" />
             </button>
             <div class="border-borders w-[340px] flex-1 cursor-help overflow-hidden rounded-xl border-3 transition hover:scale-[102%] sm:w-[450px] md:w-[530px]">
-                <video id="hero-section-video-canvas" src="{{ asset('assets/site/realizando-denuncia.mp4') }}" class="h-full w-full object-cover" autoplay></video>
+                <video id="hero-section-video-canvas" src="{{ asset('assets/site/respondendo-testes.mp4') }}" class="h-full w-full object-cover" autoplay></video>
             </div>
             <button class="custom-next bg-main-background border-borders hidden w-[45px] cursor-pointer items-center justify-center rounded-lg border-3 shadow-sm transition hover:scale-[102%] sm:flex">
                 <x-icon icon="double-chevron-right" class="text-secondary-text h-6 w-6 object-scale-down" />

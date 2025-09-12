@@ -23,10 +23,10 @@
             <div class="space-y-6 sm:space-y-7 md:space-y-8">
                 <h3 class="text-main-text font-heading text-left text-lg font-semibold">Contato</h3>
                 <nav class="space-y-4 sm:space-y-5 md:space-y-6">
-                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="mailto:{{ env('FACILITA_CONTACT_EMAIL') }}">{{ env('FACILITA_CONTACT_EMAIL') }}</a>
-                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition">{{ env('FACILITA_CONTACT_LANDLINE') }}</a>
-                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ env('FACILITA_WHATSAPP_PHONE_1_URL') }}">{{ env('FACILITA_WHATSAPP_PHONE_1') }}</a>
-                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ env('FACILITA_WHATSAPP_PHONE_2_URL') }}">{{ env('FACILITA_WHATSAPP_PHONE_2') }}</a>
+                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="mailto:{{ config('app.facilita-contact-email') }}">{{ config('app.facilita-contact-email') }}</a>
+                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition">{{ config('app.facilita-contact-landline') }}</a>
+                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ config('app.facilita-whatsapp-phone-1-url') }}">{{ config('app.facilita-whatsapp-phone-1') }}</a>
+                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ config('app.facilita-whatsapp-phone-2-url') }}">{{ config('app.facilita-whatsapp-phone-2') }}</a>
                 </nav>
             </div>
         </div>
