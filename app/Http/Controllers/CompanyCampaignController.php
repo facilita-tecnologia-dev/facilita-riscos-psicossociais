@@ -123,7 +123,7 @@ class CompanyCampaignController
         $usersWithEmail->each(function($user) use($campaign) {
             Mail::to($user->email)->queue(new CampaignEmail($user, session('company'), $campaign));
         });
-        
+
         return back()->with('message', 'Notificações disparadas com sucesso!');
     }
 
