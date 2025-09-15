@@ -46,11 +46,4 @@ class UserAnswer extends Model
         return $this->belongsTo(Option::class, 'question_option_id');
     }
 
-    public function scopeWithRelatedOptionValue(Builder $query): Builder
-    {
-        return $query->addSelect(['related_option_value' => Option::select('value')
-            ->whereColumn('id', 'user_answers.question_option_id')
-            ->take(1),
-        ]);
-    }
 }

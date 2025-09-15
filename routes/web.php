@@ -96,7 +96,11 @@ Route::middleware(AuthMiddleware::class)->group(function () {
 
     Route::resource('company', CompanyController::class);
     Route::resource('user', UserController::class);
-
+    Route::post('/user/trocar-empresa', [LoginController::class, 'switchCompanyLogin'])->name('user.switch-company');
+    Route::get('/user/{user}/permissoes', [UserController::class, 'showPermissions'])->name('user.permissions');
+    Route::post('/user/{user}/permissoes', [UserController::class, 'updatePermissions']);
+    Route::get('/user/{user}/visao-de-setores', [UserController::class, 'showDepartmentScope'])->name('user.department-scope');
+    Route::post('/user/{user}/visao-de-setores', [UserController::class, 'updateDepartmentScopes']);
 
     Route::prefix('/campanhas')->group(function(){
         Route::get('/', [CompanyCampaignController::class, 'index'])->name('campaign.index');
@@ -109,14 +113,6 @@ Route::middleware(AuthMiddleware::class)->group(function () {
         Route::put('{campaign}/editar', [CompanyCampaignController::class, 'update'])->name('campaign.update');
         Route::put('{campaign}/excluir', [CompanyCampaignController::class, 'destroy'])->name('campaign.destroy');
     });
-
-    Route::post('/user/trocar-empresa', [LoginController::class, 'switchCompanyLogin'])->name('user.switch-company');
-
-    Route::get('/user/{user}/permissoes', [UserController::class, 'showPermissions'])->name('user.permissions');
-    Route::post('/user/{user}/permissoes', [UserController::class, 'updatePermissions']);
-
-    Route::get('/user/{user}/visao-de-setores', [UserController::class, 'showDepartmentScope'])->name('user.department-scope');
-    Route::post('/user/{user}/visao-de-setores', [UserController::class, 'updateDepartmentScopes']);
 
     Route::get('/indicadores', CompanyMetricsController::class)->name('company-metrics');
     Route::post('/indicadores', [CompanyMetricsController::class, 'storeMetrics']);

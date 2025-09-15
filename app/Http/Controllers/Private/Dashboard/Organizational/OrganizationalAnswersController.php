@@ -82,7 +82,7 @@ class OrganizationalAnswersController
                             $q->where('display_name', $justTest);
                         });
                     })
-                    ->with('answers', 'testType');
+                    ->with('answers.parentQuestion', 'testType');
                 }]);
             }])
             ->get();

@@ -3,7 +3,7 @@
         <x-structure.sidebar />
         
         <x-structure.main-content-container class="items-center">
-            <x-structure.page-title title="{{ $collection->key_name == 'psychosocial-risks' ? 'Etapa - '.$testIndex : $test->display_name }}" centered />
+            <x-structure.page-title title="{{ $collection->collectionType->key_name == 'psychosocial-risks' ? 'Etapa - '.$testIndex : $test->display_name }}" centered />
 
             <div class="w-full flex flex-col items-center gap-8">
                 <div class="flex flex-col gap-3 w-full max-w-[550px] max-h-full">
@@ -26,11 +26,18 @@
                                     </p>
                                 </div>
 
-                                @foreach ($question['options']->sortByDesc('value') as $optionNumber => $option)
+
+                                @php
+                                    $options = $collection->collectionType->key_name == 'psychosocial-risks' 
+                                                ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PsychosocialQuestionOptionsEnum::cases())
+                                                : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\OrganizationalQuestionOptionsEnum::cases());
+                                @endphp
+
+                                @foreach ($options as $option)
                                     <x-test.option 
                                         :option="$option" 
-                                        name="{{  $question->id }}" 
-                                        id="{{ 'question_' . $question->id . '_' . $option->id }}"
+                                        name="{{  $question['id'] }}" 
+                                        id="{{ 'question_' . $question['id'] . '_' . $option['value'] }}"
                                         :pendingAnswer="$pendingAnswer" 
                                     />
                                 @endforeach
@@ -40,6 +47,7 @@
                                 @enderror
                             </div>
                         @endforeach
+
                         <div class="w-full flex items-center justify-between">
                             <div class="{{ $testIndex == 1 ? 'pointer-events-none opacity-50' : '' }}">
                                 <x-action href="{{ route('responder-teste', [$collection, $testIndex - 1]) }}" variant="primary">

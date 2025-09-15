@@ -20,7 +20,7 @@
         <i class="fa-solid fa-check"></i>
     </div>
 
-    {{ $option['content'] }}
+    {{ $option['label'] }}
 </label>
 
 

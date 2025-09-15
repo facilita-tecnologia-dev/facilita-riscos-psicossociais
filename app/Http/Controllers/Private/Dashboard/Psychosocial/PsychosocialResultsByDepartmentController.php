@@ -67,7 +67,6 @@ class PsychosocialResultsByDepartmentController
                         });
                     })
                     ->withAvg(['answers as average_value'], 'value')
-                    ->withAnswers()
                     ->with(['parentCollection.userOwner']);
                 })
             ->first();
