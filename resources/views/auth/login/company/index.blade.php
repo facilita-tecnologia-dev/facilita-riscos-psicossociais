@@ -7,7 +7,7 @@
 
                     <div class="flex flex-col gap-4 items-center">
                         <h1 class="text-4xl md:text-5xl font-semibold text-center text-gray-800">Login</h1>
-                        <x-structure.text-content>Faça login com a conta da sua empresa no Facilita Saúde Mental</x-structure.text-content>
+                        <x-structure.text-content>Faça login com a conta da sua empresa no Facilita Riscos Psicossociais</x-structure.text-content>
                     </div>
 
                     <x-form action="{{ route('auth.login.empresa') }}" class="w-full flex flex-col gap-3 items-center" post>

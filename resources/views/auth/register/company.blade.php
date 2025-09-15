@@ -7,7 +7,7 @@
                         <div class="flex flex-col gap-2 items-center">
                             <h1 class="text-3xl md:text-4xl font-semibold text-center text-gray-800">Registre-se</h1>
                         </div>
-                        <x-structure.text-content>Registre sua empresa no Facilita Saúde Mental</x-structure.text-content>
+                        <x-structure.text-content>Registre sua empresa no Facilita Riscos Psicossociais</x-structure.text-content>
                     </div>
                     
                     <x-form action="{{ route('auth.cadastro.empresa') }}" class="w-full flex flex-col gap-3 items-center" post>

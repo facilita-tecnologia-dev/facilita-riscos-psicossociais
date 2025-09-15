@@ -64,7 +64,7 @@
         <div class="content">
             <p>Olá,</p>
 
-            <p>Recebemos uma solicitação de redefinição de senha no <strong>Facilita Saúde Mental</strong>.</p>
+            <p>Recebemos uma solicitação de redefinição de senha no <strong>Facilita Riscos Psicossociais</strong>.</p>
             <p>Clique no link abaixo para acessar a página de redefinição de senha</p>
 
             <a href="{{ $url }}"

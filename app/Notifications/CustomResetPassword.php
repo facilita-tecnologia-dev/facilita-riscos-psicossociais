@@ -37,11 +37,6 @@ class CustomResetPassword extends Notification
 
         return (new MailMessage)
             ->subject('Recupere sua senha')
-            // ->greeting('Olá!')
-            // ->line('Você está recebendo este e-mail porque recebemos uma solicitação de redefinição de senha para sua conta.')
-            // ->action('Redefinir Senha', $url)
-            // ->line('Se você não solicitou uma redefinição de senha, nenhuma ação adicional é necessária.')
-            // ->salutation('Atenciosamente, Facilita Saúde Mental');
             ->view('emails.forgot-password', [
                 'url' => $url,
                 'user' => $notifiable,
