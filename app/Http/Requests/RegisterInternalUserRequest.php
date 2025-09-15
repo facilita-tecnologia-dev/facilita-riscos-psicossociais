@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\validateCPF;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterInternalUserRequest extends FormRequest
@@ -24,7 +23,7 @@ class RegisterInternalUserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:6', 'max:255'],
-            'cpf' => ['required', 'string', 'unique:users', new validateCPF],
+            'cpf' => ['required', 'string', 'unique:users', 'cpf'],
         ];
     }
 }

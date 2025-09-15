@@ -4,20 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helpers\AuthGuardHelper;
 use App\Helpers\SessionErrorHelper;
-use App\Http\Requests\LoginExternalRequest;
-use App\Http\Requests\LoginInternalRequest;
 use App\Models\Company;
 use App\Models\User;
-use App\Rules\validateCNPJ;
-use App\Rules\validateCPF;
-use App\Services\LoginRedirectService;
 use App\Services\AuthService;
 use App\Services\CompanyService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\ViewErrorBag;
 
 class LoginController
 {
@@ -31,7 +22,7 @@ class LoginController
     public function attemptInternalUserLogin(Request $request)
     {
         $validatedData = $request->validate([
-            'cpf' => ['required', 'string', new validateCPF],
+            'cpf' => ['required', 'string', 'cpf'],
         ]);
         
         $user = User::firstWhere('cpf', $validatedData['cpf']);
@@ -49,7 +40,7 @@ class LoginController
     public function attemptCompanyLogin(Request $request)
     {
         $validatedData = $request->validate([
-            'cnpj' => ['required', 'string', new validateCNPJ],
+            'cnpj' => ['required', 'string', 'cnpj'],
             'password' => ['required'],
         ]);
 

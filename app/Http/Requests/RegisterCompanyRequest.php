@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\validateCNPJ;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
@@ -25,7 +24,7 @@ class RegisterCompanyRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:6', 'max:255'],
-            'cnpj' => ['required', 'string', 'unique:companies', new validateCNPJ],
+            'cnpj' => ['required', 'string', 'unique:companies', 'cnpj'],
             'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
         ];

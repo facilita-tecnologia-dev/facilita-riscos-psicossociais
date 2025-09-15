@@ -5,10 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\EmployeeStatusEnum;
 use App\Enums\GenderEnum;
 use App\Enums\InternalUserRoleEnum;
-use App\Rules\validateCPF;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class UserUpdateRequest extends FormRequest
@@ -31,7 +28,7 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:5|max:255',
-            'cpf' => ['required', 'string', new validateCPF],
+            'cpf' => ['required', 'string', 'cpf'],
             'email' => ['nullable', 'email'],
             'birth_date' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()->subYears(16)), Rule::date()->after(today()->subCenturies(1))],
             'gender' => ['nullable', 'string', Rule::enum(GenderEnum::class)],

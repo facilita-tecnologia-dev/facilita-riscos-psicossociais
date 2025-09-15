@@ -4,13 +4,8 @@ namespace App\Http\Requests;
 
 use App\Enums\GenderEnum;
 use App\Enums\InternalUserRoleEnum;
-use App\Models\User;
-use App\Rules\validateCPF;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Validator;
 
 class UserStoreRequest extends FormRequest
 {
@@ -32,7 +27,7 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:5|max:255',
-            'cpf' => ['required', 'string', new validateCPF],
+            'cpf' => ['required', 'string', 'cpf'],
             'email' => ['required', 'email'],
             'birth_date' => ['required', 'date', Rule::date()->beforeOrEqual(today()->subYears(16)), Rule::date()->after(today()->subCenturies(1))],
             'gender' => ['required', 'string', Rule::enum(GenderEnum::class)],
