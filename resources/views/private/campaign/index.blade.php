@@ -15,6 +15,11 @@
                     <i class="fa-solid fa-circle-info"></i>
                     {{ session('message') }}
                 </x-structure.message>
+            @elseif(session('company')->getActiveCampaigns()->contains('collection_id', 1))
+                <x-structure.message>
+                    <i class="fa-solid fa-circle-info"></i>
+                    O Plano de Ação só poderá ser acessado e editado após a finalização da campanha de Riscos Psicossociais.
+                </x-structure.message>
             @endif
             
             @can('campaign-create')
