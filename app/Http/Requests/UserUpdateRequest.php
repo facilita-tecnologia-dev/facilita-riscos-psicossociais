@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\EmployeeStatusEnum;
 use App\Enums\GenderEnum;
 use App\Enums\InternalUserRoleEnum;
+use App\Rules\validateCPF;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,16 +28,16 @@ class UserUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:5|max:255',
-            'cpf' => ['required', 'string', 'cpf'],
+            'name' => ['required', 'string', 'min:5', 'max:255'],
+            'cpf' => ['required', 'string', new validateCPF],
             'email' => ['nullable', 'email'],
             'birth_date' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()->subYears(16)), Rule::date()->after(today()->subCenturies(1))],
             'gender' => ['nullable', 'string', Rule::enum(GenderEnum::class)],
-            'marital_status' => 'nullable|string|max:255',
-            'education_level' => 'nullable|string|max:255',
-            'department' => 'required|string|max:255',
-            'occupation' => 'required|string|max:255',
-            'work_shift' => 'required|string|max:255',
+            'marital_status' => ['nullable', 'string', 'max:255'],
+            'education_level' => ['nullable', 'string', 'max:255'],
+            'department' => ['required', 'string', 'max:255'],
+            'occupation' => ['required', 'string', 'max:255'],
+            'work_shift' => ['required', 'string', 'max:255'],
             'admission' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()), Rule::date()->after(today()->subCenturies(1))],
             'role' => ['required', 'string', Rule::enum(InternalUserRoleEnum::class)],
             'status' => ['required', 'string', Rule::enum(EmployeeStatusEnum::class)],

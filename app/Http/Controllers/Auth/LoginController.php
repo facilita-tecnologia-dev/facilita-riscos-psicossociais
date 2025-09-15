@@ -6,6 +6,7 @@ use App\Helpers\AuthGuardHelper;
 use App\Helpers\SessionErrorHelper;
 use App\Models\Company;
 use App\Models\User;
+use App\Rules\validateCNPJ;
 use App\Services\AuthService;
 use App\Services\CompanyService;
 use Illuminate\Http\Request;
@@ -40,7 +41,7 @@ class LoginController
     public function attemptCompanyLogin(Request $request)
     {
         $validatedData = $request->validate([
-            'cnpj' => ['required', 'string', 'cnpj'],
+            'cnpj' => ['required', 'string', new validateCNPJ],
             'password' => ['required'],
         ]);
 

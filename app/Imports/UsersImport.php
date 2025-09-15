@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\User;
+use App\Rules\validateCPF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -24,6 +25,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
     {
         return DB::transaction(function () use ($row) {
             if ($row['nome_completo'] != null) {
+                
                 $birth_date = $this->convertDate($row['data_de_nascimento']) ?? null;
                 $admission = $this->convertDate($row['admissao']);
                 $user = User::firstWhere('cpf', $row['cpf']);
@@ -79,17 +81,17 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
     public function rules(): array
     {
         return [
-            'nome_completo' => ['required'],
+            'nome_completo' => ['required', 'string', 'min:5', 'max:255'],
+            'cpf' => ['required', 'string', new validateCPF],
+            'email' => ['nullable', 'email'],
             'data_de_nascimento' => ['nullable'],
-            'cpf' => ['required'],
-            'setor' => ['required'],
-            'cargo' => ['required'],
-            'turno' => ['required'],
+            'setor' => ['required', 'string' ,'max:255'],
+            'cargo' => ['required', 'string' ,'max:255'],
+            'turno' => ['required', 'string' ,'max:255'],
             'admissao' => ['required'],
-            'sexo' => ['nullable'],
-            'estado_civil' => ['nullable'],
-            'grau_de_instrucao' => ['nullable'],
-            'email' => ['nullable'],
+            'sexo' => ['nullable', 'string'],
+            'estado_civil' => ['nullable', 'string', 'max:255'],
+            'grau_de_instrucao' => ['nullable', 'string', 'max:255'],
         ];
     }
 

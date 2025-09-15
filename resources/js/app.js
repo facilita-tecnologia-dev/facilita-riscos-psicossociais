@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeTogglePasswordVisibilityButtons();
     initializeLogoutModal();
     initializeFilterModals();
-    initializePasswordSteps();
     watchCNPJInputsToLiveFormat();
     watchCPFInputsToLiveFormat();
 
     window.scrollToY = scrollToY;
+    window.checkPasswordSteps = checkPasswordSteps;
 
     // Site
     animateString("animated-title", [
@@ -182,7 +182,7 @@ function initializeLogoutModal() {
     }
 }
 
-function initializePasswordSteps(event) {
+function checkPasswordSteps(event) {
     const password = event?.currentTarget.value;
 
     if (password) {
@@ -207,16 +207,17 @@ function initializePasswordSteps(event) {
     function updatePasswordRequirement(requirementId, satisfied) {
         const requirement = document.getElementById(requirementId);
 
+        console.log(requirementId, satisfied);
         const requirementBar = requirement.querySelector(".requirement-bar");
         const iconChecked = requirement.querySelector(".checked-icon");
         const iconUnchecked = requirement.querySelector(".unchecked-icon");
 
         if (satisfied) {
-            requirementBar.classList.replace("bg-red-500", "bg-green-500");
+            requirementBar.classList.replace("bg-danger", "bg-success");
             iconUnchecked.classList.replace("block", "hidden");
             iconChecked.classList.replace("hidden", "block");
         } else {
-            requirementBar.classList.replace("bg-green-500", "bg-red-500");
+            requirementBar.classList.replace("bg-success", "bg-danger");
             iconChecked.classList.replace("block", "hidden");
             iconUnchecked.classList.replace("hidden", "block");
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Private;
 use App\Enums\EmployeeStatusEnum;
 use App\Enums\GenderEnum;
 use App\Enums\InternalUserRoleEnum;
+use App\Helpers\AuthGuardHelper;
 use App\Helpers\SessionErrorHelper;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -16,6 +17,7 @@ use App\Models\User;
 use App\Models\UserCustomPermission;
 use App\Models\UserDepartmentPermission;
 use App\Repositories\UserRepository;
+use App\Rules\validateCPF;
 use App\Services\User\UserElegibilityService;
 use App\Services\User\UserFilterService;
 use Illuminate\Auth\Events\PasswordReset;
@@ -383,7 +385,7 @@ class UserController
     {
         Gate::authorize('user-create');
         $validatedData = $request->validate([
-            'cpf' => ['required', 'string', 'cpf'],
+            'cpf' => ['required', 'string', new validateCPF],
         ]);
 
         $user = User::firstWhere('cpf', $validatedData['cpf']);
