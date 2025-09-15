@@ -56,6 +56,6 @@
         </x-structure.main-content-container> 
     </x-structure.page-container>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
     <script src="{{ asset('js/dashboard/organizational/organizational-answers.js') }}"></script>
 </x-layouts.app>

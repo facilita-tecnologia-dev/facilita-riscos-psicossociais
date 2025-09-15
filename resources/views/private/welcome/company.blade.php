@@ -14,7 +14,7 @@
                     @if($currentStep == 1)
                         <div class="w-full max-w-[450px] flex flex-col items-center p-6 gap-6 bg-gray-100 rounded-md shadow-md">
                             <div class="w-full grid grid-cols-5 gap-1.5">
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
@@ -33,8 +33,8 @@
                     @if($currentStep == 2)
                         <div class="w-full max-w-[450px] flex flex-col items-center p-6 gap-6 bg-gray-100 rounded-md shadow-md">
                             <div class="w-full grid grid-cols-5 gap-1.5">
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
@@ -56,9 +56,9 @@
                     @if($currentStep == 3)
                         <div class="w-full max-w-[450px] flex flex-col items-center p-6 gap-6 bg-gray-100 rounded-md shadow-md">
                             <div class="w-full grid grid-cols-5 gap-1.5">
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
                             </div>
@@ -75,10 +75,10 @@
                     @if($currentStep == 4)
                         <div class="w-full max-w-[450px] flex flex-col items-center p-6 gap-6 bg-gray-100 rounded-md shadow-md">
                             <div class="w-full grid grid-cols-5 gap-1.5">
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
                                 <div class="rounded-md h-1.5 bg-gray-400"></div>
                             </div>
 
@@ -94,11 +94,11 @@
                     @if($currentStep == 5)
                         <div class="w-full max-w-[450px] flex flex-col items-center p-6 gap-6 bg-gray-100 rounded-md shadow-md">
                             <div class="w-full grid grid-cols-5 gap-1.5">
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
-                                <div class="rounded-md h-1.5 bg-green-500"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
+                                <div class="rounded-md h-1.5 bg-success"></div>
                             </div>
 
                             <h2 class="text-sm md:text-base flex items-center gap-3">
@@ -190,6 +190,6 @@
         </x-structure.main-content-container>   
     </x-structure.page-container>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
     <script src="{{ asset('js/company/welcome.js') }}"></script>
 </x-layouts.app>

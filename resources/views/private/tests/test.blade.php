@@ -62,6 +62,6 @@
         @endif
     </x-structure.page-container>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
     <script src="{{ asset('js/test.js') }}"></script>
 </x-layouts.app>

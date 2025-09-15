@@ -27,5 +27,5 @@
 
 </x-layouts.app>
 
-<script src="{{ asset('js/global.js') }}"></script>
+
 <script src="{{ asset('js/auth/login/reset-password.js') }}"></script>

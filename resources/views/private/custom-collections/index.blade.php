@@ -42,7 +42,7 @@
                                     <span class="text-xs bg-sky-300 rounded-md p-1 ml-3">Padrão</span>
                                 @endif
                                 @if(session('company')->getActiveCampaigns()->where('collection_id', $collection->id)->isNotEmpty())
-                                    <span class="text-xs bg-green-300 rounded-md p-1 ml-3">Campanha ativa</span>
+                                    <span class="text-xs bg-success rounded-md p-1 ml-3">Campanha ativa</span>
                                 @endif
                             </x-table.body.td>
                             <x-table.body.td class="flex-1">
@@ -64,5 +64,5 @@
         </x-structure.main-content-container>   
     </x-structure.page-container>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
 </x-layouts.app>

@@ -109,6 +109,6 @@
         </x-structure.main-content-container>   
     </x-structure.page-container>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
     <script src="{{ asset('js/control-actions/update.js') }}"></script>
 </x-layouts.app>

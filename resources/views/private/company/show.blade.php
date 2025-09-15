@@ -90,7 +90,7 @@
     </x-structure.page-container>
 
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
     <script src="{{ asset('js/company/show.js') }}"></script>
     <script src="{{ asset('js/reset-password.js') }}"></script>
 </x-layouts.app>

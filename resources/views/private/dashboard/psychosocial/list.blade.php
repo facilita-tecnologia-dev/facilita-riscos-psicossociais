@@ -76,6 +76,6 @@
         </x-structure.main-content-container>
     </x-structure.page-container>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
     <script src="{{ asset('js/test-results-list.js') }}"></script>
 </x-layouts.app>

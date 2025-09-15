@@ -26,4 +26,3 @@
 </x-layouts.app>
 
 
-<script src="{{ asset('js/global.js') }}"></script>

@@ -129,6 +129,6 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
     <script src="{{ asset('js/user/index.js') }}"></script>
 </x-layouts.app>

@@ -32,7 +32,7 @@
                             @endphp
 
                             @if($hasCompatibleCollection)
-                                <p class="p-2 bg-green-300/30 border border-green-300 text-green-800 rounded-md text-sm sm:text-base">
+                                <p class="p-2 bg-success/30 border border-green-300 text-green-800 rounded-md text-sm sm:text-base">
                                     Respondido
                                 </p>
                             @else
@@ -59,5 +59,5 @@
         </x-structure.main-content-container>   
     </x-structure.page-container>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
 </x-layouts.app>

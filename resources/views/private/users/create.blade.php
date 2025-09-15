@@ -65,7 +65,7 @@
         </x-structure.main-content-container>   
     </x-structure.page-container>
 
-    <script src="{{ asset('js/global.js') }}"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const checkBtn = document.getElementById('check-cpf');

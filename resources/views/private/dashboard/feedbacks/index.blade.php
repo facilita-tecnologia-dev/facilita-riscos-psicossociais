@@ -76,5 +76,5 @@
 </x-layouts.app>
 
 
-<script src="{{ asset('js/global.js') }}"></script>
+
 <script src="{{ asset('js/dashboard/feedbacks/index.js') }}"></script>
