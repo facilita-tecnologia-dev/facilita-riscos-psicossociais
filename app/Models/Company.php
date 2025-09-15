@@ -59,6 +59,11 @@ class Company extends Authenticatable
         return $this->hasMany(CustomCollection::class);
     }
 
+    public function userCollections(): HasMany
+    {
+        return $this->hasMany(UserCollection::class);
+    }
+
     /* --- End Relations --- */
 
     public function getActiveCampaigns() : Collection

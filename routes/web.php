@@ -104,13 +104,12 @@ Route::middleware(AuthMiddleware::class)->group(function () {
         Route::post('criar', [CompanyCampaignController::class, 'store'])->name('campaign.store');
         Route::get('{campaign}', [CompanyCampaignController::class, 'show'])->name('campaign.show');
         Route::post('{campaign}/notificar', [CompanyCampaignController::class, 'dispatchNotifications'])->name('campaign.dispatch-emails');
+        Route::put('{campaign}/finalizar', [CompanyCampaignController::class, 'close'])->name('campaign.close');
         Route::get('{campaign}/editar', [CompanyCampaignController::class, 'edit'])->name('campaign.edit');
         Route::put('{campaign}/editar', [CompanyCampaignController::class, 'update'])->name('campaign.update');
         Route::put('{campaign}/excluir', [CompanyCampaignController::class, 'destroy'])->name('campaign.destroy');
     });
 
-    // Route::resource('campaign', CompanyCampaignController::class);
-    
     Route::post('/user/trocar-empresa', [LoginController::class, 'switchCompanyLogin'])->name('user.switch-company');
 
     Route::get('/user/{user}/permissoes', [UserController::class, 'showPermissions'])->name('user.permissions');

@@ -29,7 +29,6 @@ class CompanyCampaignController
         Gate::authorize('campaign-index');
         $companyCampaigns = Company::firstWhere('id', session('company')->id)->campaigns()->with('collection')->paginate(15);
 
-
         return view('private.campaign.index', compact('companyCampaigns'));
     }
 
@@ -51,9 +50,7 @@ class CompanyCampaignController
         Gate::authorize('campaign-create');
 
         $psychosocialCollection = session('company')['customCollections']->firstWhere('collection_id', 1);
-
         $collectionId = request('collection_id') == $psychosocialCollection['id'] ? 1 : 2;
-
         $companyHasSameCampaignThisYear = session('company')->hasCampaignThisYear($collectionId);
         
         if ($companyHasSameCampaignThisYear) {
@@ -95,6 +92,7 @@ class CompanyCampaignController
     public function update(CampaignUpdateRequest $request, CompanyCampaign $campaign)
     {
         Gate::authorize('campaign-edit');
+
         $companyHasSameCampaignThisYear = Company::firstWhere('id', session('company')->id)
             ->campaigns()
             ->whereYear('start_date', now()->year)
@@ -127,5 +125,14 @@ class CompanyCampaignController
         });
         
         return back()->with('message', 'Notificações disparadas com sucesso!');
+    }
+
+    public function close(CompanyCampaign $campaign)
+    {
+        $campaign->update(['end_date' => now()]);
+        
+        session('company')->load('campaigns');
+        
+        return back()->with('message', 'Campanha encerrada com sucesso.');
     }
 }

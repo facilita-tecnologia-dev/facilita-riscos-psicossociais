@@ -39,17 +39,28 @@
                 <div class="w-full flex flex-row justify-between gap-2">
                     <div class="flex items-center gap-2" data-position="left">
                         @can('campaign-delete')
-                            @if(session('company')->hasCampaignThisYear($campaign->collection->id))
+                            @if(! session('company')->userCollections()->where('collection_id', $campaign->collection_id)->exists())
                                 <x-form action="{{ route('campaign.destroy', $campaign) }}" delete onsubmit="return confirm('Você deseja excluir a campanha?')">
                                     <x-action tag="button" type="submit" variant="danger">Excluir campanha</x-action>
                                 </x-form>
                             @endif
                         @endcan
                     </div>
-                    <div class="flex items-center gap-2" data-position="right">
-                        @can('campaign-edit')
-                            <x-action href="{{ route('campaign.edit', $campaign) }}" variant="secondary">Editar</x-action>
-                        @endcan
+                    <div class="flex gap-2">
+                        <div class="flex items-center gap-2" data-position="right">
+                            @can('campaign-edit')
+                                <x-action href="{{ route('campaign.edit', $campaign) }}" variant="secondary">Editar</x-action>
+                            @endcan
+                        </div>
+                        <div class="flex items-center gap-2" data-position="right">
+                            @can('campaign-edit')
+                                @if(session('company')->getActiveCampaigns()->where('id', $campaign->id)->isNotEmpty())
+                                    <x-form action="{{ route('campaign.close', $campaign) }}" put onsubmit="return confirm('Você deseja encerrar a campanha?')">
+                                        <x-action tag="button" type="submit" variant="secondary">Encerrar campanha</x-action>
+                                    </x-form>
+                                @endif
+                            @endcan
+                        </div>
                     </div>
                 </div>
             </div>
