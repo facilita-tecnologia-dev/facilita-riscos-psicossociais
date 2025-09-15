@@ -102,8 +102,8 @@
                 <div class="w-full flex flex-row flex-wrap justify-between gap-2">
                     <div class="flex items-center gap-2" data-position="left">
                         @can('user-delete')
-                            <x-form action="{{ route('user.destroy', $user) }}" delete onsubmit="return confirm('Você deseja excluir o colaborador?')">
-                                <x-action tag="button" type="submit" variant="danger">Excluir colaborador</x-action>
+                            <x-form action="{{ route('user.destroy', $user) }}" delete onsubmit="return confirm('Você deseja desvincular o colaborador?')">
+                                <x-action tag="button" type="submit" variant="danger">Desvincular    colaborador</x-action>
                             </x-form>
                         @endcan
                     </div>

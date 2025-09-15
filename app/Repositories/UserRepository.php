@@ -87,12 +87,7 @@ class UserRepository
 
     public function destroy(User $user): void
     {
-        // $user->delete();
-
-        $user = DB::table('company_users')
-        ->where('user_id', $user->id)
-        ->where('company_id', session('company')->id)
-        ->delete();
+        session('company')->users()->detach($user->id);
 
         session(['company' => session('company')->load('users')]);
     }

@@ -65,11 +65,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
                     'email' => $row['email'] ?? '',
                 ]);
 
-                DB::table('company_users')->insert([
-                    'user_id' => $user->id,
-                    'company_id' => session('company')->id,
-                    'role_id' => 2,
-                ]);
+                $user->companies()->attach(session('company')->id, ['role_id' => 2]);
 
                 return $user;
             }
