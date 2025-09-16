@@ -11,11 +11,13 @@
                         {{ $test->statement }}
                     </p>
                     
-                    <x-form action="{{ route('enviar-teste', [$collection, $testIndex]) }}" class="flex-1 flex flex-col gap-5" id="test-form" post>
+                    <x-form action="{{ route('send-test', [$collection, $testIndex]) }}" class="flex-1 flex flex-col gap-5" id="test-form" post>
                         @foreach ($test->questions as $key => $question)
                             @php
                                 $sessionKey = $collection->collectionType->key_name . "|" . $test->key_name ."|result";
-                                $pendingAnswer = session($sessionKey)[$question->id] ?? '';
+                                $options = $collection->collectionType->key_name == 'psychosocial-risks' 
+                                                ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PsychosocialQuestionOptionsEnum::cases())
+                                                : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\OrganizationalQuestionOptionsEnum::cases());
                             @endphp
 
                             <div data-role="test-question" class="w-full flex flex-col gap-2 items-center">
@@ -26,19 +28,11 @@
                                     </p>
                                 </div>
 
-
-                                @php
-                                    $options = $collection->collectionType->key_name == 'psychosocial-risks' 
-                                                ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PsychosocialQuestionOptionsEnum::cases())
-                                                : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\OrganizationalQuestionOptionsEnum::cases());
-                                @endphp
-
                                 @foreach ($options as $option)
                                     <x-test.option 
                                         :option="$option" 
                                         name="{{  $question['id'] }}" 
                                         id="{{ 'question_' . $question['id'] . '_' . $option['value'] }}"
-                                        :pendingAnswer="$pendingAnswer" 
                                     />
                                 @endforeach
 
@@ -50,7 +44,7 @@
 
                         <div class="w-full flex items-center justify-between">
                             <div class="{{ $testIndex == 1 ? 'pointer-events-none opacity-50' : '' }}">
-                                <x-action href="{{ route('responder-teste', [$collection, $testIndex - 1]) }}" variant="primary">
+                                <x-action href="{{ route('answer-test', [$collection, $testIndex - 1]) }}" variant="primary">
                                     Voltar
                                 </x-action>
                             </div>

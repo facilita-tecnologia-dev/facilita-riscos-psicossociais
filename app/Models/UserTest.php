@@ -18,8 +18,6 @@ class UserTest extends Model
 
     protected $fillable = ['user_collection_id', 'test_id', 'score', 'severity_title', 'severity_color'];
 
-    // protected $with = ['testType', 'answers'];
-
     /**
      * Returns the parent test collection of this test.
      */
@@ -63,25 +61,6 @@ class UserTest extends Model
             'answers' => function ($q) {
                 $q->select('id', 'user_test_id', 'question_id', 'value');
             },
-        ]);
-    }
-
-    public function scopeWithAnswersSum(Builder $query): Builder
-    {
-        return $query->addSelect([
-            'answers_sum' => DB::table('user_answers')
-                ->join('question_options', 'user_answers.question_option_id', '=', 'question_options.id')
-                ->selectRaw('SUM(question_options.value)')
-                ->whereColumn('user_answers.user_test_id', 'user_tests.id'),
-        ]);
-    }
-
-    public function scopeWithAnswersCount(Builder $query): Builder
-    {
-        return $query->addSelect([
-            'answers_count' => DB::table('user_answers')
-                ->selectRaw('COUNT(*)')
-                ->whereColumn('user_answers.user_test_id', 'user_tests.id'),
         ]);
     }
 

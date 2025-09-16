@@ -10,8 +10,6 @@ class Question extends Model
 {
     protected $table = 'questions';
 
-    protected $with = ['options'];
-
     protected $fillable = ['test_id', 'statement'];
 
     /**
@@ -20,14 +18,6 @@ class Question extends Model
     public function parentTest(): BelongsTo
     {
         return $this->belongsTo(Test::class, 'test_id');
-    }
-
-    /**
-     * Returns the answer options related to this question.
-     */
-    public function options(): HasMany
-    {
-        return $this->hasMany(Option::class, 'question_id', 'id');
     }
 
     /**

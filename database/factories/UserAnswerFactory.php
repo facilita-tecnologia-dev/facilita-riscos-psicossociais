@@ -19,7 +19,6 @@ class UserAnswerFactory extends Factory
         return [
             'user_test_id' => fake()->numberBetween(1, 5),
             'question_id' => fake()->numberBetween(1, 5),
-            'question_option_id' => fake()->numberBetween(1, 5),
         ];
     }
 }

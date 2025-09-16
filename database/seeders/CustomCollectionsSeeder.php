@@ -8,7 +8,6 @@ use App\Models\Test;
 use App\Models\CustomCollection;
 use App\Models\CustomTest;
 use App\Models\CustomQuestion;
-use App\Models\CustomQuestionOption;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -37,7 +36,6 @@ class CustomCollectionsSeeder extends Seeder
                 ]);
 
                 $tests = Test::where('collection_id', $collection->id)
-                    ->with('questions.options')
                     ->get();
 
                 foreach ($tests as $test) {
@@ -49,7 +47,6 @@ class CustomCollectionsSeeder extends Seeder
                         'order'                => $test->order,
                         'handler_type'         => $test->handler_type,
                         'reference'            => $test->reference,
-                        'number_of_questions'  => $test->number_of_questions,
                     ]);
 
                     foreach ($test->questions as $question) {
@@ -57,14 +54,6 @@ class CustomCollectionsSeeder extends Seeder
                             'custom_test_id' => $customTest->id,
                             'statement'      => $question->statement,
                         ]);
-
-                        foreach ($question->options as $option) {
-                            CustomQuestionOption::create([
-                                'custom_question_id' => $customQuestion->id,
-                                'content'            => $option->content,
-                                'value'              => $option->value,
-                            ]);
-                        }
                     }
                 }
             }

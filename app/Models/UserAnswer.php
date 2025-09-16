@@ -13,9 +13,7 @@ class UserAnswer extends Model
 
     protected $table = 'user_answers';
 
-    // protected $with = ['relatedOption'];
-
-    protected $fillable = ['user_test_id', 'question_id', 'question_option_id'];
+    protected $fillable = ['user_test_id', 'question_id'];
 
     /**
      * Returns the parent user test of this answer.
@@ -36,14 +34,6 @@ class UserAnswer extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Returns the option related this answer.
-     */
-    public function relatedOption(): BelongsTo
-    {
-        return $this->belongsTo(Option::class, 'question_option_id');
     }
 
 }

@@ -11,19 +11,6 @@ class Collection extends Model
 
     protected $fillable = ['name', 'description'];
 
-    public function getRouteKeyName()
-    {
-        return 'key_name';
-    }
-
-    /**
-     * Returns the test collections of users that have this collection as their base.
-     */
-    public function userCollections(): HasMany
-    {
-        return $this->hasMany(UserCollection::class, 'collection_id');
-    }
-
     /**
      * Returns the tests related to this collection.
      */

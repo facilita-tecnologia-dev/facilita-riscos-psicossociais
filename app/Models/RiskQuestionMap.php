@@ -54,17 +54,6 @@ class RiskQuestionMap extends Model
         ]);
     }
 
-    // public function scopeWithRelatedQuestionAnswer(Builder $query): Builder
-    // {
-    //     return $query->addSelect([
-    //         'related_question_answer' => DB::table('user_answers')
-    //             ->join('question_options', 'user_answers.question_option_id', '=', 'question_options.id')
-    //             ->whereColumn('user_answers.question_id', 'risk_question_map.question_id')
-    //             ->select('question_options.value')
-    //             ->limit(1),
-    //     ]);
-    // }
-
     public function scopeWithAnswerAverage(Builder $query, ?Request $request = null): Builder
     {
         return $query

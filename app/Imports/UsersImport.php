@@ -38,10 +38,10 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
                         'occupation' => $row['cargo'],
                         'work_shift' => $row['turno'],
                         'admission' => $admission,
-                        'gender' => $row['sexo'] ?? null,
-                        'marital_status' => $row['estado_civil'] ?? null,
-                        'education_level' => $row['grau_de_instrucao'] ?? null,
-                        'email' => $row['email'] ?? null,
+                        'gender' => $row['sexo'],
+                        'marital_status' => $row['estado_civil'],
+                        'education_level' => $row['grau_de_instrucao'],
+                        'email' => $row['email'],
                     ]);
                 
                     $user->companies()->syncWithoutDetaching([
@@ -59,10 +59,10 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
                     'occupation' => $row['cargo'],
                     'work_shift' => $row['turno'],
                     'admission' => $admission,
-                    'gender' => $row['sexo'] ?? '',
-                    'marital_status' => $row['estado_civil'] ?? '',
-                    'education_level' => $row['grau_de_instrucao'] ?? '',
-                    'email' => $row['email'] ?? '',
+                    'gender' => $row['sexo'],
+                    'marital_status' => $row['estado_civil'],
+                    'education_level' => $row['grau_de_instrucao'],
+                    'email' => $row['email'],
                 ]);
 
                 $user->companies()->attach(session('company')->id, ['role_id' => 2]);

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomCollection;
 use App\Models\CustomQuestion;
-use App\Models\CustomQuestionOption;
 use App\Models\CustomTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -64,7 +63,6 @@ class CustomCollectionController
                     'order' => $test['order'],
                     'handler_type' => $test['handler_type'],
                     'reference' => $test['reference'],
-                    'number_of_questions' => $test['number_of_questions'],
                 ]);
 
                 foreach($test['questions'] as $question){
@@ -72,14 +70,6 @@ class CustomCollectionController
                         'custom_test_id' => $customTest['id'],
                         'statement' => $question['statement']
                     ]);
-
-                    foreach($question['options'] as $option){
-                        CustomQuestionOption::create([
-                            'custom_question_id' => $customQuestion['id'],
-                            'content' => $option['content'],
-                            'value' => $option['value']
-                        ]);
-                    }
                 }
             }
 

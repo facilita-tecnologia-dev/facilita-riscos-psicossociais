@@ -30,11 +30,9 @@ class DatabaseSeeder extends Seeder
         
         // $companyPsychosocialCollection = CustomCollection::where('company_id', $company->id)
         //     ->where('collection_id', 1)
-        //     ->with('tests.questions.options')
         //     ->first();
         // $companyOrganizationalCollection = CustomCollection::where('company_id', $company->id)
         //     ->where('collection_id', 2)
-        //     ->with('tests.questions.options')
         //     ->first();
 
         // $campaign = CompanyCampaign::create([
@@ -75,7 +73,6 @@ class DatabaseSeeder extends Seeder
         //             ]);
 
         //             foreach($test->questions as $question){
-        //                 $answer = $question->options[rand(0, 4)];
 
         //                 UserAnswer::create([
         //                     'question_option_id' => $answer->id,

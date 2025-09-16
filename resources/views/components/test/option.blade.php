@@ -2,7 +2,6 @@
     'option',
     'id',
     'name',
-    'pendingAnswer',
 ])
 
 <label {{ $attributes }} for="{{ $id }}" class="bg-gray-100 w-full px-4 h-[38px] md:h-[45px] flex items-center gap-3 rounded-md shadow-sm cursor-pointer hover:bg-gray-200 transition">

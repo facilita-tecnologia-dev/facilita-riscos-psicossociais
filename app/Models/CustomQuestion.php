@@ -16,11 +16,6 @@ class CustomQuestion extends Model
         return $this->belongsTo(CustomTest::class);
     }
 
-    public function options(): HasMany
-    {
-        return $this->hasMany(CustomQuestionOption::class);
-    }
-
     public function answers(): HasMany
     {
         return $this->hasMany(UserAnswer::class, 'question_id');

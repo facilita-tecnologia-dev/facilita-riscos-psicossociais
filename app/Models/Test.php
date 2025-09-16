@@ -13,7 +13,7 @@ class Test extends Model
 {
     protected $table = 'tests';
 
-    protected $fillable = ['key_name', 'display_name', 'statement', 'reference', 'number_of_questions', 'handler_type', 'order'];
+    protected $fillable = ['key_name', 'display_name', 'statement', 'reference', 'handler_type', 'order'];
 
     // protected $with = ['questions', 'risks'];
 
