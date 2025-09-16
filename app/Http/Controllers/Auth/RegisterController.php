@@ -11,7 +11,6 @@ use App\Models\ControlAction;
 use App\Models\CustomCollection;
 use App\Models\CustomControlAction;
 use App\Models\CustomQuestion;
-use App\Models\CustomQuestionOption;
 use App\Models\CustomTest;
 use App\Models\Metric;
 use App\Models\RiskQuestionMap;
@@ -64,7 +63,7 @@ class RegisterController
                     'is_default' => true,
                 ]);
 
-                $tests = Test::where('collection_id', $collection['id'])->with('questions.options')->get();
+                $tests = Test::where('collection_id', $collection['id'])->with('questions')->get();
 
                 foreach($tests as $test){
                     $customTest = CustomTest::create([
@@ -75,7 +74,6 @@ class RegisterController
                         'order' => $test['order'],
                         'handler_type' => $test['handler_type'],
                         'reference' => $test['reference'],
-                        'number_of_questions' => $test['number_of_questions'],
                     ]);
     
                     foreach($test['questions'] as $question){
@@ -92,14 +90,6 @@ class RegisterController
                                 'risk_id' => $riskQuestion['risk_id'],
                                 'question_Id' => $customQuestion['id'],
                                 'company_id' => $company['id']
-                            ]);
-                        }
-    
-                        foreach($question['options'] as $option){
-                            CustomQuestionOption::create([
-                                'custom_question_id' => $customQuestion['id'],
-                                'content' => $option['content'],
-                                'value' => $option['value']
                             ]);
                         }
                     }

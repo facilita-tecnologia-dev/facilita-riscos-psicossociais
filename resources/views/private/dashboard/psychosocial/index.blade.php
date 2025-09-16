@@ -57,7 +57,7 @@
                             @if(isset($results['risks']))
                                 <div class="w-full flex flex-col gap-1 px-4">
                                     @foreach ($results['risks'] as $riskName => $risk)
-                                        <x-charts.risk-bar :riskName="$riskName" :risk="$risk" href="{{ route('dashboard.psychosocial.by-department', ['testName' => $testTypeName, 'riskName' => $riskName ])}}" />
+                                        <x-charts.risk-bar :riskName="$riskName" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['testName' => $testTypeName, 'riskName' => $riskName ])}}" />
                                     @endforeach
                                 </div>
                             @endif

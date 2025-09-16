@@ -463,7 +463,7 @@ class UserController
         );
 
         return $status === FacadePassword::PasswordReset
-        ? to_route('auth.login.usuario-interno')->with('message', __($status))
+        ? to_route('employee.login')->with('message', __($status))
         : back()->withErrors(['password' => [__($status)]]);
     }
 }

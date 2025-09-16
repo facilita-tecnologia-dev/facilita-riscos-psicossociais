@@ -35,7 +35,7 @@ class PsychosocialRisksController
         return view('private.dashboard.psychosocial.risks', compact('riskResults'));
     }
 
-    public function generatePDF(Request $request)
+    public function createPDFReport(Request $request)
     {
         Gate::authorize('psychosocial-dashboard-view');
 

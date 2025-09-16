@@ -116,7 +116,7 @@ class CompanyCampaignController
         return to_route('campaign.index')->with('message', 'Campanha excluída com sucesso.');
     }
 
-    public function dispatchNotifications(CompanyCampaign $campaign)
+    public function notify(CompanyCampaign $campaign)
     {
         $usersWithEmail = session('company')->users->where('email');
         

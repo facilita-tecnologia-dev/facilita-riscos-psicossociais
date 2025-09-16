@@ -19,7 +19,7 @@
                 </div>
                 <div id="dropdown-register" class="hidden">
                     <nav class="space-y-2 px-2 py-3">
-                        <a href="{{ route('auth.cadastro.empresa') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Cadastrar empresa</a>
+                        <a href="{{ route('company.register') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Cadastrar empresa</a>
                     </nav>
                 </div>
             </div>
@@ -31,8 +31,8 @@
                 </div>
                 <div id="dropdown-login" class="hidden">
                     <nav class="space-y-2 px-2 py-3">
-                        <a href="{{ route('auth.login.empresa') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Login como empresa</a>
-                        <a href="{{ route('auth.login.usuario-interno') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Login como usuário</a>
+                        <a href="{{ route('company.login') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Login como empresa</a>
+                        <a href="{{ route('employee.login') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Login como usuário</a>
                     </nav>
                 </div>
             </div>
@@ -56,11 +56,11 @@
             <div class="w-full space-y-4">
                 <div class="space-y-2">
                     <h3 class="text-main-text font-heading text-left text-sm font-semibold">Empresa</h3>
-                    <a href="{{ route('auth.login.empresa') }}" class="bg-secondary-background border-borders flex w-full items-center gap-2 rounded-sm border px-4 py-2 transition hover:brightness-95">
+                    <a href="{{ route('company.login') }}" class="bg-secondary-background border-borders flex w-full items-center gap-2 rounded-sm border px-4 py-2 transition hover:brightness-95">
                         <x-icon icon="user-check" class="text-secondary-text h-5 w-5 object-scale-down" />
                         <span class="text-main-text font-heading text-left text-sm font-normal">Login</span>
                     </a>
-                    <a href="{{ route('auth.cadastro.empresa') }}" class="bg-secondary-background border-borders flex w-full items-center gap-2 rounded-sm border px-4 py-2 transition hover:brightness-95">
+                    <a href="{{ route('company.register') }}" class="bg-secondary-background border-borders flex w-full items-center gap-2 rounded-sm border px-4 py-2 transition hover:brightness-95">
                         <x-icon icon="user-plus" class="text-secondary-text h-5 w-5 object-scale-down" />
                         <span class="text-main-text font-heading text-left text-sm font-normal">Cadastro</span>
                     </a>
@@ -69,7 +69,7 @@
                 <div class="space-y-2">
                     <h3 class="text-main-text font-heading text-left text-sm font-semibold">Comitê</h3>
 
-                    <a href="{{ route('auth.login.usuario-interno') }}" class="bg-secondary-background border-borders flex w-full items-center gap-2 rounded-sm border px-4 py-2 transition hover:brightness-95">
+                    <a href="{{ route('employee.login') }}" class="bg-secondary-background border-borders flex w-full items-center gap-2 rounded-sm border px-4 py-2 transition hover:brightness-95">
                         <x-icon icon="user-check" class="text-secondary-text h-5 w-5 object-scale-down" />
                         <span class="text-main-text font-heading text-left text-sm font-normal">Login</span>
                     </a>

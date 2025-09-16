@@ -52,7 +52,7 @@
                 @endcan
             
                 @can('feedbacks-index')
-                    <x-sidebar.item href="{{ route('feedbacks.index') }}" class="{{ request()->routeIs('feedbacks.index') ? 'bg-gray-200' : ''}}">
+                    <x-sidebar.item href="{{ route('feedback.index') }}" class="{{ request()->routeIs('feedback.index') ? 'bg-gray-200' : ''}}">
                         <div class="w-5 flex justify-center items-center">
                             <i class="fa-solid fa-comments"></i>
                         </div>
@@ -61,7 +61,7 @@
                 @endcan
                     
                 @can('metrics-edit')
-                    <x-sidebar.item href="{{ route('company-metrics') }}" class="{{ request()->routeIs('company-metrics') ? 'bg-gray-200' : ''}}">
+                    <x-sidebar.item href="{{ route('company-metrics.edit') }}" class="{{ request()->routeIs('company-metrics.edit') ? 'bg-gray-200' : ''}}">
                         <div class="w-5 flex justify-center items-center">
                             <i class="fa-solid fa-percent"></i>
                         </div>
@@ -100,7 +100,7 @@
                 @endcan
                 @can('answer-psychosocial-test')
                     @if($activePsychosocialCampaign)
-                        <x-sidebar.item href="{{ route('responder-teste', $activePsychosocialCampaign->collection) }}" class="{{ $hasAnsweredPsychosocial  ? 'pointer-events-none opacity-50' : '' }}">
+                        <x-sidebar.item href="{{ route('answer-test', $activePsychosocialCampaign->collection) }}" class="{{ $hasAnsweredPsychosocial  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-question"></i>
                             </div>
@@ -110,7 +110,7 @@
                 @endcan
                 @can('answer-organizational-test')
                     @if($activeOrganizationalCampaign)
-                        <x-sidebar.item href="{{ route('responder-teste', $activeOrganizationalCampaign->collection) }}" class="{{ $hasAnsweredOrganizational  ? 'pointer-events-none opacity-50' : '' }}">
+                        <x-sidebar.item href="{{ route('answer-test', $activeOrganizationalCampaign->collection) }}" class="{{ $hasAnsweredOrganizational  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-question"></i>
                             </div>

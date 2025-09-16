@@ -20,13 +20,13 @@ class AuthService {
         if($actor instanceof User){
 
             if($this->userHasManyCompanies($actor)){
-                return route('auth.login.usuario-interno.escolher-empresa', $actor);
+                return route('employee.login.choose-company', $actor);
             }
 
             CompanyService::loadCompanyToSession($actor->companies->first());
 
             if($this->userIsManager($actor)){
-                return route('auth.login.usuario-interno.senha', $actor);
+                return route('employee.login.password', $actor);
             }
 
             $this->login($actor);
@@ -98,7 +98,7 @@ class AuthService {
 
     public function getRedirectLogoutRoute(Authenticatable $actor)
     {
-        return $actor instanceof Company ? route('auth.login.empresa') : route('auth.login.usuario-interno');
+        return $actor instanceof Company ? route('company.login') : route('employee.login');
     }
 
     public function checkPasswordHash(string $value, string $hashed)

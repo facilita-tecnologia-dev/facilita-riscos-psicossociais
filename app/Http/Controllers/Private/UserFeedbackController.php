@@ -30,7 +30,7 @@ class UserFeedbackController
         $filteredUserCount = $userFeedbacks->total();
         $filtersApplied = array_filter($request->query(), fn ($queryParam) => $queryParam != null);
 
-        return view('private.dashboard.feedbacks.index', [
+        return view('private.dashboard.feedback.index', [
             'userFeedbacks' => $userFeedbacks->count() ? $userFeedbacks : null,
             'filtersApplied' => $filtersApplied,
             'filteredUserCount' => $filteredUserCount ? $filteredUserCount : null,
@@ -73,7 +73,7 @@ class UserFeedbackController
         ]);
 
         if ($validatedData['feedback'] == null) {
-            return to_route('responder-teste.thanks');
+            return to_route('complete-tests.thanks');
         }
 
         UserFeedback::create([
@@ -93,7 +93,7 @@ class UserFeedbackController
         Gate::authorize('feedbacks-index');
         $parentUser = $feedback->parentUser;
 
-        return view('private.dashboard.feedbacks.show', compact('feedback', 'parentUser'));
+        return view('private.dashboard.feedback.show', compact('feedback', 'parentUser'));
     }
 
     /**

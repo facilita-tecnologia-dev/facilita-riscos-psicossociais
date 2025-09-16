@@ -24,7 +24,7 @@ it('should be able to generate report of Organizational Dashboard', function () 
 });
 
 it('should be able to see Organizational Answers', function () {
-    $response = $this->get(route('dashboard.organizational-climate.by-answers'));
+    $response = $this->get(route('dashboard.organizational-climate.answers'));
 
     $response->assertOk();
     $response->assertViewHasAll(['organizationalClimateResults']);
@@ -35,7 +35,7 @@ it('should be able to see Organizational Answers with filtered test', function (
     $tests = $collection->tests;
 
     foreach ($tests as $test) {
-        $response = $this->get(route('dashboard.organizational-climate.by-answers', ['test' => $test->display_name]));
+        $response = $this->get(route('dashboard.organizational-climate.answers', ['test' => $test->display_name]));
 
         $response->assertOk();
         $response->assertViewHasAll(['organizationalClimateResults']);
@@ -43,7 +43,7 @@ it('should be able to see Organizational Answers with filtered test', function (
 });
 
 it('should be able to generate report of Organizational Answers', function () {
-    $response = $this->get(route('dashboard.organizational-climate.by-answers.report'));
+    $response = $this->get(route('dashboard.organizational-climate.answers.report'));
 
     $response->assertOk();
     $response->assertHeader('Content-Type', 'application/pdf');

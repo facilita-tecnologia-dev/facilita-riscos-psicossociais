@@ -5,9 +5,9 @@
         <x-structure.main-content-container>
             <x-structure.page-title 
                 title="Comentário - Detalhe"
-                :back="route('feedbacks.index')"
+                :back="route('feedback.index')"
                 :breadcrumbs="[
-                    'Comentários' => route('feedbacks.index'),
+                    'Comentários' => route('feedback.index'),
                     'Comentário - Detalhe' => '',
                 ]"
             />

@@ -21,7 +21,7 @@ it('should be able to see Psychosocial By Department', function () {
     $tests = $collection->tests;
 
     foreach ($tests as $test) {
-        $response = $this->get(route('dashboard.psychosocial.by-department', $test->display_name));
+        $response = $this->get(route('dashboard.psychosocial.department', $test->display_name));
 
         $response->assertOk();
         $response->assertViewHas('testName', fn (string $testName) => $testName === $test->display_name);
@@ -50,7 +50,7 @@ it('should be able to see Psychosocial Risks', function () {
 });
 
 it('should be able to generate a risks report', function () {
-    $response = $this->get(route('dashboard.psychosocial.risks.pdf'));
+    $response = $this->get(route('dashboard.psychosocial.risks.report'));
 
     $response->assertOk();
     $response->assertHeader('Content-Type', 'application/pdf');

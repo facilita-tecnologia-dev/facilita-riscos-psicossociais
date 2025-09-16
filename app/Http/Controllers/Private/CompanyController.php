@@ -62,7 +62,7 @@ class CompanyController
         return back()->with('message', 'Perfil da empresa atualizado com sucesso!');
     }
 
-    public function destroy(Request $request, string $id)
+    public function destroy(Request $request)
     {
         $validatedData = $request->validate([
             'password' => ['required']
@@ -76,30 +76,6 @@ class CompanyController
         session('company')->delete();
 
         return redirect()->to(route('logout'));
-    }
-
-    public function resetCompanyPassword(Request $request, string $id)
-    {
-        $validatedData = $request->validate([
-            "current_password" => ['required'],
-            'new_password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-        ]);
-
-        if(!Hash::check($validatedData['current_password'], session('company')->password)){
-            SessionErrorHelper::flash('current_password', 'Senha incorreta.');
-            return back();
-        }
-
-        if(Hash::check($validatedData['new_password'], session('company')->password)){
-            SessionErrorHelper::flash('new_password', 'Essa senha já foi/está sendo utilizada.');
-            return back();
-        }
-
-        session('company')->update([
-            'password' => Hash::make($validatedData['new_password']),
-        ]);
-
-        return back()->with('message', 'Senha redefinida com sucesso!');
     }
 
     public function showForgotPassword()
@@ -156,7 +132,7 @@ class CompanyController
         );
 
         return $status === FacadePassword::PasswordReset
-        ? to_route('auth.login.empresa')->with('message', __($status))
+        ? to_route('company.login')->with('message', __($status))
         : back()->withErrors(['password' => [__($status)]]);
     }
 

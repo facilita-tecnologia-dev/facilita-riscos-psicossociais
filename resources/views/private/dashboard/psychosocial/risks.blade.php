@@ -19,7 +19,7 @@
                     </div>
                 @endcan
                 <div class="w-full md:w-fit">
-                    <x-action href="{{ route('dashboard.psychosocial.risks.pdf') }}" width="full">
+                    <x-action href="{{ route('dashboard.psychosocial.risks.report') }}" width="full">
                         Visualizar Inventário de Riscos
                     </x-action>
                 </div>

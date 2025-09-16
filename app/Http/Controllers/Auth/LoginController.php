@@ -67,7 +67,7 @@ class LoginController
         CompanyService::loadCompanyToSession($company);
 
         if($user->hasRole('manager')){
-            return redirect()->to(route('auth.login.usuario-interno.senha', $user));
+            return redirect()->to(route('employee.login.password', $user));
         }
 
         $this->authService->login($user);
@@ -126,7 +126,7 @@ class LoginController
         CompanyService::loadCompanyToSession($company);
         
         if($roleInCurrentCompany->name === 'employee' && $roleInRequestCompany->name === 'manager'){
-            return redirect()->to(route('auth.login.usuario-interno.senha', $user));
+            return redirect()->to(route('employee.login.password', $user));
         } 
 
         $this->authService->login($user);

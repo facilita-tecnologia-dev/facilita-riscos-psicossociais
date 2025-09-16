@@ -10,18 +10,15 @@ use Illuminate\Support\Facades\Gate;
 
 class CompanyMetricsController
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function __invoke(Request $request)
+    public function edit(Request $request)
     {
         Gate::authorize('metrics-edit');
         $metrics = CompanyMetric::where('company_id', session('company')->id)->with('metricType')->get()->keyBy('metricType.key_name');
 
-        return view('private.company.company-metrics', compact('metrics'));
+        return view('private.company.company-metrics.edit', compact('metrics'));
     }
 
-    public function storeMetrics(Request $request)
+    public function update(Request $request)
     {
         Gate::authorize('metrics-edit');
 

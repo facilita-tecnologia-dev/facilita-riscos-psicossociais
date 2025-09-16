@@ -5,10 +5,10 @@
         <x-structure.main-content-container>   
             <x-structure.page-title 
                 :title="$riskName" 
-                :back="route('dashboard.psychosocial.by-department', ['testName' => $testName, 'riskName' => $riskName])"
+                :back="route('dashboard.psychosocial.department', ['testName' => $testName, 'riskName' => $riskName])"
                 :breadcrumbs="[
                     'Riscos Psicossociais' => route('dashboard.psychosocial'),
-                    'Divisão por departamento' => route('dashboard.psychosocial.by-department', ['testName' => $testName, 'riskName' => $riskName]),
+                    'Divisão por departamento' => route('dashboard.psychosocial.department', ['testName' => $testName, 'riskName' => $riskName]),
                     'Lista de Resultados' => ''
                 ]"
             />

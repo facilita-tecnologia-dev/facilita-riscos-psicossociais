@@ -20,18 +20,10 @@ class ChooseCompanyToLoginController
     {
         CompanyService::loadCompanyToSession($company);
 
-        if (session('company')->id == 2) {
-            if (Auth::user()->hasRole('manager')) {
-                return redirect()->route('dashboard.organizational-climate');
-            }
-
-            return redirect()->route('responder-teste', Collection::where('key_name', 'organizational-climate')->first());
-        }
-
         if (Auth::user()->hasRole('manager')) {
             return redirect()->route('dashboard.psychosocial');
         }
 
-        return redirect()->route('responder-teste', Collection::where('key_name', 'psychosocial-risks')->first());
+        return redirect()->route('answer-test', Collection::where('key_name', 'psychosocial-risks')->first());
     }
 }

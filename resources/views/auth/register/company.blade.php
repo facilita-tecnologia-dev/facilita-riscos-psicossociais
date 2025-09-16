@@ -10,7 +10,7 @@
                         <x-structure.text-content>Registre sua empresa no Facilita Riscos Psicossociais</x-structure.text-content>
                     </div>
                     
-                    <x-form action="{{ route('auth.cadastro.empresa') }}" class="w-full flex flex-col gap-3 items-center" post>
+                    <x-form action="{{ route('company.register') }}" class="w-full flex flex-col gap-3 items-center" post>
                         <x-form.input-text name="name" placeholder="Razão Social" />
                         <x-form.input-text name="cnpj" placeholder="CNPJ (00.000.000/0000-00)" />
                         <x-form.input-text name="email" placeholder="E-mail" />

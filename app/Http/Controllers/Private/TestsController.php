@@ -59,14 +59,14 @@ class TestsController
             $request->session()->forget(array_keys($testAnswers));
 
             if ($collection['collection_id'] == 2) {
-                return to_route('feedbacks.create');
+                return to_route('feedback.create');
             }
 
-            // return to_route('responder-teste.thanks');
+            // return to_route('complete-tests.thanks');
             return to_route('logout');
         }
 
-        return to_route('responder-teste', [$collection, $testIndex + 1]);
+        return to_route('answer-test', [$collection, $testIndex + 1]);
     }
 
     private function generateValidationRules($test): array
@@ -119,11 +119,8 @@ class TestsController
 
                 $test->questions->each(function($question) use($userTest, $testAnswers) {
                     $questionAnswer = $testAnswers[$question->id];
-
-                    $option = $question->options->firstWhere('value', $questionAnswer);
                     
                     UserAnswer::create([
-                        'question_option_id' => $option->id,
                         'question_id' => $question->id,
                         'user_test_id' => $userTest->id,
                         'user_id' => AuthGuardHelper::user()->id,

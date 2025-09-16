@@ -10,7 +10,7 @@ beforeEach(function () {
 });
 
 it('should be able to see the feedbacks list page', function () {
-    $response = $this->get(route('feedbacks.index'));
+    $response = $this->get(route('feedback.index'));
 
     $response->assertOk();
     $response->assertViewHasAll(['userFeedbacks', 'filtersApplied', 'filteredUserCount']);
@@ -18,7 +18,7 @@ it('should be able to see the feedbacks list page', function () {
 
 it('should be able to see feedback detail', function () {
     $feedback = UserFeedback::where('company_id', session('company')->id)->first();
-    $response = $this->get(route('feedbacks.show', $feedback));
+    $response = $this->get(route('feedback.show', $feedback));
 
     $response->assertOk();
     $response->assertViewHas('feedback', fn ($userFeedback) => $userFeedback->id == $feedback->id);
@@ -26,22 +26,22 @@ it('should be able to see feedback detail', function () {
 });
 
 it('should be able to see the feedback create page', function () {
-    $response = $this->get(route('feedbacks.create'));
+    $response = $this->get(route('feedback.create'));
     $response->assertOk();
 });
 
 it('should be able to send a filled feedback', function () {
-    $response = $this->post(route('feedbacks.create'), [
+    $response = $this->post(route('feedback.create'), [
         'feedback' => 'Meu feedback',
     ]);
 
-    $response->assertRedirectToRoute('responder-teste.thanks');
+    $response->assertRedirectToRoute('complete-tests.thanks');
 });
 
 it('should be able to send a empty / not send a feedback', function () {
-    $response = $this->post(route('feedbacks.create'), [
+    $response = $this->post(route('feedback.create'), [
         'feedback' => '',
     ]);
 
-    $response->assertRedirectToRoute('responder-teste.thanks');
+    $response->assertRedirectToRoute('complete-tests.thanks');
 });

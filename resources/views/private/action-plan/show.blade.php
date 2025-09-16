@@ -18,7 +18,7 @@
                     </x-structure.message>
                 @endif
 
-                <x-action href="{{ route('dashboard.psychosocial.risks.pdf') }}">
+                <x-action href="{{ route('dashboard.psychosocial.risks.report') }}">
                     Visualizar Inventário de Riscos
                 </x-action>
             </div>

@@ -87,7 +87,7 @@
                                 Cadastre os Dados de Desempenho Organizacional da sua empresa nos últimos 12 meses (%)
                             </h2>
                             <p class="text-sm text-center w-full">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto odio, ullam assumenda beatae.</p>
-                            <x-action variant="secondary" width="full" :href="route('company-metrics')">Cadastrar Dados de Desempenho</x-action>
+                            <x-action variant="secondary" width="full" :href="route('company-metrics.edit')">Cadastrar Dados de Desempenho</x-action>
                         </div>
                     @endif
 

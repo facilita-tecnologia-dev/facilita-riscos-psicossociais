@@ -33,7 +33,7 @@ class PsychosocialResultsByDepartmentController
 
         $resultsPerDepartment = $this->getCompiledPageData($riskName);
 
-        return view('private.dashboard.psychosocial.by-department', compact(
+        return view('private.dashboard.psychosocial.department', compact(
             'testName',
             'riskName',
             'resultsPerDepartment',

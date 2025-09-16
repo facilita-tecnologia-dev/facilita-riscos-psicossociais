@@ -36,7 +36,7 @@
                     />
 
                     <div class="w-full sm:w-fit">
-                        <x-action href="{{ route('export-feedbacks') }}" width="full">Exportar comentários</x-action>
+                        <x-action href="{{ route('feedback.export') }}" width="full">Exportar comentários</x-action>
                     </div>
                 </div>
      
@@ -53,7 +53,7 @@
                     <x-table.body>
                         @foreach ($userFeedbacks as $user)
                             @foreach ($user->feedbacks as $feedback)
-                                <x-table.body.tr tag="a" href="{{ route('feedbacks.show', $feedback) }}" class="flex items-center gap-4" >
+                                <x-table.body.tr tag="a" href="{{ route('feedback.show', $feedback) }}" class="flex items-center gap-4" >
                                     <x-table.body.td class="truncate w-1/2 md:w-48" title="{{ $user->department }}">{{ $user->department }}</x-table.body.td>
                                     <x-table.body.td class="truncate hidden md:block w-32">{{ $user->work_shift }}</x-table.body.td>
                                     <x-table.body.td class="truncate flex-1" title="{{ $feedback->content }}">{{ $feedback->content }}</x-table.body.td>

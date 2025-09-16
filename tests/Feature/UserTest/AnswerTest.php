@@ -13,7 +13,7 @@ beforeEach(function () {
 it('test form should be rendered', function () {
     $collection = Collection::where('key_name', 'psychosocial-risks')->first();
 
-    $response = $this->get(route('responder-teste', $collection));
+    $response = $this->get(route('answer-test', $collection));
 
     $response->assertOk();
     $response->assertViewHas('test', function (Test $test) use ($collection) {
@@ -37,15 +37,15 @@ it('psychosocial tests should be answerable', function () {
 
         $nextTest = $collection->tests()->where('order', $test['order'] + 1)->first();
 
-        $response = $this->post(route('enviar-teste', ['collection' => $collection, 'test' => $test['order']]), $answers);
+        $response = $this->post(route('send-test', ['collection' => $collection, 'test' => $test['order']]), $answers);
 
         if ($nextTest == null) {
-            $response->assertRedirectToRoute('responder-teste.thanks');
+            $response->assertRedirectToRoute('complete-tests.thanks');
             $resultsOnSession = array_filter(array_keys(session()->all()), fn ($item) => str_ends_with($item, '|result'));
             expect($resultsOnSession)->toBeEmpty();
         } else {
             $response->assertSessionHas("$collection->key_name|$test->key_name|result");
-            $response->assertRedirectToRoute('responder-teste', ['collection' => $collection, 'test' => $nextTest['order']]);
+            $response->assertRedirectToRoute('answer-test', ['collection' => $collection, 'test' => $nextTest['order']]);
         }
     }
 });
@@ -65,15 +65,15 @@ it('organizational tests should be answerable', function () {
 
         $nextTest = $collection->tests()->where('order', $test['order'] + 1)->first();
 
-        $response = $this->post(route('enviar-teste', ['collection' => $collection, 'test' => $test['order']]), $answers);
+        $response = $this->post(route('send-test', ['collection' => $collection, 'test' => $test['order']]), $answers);
 
         if ($nextTest == null) {
-            $response->assertRedirectToRoute('feedbacks.create');
+            $response->assertRedirectToRoute('feedback.create');
             $resultsOnSession = array_filter(array_keys(session()->all()), fn ($item) => str_ends_with($item, '|result'));
             expect($resultsOnSession)->toBeEmpty();
         } else {
             $response->assertSessionHas("$collection->key_name|$test->key_name|result");
-            $response->assertRedirectToRoute('responder-teste', ['collection' => $collection, 'test' => $nextTest['order']]);
+            $response->assertRedirectToRoute('answer-test', ['collection' => $collection, 'test' => $nextTest['order']]);
         }
     }
 });

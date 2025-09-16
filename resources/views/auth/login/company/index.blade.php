@@ -10,7 +10,7 @@
                         <x-structure.text-content>Faça login com a conta da sua empresa no Facilita Riscos Psicossociais</x-structure.text-content>
                     </div>
 
-                    <x-form action="{{ route('auth.login.empresa') }}" class="w-full flex flex-col gap-3 items-center" post>
+                    <x-form action="{{ route('company.login') }}" class="w-full flex flex-col gap-3 items-center" post>
                         @if(session('message'))
                             <span class="text-green-500 text-sm text-center">{{ session('message') }}</span>
                         @endif
