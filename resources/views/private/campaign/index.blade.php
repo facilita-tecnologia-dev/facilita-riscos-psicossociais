@@ -52,10 +52,10 @@
                         <x-table.head.sortable-th class="w-24" field="end_date">
                             Status
                         </x-table.head.sortable-th>
-                        {{-- @if(session('company')->getActiveCampaigns())
+                        @if(session('company')->getActiveCampaigns())
                             <x-table.head.th class="w-32">
                             </x-table.head.th>
-                        @endif --}}
+                        @endif
                     </x-table.head>
                     <x-table.body>
                         @foreach ($companyCampaigns as $campaign)
@@ -69,10 +69,10 @@
                                     @if(now() <= $campaign->start_date) Agendada @endif
                                     @if(now() >= $campaign->end_date) Encerrada @endif
                                 </x-table.body.td>
-                                {{-- @if(session('company')->getActiveCampaigns())
+                                @if(session('company')->getActiveCampaigns())
                                     <x-table.body.td class="w-32">
                                             @if(now() >= $campaign->start_date && now() <= $campaign->end_date)
-                                                <x-form action="{{ route('campaign.dispatch-emails', $campaign) }}" class="w-full" post>
+                                                <x-form action="{{ route('campaign.notify', $campaign) }}" class="w-full" post>
                                                     <x-action tag="button" data-tippy-content="Notificar colaboradores sobre essa campanha" width="full">
                                                         <i class="fa-solid fa-envelope"></i>
                                                         Notificar
@@ -80,7 +80,7 @@
                                                 </x-form>
                                             @endif
                                     </x-table.body.td>
-                                @endif --}}
+                                @endif
                                 
                             </x-table.body.tr>
                         @endforeach
