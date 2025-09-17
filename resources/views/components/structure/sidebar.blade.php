@@ -99,7 +99,7 @@
                     </x-sidebar.item>
                 @endcan
                 @can('answer-psychosocial-test')
-                    @if($activePsychosocialCampaign)
+                    @if($hasActivePsychosocialCampaign)
                         <x-sidebar.item href="{{ route('answer-test', $activePsychosocialCampaign->collection) }}" class="{{ $hasAnsweredPsychosocial  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-question"></i>
@@ -109,7 +109,7 @@
                     @endif
                 @endcan
                 @can('answer-organizational-test')
-                    @if($activeOrganizationalCampaign)
+                    @if($hasActiveOrganizationalCampaign)
                         <x-sidebar.item href="{{ route('answer-test', $activeOrganizationalCampaign->collection) }}" class="{{ $hasAnsweredOrganizational  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-question"></i>

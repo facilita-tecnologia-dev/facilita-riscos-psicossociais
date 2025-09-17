@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enums\CampaignStatusTypes;
 use App\Helpers\AuthGuardHelper;
 use App\Models\Company;
 use App\Models\User;
@@ -414,11 +415,11 @@ class AuthServiceProvider extends ServiceProvider
                 /** @var User $user */
                 $user = AuthGuardHelper::user();
 
-                return $user->hasPermission('action_plan_edit') && session('company')->hasCampaignThisYear(1, true);
+                return $user->hasPermission('action_plan_edit') && session('company')->hasCampaignThisYear(1, CampaignStatusTypes::COMPLETED->value);
             }
 
             if (AuthGuardHelper::user() instanceof Company) {
-                return session('company')->hasCampaignThisYear(1, true);
+                return session('company')->hasCampaignThisYear(1, CampaignStatusTypes::COMPLETED->value);
             }
 
             return false;

@@ -22,28 +22,4 @@ class UserElegibilityService
     {
         return $this->hasAnsweredThisYear($user['latestOrganizationalClimateCollection']?->created_at);
     }
-
-    private function activeCompanyCampaigns()
-    {
-        return session('company')
-            ->campaigns()
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
-            ->get()
-            ->groupBy('collection.collection_id');
-    }
-
-    public function hasActivePsychosocialCampaign(): bool
-    {
-        $activeCampaigns = $this->activeCompanyCampaigns();
-
-        return isset($activeCampaigns[1]);
-    }
-
-    public function hasActiveOrganizationalCampaign(): bool
-    {
-        $activeCampaigns = $this->activeCompanyCampaigns();
-
-        return isset($activeCampaigns[2]);
-    }
 }

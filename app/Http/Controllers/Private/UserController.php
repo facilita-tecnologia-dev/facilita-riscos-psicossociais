@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Private;
 
-use App\Enums\EmployeeStatusEnum;
+use App\Enums\UserStatusTypes;
 use App\Enums\GenderEnum;
 use App\Enums\InternalUserRoleEnum;
 use App\Helpers\AuthGuardHelper;
@@ -120,7 +120,7 @@ class UserController
         Gate::authorize('user-edit');
 
         $gendersToSelect = array_map(fn (GenderEnum $gender) => $gender->value, GenderEnum::cases());
-        $employeeStatusToSelect = array_map(fn (EmployeeStatusEnum $status) => ['option' => EmployeeStatusEnum::labelFromValue($status->value), 'value' => $status->value], EmployeeStatusEnum::cases());
+        $employeeStatusToSelect = array_map(fn (UserStatusTypes $status) => ['option' => UserStatusTypes::labelFromValue($status->value), 'value' => $status->value], UserStatusTypes::cases());
         
         $rolesToSelect = array_map(fn ($role) => InternalUserRoleEnum::from($role['display_name'])->value,
             Role::whereIn('id', [1, 2])->get()->toArray()

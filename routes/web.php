@@ -1,18 +1,14 @@
 <?php
 
-use App\Exports\CommentsExport;
 use App\Http\Controllers\ActionPlanController;
-use App\Http\Controllers\Auth\ChooseCompanyToLoginController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\CompanyCampaignController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CustomCollectionController;
-use App\Http\Controllers\CustomCollectionsController;
 use App\Http\Controllers\CustomControlActionController;
 use App\Http\Controllers\CustomQuestionController;
 use App\Http\Controllers\CustomTestController;
-use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Private\CompanyController;
 use App\Http\Controllers\Private\CompanyMetricsController;
 use App\Http\Controllers\Private\Dashboard\Demographics\DemographicsMainController;
@@ -26,7 +22,6 @@ use App\Http\Controllers\Private\TestsController;
 use App\Http\Controllers\Private\UserController;
 use App\Http\Controllers\Private\UserFeedbackController;
 use App\Http\Controllers\Private\WelcomeController;
-use App\Http\Controllers\Public\PresentationController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\GuestMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -94,15 +89,15 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     });
 
     Route::prefix('campaigns')->group(function(){
-        Route::get('/', [CompanyCampaignController::class, 'index'])->name('campaign.index');
-        Route::get('create', [CompanyCampaignController::class, 'create'])->name('campaign.create');
-        Route::post('store', [CompanyCampaignController::class, 'store'])->name('campaign.store');
-        Route::get('{campaign}', [CompanyCampaignController::class, 'show'])->name('campaign.show');
-        Route::get('{campaign}/edit', [CompanyCampaignController::class, 'edit'])->name('campaign.edit');
-        Route::put('{campaign}/update', [CompanyCampaignController::class, 'update'])->name('campaign.update');
-        Route::put('{campaign}/delete', [CompanyCampaignController::class, 'destroy'])->name('campaign.destroy');
-        Route::post('{campaign}/notify', [CompanyCampaignController::class, 'notify'])->name('campaign.notify');
-        Route::put('{campaign}/close', [CompanyCampaignController::class, 'close'])->name('campaign.close');
+        Route::get('/', [CampaignController::class, 'index'])->name('campaign.index');
+        Route::get('create', [CampaignController::class, 'create'])->name('campaign.create');
+        Route::post('store', [CampaignController::class, 'store'])->name('campaign.store');
+        Route::get('{campaign}', [CampaignController::class, 'show'])->name('campaign.show');
+        Route::get('{campaign}/edit', [CampaignController::class, 'edit'])->name('campaign.edit');
+        Route::put('{campaign}/update', [CampaignController::class, 'update'])->name('campaign.update');
+        Route::put('{campaign}/delete', [CampaignController::class, 'destroy'])->name('campaign.destroy');
+        Route::post('{campaign}/notify', [CampaignController::class, 'notify'])->name('campaign.notify');
+        Route::put('{campaign}/close', [CampaignController::class, 'close'])->name('campaign.close');
     });
 
     Route::prefix('action-plan')->group(function(){
@@ -132,7 +127,7 @@ Route::middleware(AuthMiddleware::class)->group(function() {
 
     Route::prefix('company-metrics')->group(function() {
         Route::get('/', [CompanyMetricsController::class, 'edit'])->name('company-metrics.edit');
-        Route::post('/', [CompanyMetricsController::class, 'update'])->name('company-metrics.udpate');
+        Route::post('/', [CompanyMetricsController::class, 'update'])->name('company-metrics.update');
     });
 
     Route::prefix('dashboard')->group(function () {

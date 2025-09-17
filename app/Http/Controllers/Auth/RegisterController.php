@@ -29,7 +29,7 @@ class RegisterController
 
     public function attemptCompanyRegister(RegisterCompanyRequest $request)
     {
-        $company = DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request) {
             $company = Company::create([
                 'name' => $request->validated('name'),
                 'cnpj' => $request->validated('cnpj'),
@@ -38,65 +38,64 @@ class RegisterController
             ]);
 
             $this->createMetrics($company);
-            $this->createCustomCollections($company);
             $this->createActionPlan($company);
             
             Auth::guard('company')->login($company);
             session()->regenerate();
 
-            CompanyService::loadCompanyToSession($company);
+            session(['company' => $company]);
         });
 
         return to_route('welcome.company');
     }
 
-    private function createCustomCollections(Company $company)
-    {
-        return DB::transaction(function() use($company) {
-            $collections = Collection::all();
+    // private function createCustomCollections(Company $company)
+    // {
+    //     return DB::transaction(function() use($company) {
+    //         $collections = Collection::all();
 
-            foreach($collections as $collection){
-                $customCollection = CustomCollection::create([
-                    'company_id' => $company['id'],
-                    'collection_id' => $collection['id'],
-                    'name' => $collection['name'],
-                    'is_default' => true,
-                ]);
+    //         foreach($collections as $collection){
+    //             $customCollection = CustomCollection::create([
+    //                 'company_id' => $company['id'],
+    //                 'collection_id' => $collection['id'],
+    //                 'name' => $collection['name'],
+    //                 'is_default' => true,
+    //             ]);
 
-                $tests = Test::where('collection_id', $collection['id'])->with('questions')->get();
+    //             $tests = Test::where('collection_id', $collection['id'])->with('questions')->get();
 
-                foreach($tests as $test){
-                    $customTest = CustomTest::create([
-                        'custom_collection_id' => $customCollection['id'],
-                        'key_name' => $test['key_name'],
-                        'display_name' => $test['display_name'],
-                        'statement' => $test['statement'],
-                        'order' => $test['order'],
-                        'handler_type' => $test['handler_type'],
-                        'reference' => $test['reference'],
-                    ]);
+    //             foreach($tests as $test){
+    //                 $customTest = CustomTest::create([
+    //                     'custom_collection_id' => $customCollection['id'],
+    //                     'key_name' => $test['key_name'],
+    //                     'display_name' => $test['display_name'],
+    //                     'statement' => $test['statement'],
+    //                     'order' => $test['order'],
+    //                     'handler_type' => $test['handler_type'],
+    //                     'reference' => $test['reference'],
+    //                 ]);
     
-                    foreach($test['questions'] as $question){
-                        $customQuestion = CustomQuestion::create([
-                            'custom_test_id' => $customTest['id'],
-                            'statement' => $question['statement']
-                        ]);
+    //                 foreach($test['questions'] as $question){
+    //                     $customQuestion = CustomQuestion::create([
+    //                         'custom_test_id' => $customTest['id'],
+    //                         'statement' => $question['statement']
+    //                     ]);
 
-                        $riskQuestion = RiskQuestionMap::where('question_Id', $question['id'])
-                                                            ->where('company_id', 0)
-                                                            ->first(); 
-                        if($riskQuestion) {
-                            RiskQuestionMap::create([
-                                'risk_id' => $riskQuestion['risk_id'],
-                                'question_Id' => $customQuestion['id'],
-                                'company_id' => $company['id']
-                            ]);
-                        }
-                    }
-                }
-            }
-        });
-    }
+    //                     $riskQuestion = RiskQuestionMap::where('question_Id', $question['id'])
+    //                                                         ->where('company_id', 0)
+    //                                                         ->first(); 
+    //                     if($riskQuestion) {
+    //                         RiskQuestionMap::create([
+    //                             'risk_id' => $riskQuestion['risk_id'],
+    //                             'question_Id' => $customQuestion['id'],
+    //                             'company_id' => $company['id']
+    //                         ]);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 
     private function createMetrics(Company $company)
     {

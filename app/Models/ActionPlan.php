@@ -8,13 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ActionPlan extends Model
 {
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class, 'company_id');
-    }
-
-    public function controlActions(): HasMany
-    {
-        return $this->hasMany(CustomControlAction::class);
-    }
+    protected $table = 'action_plans';
+    public $timestamps = false;
 }

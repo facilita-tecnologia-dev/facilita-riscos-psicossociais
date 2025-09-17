@@ -3,7 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Company;
-use App\Models\CompanyCampaign;
+use App\Models\Campaign;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,9 +18,9 @@ class CampaignEmail extends Mailable
 
     public User $user;
     public Company $company;
-    public CompanyCampaign $campaign;
+    public Campaign $campaign;
 
-    public function __construct(User $user, Company $company, CompanyCampaign $campaign)
+    public function __construct(User $user, Company $company, Campaign $campaign)
     {
         $this->user = $user;
         $this->company = $company;

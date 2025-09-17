@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CampaignStatusTypes;
 use App\Notifications\CustomResetPassword;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,21 +18,18 @@ class Company extends Authenticatable
 
     protected $table = 'companies';
 
-    protected $fillable = ['name', 'cnpj', 'logo'];
-
     /* --- Relations --- */
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'company_users')
-            ->withPivot('role_id')
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'company_user')
+            ->withPivot('role_id');
     }
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'company_users')
-        ->withPivot('company_id');
+        return $this->belongsToMany(Role::class, 'company_user')
+            ->withPivot('company_id');
     }
 
     public function feedbacks(): HasMany
@@ -46,7 +44,7 @@ class Company extends Authenticatable
 
     public function campaigns(): HasMany
     {
-        return $this->hasMany(CompanyCampaign::class, 'company_id');
+        return $this->hasMany(Campaign::class, 'company_id');
     }
 
     public function actionPlan(): HasOne
@@ -54,51 +52,29 @@ class Company extends Authenticatable
         return $this->hasOne(ActionPlan::class);
     }
     
-    public function customCollections(): HasMany
-    {
-        return $this->hasMany(CustomCollection::class);
-    }
-
-    public function userCollections(): HasMany
-    {
-        return $this->hasMany(UserCollection::class);
-    }
 
     /* --- End Relations --- */
 
-    public function getActiveCampaigns() : Collection
+    public function hasCampaignThisYear(string $collectionID, string $status): bool
     {
-        return $this->campaigns
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now());
+        return $this->campaigns()
+                    ->whereYear('start_date', now()->year)
+                    ->where('collection_id', $collectionID)
+                    ->when($status, function($q) use($status) {
+                        $q->where('status', $status);
+                    })
+                    ->exists();
     }
 
-    public function hasCompletedBasicData() : bool
+    public function activeCampaigns() : Collection
     {
-        return $this->users->count() && $this->logo && $this->metrics()->where('value')->count();
+        return $this->campaigns->where('status', CampaignStatusTypes::IN_PROGRESS);
     }
 
-    public function hasCampaignThisYear($collectionId, $finalized = false) : bool
-    {
-        return $this
-            ->campaigns()
-            ->whereYear('start_date', now()->year)
-            ->when($finalized, function($q){
-                $q->where('end_date', '<' , now());
-            })
-            ->whereHas('collection', function($query) use($collectionId) {
-                $query->where('collection_id', $collectionId);
-            })
-            ->exists();
-    }
-
-    public function getFirstName(): string
-    {
-        $name = explode(' ', $this->name);
-
-        return $name[0];
-    }
-
+    // public function hasCompletedBasicData() : bool
+    // {
+    //     return $this->users->count() && $this->logo && $this->metrics()->where('value')->count();
+    // }
 
     public function sendPasswordResetNotification($token)
     {

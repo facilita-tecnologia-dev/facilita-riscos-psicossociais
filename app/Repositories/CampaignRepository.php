@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Models\CompanyCampaign;
+use App\Models\Campaign;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 
 class CampaignRepository
 {
-    public function store(FormRequest $request): CompanyCampaign
+    public function store(FormRequest $request): Campaign
     {
         return DB::transaction(function () use ($request) {
             $validatedData = $request->validated();
    
-            $campaign = CompanyCampaign::create([
+            $campaign = Campaign::create([
                 'company_id' => session('company')->id,
                 'collection_id' => $validatedData['collection_id'],
                 'name' => $validatedData['name'],
@@ -28,7 +28,7 @@ class CampaignRepository
         });
     }
 
-    public function update(CompanyCampaign $campaign, FormRequest $request): CompanyCampaign
+    public function update(Campaign $campaign, FormRequest $request): Campaign
     {
         return DB::transaction(function () use ($campaign, $request) {
             $campaign->update($request->safe()->toArray());
@@ -40,7 +40,7 @@ class CampaignRepository
         });
     }
 
-    public function destroy(CompanyCampaign $campaign): mixed
+    public function destroy(Campaign $campaign): mixed
     {
         return $campaign->delete();
     }

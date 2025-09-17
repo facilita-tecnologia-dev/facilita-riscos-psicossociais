@@ -64,7 +64,7 @@ class LoginController
 
     public function loginUserWithCompany(User $user, Company $company)
     {
-        CompanyService::loadCompanyToSession($company);
+        session(['company' => $company]);
 
         if($user->hasRole('manager')){
             return redirect()->to(route('employee.login.password', $user));
@@ -123,7 +123,7 @@ class LoginController
         $company = Company::firstWhere('id', request('company_id'));
         $roleInRequestCompany = $user->roleInCompany($company);
         
-        CompanyService::loadCompanyToSession($company);
+        session(['company' => $company]);
         
         if($roleInCurrentCompany->name === 'employee' && $roleInRequestCompany->name === 'manager'){
             return redirect()->to(route('employee.login.password', $user));

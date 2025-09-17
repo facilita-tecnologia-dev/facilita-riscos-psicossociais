@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RolePermission extends Model
 {
+    protected $table = 'role_permission';
+    public $timestamps = false;
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);

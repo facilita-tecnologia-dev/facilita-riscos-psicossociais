@@ -7,11 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CompanyMetric extends Model
 {
+    protected $table = 'company_metric';
     public $timestamps = false;
-
-    protected $table = 'company_metrics';
-
-    protected $with = ['metricType'];
 
     /**
      * Returns the company to which this company metric belongs.

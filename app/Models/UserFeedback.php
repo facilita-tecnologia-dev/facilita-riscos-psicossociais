@@ -11,8 +11,6 @@ class UserFeedback extends Model
     /** @use HasFactory<\Database\Factories\UserFeedbackFactory> */
     use HasFactory;
 
-    public function parentUser(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+    protected $table = 'user_feedbacks';
+    public $timestamps = false;
 }

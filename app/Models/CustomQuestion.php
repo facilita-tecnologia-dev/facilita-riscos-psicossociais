@@ -8,16 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CustomQuestion extends Model
 {
-    protected $guarded = [];
+    protected $table = 'custom_questions';
     public $timestamps = false;
-
-    public function parentTest(): BelongsTo
-    {
-        return $this->belongsTo(CustomTest::class);
-    }
-
-    public function answers(): HasMany
-    {
-        return $this->hasMany(UserAnswer::class, 'question_id');
-    }
 }

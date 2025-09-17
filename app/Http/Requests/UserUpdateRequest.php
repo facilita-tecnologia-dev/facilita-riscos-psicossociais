@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\EmployeeStatusEnum;
+use App\Enums\UserStatusTypes;
 use App\Enums\GenderEnum;
 use App\Enums\InternalUserRoleEnum;
 use App\Rules\validateCPF;
@@ -40,7 +40,7 @@ class UserUpdateRequest extends FormRequest
             'work_shift' => ['required', 'string', 'max:255'],
             'admission' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()), Rule::date()->after(today()->subCenturies(1))],
             'role' => ['required', 'string', Rule::enum(InternalUserRoleEnum::class)],
-            'status' => ['required', 'string', Rule::enum(EmployeeStatusEnum::class)],
+            'status' => ['required', 'string', Rule::enum(UserStatusTypes::class)],
         ];
     }
 }

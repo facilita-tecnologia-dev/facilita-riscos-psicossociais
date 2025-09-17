@@ -11,55 +11,5 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Risk extends Model
 {
     protected $table = 'risks';
-
-    // protected $with = ['relatedQuestions:id,risk_id,question_Id', 'controlActions:id,risk_id,content'];
-
-    /**
-     * Returns the questions related to this risk.
-     *
-     * @return HasMany
-     */
-    public function relatedQuestions()
-    {
-        return $this->hasMany(RiskQuestionMap::class, 'risk_id')
-                ->where('company_id', session('company')->id);
-    }
-
-    /**
-     * Returns the control actions related to this risk.
-     */
-    public function controlActions(): HasMany
-    {
-        return $this->hasMany(ControlAction::class);
-    }
-
-    public function customControlActions(): HasMany
-    {
-        return $this->hasMany(CustomControlAction::class);
-    }
-
-    /**
-     * Returns the test related to this risk.
-     */
-    public function relatedTest(): BelongsTo
-    {
-        return $this->belongsTo(Test::class, 'test_id');
-    }
-
-    public function scopeWithRelatedQuestions(Builder $query, Closure $callback): Builder
-    {
-        return $query->with([
-            'relatedQuestions' => $callback,
-        ]);
-    }
-
-    public function scopeWithControlActions(Builder $query): Builder
-    {
-        return $query->with('controlActions');
-    }
-
-    public function scopeWithCustomControlActions(Builder $query): Builder
-    {
-        return $query->with('customControlActions');
-    }
+    public $timestamps = false;
 }

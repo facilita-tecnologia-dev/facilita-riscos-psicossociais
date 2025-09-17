@@ -2,67 +2,33 @@
 
 namespace Database\Factories;
 
-use App\Enums\DepartmentEnum;
-use App\Enums\EducationLevelEnum;
-use App\Enums\GenderEnum;
-use App\Enums\MaritalStatusEnum;
-use App\Enums\OccupationEnum;
-use App\Enums\WorkShiftEnum;
-use App\Models\Company;
-use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $password;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
-        $faker = FakerFactory::create('pt_BR');
+        $faker = \Faker\Factory::create('pt_BR');
 
         return [
             'name' => $faker->name(),
-            'cpf' => $faker->unique()->cpf(),
-            'email' => $faker->email(),
-            'birth_date' => $faker->date($format = 'Y-m-d', $max = '2007-01-01', $min = '1930-01-01'),
-            'gender' => $faker->randomElement(GenderEnum::cases())->value,
-            'department' => $faker->randomElement(DepartmentEnum::cases())->value,
-            'occupation' => $faker->randomElement(OccupationEnum::cases())->value,
-            'admission' => $faker->date($format = 'Y-m-d', $max = 'now', $min = '1930-01-01'),
-            'marital_status' => $faker->randomElement(MaritalStatusEnum::cases())->value,
-            'work_shift' => $faker->randomElement(WorkShiftEnum::cases())->value,
-            'education_level' => $faker->randomElement(EducationLevelEnum::cases())->value,
+            'cpf' => $faker->cpf(),
+            'email' => $faker->unique()->safeEmail(),
+            'password' => static::$password ??= Hash::make('password'),
+            'department' => $faker->word(),
+            'occupation' => $faker->word(),
+            'admission' => $faker->dateTimeBetween('-5 year', 'now'),
+            'birth_date' => $faker->dateTimeBetween('-60 year', '-18 year'),
+            'gender' => $faker->randomElement(['Masculino', 'Feminino', 'Prefiro não dizer']),
+            'marital_status' => $faker->randomElement(['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo(a)']),
+            'work_shift' => $faker->randomElement(['Diurno', 'Vespertino', 'Noturno']),
+            'education_level' => $faker->randomElement(['Ensino Médio Completo', 'Ensino Superior Incompleto', 'Ensino Superior Completo']),
         ];
-    }
-
-    public function configure()
-    {
-        return $this->afterCreating(function ($user) {
-            $company = Company::first();
-            $user->companies()->attach($company->id, [
-                'role_id' => rand(1, 2),
-            ]);
-        });
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
     }
 }

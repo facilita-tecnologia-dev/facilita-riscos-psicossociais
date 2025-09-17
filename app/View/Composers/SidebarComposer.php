@@ -2,6 +2,7 @@
 
 namespace App\View\Composers;
 
+use App\Enums\CampaignStatusTypes;
 use App\Helpers\AuthGuardHelper;
 use App\Models\User;
 use App\Repositories\TestRepository;
@@ -29,18 +30,15 @@ class SidebarComposer
                 'id' => $company['id'],
             ], $user->companies->toArray());
 
-            $hasActivePsychosocialCampaign = $this->elegibilityService->hasActivePsychosocialCampaign();
-            $hasActiveOrganizationalCampaign = $this->elegibilityService->hasActiveOrganizationalCampaign();
+            $hasActivePsychosocialCampaign = session('company')->hasCampaignThisYear(1, CampaignStatusTypes::IN_PROGRESS->value);
+            $hasActiveOrganizationalCampaign = session('company')->hasCampaignThisYear(2, CampaignStatusTypes::IN_PROGRESS->value);
 
-            $activePsychosocialCampaign = $hasActivePsychosocialCampaign ? session('company')->getActiveCampaigns()->filter(fn($campaign) => $campaign->collection->collection_id == 1)->first() : null;
-            $activeOrganizationalCampaign = $hasActiveOrganizationalCampaign ? session('company')->getActiveCampaigns()->filter(fn($campaign) => $campaign->collection->collection_id == 2)->first() : null;
-            
             $view->with([
                 'hasAnsweredPsychosocial' => $hasAnsweredPsychosocial,
                 'hasAnsweredOrganizational' => $hasAnsweredOrganizational,
                 'companiesToSwitch' => $companiesToSwitch,
-                'activePsychosocialCampaign' => $activePsychosocialCampaign,
-                'activeOrganizationalCampaign' => $activeOrganizationalCampaign,
+                'hasActivePsychosocialCampaign' => $hasActivePsychosocialCampaign,
+                'hasActiveOrganizationalCampaign' => $hasActiveOrganizationalCampaign,
                 'isInstanceOfUser' => true,
             ]);
         }

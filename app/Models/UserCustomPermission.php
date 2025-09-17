@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserCustomPermission extends Model
 {
+    protected $table = 'user_custom_permissions';
     public $timestamps = false;
 
     public function user(): BelongsTo

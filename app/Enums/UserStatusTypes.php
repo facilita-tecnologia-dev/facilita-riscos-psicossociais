@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Enums;
+
+enum UserStatusTypes: int
+{
+    case ACTIVE = 1;
+    case INACTIVE = 2;
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::ACTIVE => 'Ativo',
+            self::INACTIVE => 'Inativo',
+        };
+    }
+
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
+}

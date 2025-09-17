@@ -2,112 +2,29 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
-use App\Models\CompanyCampaign;
-use App\Models\CustomCollection;
-use App\Models\Test;
-use App\Models\User;
-use App\Models\UserAnswer;
-use App\Models\UserCollection;
-use App\Models\UserFeedback;
-use App\Models\UserTest;
-use Carbon\Carbon;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\ActionPlan\ActionPlanSeeder;
+use Database\Seeders\BaseTests\BaseCollectionsSeeder;
+use Database\Seeders\Campaigns\CampaignSeeder;
+use Database\Seeders\Metrics\MetricsSeeder;
+use Database\Seeders\Risks\QuestionRiskSeeder;
+use Database\Seeders\Risks\RiskSeeder;
+use Database\Seeders\RolePermissions\PermissionSeeder;
+use Database\Seeders\RolePermissions\RoleSeeder;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-
-        // $this->call(CustomCollectionsSeeder::class);
-        // $company = Company::first();
-        
-        // $companyPsychosocialCollection = CustomCollection::where('company_id', $company->id)
-        //     ->where('collection_id', 1)
-        //     ->first();
-        // $companyOrganizationalCollection = CustomCollection::where('company_id', $company->id)
-        //     ->where('collection_id', 2)
-        //     ->first();
-
-        // $campaign = CompanyCampaign::create([
-        //     'company_id' => $company['id'],
-        //     'name' => "Campanha de Riscos Psicossociais",
-        //     'description' => "Descrição da minha campanha",
-        //     'start_date' => "2025-05-23 14:54:00",
-        //     'end_date' => "2025-05-23 14:54:00",
-        //     'collection_id' => $companyPsychosocialCollection['id'],
-        // ]);
-
-        // $campaign = CompanyCampaign::create([
-        //     'company_id' => $company['id'],
-        //     'name' => "Campanha de Clima Organizacional",
-        //     'description' => "Descrição da minha campanha",
-        //     'start_date' => "2025-05-23 14:54:00",
-        //     'end_date' => "2025-05-23 14:54:00",
-        //     'collection_id' => $companyOrganizationalCollection['id'],
-        // ]);
-
-        // $users = User::factory(150)->create();
-        // $users = $company->users();
-
-        // $users->each(function($user) use($company, $companyOrganizationalCollection) {
-        //     DB::transaction(function() use($company, $user, $companyOrganizationalCollection){
-        //         $newUserCollection = UserCollection::create([
-        //             'user_id' => $user->id,
-        //             'collection_id' => $companyOrganizationalCollection->id,
-        //             'company_id' => $company->id,
-        //             'created_at' => now(),
-        //             'updated_at' => now(),
-        //         ]);
-
-        //         foreach($companyOrganizationalCollection->tests as $test){
-        //             $userTest = UserTest::create([
-        //                 'user_collection_id' => $newUserCollection->id,
-        //                 'test_id' => $test->id,
-        //             ]);
-
-        //             foreach($test->questions as $question){
-
-        //                 UserAnswer::create([
-        //                     'question_option_id' => $answer->id,
-        //                     'question_id' => $question->id,
-        //                     'user_test_id' => $userTest->id,
-        //                     'user_id' => $user->id,
-        //                     'value' => $answer->value,
-        //                 ]);
-        //             }
-        //         }
-        //     });
-        // });   
-
-
-        // DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // DB::table('users')->truncate();
-        // DB::table('company_users')->truncate();
-        // DB::table('user_collections')->truncate();
-        // DB::table('user_tests')->truncate();
-        // DB::table('user_answers')->truncate();
-
-        // DB::table('companies')->truncate();
-        // DB::table('action_plans')->truncate();
-        // DB::table('custom_control_actions')->truncate();
-        // DB::table('company_campaigns')->truncate();
-        // DB::table('company_metrics')->truncate();
-        // DB::table('custom_collections')->truncate();
-        // DB::table('custom_tests')->truncate();
-        // DB::table('custom_questions')->truncate();
-        // DB::table('custom_question_options')->truncate();
-        // DB::table('user_custom_permissions')->truncate();
-        // DB::table('user_department_permissions')->truncate();
-        // DB::table('user_feedback')->truncate();
-
-        // DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $this->call([
+            BaseCollectionsSeeder::class,
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            MetricsSeeder::class,
+            ActionPlanSeeder::class,
+            CompanySeeder::class,
+            RiskSeeder::class,
+            CampaignSeeder::class
+        ]);
     }
 }

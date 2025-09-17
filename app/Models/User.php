@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    protected $guarded = [];
+    protected $table = 'users';
+    
     protected $cachedPermissionMap;
 
 
@@ -49,45 +49,12 @@ class User extends Authenticatable
         return $this->hasMany(UserCollection::class, 'user_id');
     }
 
-    public function latestPsychosocialCollection(): HasOne
+    public function departmentScopes(): HasMany
     {
-        return $this->hasOne(UserCollection::class)
-            ->whereHas('collectionType', function ($query) {
-                $query->where('collection_id', 1); // <-- ID da collectionType
-            })
-            ->where('company_id', session('company')->id)
-            ->whereYear('created_at', now()->year)
-            ->latest();
-    }
-
-    public function latestOrganizationalClimateCollection(): HasOne
-    {      
-        return $this->hasOne(UserCollection::class)
-            ->whereHas('collectionType', function ($query) {
-                $query->where('collection_id', 2); // <-- ID da collectionType
-            })
-            ->where('company_id', session('company')->id)
-            ->whereYear('created_at', now()->year)
-            ->latest();
+        return $this->hasMany(UserDepartmentPermission::class, 'user_id');
     }
 
     /* ---- End Relations ---- */
-
-    /* ---- Scopes ---- */
-    public function scopeWithLatestOrganizationalClimateCollection(Builder $query, Closure $callback): Builder
-    {
-        return $query->with([
-            'latestOrganizationalClimateCollection' => $callback,
-        ]);
-    }
-
-    public function scopeWithLatestPsychosocialCollection(Builder $query, Closure $callback): Builder
-    {
-        return $query->with([
-            'latestPsychosocialCollection' => $callback,
-        ]);
-    }
-    /* ---- End Scopes ---- */
 
     /* ---- Aux/Verifiers/Conditionals ---- */
     public function roleInCompany(?Company $company = null): Role
@@ -100,11 +67,6 @@ class User extends Authenticatable
     public function hasRole(string $role): bool
     {
         return $this->roleInCompany()->name == $role;
-    }
-
-    public function departmentScopes(): HasMany
-    {
-        return $this->hasMany(UserDepartmentPermission::class, 'user_id');
     }
 
     public function hasPermission(string $key): bool

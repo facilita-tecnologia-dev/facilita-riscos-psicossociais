@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserDepartmentPermission extends Model
 {
+    protected $table = 'user_department_permissions';
     public $timestamps = false;
 
     public function user(): BelongsTo
@@ -17,10 +18,5 @@ class UserDepartmentPermission extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
-    }
-
-    public function departmentUsers()
-    {
-        return User::where('department', $this->department);
     }
 }

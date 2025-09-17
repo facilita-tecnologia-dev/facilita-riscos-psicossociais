@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\BaseCollection;
 use App\Models\Collection;
 use App\Models\Company;
 use App\Services\CompanyService;
@@ -18,12 +19,12 @@ class ChooseCompanyToLoginController
 
     public function attemptInternalLoginWithCompany(Company $company)
     {
-        CompanyService::loadCompanyToSession($company);
+        session(['company' => $company]);
 
         if (Auth::user()->hasRole('manager')) {
             return redirect()->route('dashboard.psychosocial');
         }
 
-        return redirect()->route('answer-test', Collection::where('key_name', 'psychosocial-risks')->first());
+        return redirect()->route('answer-test', BaseCollection::where('key_name', 'psychosocial-risks')->first());
     }
 }

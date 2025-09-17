@@ -23,7 +23,7 @@ class AuthService {
                 return route('employee.login.choose-company', $actor);
             }
 
-            CompanyService::loadCompanyToSession($actor->companies->first());
+            session(['company' => $actor->companies->first()]);
 
             if($this->userIsManager($actor)){
                 return route('employee.login.password', $actor);
@@ -35,7 +35,7 @@ class AuthService {
         if($actor instanceof Company){
             if($this->checkPasswordHash($data['password'], $actor->password)){   
                 $this->login($actor);
-                CompanyService::loadCompanyToSession($actor);
+                session(['company' => $actor]);
             } else{
                 return url()->previous();
             }
