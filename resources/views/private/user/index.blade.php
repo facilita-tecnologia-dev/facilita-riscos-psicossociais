@@ -21,29 +21,16 @@
                 @if($users)
                     <div class="w-full flex flex-col-reverse md:flex-row gap-4 items-start">
                         <div class="flex items-center gap-2 w-full flex-wrap">
-                            <x-numbers-of-records :value="$filteredUserCount" />
+                            <x-numbers-of-records :value="$users->count()" />
 
                             <x-applied-filters
-                                :filtersApplied="$filtersApplied"
+                                :filters="$filters"
                             />
                         </div>
 
                         <x-filter-actions
-                            :filtersApplied="$filtersApplied"
-                            :modalFilters="[
-                                'name',
-                                'cpf',
-                                'gender', 
-                                'department', 
-                                'occupation', 
-                                'work_shift', 
-                                'marital_status', 
-                                'education_level', 
-                                'age_range', 
-                                'admission_range',
-                                'hasAnsweredPsychosocialCollection', 
-                                'hasAnsweredOrganizationalCollection'
-                            ]" 
+                            :filters="$filters"
+                            :modalFilters="['name', 'cpf', 'gender',  'department',  'occupation',  'work_shift',  'marital_status',  'education_level',  'age_range',  'admission_range', 'hasAnsweredPsychosocialCollection',  'hasAnsweredOrganizationalCollection']" 
                         />
                     </div>
                 @endif
@@ -64,20 +51,17 @@
                 @endcan
             </div>
 
-            @if($users)
+            @if(session('auth:company')->users->isNotEmpty())
                 <x-table class="flex flex-col gap-1">
                     <x-table.head class="flex items-center gap-3">
                         <x-table.head.sortable-th class="flex-1" field="name">
                             Nome
                         </x-table.head.sortable-th>
-                        <x-table.head.sortable-th class="hidden lg:block w-24" field="age">
+                        <x-table.head.sortable-th class="hidden lg:block w-32" field="age">
                             Idade
                         </x-table.head.sortable-th>
                         <x-table.head.sortable-th class="hidden md:block flex-1" field="department">
                             Setor
-                        </x-table.head.sortable-th>
-                        <x-table.head.sortable-th class="hidden sm:block flex-1" field="occupation">
-                            Função
                         </x-table.head.sortable-th>
                         <x-table.head.th class="text-center w-6 sm:w-12">
                         </x-table.head.th>
@@ -92,23 +76,22 @@
                         @foreach ($users as $user)
                             <x-table.body.tr tag="a" href="{{ route('user.show', $user) }}" class="flex items-center gap-3" >
                                 <x-table.body.td class="truncate flex-1">{{ $user->name }}</x-table.body.td>
-                                <x-table.body.td class="hidden lg:block w-24">{{ $user->birth_date ? Carbon\Carbon::create($user->birth_date)->age . ' anos' : 'Não cadastrado' }}</x-table.body.td>
-                                <x-table.body.td class="hidden md:block truncate flex-1">{{ $user->department ?? 'Não cadastrado' }}</x-table.body.td>
-                                <x-table.body.td class="hidden sm:block truncate flex-1">{{ $user->occupation ?? 'Não cadastrado' }}</x-table.body.td>
+                                <x-table.body.td class="hidden lg:block w-32">{{ $user->birth_date ? Carbon\Carbon::create($user->birth_date)->age : '-' }}</x-table.body.td>
+                                <x-table.body.td class="hidden md:block truncate flex-1">{{ $user->department }}</x-table.body.td>
                                 <x-table.body.td class="text-center w-6 sm:w-12">
-                                    @if($user->hasRole('manager'))
+                                    @if($user->hasRole(App\Enums\RoleEnum::MANAGER->value))
                                         <i class="fa-solid fa-briefcase"></i>
                                     @endif
                                 </x-table.body.td>
                                 <x-table.body.td class="text-center w-6 sm:w-12">
-                                    @if($user->latestPsychosocialCollection)
+                                    @if($user->hasAnsweredCampaign($latestPsychosocialCampaign?->id))
                                         <i class="fa-solid fa-check"></i>
                                     @else
                                         <i class="fa-solid fa-xmark"></i>
                                     @endif
                                 </x-table.body.td>
                                 <x-table.body.td class="text-center w-6 sm:w-12">
-                                    @if($user->latestOrganizationalClimateCollection)
+                                    @if($user->hasAnsweredCampaign($latestOrganizationalCampaign?->id))
                                         <i class="fa-solid fa-check"></i>
                                     @else
                                         <i class="fa-solid fa-xmark"></i>

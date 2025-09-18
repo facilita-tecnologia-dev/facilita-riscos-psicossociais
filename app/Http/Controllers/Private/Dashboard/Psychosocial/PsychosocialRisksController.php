@@ -43,7 +43,7 @@ class PsychosocialRisksController
 
         $risks = $this->getCompiledPageData();
 
-        $company = session('company');
+        $company = session('auth:company');
         $companyLogo = $company->logo;
         $companyName = $company->name;
 
@@ -58,7 +58,7 @@ class PsychosocialRisksController
 
     private function query(Request $request)
     {
-        $psychosocialCampaign = session('company')->campaigns()
+        $psychosocialCampaign = session('auth:company')->campaigns()
             ->whereYear('end_date', now()->year)
             ->whereHas('collection', function($query){
                 $query->where('collection_id', 1);
@@ -77,7 +77,7 @@ class PsychosocialRisksController
                     ->whereYear('created_at', $request->year ?? Carbon::now()->year)
                     ->whereHas('parentCollection', function ($query) {
                         $query
-                        ->where('company_id', session('company')->id);
+                        ->where('company_id', session('auth:company')->id);
                     })
                     ->withAvg(['answers as average_value'], 'value')
                     ->with([
@@ -136,7 +136,7 @@ class PsychosocialRisksController
 
         $testType->average = round($testType['userTests']->avg('average_value'), 2);
         
-        $evaluatedTest = $this->testService->evaluateTests($testType, session('company')->metrics);
+        $evaluatedTest = $this->testService->evaluateTests($testType, session('auth:company')->metrics);
         
         foreach($evaluatedTest['risks'] as &$risk){
             $risk['riskCaption'] = RiskLevelEnum::labelFromValue($risk['riskLevel']);

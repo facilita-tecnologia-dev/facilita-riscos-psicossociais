@@ -24,48 +24,47 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
     public function model(array $row)
     {
         return DB::transaction(function () use ($row) {
-            if ($row['nome_completo'] != null) {
-                
-                $birth_date = $this->convertDate($row['data_de_nascimento']) ?? null;
-                $admission = $this->convertDate($row['admissao']);
+            if ($row['nome_completo'] != null && $row['cpf'] != null) {
                 $user = User::firstWhere('cpf', $row['cpf']);
+                
+                $birth_date = $row['data_de_nascimento'] ? $this->convertDate($row['data_de_nascimento']) : ($user ? $user->birth_date : null);
+                $admission = $row['admissao'] ? $this->convertDate($row['admissao']) : ($user ? $user->admission : null);
 
                 if ($user) {
                     $user->update([
                         'name' => $row['nome_completo'],
-                        'birth_date' => $birth_date,
                         'department' => $row['setor'],
                         'occupation' => $row['cargo'],
                         'work_shift' => $row['turno'],
-                        'admission' => $admission,
                         'gender' => $row['sexo'],
                         'marital_status' => $row['estado_civil'],
                         'education_level' => $row['grau_de_instrucao'],
                         'email' => $row['email'],
+                        'admission' => $admission,
+                        'birth_date' => $birth_date,
                     ]);
-                
-                    $user->companies()->syncWithoutDetaching([
-                        session('company')->id => ['role_id' => 2]
-                    ]);
-                
+                    
+                    $userAlreadyOnCompany = session('auth:company')->users()->where('users.id', $user->id)->exists();
+                    if(!$userAlreadyOnCompany) session('auth:company')->users()->syncWithoutDetaching([$user->id => ['role_id' => 2]]);
+                    
                     return $user;
                 }
 
                 $user = User::create([
                     'name' => $row['nome_completo'],
-                    'birth_date' => $birth_date,
                     'cpf' => $row['cpf'],
                     'department' => $row['setor'],
                     'occupation' => $row['cargo'],
                     'work_shift' => $row['turno'],
-                    'admission' => $admission,
                     'gender' => $row['sexo'],
                     'marital_status' => $row['estado_civil'],
                     'education_level' => $row['grau_de_instrucao'],
                     'email' => $row['email'],
+                    'birth_date' => $birth_date,
+                    'admission' => $admission,
                 ]);
 
-                $user->companies()->attach(session('company')->id, ['role_id' => 2]);
+                session('auth:company')->users()->attach($user, ['role_id' => 2]);
 
                 return $user;
             }
@@ -83,8 +82,8 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
             'data_de_nascimento' => ['nullable'],
             'setor' => ['required', 'string' ,'max:255'],
             'cargo' => ['required', 'string' ,'max:255'],
-            'turno' => ['required', 'string' ,'max:255'],
-            'admissao' => ['required'],
+            'turno' => ['nullable', 'string' ,'max:255'],
+            'admissao' => ['nullable'],
             'sexo' => ['nullable', 'string'],
             'estado_civil' => ['nullable', 'string', 'max:255'],
             'grau_de_instrucao' => ['nullable', 'string', 'max:255'],

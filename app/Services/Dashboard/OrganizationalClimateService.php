@@ -2,8 +2,6 @@
 
 namespace App\Services\Dashboard;
 
-use App\Helpers\AuthGuardHelper;
-use App\Models\User;
 use App\Services\User\UserFilterService;
 use Illuminate\Support\Collection;
 
@@ -15,7 +13,7 @@ class OrganizationalClimateService
 
     public function getOrganizationalData($request, $applyFilters = false): Collection
     {
-        $query = session('company')->users()
+        $query = session('auth:company')->users()
             ->whereHas('latestOrganizationalClimateCollection')
             ->withLatestOrganizationalClimateCollection(fn($q) => 
                 $q->whereYear('created_at', $request->year ?? now()->year)
@@ -38,8 +36,8 @@ class OrganizationalClimateService
 
     public function filterByDepartmentScope(Collection $users): Collection
     {
-        $user = AuthGuardHelper::user();
-        if (!($user instanceof User)) {
+        $user = session('auth:user');
+        if (!session('auth:guard') === 'user') {
             return $users;
         }
 
@@ -50,7 +48,7 @@ class OrganizationalClimateService
             
 
         return $users->filter(function ($u) use ($allowedDepartments) {
-            return $u instanceof User && in_array($u->department, $allowedDepartments);
+            return session('auth:guard') === 'user' && in_array($u->department, $allowedDepartments);
         });
     }
 }

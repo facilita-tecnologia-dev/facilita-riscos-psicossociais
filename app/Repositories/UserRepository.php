@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\InternalUserRoleEnum;
+use App\Enums\RoleEnum;
 use App\Imports\UsersImport;
 use App\Models\Role;
 use App\Models\User;
@@ -19,23 +20,21 @@ class UserRepository
             $user = User::firstWhere('cpf', $data['cpf']);
 
             if($user){
-                $user->companies()->syncWithoutDetaching([session('company')->id => ['role_id' => 2]]);
+                session('auth:company')->users()->attach($user, ['role_id', 2]);
             } else{
-                $userData = $data->except('role');
+                $role = RoleEnum::from($data['role']);
 
-                $userRole = Role::where('display_name', InternalUserRoleEnum::from($data['role'])->value)->first();
-
-                if($userRole->name == 'manager'){
-                    $userData['password'] = AuthService::createTempPassword();
+                if($role === RoleEnum::MANAGER){
+                    $data['password'] = $user->generateTemporaryPassword();
+                    $data['is_temp_password'] = true;
                 }     
 
-                $user = User::create($userData);
+                $user = User::create($data->except('role'));
 
-                $user->companies()->sync([session('company')->id => ['role_id' => $userRole->id]]);
+                session('auth:company')->users()->attach($user, ['role_id' => $data['role']]);
             }
-
-            session()->flash('password-warning', true);
-            session(['company' => session('company')->load('users')]);
+            
+            session(['company' => session('auth:company')->load('users')]);
 
             return $user;
         });
@@ -51,33 +50,25 @@ class UserRepository
             return $import->failures();
         }
         
-        session(['company' => session('company')->load('users')]);
+        session(['company' => session('auth:company')->load('users')]);
+        
         return true;
     }
 
     public function update(ValidatedInput $data, User $user): User
     {
         return DB::transaction(function () use ($data, $user) {
-            $userData = $data->except(['role', 'status']);
-            
-            $userRole = Role::where('display_name', InternalUserRoleEnum::from($data['role'])->value)->first();
-            
-            $user->companies()->syncWithoutDetaching([
-                session('company')->id => ['status' => $data['status']]
-            ]);
+            $role = RoleEnum::from($data['role']);
 
-            if($userRole->name == 'manager'){
-                if(!$user->password){
-                    $userData['password'] = AuthService::createTempPassword();
-                }
+            $user->companies()->syncWithoutDetaching([session('auth:company')->id => ['status' => $data['status']]]);
+            if($role == RoleEnum::MANAGER && !$user->password){
+                $data['password'] = $user->generateTemporaryPassword();
+                $data['is_temp_password'] = true;
             }
             
-            $user->update($userData);
-
-            $user->companies()->sync([session('company')->id => ['role_id' => $userRole->id]]);
-
-            session()->flash('password-warning', true);
-            session(['company' => session('company')->load('users')]);
+            $user->update($data->except(['role', 'status']));
+            $user->companies()->sync([session('auth:company')->id => ['role_id' => $role->value]]);
+            session(['company' => session('auth:company')->load('users')]);
 
             return $user;
         });
@@ -85,8 +76,8 @@ class UserRepository
 
     public function destroy(User $user): void
     {
-        session('company')->users()->detach($user->id);
+        session('auth:company')->users()->detach($user->id);
 
-        session(['company' => session('company')->load('users')]);
+        session(['company' => session('auth:company')->load('users')]);
     }
 }

@@ -3,43 +3,27 @@
 namespace App\View\Composers;
 
 use App\Enums\CampaignStatusTypes;
-use App\Helpers\AuthGuardHelper;
-use App\Models\User;
-use App\Repositories\TestRepository;
-use App\Services\User\UserElegibilityService;
 use Illuminate\View\View;
 
 class SidebarComposer
 {
-    protected UserElegibilityService $elegibilityService;
-
-    public function __construct(UserElegibilityService $elegibilityService)
-    {
-        $this->elegibilityService = $elegibilityService;
-    }
-
     public function compose(View $view): void
     {
-        $user = AuthGuardHelper::user();
-        
-        if ($user instanceof User) {
-            $hasAnsweredPsychosocial = $this->elegibilityService->hasAnsweredPsychosocialCollection($user);
-            $hasAnsweredOrganizational = $this->elegibilityService->hasAnsweredOrganizationalCollection($user);
-            $companiesToSwitch = array_map(fn ($company) => [
-                'name' => $company['name'],
-                'id' => $company['id'],
-            ], $user->companies->toArray());
+        if (session('auth:guard') === 'user') {
+            $companies = session('auth:user')->companies->map(fn($company) => ['id' => $company->id, 'name' => $company->name]);
 
-            $hasActivePsychosocialCampaign = session('company')->hasCampaignThisYear(1, CampaignStatusTypes::IN_PROGRESS->value);
-            $hasActiveOrganizationalCampaign = session('company')->hasCampaignThisYear(2, CampaignStatusTypes::IN_PROGRESS->value);
-
+            $hasActivePsychosocialCampaign = session('auth:company')->hasCampaignThisYear(1, CampaignStatusTypes::IN_PROGRESS->value);
+            $hasActiveOrganizationalCampaign = session('auth:company')->hasCampaignThisYear(2, CampaignStatusTypes::IN_PROGRESS->value);
+            
+            $hasAnsweredPsychosocial = session('auth:user')->collections->where('campaign_id',  session('auth:company')->latestPsychosocialCampaign()?->id)->isNotEmpty();
+            $hasAnsweredOrganizational = session('auth:user')->collections->where('campaign_id',  session('auth:company')->latestOrganizationalCampaign()?->id)->isNotEmpty();
+           
             $view->with([
+                'companies' => $companies,
                 'hasAnsweredPsychosocial' => $hasAnsweredPsychosocial,
                 'hasAnsweredOrganizational' => $hasAnsweredOrganizational,
-                'companiesToSwitch' => $companiesToSwitch,
                 'hasActivePsychosocialCampaign' => $hasActivePsychosocialCampaign,
                 'hasActiveOrganizationalCampaign' => $hasActiveOrganizationalCampaign,
-                'isInstanceOfUser' => true,
             ]);
         }
     }

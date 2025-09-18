@@ -24,19 +24,17 @@ class User extends Authenticatable
     
     protected $cachedPermissionMap;
 
-
     /* ---- Relations ---- */
     public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Company::class, 'company_users')
-            ->withPivot('role_id', 'status')
-            ->withTimestamps();
+        return $this->belongsToMany(Company::class, 'company_user')
+            ->withPivot('role_id', 'status');
     }
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'company_users')
-        ->withPivot('company_id');
+        return $this->belongsToMany(Role::class, 'company_user')
+                    ->withPivot('company_id');
     }
 
     public function feedbacks(): HasMany
@@ -46,7 +44,8 @@ class User extends Authenticatable
 
     public function collections(): HasMany
     {
-        return $this->hasMany(UserCollection::class, 'user_id');
+        return $this->hasMany(UserCollection::class)
+                    ->where('company_id', session('auth:company')->id);
     }
 
     public function departmentScopes(): HasMany
@@ -57,16 +56,26 @@ class User extends Authenticatable
     /* ---- End Relations ---- */
 
     /* ---- Aux/Verifiers/Conditionals ---- */
-    public function roleInCompany(?Company $company = null): Role
+    public function hasAnsweredCampaign($campaignID): bool
     {
-        $roles = $this->roles()->get(); 
-        $company = $company ?? session('company');
-        return $roles->first(fn($role) => $role->pivot->company_id == $company->id);
+        return $this->collections->where('campaign_id', $campaignID)->isNotEmpty();
+    }
+
+    public function status(?Company $company = null)
+    {
+        $company = $company ?? session('auth:company');
+        return $this->companies()->where('companies.id', $company->id)->first()['pivot']['status'];
+    }
+
+    public function role(?Company $company = null): Role
+    {
+        $company = $company ?? session('auth:company');
+        return $this->roles()->wherePivot('company_id', $company->id)->first();
     }
 
     public function hasRole(string $role): bool
     {
-        return $this->roleInCompany()->name == $role;
+        return $this->role()->type == $role;
     }
 
     public function hasPermission(string $key): bool
@@ -86,7 +95,7 @@ class User extends Authenticatable
 
     private function loadPermissions(): array
     {
-        $companyId = session('company')->id;
+        $companyId = session('auth:company')->id;
 
         // 1. Permissões customizadas por usuário (tanto allowed quanto denied)
         $custom = DB::table('user_custom_permissions')
@@ -99,7 +108,7 @@ class User extends Authenticatable
             ->toArray();
 
         // 2. Papel do usuário
-        $roleId = DB::table('company_users')
+        $roleId = DB::table('company_user')
             ->where('user_id', $this->id)
             ->where('company_id', $companyId)
             ->value('role_id');
@@ -108,10 +117,10 @@ class User extends Authenticatable
         $rolePermissions = [];
 
         if ($roleId) {
-            $rolePermissions = DB::table('role_permissions')
-                ->join('permissions', 'permissions.id', '=', 'role_permissions.permission_id')
-                ->where('role_permissions.role_id', $roleId)
-                ->where('role_permissions.allowed', true)
+            $rolePermissions = DB::table('role_permission')
+                ->join('permissions', 'permissions.id', '=', 'role_permission.permission_id')
+                ->where('role_permission.role_id', $roleId)
+                ->where('role_permission.allowed', true)
                 ->pluck('permissions.key_name')
                 ->toArray();
         }
@@ -128,6 +137,12 @@ class User extends Authenticatable
     }
 
     /* ---- End Aux/Verifiers/Conditionals ---- */
+
+    
+    public static function generateTemporaryPassword(): string
+    {
+        return 'temp_' . bin2hex(random_bytes(5));
+    }
 
     public function sendPasswordResetNotification($token)
     {

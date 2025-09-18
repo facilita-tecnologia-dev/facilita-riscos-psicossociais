@@ -25,7 +25,7 @@ class CustomControlActionController
         ]);
 
         CustomControlAction::create([
-            'company_id' => session('company')->id,
+            'company_id' => session('auth:company')->id,
             'action_plan_id' => $actionPlan->id,
             'risk_id' => $risk->id,
             'content' => $validatedData['control_action'],
@@ -35,7 +35,7 @@ class CustomControlActionController
             'status' => $validatedData['status'] ?? null,
         ]);
 
-        session(['company' => session('company')->load('actionPlan.controlActions')]);
+        session(['company' => session('auth:company')->load('actionPlan.controlActions')]);
 
         return back()->with('message', 'Medida de Controle criada com sucesso!');
     }
@@ -47,7 +47,7 @@ class CustomControlActionController
     {
         $controlAction->delete();
 
-        session(['company' => session('company')->load('actionPlan.controlActions')]);
+        session(['company' => session('auth:company')->load('actionPlan.controlActions')]);
 
         return back()->with('message', 'Medida de Controle excluída com sucesso!');
     }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Private;
 
-use App\Helpers\AuthGuardHelper;
 use App\Models\CustomCollection;
 use App\Models\UserAnswer;
 use App\Models\UserCollection;
@@ -33,7 +32,6 @@ class TestsController
             }
         }
 
-        // $pendingAnswers = PendingTestAnswer::query()->where('user_id', '=', AuthGuardHelper::user()->id)->where('test_id', '=', $test->id)->get();
 
         return view('private.tests.test', compact('test', 'testIndex', 'collection'));
     }
@@ -102,9 +100,9 @@ class TestsController
         
         DB::transaction(function() use($collection, $tests, $compiledTestAnswers){
             $newUserCollection = UserCollection::create([
-                'user_id' => AuthGuardHelper::user()->id,
+                'user_id' => session('auth:user')->id,
                 'collection_id' => $collection->id,
-                'company_id' => session('company')->id,
+                'company_id' => session('auth:company')->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -123,7 +121,7 @@ class TestsController
                     UserAnswer::create([
                         'question_id' => $question->id,
                         'user_test_id' => $userTest->id,
-                        'user_id' => AuthGuardHelper::user()->id,
+                        'user_id' => session('auth:user')->id,
                         'value' => $questionAnswer,
                     ]);
                 });  
@@ -138,7 +136,7 @@ class TestsController
 
         $compiled = $defaultTestsOnDatabase->map(function($test) use($collection, $customTestsOnDatabase) {
             $relatedCustomTest = $customTestsOnDatabase
-                ->where('company_id', session('company')->id)
+                ->where('company_id', session('auth:company')->id)
                 ->where('collection_id', $collection->id)
                 ->where('test_id', $test->id)
                 ->first();

@@ -38,7 +38,6 @@ class UserFilterService
         AdmissionRangeFilter::class,
         HasAnsweredPsychosocialFilter::class,
         HasAnsweredOrganizationalFilter::class,
-        // Adicione mais filtros aqui
     ];
 
     /**
@@ -65,14 +64,15 @@ class UserFilterService
             $direction = strtolower(request('order_direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
             if ($orderBy == 'psychosocial-risks') {
-                $latestPsychosocialSub = DB::table('user_collections')
-                    ->select('user_id', DB::raw('MAX(created_at) as latest_created_at'))
-                    ->where('collection_id', 1)
-                    ->groupBy('user_id');
+                dd(session('auth:company')->latestPsychosocialCampaign()->userCollections()->latest());
+                // $latestPsychosocialSub = DB::table('user_collections')
+                //     ->select('user_id', DB::raw('MAX(created_at) as latest_created_at'))
+                //     ->where('collection_id', 1)
+                //     ->groupBy('user_id');
 
-                return $query->leftJoinSub($latestPsychosocialSub, 'latest_psychosocial', function ($join) {
-                    $join->on('users.id', '=', 'latest_psychosocial.user_id');
-                })->orderBy('latest_psychosocial.latest_created_at', $direction);
+                // return $query->leftJoinSub($latestPsychosocialSub, 'latest_psychosocial', function ($join) {
+                //     $join->on('users.id', '=', 'latest_psychosocial.user_id');
+                // })->orderBy('latest_psychosocial.latest_created_at', $direction);
             }
 
             if ($orderBy == 'organizational-climate') {

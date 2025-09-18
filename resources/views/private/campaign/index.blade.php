@@ -15,7 +15,7 @@
                     <i class="fa-solid fa-circle-info"></i>
                     {{ session('message') }}
                 </x-structure.message>
-            @elseif(session('company')->hasCampaignThisYear(1, App\Enums\CampaignStatusTypes::IN_PROGRESS->value))
+            @elseif(session('auth:company')->hasCampaignThisYear(1, App\Enums\CampaignStatusTypes::IN_PROGRESS->value))
                 <x-structure.message>
                     <i class="fa-solid fa-circle-info"></i>
                     O Plano de Ação só poderá ser acessado e editado após a finalização da campanha de Riscos Psicossociais.
@@ -33,8 +33,8 @@
                     </div>
                 </div>
             @endcan
-             
-            @if($Campaigns)
+                
+            @if(session('auth:company')->campaigns->isNotEmpty())
                 <x-table class="flex flex-col gap-1">
                     <x-table.head class="flex items-center gap-3">
                         <x-table.head.sortable-th class="flex-1" field="name">
@@ -49,25 +49,21 @@
                         <x-table.head.sortable-th class="w-24" field="end_date">
                             Status
                         </x-table.head.sortable-th>
-                        @if(session('company')->activeCampaigns()->count())
+                        @if(session('auth:company')->activeCampaigns()->count())
                             <x-table.head.th class="w-32">
                             </x-table.head.th>
                         @endif
                     </x-table.head>
                     <x-table.body>
-                        @foreach ($Campaigns as $campaign)
+                        @foreach ($campaigns as $campaign)
                             <x-table.body.tr tag="a" href="{{ route('campaign.show', $campaign) }}" class="flex items-center gap-3" >
                                 <x-table.body.td class="truncate flex-1">{{ $campaign->name }}</x-table.body.td>
                                 <x-table.body.td class="hidden md:block truncate flex-1">{{ $campaign->start_date->format('d/m/Y - H:i') }}</x-table.body.td>
                                 <x-table.body.td class="hidden md:block truncate flex-1">{{ $campaign->end_date->format('d/m/Y - H:i') }}</x-table.body.td>
-                                <x-table.body.td class="truncate w-24">
-                                    @if(now() >= $campaign->start_date && now() <= $campaign->end_date) Ativa @endif
-                                    @if(now() <= $campaign->start_date) Agendada @endif
-                                    @if(now() >= $campaign->end_date) Encerrada @endif
-                                </x-table.body.td>
-                                @if(session('company')->activeCampaigns()->count())
+                                <x-table.body.td class="truncate w-24">{{ $campaign->status->label() }}</x-table.body.td>
+                                @if(session('auth:company')->activeCampaigns()->isNotEmpty())
                                     <x-table.body.td class="w-32">
-                                            @if(now() >= $campaign->start_date && now() <= $campaign->end_date)
+                                            @if($campaign->status === App\Enums\CampaignStatusTypes::IN_PROGRESS)
                                                 <x-form action="{{ route('campaign.notify', $campaign) }}" class="w-full" post>
                                                     <x-action tag="button" data-tippy-content="Notificar colaboradores sobre essa campanha" width="full">
                                                         <i class="fa-solid fa-envelope"></i>
@@ -83,11 +79,11 @@
                     </x-table.body>
                 </x-table>
 
-                {{ $Campaigns->links() }}
+                {{ $campaigns->links() }}
             @else
                 <div class="w-full flex flex-col items-center gap-2">
                     <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
-                    <p class="text-base text-center">Você ainda não registrou colaboradores.</p>
+                    <p class="text-base text-center">Você ainda não agendou campanhas.</p>
                 </div>         
             @endif
         </x-structure.main-content-container>

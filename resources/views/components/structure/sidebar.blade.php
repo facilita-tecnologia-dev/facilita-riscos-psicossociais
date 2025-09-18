@@ -4,31 +4,21 @@
 
 <div id="sidebar" class="bg-gray-100 z-40 w-[280px] overflow-auto transition-all duration-200 shadow-lg h-screen flex flex-col pt-8 pb-12 absolute -left-full top-0">
     <header class="w-full flex items-center justify-center px-8 py-2">
-        @if(session('company')->logo)
-            <img src="{{ asset(session('company')->logo) }}" alt="" class="w-full max-h-12 object-contain">
+        @if(session('auth:company')->logo)
+            <img src="{{ asset(session('auth:company')->logo) }}" alt="" class="w-full max-h-12 object-contain">
         @else
-            <h2 class="text-lg font-semibold text-left">{{ session('company')->name }}</h2>
+            <h2 class="text-lg font-semibold text-left">{{ session('auth:company')->name }}</h2>
         @endif
     </header>
 
     <div class="flex-1 px-4 py-8 flex flex-col gap-6">
         <x-sidebar.menu title="Home">
-            @if(Auth::guard('user')->check())
-                <x-sidebar.item href="{{ route('welcome.user') }}" class="">
-                    <div class="w-5 flex justify-center items-center">
-                        <i class="fa-solid fa-house"></i>
-                    </div>
-                    Home
-                </x-sidebar.item>
-            @elseif (Auth::guard('company')->check())
-                <x-sidebar.item href="{{ route('welcome.company') }}" class="">
-                    <div class="w-5 flex justify-center items-center">
-                        <i class="fa-solid fa-house"></i>
-                    </div>
-                    Home
-                </x-sidebar.item>
-            @endif
-
+            <x-sidebar.item href="{{ session('auth:guard') === 'user' ? route('welcome.user') : route('welcome.company') }}" class="">
+                <div class="w-5 flex justify-center items-center">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+                Home
+            </x-sidebar.item>
         </x-sidebar.menu>
 
         @canany(['psychosocial-dashboard-view', 'organizational-dashboard-view', 'feedbacks-index', 'metrics-edit', 'demographics-dashboard-view'])
@@ -100,7 +90,7 @@
                 @endcan
                 @can('answer-psychosocial-test')
                     @if($hasActivePsychosocialCampaign)
-                        <x-sidebar.item href="{{ route('answer-test', $activePsychosocialCampaign->collection) }}" class="{{ $hasAnsweredPsychosocial  ? 'pointer-events-none opacity-50' : '' }}">
+                        <x-sidebar.item href="{{-- route('answer-test', $activePsychosocialCampaign->collection) --}}" class="{{ $hasAnsweredPsychosocial  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-question"></i>
                             </div>
@@ -110,7 +100,7 @@
                 @endcan
                 @can('answer-organizational-test')
                     @if($hasActiveOrganizationalCampaign)
-                        <x-sidebar.item href="{{ route('answer-test', $activeOrganizationalCampaign->collection) }}" class="{{ $hasAnsweredOrganizational  ? 'pointer-events-none opacity-50' : '' }}">
+                        <x-sidebar.item href="{{-- route('answer-test', $activeOrganizationalCampaign->collection) --}}" class="{{ $hasAnsweredOrganizational  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-question"></i>
                             </div>
@@ -124,7 +114,7 @@
         @canany(['company-show', 'user-index'])
             <x-sidebar.menu title="Empresa">
                 @can('company-show')
-                    <x-sidebar.item href="{{ route('company.show', session('company')) }}" class="{{ request()->routeIs('company.show') ? 'bg-gray-200' : ''}}">
+                    <x-sidebar.item href="{{ route('company.show', session('auth:company')) }}" class="{{ request()->routeIs('company.show') ? 'bg-gray-200' : ''}}">
                         <div class="w-5 flex justify-center items-center">
                             <i class="fa-solid fa-building"></i>
                         </div>
@@ -140,7 +130,7 @@
                     </x-sidebar.item>
                 @endcan
                 @can('action-plan-edit')
-                    <x-sidebar.item href="{{ route('action-plan.show', App\Models\ActionPlan::firstWhere('company_id', session('company')->id)) }}" class="{{ request()->routeIs('action-plan.show') ? 'bg-gray-200' : ''}}">
+                    <x-sidebar.item href="{{ route('action-plan.show', App\Models\ActionPlan::firstWhere('company_id', session('auth:company')->id)) }}" class="{{ request()->routeIs('action-plan.show') ? 'bg-gray-200' : ''}}">
                         <div class="w-5 flex justify-center items-center">
                             <i class="fa-solid fa-list-ul"></i>
                         </div>
@@ -175,28 +165,17 @@
                 Logout
             </x-sidebar.item>
         </x-sidebar.menu>
-        
-        <x-modal.background data-role="logout-modal">
-            <x-modal.wrapper class="max-w-[450px]">
-                <x-modal.title>Fazer logout</x-modal.title>
-
-                <div class="w-full flex flex-col gap-2">
-                    <p class="text-center">Deseja fazer logout do sistema?</p>
-                    <x-action href="{{ route('logout') }}" variant="danger" width="full" data-role="logout-modal-trigger">Fazer logout</x-action>
-                </div>
-            </x-modal.wrapper>
-        </x-modal.background>
-
+    
         @can('switch-companies')
             <x-sidebar.menu title="Login em outra empresa">
-                <x-sidebar.switch-company :companies="$companiesToSwitch" />
+                <x-sidebar.switch-company :companies="$companies" />
             </x-sidebar.menu>
         @endcan
     </div>
 
-    @if(Auth::guard('user')->check())
+    @if(session('auth:guard') === 'user')
         <footer class="px-4 py-2 flex flex-col gap-2">
-            <a href="{{ route('user.show', App\Helpers\AuthGuardHelper::user()) }}" class="px-2 py-1.5 flex items-center gap-2 justify-start hover:bg-gray-200 transition rounded-md">
+            <a href="{{ route('user.show', session('auth:user')) }}" class="px-2 py-1.5 flex items-center gap-2 justify-start hover:bg-gray-200 transition rounded-md">
                 <div class="w-5 flex justify-center items-center">
                     <i class="fa-solid fa-user"></i>
                 </div>
@@ -204,11 +183,4 @@
             </a>
         </footer>
     @endif
-</div>
-
-
-{{-- LGPD Bar --}}
-<div data-role="lgpd-bar" class="hidden fixed z-30 bg-gray-100 bottom-0 left-0 w-full shadow-md py-4 px-4 md:px-8 items-center flex-col md:flex-row justify-between gap-4">
-    <p class="text-sm sm:text-base text-center md:text-left">Ao utilizar este sistema, você declara estar ciente e de acordo com a nossa <a href="{{ route('privacy-policy') }}" class="underline text-blue-600">Política de Privacidade</a>.</p>
-    <x-action tag="button" variant="secondary">Confirmar</x-action>
 </div>

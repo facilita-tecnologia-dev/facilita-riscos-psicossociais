@@ -30,6 +30,10 @@
                         <p class="font-semibold text-base sm:text-lg text-left">Data de encerramento:</p>
                         <p class="text-sm sm:text-base text-left">{{ $campaign->end_date->format('d/m/Y - H:i') }}</p>
                     </div>
+                    <div class="">
+                        <p class="font-semibold text-base sm:text-lg text-left">Status:</p>
+                        <p class="text-sm sm:text-base text-left">{{ $campaign->status->label() }}</p>
+                    </div>
                     <div class="md:col-span-2">
                         <p class="font-semibold text-base sm:text-lg text-left">Descrição:</p>
                         <p class="text-sm sm:text-base text-left">{{ $campaign->description }}</p>
@@ -39,7 +43,7 @@
                 <div class="w-full flex flex-row justify-between gap-2">
                     <div class="flex items-center gap-2" data-position="left">
                         @can('campaign-delete')
-                            @if(!$campaign->userCollections()->count())
+                            @if($campaign->userCollections->isEmpty())
                                 <x-form action="{{ route('campaign.destroy', $campaign) }}" delete onsubmit="return confirm('Você deseja excluir a campanha?')">
                                     <x-action tag="button" type="submit" variant="danger">Excluir campanha</x-action>
                                 </x-form>

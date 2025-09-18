@@ -25,6 +25,5 @@ class AppServiceProvider extends ServiceProvider
         
         View::composer('components.structure.sidebar', SidebarComposer::class);
         View::composer('components.filter-actions', FiltersComposer::class);
-        View::composer('private.welcome.user', UserWelcomeComposer::class);
     }
 }

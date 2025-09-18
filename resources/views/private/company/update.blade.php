@@ -20,7 +20,7 @@
             @endif
 
             <div class="w-full bg-gray-100 rounded-md shadow-md p-4 md:p-8 space-y-6">
-                <x-form action="{{ route('company.update', session('company')) }}" id="form-update-company-profile" put class="w-full grid grid-cols-1 md:grid-cols-2 gap-4" enctype="multipart/form-data">
+                <x-form action="{{ route('company.update', session('auth:company')) }}" id="form-update-company-profile" put class="w-full grid grid-cols-1 md:grid-cols-2 gap-4" enctype="multipart/form-data">
                     <div class="md:col-span-2">
                         <label class="block text-base font-semibold mb-1 text-gray-800" for="logo">
                             Logo
@@ -30,14 +30,14 @@
                             <x-form.error-span text="{{ $message }}" />
                         @enderror
                     </div>
-                    <x-form.input-text class="opacity-70" name="name" label="Razão Social" value="{{ $company->name }}" disabled placeholder="Digite a razão social da sua empresa"/>
+                    <x-form.input-text class="opacity-70" name="name" label="Razão Social" value="{{ $company->name }}" placeholder="Digite a razão social da sua empresa"/>
                     <x-form.input-text class="opacity-70" name="cnpj" label="CNPJ" value="{{ $company->cnpj }}" disabled placeholder="Digite o cnpj da sua empresa"/>
                     <x-form.input-text name="email" label="E-mail" value="{{ $company->email }}" placeholder="Digite o email da sua empresa"/>
                 </x-form>
 
                 <div class="w-full flex flex-row justify-between gap-2">
                     <div class="flex items-center gap-2" data-position="left">
-                        <x-action href="{{ route('company.show', session('company')) }}" variant="secondary">Cancelar</x-action>
+                        <x-action href="{{ route('company.show', session('auth:company')) }}" variant="secondary">Cancelar</x-action>
                     </div>
                     <div class="flex items-center gap-2" data-position="right">
                         <x-action tag="button" type="submit" form="form-update-company-profile" variant="secondary">Salvar</x-action>

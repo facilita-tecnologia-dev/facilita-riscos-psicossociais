@@ -25,9 +25,9 @@ class CampaignStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:8', 'max:255'],
             'collection_id' => ['required'],
-            'start_date' => ['required', 'date', Rule::date()->afterOrEqual(today())],
+            'start_date' => ['required', 'date', Rule::date()->afterOrEqual(now())],
             'end_date' => ['required', 'date', 'after:start_date'],
-            'description' => ['required', 'min:8', 'string'],
+            'description' => ['nullable', 'string'],
         ];
     }
 }

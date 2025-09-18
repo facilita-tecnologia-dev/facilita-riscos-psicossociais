@@ -18,7 +18,7 @@ class FeedbacksExport implements FromCollection, WithHeadings, WithStyles, WithE
 {
     public function collection()
     {
-        $feedbacks = Company::firstWhere('id', session('company')->id)->feedbacks()->whereYear('created_at', now()->year)->with('parentUser')->get();
+        $feedbacks = Company::firstWhere('id', session('auth:company')->id)->feedbacks()->whereYear('created_at', now()->year)->with('parentUser')->get();
         $formatted = $feedbacks->map(function($feedback){
             return [
                 $feedback->parentUser->department,

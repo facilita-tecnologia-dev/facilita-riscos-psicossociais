@@ -13,7 +13,8 @@ class CompanyMetricsController
     public function edit(Request $request)
     {
         Gate::authorize('metrics-edit');
-        $metrics = CompanyMetric::where('company_id', session('company')->id)->with('metricType')->get()->keyBy('metricType.key_name');
+
+        $metrics = session('auth:company')->metrics()->with('metric')->get()->keyBy('metric.type');
 
         return view('private.company.company-metrics.edit', compact('metrics'));
     }
@@ -22,7 +23,7 @@ class CompanyMetricsController
     {
         Gate::authorize('metrics-edit');
 
-        $validatedData = $request->validate([
+        $data = $request->validate([
             'turnover' => 'nullable|between:0,100',
             'absenteeism' => 'nullable|between:0,100',
             'extra-hours' => 'nullable|between:0,100',
@@ -30,24 +31,11 @@ class CompanyMetricsController
             'absences' => 'nullable|between:0,100',
         ]);
 
-        DB::transaction(function () use ($validatedData) {
-            $metrics = Metric::all();
-            foreach ($validatedData as $key => $inputMetric) {
-                $metric = $metrics->firstWhere('key_name', $key);
-
-                CompanyMetric::updateOrInsert(
-                    [
-                        'company_id' => session('company')->id,
-                        'metric_id' => $metric->id,
-                    ],
-                    [
-                        'value' => $inputMetric,
-                    ]
-                );
-            }
+        DB::transaction(function () use ($data) {
+            session('auth:company')->metrics->each(fn($companyMetric) => $companyMetric->update(['value' => $data[$companyMetric->metric['type']]]));
         });
 
-        session(['company' => session('company')->load('metrics')]);
+        session(['company' => session('auth:company')->load('metrics')]);
 
         return back()->with('message', 'Indicadores armazenados com sucesso!');
     }

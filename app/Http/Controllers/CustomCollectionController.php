@@ -16,7 +16,7 @@ class CustomCollectionController
      */
     public function index()
     {
-        $customCollections = session('company')->customCollections()
+        $customCollections = session('auth:company')->customCollections()
         ->with('tests.questions')
         ->withCount('tests')
         ->get();
@@ -44,10 +44,10 @@ class CustomCollectionController
         ]);
 
         $customCollection = DB::transaction(function() use($validatedData) {
-            $defaultCollection = session('company')->customCollections->where('collection_id', 2)->where('is_default')->first();
+            $defaultCollection = session('auth:company')->customCollections->where('collection_id', 2)->where('is_default')->first();
 
             $customCollection = CustomCollection::create([
-                'company_id' => session('company')->id,
+                'company_id' => session('auth:company')->id,
                 'collection_id' => 2,
                 'is_default' => false,
                 'name' => $validatedData['name'],
@@ -77,7 +77,7 @@ class CustomCollectionController
         });
 
         
-        session(['company' => session('company')->load('customCollections')]);
+        session(['company' => session('auth:company')->load('customCollections')]);
 
         return to_route('custom-collections.show', $customCollection);
     }

@@ -44,7 +44,7 @@
                         </div>
                         <div class="flex items-center gap-2" data-position="right">
                             <x-action tag="button" variant="secondary" data-role="reset-password-modal-trigger">Redefinir senha</x-action>
-                            <x-action href="{{ route('company.edit', session('company')) }}" variant="secondary">Editar</x-action>
+                            <x-action href="{{ route('company.edit', session('auth:company')) }}" variant="secondary">Editar</x-action>
                         </div>
                     </div>
                 @endcan
@@ -60,7 +60,7 @@
                     </p>
                     <div class="w-full flex flex-col gap-2">
                         <p class="text-center">Digite a senha da empresa para excluir a conta:</p>
-                        <x-form action="{{ route('company.destroy', session('company')) }}" delete class="w-full flex flex-col gap-2">
+                        <x-form action="{{ route('company.destroy', session('auth:company')) }}" delete class="w-full flex flex-col gap-2">
                             <x-form.input-text type="password" name="password" placeholder="Senha"/>
                             <x-action variant="danger" tag="button" width="full">Excluir conta</x-action>
                         </x-form>
@@ -73,7 +73,7 @@
                     <x-modal.title>Redefinir senha</x-modal.title>
                     
                     <div class="w-full flex flex-col gap-2">
-                        <x-form action="{{ route('company.reset-password', session('company')) }}" put class="w-full flex flex-col gap-2">
+                        <x-form action="{{ route('company.reset-password-modal', session('auth:company')) }}" put class="w-full flex flex-col gap-2">
                             <p class="text-center">Digite a senha atual:</p>
                             <x-form.input-text type="password" name="current_password" placeholder="Senha atual"/>
                             <p class="text-center">Digite e confirme a nova senha:</p>

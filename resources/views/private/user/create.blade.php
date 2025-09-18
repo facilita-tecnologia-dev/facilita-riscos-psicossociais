@@ -20,6 +20,7 @@
                             <x-action 
                                 variant="secondary" 
                                 id="check-cpf" 
+                                data-ajax-url="{{ route('user.create.verify-cpf') }}"
                                 data-tippy-content="Pesquise o CPF para verificar se o usuário já existe. Se existir, clique em 'Vincular usuário por CPF'.">
                                 <i class="fa-solid fa-magnifying-glass text-base -scale-x-100"></i>
                             </x-action>
@@ -35,7 +36,7 @@
                     
                     <x-form.input-date name="birth_date" max="{{ Carbon\Carbon::now()->subYears(16)->toDateString() }}" label="Data de nascimento"/>
 
-                    <x-form.select name="gender" label="Sexo" :options="$gendersToSelect"/>
+                    <x-form.input-text name="gender" label="Sexo" placeholder="Digite o sexo do usuário"/>
 
                     <x-form.input-text name="marital_status" label="Estado Civil" placeholder="Digite o estado civil do usuário"/>
 
@@ -49,7 +50,7 @@
                     
                     <x-form.input-date name="admission" max="{{ Carbon\Carbon::now()->toDateString() }}" label="Data de admissão"/>
                     
-                    <x-form.select name="role" label="Gestor/Colaborador" :options="$rolesToSelect" />
+                    <x-form.select name="role" label="Hierarquia" :options="$roles" />
                         
                 </x-form>
 
@@ -65,60 +66,6 @@
         </x-structure.main-content-container>   
     </x-structure.page-container>
 
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const checkBtn = document.getElementById('check-cpf');
-            const cpfInput = document.getElementById('cpf');
-            const messageDiv = document.getElementById('cpf-message');
+    <script src="{{ asset('js/user/create.js') }}"></script>
 
-            checkBtn.addEventListener('click', async function () {
-                const cpf = cpfInput.value.trim();
-                messageDiv.textContent = '';
-                
-                if (!cpf) {
-                    messageDiv.textContent = 'Digite um CPF para pesquisar';
-                    return;
-                }
-
-                try {
-                    const response = await fetch(`{{ route('user.create.checkCpf') }}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ cpf })
-                    });
-
-                    const data = await response.json();
-
-                    if (data.user) {
-                        messageDiv.textContent = 'CPF já está cadastrado.';
-                        messageDiv.classList.add('text-red-500');
-                        messageDiv.classList.remove('text-green-500');
-
-                        document.querySelector('input[name="name"]').value = data.user.name;
-                        document.querySelector('input[name="email"]').value = data.user.email;
-                        document.querySelector('input[name="birth_date"]').value = data.user.birth_date;
-                        document.querySelector('select[name="gender"]').value = data.user.gender;
-                        document.querySelector('input[name="marital_status"]').value = data.user.marital_status;
-                        document.querySelector('input[name="education_level"]').value = data.user.education_level;
-                        document.querySelector('input[name="department"]').value = data.user.department;
-                        document.querySelector('input[name="occupation"]').value = data.user.occupation;
-                        document.querySelector('input[name="work_shift"]').value = data.user.work_shift;
-                        document.querySelector('input[name="admission"]').value = data.user.admission;
-                    } else {
-                        messageDiv.textContent = 'CPF disponível.';
-                        messageDiv.classList.add('text-green-500');
-                        messageDiv.classList.remove('text-red-500');
-                    }
-
-                } catch (error) {
-                    console.log(error);
-                    messageDiv.textContent = 'Erro ao verificar CPF.';
-                }
-            });
-        });
-    </script>
 </x-layouts.app>

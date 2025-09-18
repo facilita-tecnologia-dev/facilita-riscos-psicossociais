@@ -202,7 +202,7 @@ return [
         'occupation' => 'função',
         'work_shift' => 'turno',
         'admission' => 'data de admissão',
-        'role' => 'gestor/colaborador',
+        'role' => 'hierarquia',
         'cnpj' => 'cnpj',
         'password' => 'senha',
         'current_password' => 'senha atual',
@@ -217,6 +217,7 @@ return [
         'start_date' => 'data de início',
         'description' => 'descrição',
         'control_action' => 'medida de controle',
+        'import_users' => 'arquivo de importação'
     ],
 
 ];

@@ -29,7 +29,7 @@ class Company extends Authenticatable
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'company_user')
-            ->withPivot('company_id');
+            ->withPivot('user_id');
     }
 
     public function feedbacks(): HasMany
@@ -51,11 +51,15 @@ class Company extends Authenticatable
     {
         return $this->hasOne(ActionPlan::class);
     }
-    
+
+    public function customCollections(): HasMany
+    {
+        return $this->hasMany(CustomCollection::class);
+    }
 
     /* --- End Relations --- */
 
-    public function hasCampaignThisYear(string $collectionID, string $status): bool
+    public function hasCampaignThisYear(string $collectionID, ?string $status = null): bool
     {
         return $this->campaigns()
                     ->whereYear('start_date', now()->year)
@@ -69,6 +73,16 @@ class Company extends Authenticatable
     public function activeCampaigns() : Collection
     {
         return $this->campaigns->where('status', CampaignStatusTypes::IN_PROGRESS);
+    }
+
+    public function latestPsychosocialCampaign()
+    {
+        return $this->campaigns()->where('collection_id', 1)->orderByDesc('start_date')->first();
+    }
+
+    public function latestOrganizationalCampaign()
+    {
+        return $this->campaigns()->where('collection_id', 2)->orderByDesc('start_date')->first();
     }
 
     // public function hasCompletedBasicData() : bool

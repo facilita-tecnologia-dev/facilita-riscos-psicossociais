@@ -14,6 +14,6 @@ class TestRepository
     }
 
     public static function companyCustomTests(){
-        return Company::firstWhere('id', session('company')->id)->customTests;
+        return Company::firstWhere('id', session('auth:company')->id)->customTests;
     }
 }

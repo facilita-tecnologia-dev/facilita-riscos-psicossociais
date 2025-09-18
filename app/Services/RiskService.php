@@ -110,7 +110,7 @@ class RiskService
 
     public static function getControlActions(Risk $risk, int $riskLevel)
     {
-        $controlActions = session('company')['actionPlan']['controlActions']
+        $controlActions = session('auth:company')['actionPlan']['controlActions']
         ->filter(function($ca) use($risk, $riskLevel) {
             return $ca['risk']['id'] == $risk->id && $ca['severity'] == $riskLevel;
         });

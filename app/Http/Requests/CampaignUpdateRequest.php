@@ -27,7 +27,7 @@ class CampaignUpdateRequest extends FormRequest
             'collection_id' => ['nullable'],
             'start_date' => ['nullable', 'date', Rule::date()->afterOrEqual(now())],
             'end_date' => ['nullable', 'date', 'after:start_date'],
-            'description' => ['required', 'min:8', 'string'],
+            'description' => ['nullable', 'string'],
         ];
     }
 }

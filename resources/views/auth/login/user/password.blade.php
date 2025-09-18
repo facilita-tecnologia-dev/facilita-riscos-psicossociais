@@ -7,7 +7,7 @@
                 <div class="w-full flex flex-col items-center gap-4">
                     <img src="{{ asset('assets/icon-facilita.svg') }}" alt="">
                     <div class="flex flex-col gap-2 items-center">
-                        @if($user->hasTemporaryPassword())
+                        @if($user->is_temp_password)
                             <h1 class="text-3xl md:text-4xl font-semibold text-center text-gray-800">Digite sua senha provisória</h1>
                             <p class="text-base text-center text-gray-800">Entre com sua senha provisória para redefinir a sua senha.</p>
                         @else
@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <x-form action="{{ route('employee.login.password', $user) }}" class="w-full flex flex-col gap-4 items-center" post>
+                <x-form action="{{ route('user.login.password', $user) }}" class="w-full flex flex-col gap-4 items-center" post>
                     <x-form.input-text type="password" name="password" placeholder="Digite sua senha" />
                     <x-action tag="button" type="submit" variant="secondary" width="full">Fazer login</x-action>
                 </x-form>

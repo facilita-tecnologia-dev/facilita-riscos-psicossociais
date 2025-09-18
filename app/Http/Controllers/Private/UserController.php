@@ -4,21 +4,18 @@ namespace App\Http\Controllers\Private;
 
 use App\Enums\UserStatusTypes;
 use App\Enums\GenderEnum;
-use App\Enums\InternalUserRoleEnum;
-use App\Helpers\AuthGuardHelper;
+use App\Enums\RoleEnum;
 use App\Helpers\SessionErrorHelper;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Company;
 use App\Models\Permission;
-use App\Models\Role;
 use App\Models\RolePermission;
 use App\Models\User;
 use App\Models\UserCustomPermission;
 use App\Models\UserDepartmentPermission;
 use App\Repositories\UserRepository;
-use App\Rules\validateCPF;
-use App\Services\User\UserElegibilityService;
+use App\Services\AuthService;
 use App\Services\User\UserFilterService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -31,19 +28,15 @@ use Illuminate\Validation\Rules\Password;
 class UserController
 {
     protected UserFilterService $filterService;
-
-    protected UserElegibilityService $elegibilityService;
-
     protected UserRepository $userRepository;
 
     protected $companyCustomTests;
 
     protected $defaultTests;
 
-    public function __construct(UserFilterService $filterService, UserElegibilityService $elegibilityService, UserRepository $userRepository)
+    public function __construct(UserFilterService $filterService, UserRepository $userRepository)
     {
         $this->filterService = $filterService;
-        $this->elegibilityService = $elegibilityService;
         $this->userRepository = $userRepository;
     }
 
@@ -51,24 +44,27 @@ class UserController
     {
         Gate::authorize('user-index');
 
-        $query = Company::whereId(session('company')->id)->first()->users()->getQuery();
-        $users = $this->filterService->sort($this->filterService->apply($query))
-            ->with(['latestPsychosocialCollection', 'latestOrganizationalClimateCollection'])
-            ->select('users.id', 'users.name', 'users.birth_date', 'users.department', 'users.occupation')
-            ->paginate(15)->appends(request()->query());
+        $latestPsychosocialCampaign = session('auth:company')->latestPsychosocialCampaign();
+        $latestOrganizationalCampaign = session('auth:company')->latestOrganizationalCampaign();
 
-        $filteredUserCount = $users->total();
+        // $query = session('auth:company')->users()->getQuery();
+        // $users = $this->filterService->sort($this->filterService->apply($query))
+        // ->with(['collections'])
+        // ->paginate(15)
+        // ->appends(request()->query());
+        
+        $users = session('auth:company')->users() 
+        ->with(['collections'])
+        ->paginate(15)
+        ->appends(request()->query());
 
-        $filtersApplied = collect(request()->query())->except(['order_by', 'order_direction'])->filter(function ($value, $key) {
-            return $value !== null;
-        });
+        $filters = collect(request()->query())->except(['order_by', 'order_direction'])->filter(fn ($value) => $value !== null);
 
-        return view('private.users.index', [
-            'users' => $users->count() ? $users : null,
-            'filtersApplied' => $filtersApplied,
-            'filteredUserCount' => $filteredUserCount > 0 ? $filteredUserCount : null,
-            'companyCustomTests' => $this->companyCustomTests ? $this->companyCustomTests : null,
-            'defaultTests' => $this->defaultTests ? $this->defaultTests : null,
+        return view('private.user.index', [
+            'users' => $users,
+            'latestPsychosocialCampaign' => $latestPsychosocialCampaign,
+            'latestOrganizationalCampaign' => $latestOrganizationalCampaign,
+            'filters' => $filters,
         ]);
     }
 
@@ -76,12 +72,9 @@ class UserController
     {
         Gate::authorize('user-create');
 
-        $gendersToSelect = array_map(fn (GenderEnum $gender) => $gender->value, GenderEnum::cases());
-        $rolesToSelect = array_map(fn ($role) => InternalUserRoleEnum::from($role['display_name'])->value,
-            Role::whereIn('id', [1, 2])->get()->toArray()
-        );
+        $roles = array_map(fn($role) => ['option' => $role->label(), 'value' => $role->value], RoleEnum::cases());
 
-        return view('private.users.create', compact('rolesToSelect', 'gendersToSelect'));
+        return view('private.user.create', compact('roles'));
     }
 
     public function store(UserStoreRequest $request)
@@ -103,15 +96,11 @@ class UserController
 
         $latestOrganizationalClimateCollectionDate = $user['latestPsychosocialCollection']?->created_at->diffForHumans() ?? 'Nunca';
         $latestPsychosocialCollectionDate = $user['latestPsychosocialCollection']?->created_at->diffForHumans() ?? 'Nunca';
-        $hasTemporaryPassword = $user->hasTemporaryPassword();
-        $userStatus = $user->companies->where('id', session('company')->id)[0]['pivot']['status'];
 
-        return view('private.users.show', compact(
+        return view('private.user.show', compact(
             'user', 
             'latestPsychosocialCollectionDate', 
             'latestOrganizationalClimateCollectionDate', 
-            'hasTemporaryPassword',
-            'userStatus'
         ));
     }
 
@@ -119,25 +108,13 @@ class UserController
     {
         Gate::authorize('user-edit');
 
-        $gendersToSelect = array_map(fn (GenderEnum $gender) => $gender->value, GenderEnum::cases());
-        $employeeStatusToSelect = array_map(fn (UserStatusTypes $status) => ['option' => UserStatusTypes::labelFromValue($status->value), 'value' => $status->value], UserStatusTypes::cases());
-        
-        $rolesToSelect = array_map(fn ($role) => InternalUserRoleEnum::from($role['display_name'])->value,
-            Role::whereIn('id', [1, 2])->get()->toArray()
-        );
+        $status = array_map(fn (UserStatusTypes $status) => ['option' => UserStatusTypes::labelFromValue($status->value), 'value' => $status->value], UserStatusTypes::cases());
+        $roles = array_map(fn($role) => ['option' => $role->label(), 'value' => $role->value], RoleEnum::cases());
 
-        $roleId = $user->companies()->where('companies.id', session('company')->id)->first()->pivot['role_id'];
-        $roleDisplayName = Role::whereId($roleId)->first()->display_name;
-
-        $userStatus = $user->companies->where('id', session('company')->id)[0]['pivot']['status'];
-
-        return view('private.users.update', compact(
+        return view('private.user.update', compact(
             'user',
-            'rolesToSelect',
-            'gendersToSelect',
-            'employeeStatusToSelect',
-            'roleDisplayName',
-            'userStatus',
+            'roles',
+            'status',
         ));
     }
 
@@ -161,7 +138,7 @@ class UserController
 
     public function showImport()
     {
-        return view('private.users.import');
+        return view('private.user.import');
     }
 
     public function import(Request $request)
@@ -179,7 +156,7 @@ class UserController
                 return "Linha " . $validationError->row() . " - " . $username . ' - ' . $nameBagFormatted;
             });
 
-            return view('private.users.import', [
+            return view('private.user.import', [
                 'failures' => $importUsers,
             ]);
         }
@@ -198,7 +175,7 @@ class UserController
 
         $customizedPermissions = UserCustomPermission::where('user_id', $user->id)
             ->with('permission')
-            ->where('company_id', session('company')->id)
+            ->where('company_id', session('auth:company')->id)
             ->get();
 
         $compiledPermissions = [];
@@ -216,7 +193,7 @@ class UserController
             return $b->allowed <=> $a->allowed;
         });
 
-        return view('private.users.permissions', compact('user', 'compiledPermissions'));
+        return view('private.user.permissions', compact('user', 'compiledPermissions'));
     }
 
     public function updatePermissions(Request $request, User $user)
@@ -247,7 +224,7 @@ class UserController
                     $permissionId = Permission::where('key_name', '=', $permissionKeyName)->value('id');
 
                     UserCustomPermission::create([
-                        'company_id' => session('company')->id,
+                        'company_id' => session('auth:company')->id,
                         'user_id' => $user->id,
                         'permission_id' => $permissionId,
                         'allowed' => $permissionValue,
@@ -263,7 +240,7 @@ class UserController
     {
         Gate::authorize('user-department-scope-edit');
 
-        $companyDepartments = Company::firstWhere('id', session('company')->id)
+        $companyDepartments = Company::firstWhere('id', session('auth:company')->id)
             ->users()
             ->pluck('department')
             ->unique()
@@ -273,21 +250,21 @@ class UserController
             })
         ->values();
 
-        $userDepartmentPermissions = UserDepartmentPermission::where('company_id', session('company')->id)
+        $userDepartmentPermissions = UserDepartmentPermission::where('company_id', session('auth:company')->id)
             ->where('user_id', $user->id)
             ->orderBy('allowed', 'desc')
             ->orderByRaw("CASE WHEN department = ? THEN 0 ELSE 1 END", [$user->department])
         ->get();
 
 
-        return view('private.users.department-scope', compact('user', 'companyDepartments', 'userDepartmentPermissions'));
+        return view('private.user.department-scope', compact('user', 'companyDepartments', 'userDepartmentPermissions'));
     }
 
     public function updateDepartmentScopes(Request $request, User $user)
     {
         Gate::authorize('user-department-scope-edit');
 
-        $currentDepartmentScopes = UserDepartmentPermission::where('company_id', session('company')->id)
+        $currentDepartmentScopes = UserDepartmentPermission::where('company_id', session('auth:company')->id)
             ->where('user_id', $user->id)
             ->get();
 
@@ -308,7 +285,7 @@ class UserController
         foreach($newDepartmentScopes as $departmentName => $departmentScope){
             if(! $currentDepartmentScopes->firstWhere('department', $departmentName)){
                 UserDepartmentPermission::create([
-                    'company_id' => session('company')->id,
+                    'company_id' => session('auth:company')->id,
                     'user_id' => $user->id,
                     'department' => $departmentName,
                     'allowed' => $departmentScope,
@@ -316,90 +293,44 @@ class UserController
             }
         }
 
-
         return to_route('user.permissions', $user)->with('message', 'Visão de Setores atualizada com sucesso!');
     }
 
-    // public function resetUserPassword(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-    //     ]);
 
-    //     /** @var User $user */
-    //     $user = AuthGuardHelper::user(); 
+    public function showResetPassword(Request $request, User $user)
+    {
+        return view('private.user.reset-password', compact('user'));
+    }
 
-    //     $user->password = Hash::make($validatedData['password']);
-    //     $user->save();
-
-    //     $authService = app(AuthService::class);
-
-    //     return redirect()->to($authService->getRedirectLoginRoute($user));
-    // }
-
-    public function resetPasswordOnShowScreen(Request $request, User $user)
+    public function resetPassword(Request $request, User $user)
     {   
-        $validatedData = $request->validate([
+        $credentials = $request->validate([
             "current_password" => ['required'],
             'new_password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
         ]);
         
-        if($user->hasTemporaryPassword()){
-            if($validatedData['current_password'] !== $user->password){
-                SessionErrorHelper::flash('current_password', 'Senha incorreta.');
-                return back();
-            }
-
-            if($validatedData['new_password'] === $user->password){
-                SessionErrorHelper::flash('new_password', 'Essa senha já foi/está sendo utilizada.');
-                return back();
-            }
-        } else{
-            if(!Hash::check($validatedData['current_password'], $user->password)){
-                SessionErrorHelper::flash('current_password', 'Senha incorreta.');
-                return back();
-            }
-
-            if(Hash::check($validatedData['new_password'], $user->password)){
-                SessionErrorHelper::flash('new_password', 'Essa senha já foi/está sendo utilizada.');
-                return back();
-            }
-        }
-
-
-        $user->update([
-            'password' => Hash::make($validatedData['new_password']),
-        ]);
-
-        return back()->with('message', 'Senha redefinida com sucesso!');
-    }
-
-    public function showAddExistingUser()
-    {
-        Gate::authorize('user-create');
-
-        return view('private.users.add-existing');
-    }
-
-    public function addExistingUser(Request $request)
-    {
-        Gate::authorize('user-create');
-        $validatedData = $request->validate([
-            'cpf' => ['required', 'string', new validateCPF],
-        ]);
-
-        $user = User::firstWhere('cpf', $validatedData['cpf']);
-
-        if($user){
-            $user->companies()->syncWithoutDetaching([session('company')->id => ['role_id' => 2]]);
-        }
-
-        session(['company' => session('company')->load('users')]);
+        if(AuthService::resetPassword('user', $user, $credentials)){  
+            return redirect()->to(AuthService::redirectLoginRoute('user'));
+        };
         
-        return redirect()->to(route('user.index'));
+        return back()->with('message', 'Não foi possível redefinir sua senha.');
     }
 
-    public function checkCpf(Request $request)
+    public function resetPasswordModal(Request $request, User $user)
+    {   
+        $credentials = $request->validate([
+            "current_password" => ['required'],
+            'new_password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+        ]);
+        
+        if(AuthService::resetPassword('user', $user, $credentials)){  
+            return back()->with('message', 'Senha redefinida com sucesso!');
+        };
+
+        return back()->with('message', 'Não foi possível redefinir sua senha.');
+    }
+
+    public function verifyCPF(Request $request)
     {
         $request->validate([
             'cpf' => ['required']
@@ -408,62 +339,5 @@ class UserController
         $user = User::where('cpf', $request['cpf'])->first();
 
         return response()->json(['user' => $user]);
-    }
-
-    public function showForgotPassword()
-    {
-        return view('auth.login.user.forgot-password');
-    }
-
-    public function sendResetEmail(Request $request)
-    {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
-
-        $status = FacadePassword::broker('users')->sendResetLink(
-            $request->only('email'),
-            function ($user, $token) {
-                $user->sendPasswordResetNotification($token, 'user');
-            }
-        );
-
-        return $status === FacadePassword::ResetLinkSent
-        ? back()->with(['message' => __($status)])
-        : back()->withErrors(['email' => __($status)]);
-    }
-
-    public function showResetPassword(Request $request, string $token)
-    {
-        return view('auth.login.user.reset-password', [
-            'token' => $token,
-            'email' => request('email')
-        ]);
-    }
-
-    public function resetPassword(Request $request)
-    {
-        $validatedData = $request->validate([
-            'token' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-        ]);
-        
-        $status = FacadePassword::broker('users')->reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ]);
-    
-                $user->save();
-    
-                event(new PasswordReset($user));
-            }
-        );
-
-        return $status === FacadePassword::PasswordReset
-        ? to_route('employee.login')->with('message', __($status))
-        : back()->withErrors(['password' => [__($status)]]);
     }
 }

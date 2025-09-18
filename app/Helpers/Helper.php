@@ -15,31 +15,7 @@ class Helper
     {
         $this->testService = $testService;
     }
-
-    // public function getCompanyUsers($hasCollection = null)
-    // {
-    //     $company = Company::where('id', session('company')->id)
-    //         ->with('users', function ($q) use ($hasCollection) {
-    //             $q->when($hasCollection, fn ($i) => $i->has('latestCollection'));
-    //         })
-    //         ->first();
-
-    //     return $company;
-    // }
-
-    // public static function getTestRisks(Test $testType)
-    // {
-    //     $risks = Risk::whereHas('relatedQuestions', function ($q) use ($testType) {
-    //         $q->whereIn('question_id', $testType->questions->pluck('id'));
-    //     })
-    //         ->with(['relatedQuestions' => function ($q) use ($testType) {
-    //             $q->whereIn('question_id', $testType->questions->pluck('id'));
-    //         }])
-    //         ->get();
-
-    //     return $risks;
-    // }
-
+    
     public static function multiplyAnswer($answer)
     {
         $multiplied = 0;

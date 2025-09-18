@@ -32,7 +32,7 @@
                 <div id="dropdown-login" class="hidden">
                     <nav class="space-y-2 px-2 py-3">
                         <a href="{{ route('company.login') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Login como empresa</a>
-                        <a href="{{ route('employee.login') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Login como usuário</a>
+                        <a href="{{ route('user.login') }}" class="hover:bg-main-background/30 text-main-background font-heading block rounded-md px-3 py-1.5 text-left text-sm font-normal transition">Login como usuário</a>
                     </nav>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 <div class="space-y-2">
                     <h3 class="text-main-text font-heading text-left text-sm font-semibold">Comitê</h3>
 
-                    <a href="{{ route('employee.login') }}" class="bg-secondary-background border-borders flex w-full items-center gap-2 rounded-sm border px-4 py-2 transition hover:brightness-95">
+                    <a href="{{ route('user.login') }}" class="bg-secondary-background border-borders flex w-full items-center gap-2 rounded-sm border px-4 py-2 transition hover:brightness-95">
                         <x-icon icon="user-check" class="text-secondary-text h-5 w-5 object-scale-down" />
                         <span class="text-main-text font-heading text-left text-sm font-normal">Login</span>
                     </a>

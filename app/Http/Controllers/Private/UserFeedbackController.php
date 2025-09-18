@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Private;
 
 use App\Exports\FeedbacksExport;
-use App\Helpers\AuthGuardHelper;
 use App\Models\UserFeedback;
 use App\Services\User\UserFilterService;
 use Carbon\Carbon;
@@ -39,12 +38,12 @@ class UserFeedbackController
 
     private function query(Request $request)
     {
-        $query = session('company')->users()->getQuery();
+        $query = session('auth:company')->users()->getQuery();
 
         return $this->filterService->sort($this->filterService->apply($query))
             ->whereHas('feedbacks', function ($query) use ($request) {
                 $query->whereYear('created_at', $request->year ?? Carbon::now()->year)
-                        ->where('company_id', session('company')->id);
+                        ->where('company_id', session('auth:company')->id);
             })
             ->select('users.id', 'name', 'department', 'work_shift')
             ->with('feedbacks', fn ($query) => $query->latest()->limit(1))
@@ -60,7 +59,7 @@ class UserFeedbackController
     }
     
     public function export(){
-        return Excel::download(new FeedbacksExport, session('company')->getFirstName() . ' - Pesquisa de Clima Organizacional - Comentários.xlsx');
+        return Excel::download(new FeedbacksExport, session('auth:company')->getFirstName() . ' - Pesquisa de Clima Organizacional - Comentários.xlsx');
     }
 
     /**
@@ -77,8 +76,8 @@ class UserFeedbackController
         }
 
         UserFeedback::create([
-            'company_id' => session('company')->id,
-            'user_id' => AuthGuardHelper::user()->id,
+            'company_id' => session('auth:company')->id,
+            'user_id' => session('auth:user')->id,
             'content' => $validatedData['feedback'],
         ]);
 

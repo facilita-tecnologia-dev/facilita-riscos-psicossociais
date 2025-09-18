@@ -4,7 +4,6 @@ namespace App\View\Composers;
 
 use App\Enums\AdmissionRangeEnum;
 use App\Enums\AgeRangeEnum;
-use App\Helpers\AuthGuardHelper;
 use App\Models\Company;
 use App\Models\User;
 use Carbon\Carbon;
@@ -15,16 +14,16 @@ class FiltersComposer
     public function compose(View $view): void
     {
         /** @var User $user */
-        $user = AuthGuardHelper::user();
-        if($user instanceof User){
+        $user = session('auth:user');
+        if(session('auth:guard') === 'user'){
             $departmentScopes = $user->departmentScopes()->where('allowed', true)->get()->pluck('department');
 
-            $companyUsers = Company::firstWhere('id', session('company')->id)
+            $companyUsers = Company::firstWhere('id', session('auth:company')->id)
             ->users()
             ->whereIn('department', $departmentScopes)
             ->get();
         } else{
-            $companyUsers = Company::firstWhere('id', session('company')->id)
+            $companyUsers = Company::firstWhere('id', session('auth:company')->id)
             ->users()
             ->get();
         }

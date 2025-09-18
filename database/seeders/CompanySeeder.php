@@ -14,7 +14,7 @@ class CompanySeeder extends Seeder
     {
         Company::factory(5)->create(['password' => Hash::make('facilita3015')])->each(function($company){
             // Users
-            User::factory(rand(8, 100))->create()->each(function($user) use($company) {
+            User::factory(rand(8, 100))->create(['password' => null])->each(function($user) use($company) {
                 $company->users()->attach($user, ['role_id' => rand(1, 2)]);
             });
 

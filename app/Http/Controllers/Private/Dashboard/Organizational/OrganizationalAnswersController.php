@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Private\Dashboard\Organizational;
 
-use App\Helpers\AuthGuardHelper;
 use App\Models\User;
 use App\Services\Dashboard\OrganizationalClimateService;
 use App\Services\TestService;
@@ -50,7 +49,7 @@ class OrganizationalAnswersController
     {
         Gate::authorize('organizational-dashboard-view');
 
-        $company = session('company');
+        $company = session('auth:company');
 
         $this->pageData = $this->query(request('test'));
 
@@ -69,7 +68,7 @@ class OrganizationalAnswersController
 
     private function query($justTest = null)
     {
-        $companyUserIds = session('company')->users->pluck('id');        
+        $companyUserIds = session('auth:company')->users->pluck('id');        
         $query = User::whereIn('id', $companyUserIds);
 
         return $this->filterService->apply($query)
@@ -92,11 +91,10 @@ class OrganizationalAnswersController
     {   
         $testCompiled = [];
 
-        $isUser = AuthGuardHelper::user() instanceof User;
-        $userDepartmentScopes = $isUser ? AuthGuardHelper::user()->departmentScopes->where('allowed', 1) : false;
+        $userDepartmentScopes = session('auth:guard') === 'user' ? session('auth:user')->departmentScopes->where('allowed', 1) : false;
         
         foreach($this->pageData as $user){
-            if ($user->latestOrganizationalClimateCollection && (!$isUser || $userDepartmentScopes->where('department', $user->department)->count())) {
+            if ($user->latestOrganizationalClimateCollection && (!session('auth:guard') === 'user' || $userDepartmentScopes->where('department', $user->department)->count())) {
                 $this->compileUserTests($user, $testCompiled);
             }
         }
@@ -115,7 +113,7 @@ class OrganizationalAnswersController
         $tests->each(function($userTest) use($user, &$testCompiled) {
             $testDisplayName = $userTest['testType']['display_name'];
             
-            $evaluatedTest = $this->testService->evaluateIndividualTest($userTest['testType'], $userTest, session('company')->metrics, 'organizational-climate');
+            $evaluatedTest = $this->testService->evaluateIndividualTest($userTest['testType'], $userTest, session('auth:company')->metrics, 'organizational-climate');
             $questions = $userTest->answers->map(fn($answer) => $answer->parentQuestion);
 
             $this->updateAnswers($user, $testDisplayName, $evaluatedTest, $questions->keyBy('id'), $testCompiled);

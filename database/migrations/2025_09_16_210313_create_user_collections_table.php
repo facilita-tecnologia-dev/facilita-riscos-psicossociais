@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('collection_id');
             $table->enum('type', CollectionTypes::values());
             $table->float('score');
-
+            $table->timestamps();
             $table->index('campaign_id');
         });
     }

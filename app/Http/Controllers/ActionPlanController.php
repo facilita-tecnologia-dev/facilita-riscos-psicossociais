@@ -75,14 +75,14 @@ class ActionPlanController
             $controlActionRelated->save();
         }
 
-        session(['company' => session('company')->load('actionPlan.controlActions')]);
+        session(['company' => session('auth:company')->load('actionPlan.controlActions')]);
 
         return back()->with('message', 'Medidas de controle atualizadas com sucesso!');
     }
 
     private function query()
     {
-        $psychosocialCampaign = session('company')->campaigns()
+        $psychosocialCampaign = session('auth:company')->campaigns()
             ->whereYear('end_date', now()->year)
             ->whereHas('collection', function($query){
                 $query->where('collection_id', 1);
@@ -101,7 +101,7 @@ class ActionPlanController
                     ->whereYear('created_at', Carbon::now()->year)
                     ->whereHas('parentCollection', function ($query) {
                         $query
-                        ->where('company_id', session('company')->id);
+                        ->where('company_id', session('auth:company')->id);
                     })
                     ->withAvg(['answers as average_value'], 'value')
                     ->with([
@@ -157,7 +157,7 @@ class ActionPlanController
 
         $testType->average = round($testType['userTests']->avg('average_value'), 2);
         
-        $evaluatedTest = $this->testService->evaluateTests($testType, session('company')->metrics);
+        $evaluatedTest = $this->testService->evaluateTests($testType, session('auth:company')->metrics);
         
         foreach($evaluatedTest['risks'] as &$risk){
             $risk['riskCaption'] = RiskLevelEnum::labelFromValue($risk['riskLevel']);

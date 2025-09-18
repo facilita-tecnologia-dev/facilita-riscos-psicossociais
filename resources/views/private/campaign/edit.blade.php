@@ -29,7 +29,7 @@
                         label="Formulário de Pesquisa" 
                         disabled="{{ $campaign->start_date < now() ? true : false }}" 
                         value="{{ old('collection_id', $campaign->collection_id) }}" 
-                        :options="$collectionsToSelect" 
+                        :options="$collections" 
                     />
                     
                     <x-form.input-date 

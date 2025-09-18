@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
     watchCNPJInputsToLiveFormat();
     watchCPFInputsToLiveFormat();
 
+    const body = document.querySelector("body");
+
+    window.body = body;
     window.scrollToY = scrollToY;
     window.checkPasswordSteps = checkPasswordSteps;
 
@@ -62,7 +65,7 @@ function initializeSidebar() {
     const body = document.querySelector("body");
     const sidebar = document.querySelector("#sidebar");
 
-    body.addEventListener("click", function (event) {
+    document.querySelector("body").addEventListener("click", function (event) {
         if (sidebar && !sidebar.contains(event.target)) {
             sidebar.classList.replace("left-0", "-left-full");
         }
@@ -101,11 +104,13 @@ function initializeFilterModals() {
     const filterModal = document.querySelector('[data-role="filter-modal"]');
 
     if (filterModal) {
-        body.addEventListener("click", function (event) {
-            if (event.target === filterModal) {
-                filterModal.classList.replace("flex", "hidden");
-            }
-        });
+        document
+            .querySelector("body")
+            .addEventListener("click", function (event) {
+                if (event.target === filterModal) {
+                    filterModal.classList.replace("flex", "hidden");
+                }
+            });
     }
 
     if (triggerFilterModal && filterModal) {
@@ -158,12 +163,14 @@ function initializeLogoutModal() {
     }
 
     if (logoutModal) {
-        body.addEventListener("click", function (event) {
-            if (event.target === logoutModal) {
-                hideLogoutModal(logoutModal);
-                localStorage.removeItem("open-logout-modal");
-            }
-        });
+        document
+            .querySelector("body")
+            .addEventListener("click", function (event) {
+                if (event.target === logoutModal) {
+                    hideLogoutModal(logoutModal);
+                    localStorage.removeItem("open-logout-modal");
+                }
+            });
     }
 
     if (triggerLogoutModal && logoutModal) {

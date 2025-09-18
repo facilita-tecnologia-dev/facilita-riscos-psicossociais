@@ -2,106 +2,155 @@
 
 namespace App\Services;
 
-use App\Helpers\AuthGuardHelper;
+use App\Enums\RoleEnum;
 use App\Helpers\SessionErrorHelper;
 use App\Models\Company;
 use App\Models\User;
-use Illuminate\Auth\Middleware\Authenticate;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
 
 class AuthService {
-    public function authenticate(Authenticatable $actor, array $data){
-        $redirectRoute = '';
-
-        if($actor instanceof User){
-
-            if($this->userHasManyCompanies($actor)){
-                return route('employee.login.choose-company', $actor);
+    public static function attempt($guard, $credentials)
+    {
+        if($guard === 'user'){
+            $user = User::firstWhere('cpf', $credentials['cpf']);
+            
+            if (! $user) {
+                SessionErrorHelper::flash('cpf', 'Usuário não cadastrado.');
+                return false;
             }
 
-            session(['company' => $actor->companies->first()]);
+            self::putGuardOnSession('user');
 
-            if($this->userIsManager($actor)){
-                return route('employee.login.password', $actor);
-            }
+            if(self::checkUserHasMultipleCompanies($user)) return route('user.login.choose-company', $user);
 
-            $this->login($actor);
+            self::putCompanyOnSession($user->companies->first());
+
+            if(self::checkUserIsManager($user)) return route('user.login.password', $user);
+
+            self::authenticate('user', $user);
         }
 
-        if($actor instanceof Company){
-            if($this->checkPasswordHash($data['password'], $actor->password)){   
-                $this->login($actor);
-                session(['company' => $actor]);
-            } else{
-                return url()->previous();
+        if($guard === 'company'){
+            if(Auth::guard($guard)->attempt($credentials)){
+                self::putGuardOnSession('company');
+                self::putUserOnSession('company');
+                self::putCompanyOnSession(Auth::guard('company')->user());
+            } else {
+                SessionErrorHelper::flash('cnpj', 'Credenciais incorretas.');
+                return false;
             }
         }
-
-        return $this->getRedirectLoginRoute($actor);
+       
+        return self::redirectLoginRoute($guard); 
     }
 
-    public function login(Authenticatable $actor)
+
+    public static function authenticate(string $guard, $actor)
     {
-        if($actor instanceof User){
-            Auth::guard('user')->login($actor);
-        }
-        
-        if($actor instanceof Company){
-            Auth::guard('company')->login($actor);
-        }
+        if($guard === 'user') Auth::guard('user')->login($actor);
+        if($guard === 'company') Auth::guard('company')->login($actor);
+
+        self::putUserOnSession($guard);
 
         session()->regenerate();
     }
 
-    public function logout(Request $request)
+    public static function logout(Request $request)
     {
-        $redirectRoute = $this->getRedirectLogoutRoute(AuthGuardHelper::user());
-
-        if (Auth::guard('company')->check()) {
-            Auth::guard('company')->logout();
-        }
-
-        if (Auth::guard('user')->check()) {
-            Auth::guard('user')->logout();
-        }
-
+        $guard = session('auth:guard');
+        
+        Auth::guard(session('auth:guard'))->logout();
+        
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return $redirectRoute;
+        
+        return self::redirectLogoutRoute($guard);
     }
 
-    public function userHasManyCompanies(User $user)
+    public static function resetPassword(string $guard, $actor, $credentials)
+    {
+        if($guard === 'user'){
+            if($actor->is_temp_password){
+                if($credentials['current_password'] !== $actor->password){
+                    SessionErrorHelper::flash('current_password', 'Senha incorreta.');
+                    return false;
+                }
+    
+                if($credentials['new_password'] === $actor->password){
+                    SessionErrorHelper::flash('new_password', 'Essa senha já foi/está sendo utilizada.');
+                    return false;
+                }
+            } else{
+                if(!Hash::check($credentials['current_password'], $actor->password)){
+                    SessionErrorHelper::flash('current_password', 'Senha incorreta.');
+                    return false;
+                }
+    
+                if(Hash::check($credentials['new_password'], $actor->password)){
+                    SessionErrorHelper::flash('new_password', 'Essa senha já foi/está sendo utilizada.');
+                    return false;
+                }
+            }
+    
+            $actor->update([
+                'password' => Hash::make($credentials['new_password']),
+                'is_temp_password' => false,
+            ]);
+
+            return true;
+        }
+
+        if($guard === 'company'){
+            if(!Hash::check($credentials['current_password'], $actor->password)){
+                SessionErrorHelper::flash('current_password', 'Senha incorreta.');
+                return false;
+            }
+
+            if(Hash::check($credentials['new_password'], $actor->password)){
+                SessionErrorHelper::flash('new_password', 'Essa senha já foi/está sendo utilizada.');
+                return false;
+            }
+
+            $actor->update([
+                'password' => Hash::make($credentials['new_password']),
+            ]);
+
+            return true;
+        }
+    }
+
+
+    public static function checkUserHasMultipleCompanies(User $user)
     {
         return $user->companies->count() > 1;
     }
 
-    public function userIsManager(User $user)
+    public static function checkUserIsManager(User $user)
     {
-        return $user->hasRole('manager');
+        return $user->hasRole(RoleEnum::MANAGER->value);
     }
 
-    public function getRedirectLoginRoute(Authenticatable $actor)
+    public static function redirectLoginRoute($guard)
     {
-        if($actor instanceof Company){
-            return route('welcome.company');
-        }
-
-        if($actor instanceof User){
-            return route('welcome.user');
-        }
+        return match ($guard) {
+            'company' => route('welcome.company'),
+            'user'    => route('welcome.user'),
+            default   => route('site.home'),
+        };
     }
 
-    public function getRedirectLogoutRoute(Authenticatable $actor)
+    public static function redirectLogoutRoute($guard)
     {
-        return $actor instanceof Company ? route('company.login') : route('employee.login');
-    }
+        return match ($guard) {
+            'company' => route('company.login'),
+            'user'    => route('user.login'),
+            default   => route('site.home'),
+        };
+    } 
 
-    public function checkPasswordHash(string $value, string $hashed)
+    public static function checkPassword(string $value, string $hashed)
     {
         if(!Hash::check($value, $hashed)){ 
             SessionErrorHelper::flash('password', 'A senha está incorreta.');
@@ -111,8 +160,28 @@ class AuthService {
         return true;
     }
 
-    public static function createTempPassword(): string
+    public static function checkTempPassword(string $value, string $temp)
     {
-        return 'temp_' . bin2hex(random_bytes(5));
+        if($value !== $temp){ 
+            SessionErrorHelper::flash('password', 'A senha está incorreta.');
+            return false;
+        }
+        
+        return true;
+    }
+
+    public static function putGuardOnSession(string $guard): void
+    {
+        session()->put('auth:guard', $guard);
+    }
+
+    public static function putUserOnSession(string $guard): void
+    {
+        session()->put('auth:user', Auth::guard($guard)->user());
+    }
+        
+    public static function putCompanyOnSession(Company $company): void
+    {
+        session()->put('auth:company', $company);
     }
 }

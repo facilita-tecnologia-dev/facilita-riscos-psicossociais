@@ -13,7 +13,7 @@
 
                 @can('action-plan-edit')
                     <div class="w-full md:w-fit">
-                        <x-action href="{{ route('action-plan.show', App\Models\ActionPlan::firstWhere('company_id', session('company')->id)) }}" width="full">
+                        <x-action href="{{ route('action-plan.show', App\Models\ActionPlan::firstWhere('company_id', session('auth:company')->id)) }}" width="full">
                             Editar Plano de Ação
                         </x-action>
                     </div>

@@ -46,7 +46,7 @@ class PsychosocialResultsListController
     
     private function query(Request $request, string $testName)
     { 
-        $psychosocialCampaign = session('company')->campaigns()
+        $psychosocialCampaign = session('auth:company')->campaigns()
             ->whereYear('end_date', now()->year)
             ->whereHas('collection', function($query){
                 $query->where('collection_id', 1);
@@ -65,7 +65,7 @@ class PsychosocialResultsListController
                     ->whereYear('created_at', $request->year ?? Carbon::now()->year)
                     ->whereHas('parentCollection', function ($query) {
                         $query
-                        ->where('company_id', session('company')->id)
+                        ->where('company_id', session('auth:company')->id)
                         ->whereHas('userOwner', function ($query) {
                             $this->filterService->apply($query);
                         });
@@ -107,7 +107,7 @@ class PsychosocialResultsListController
         foreach($testType['userTests'] as $userTest){
             $user = $userTest['parentCollection']['userOwner'];
 
-            $evaluatedTest = $this->testService->evaluateIndividualTest($testType, $userTest, session('company')->metrics);
+            $evaluatedTest = $this->testService->evaluateIndividualTest($testType, $userTest, session('auth:company')->metrics);
 
             $testCompiled[$user->name]['user'] = $user;
 

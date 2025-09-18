@@ -13,7 +13,7 @@ it('should be able to see company metrics page', function () {
 
     $response->assertOk();
     $response->assertViewHas('metrics', function ($metrics) {
-        return $metrics->every(fn ($metric) => $metric->company_id === session('company')->id);
+        return $metrics->every(fn ($metric) => $metric->company_id === session('auth:company')->id);
     });
 });
 
@@ -27,7 +27,7 @@ it('should be able to update company metrics', function () {
     ]);
 
     $this->assertDatabaseHas('company_metrics', [
-        'company_id' => session('company')->id,
+        'company_id' => session('auth:company')->id,
         'metric_id' => 1,
         'value' => 10,
     ]);

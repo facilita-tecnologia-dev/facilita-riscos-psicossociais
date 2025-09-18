@@ -11,7 +11,7 @@
                         </div>
                     </div>
 
-                    <x-form action="{{ route('employee.login') }}" class="w-full flex flex-col gap-4 items-center" post>
+                    <x-form action="{{ route('user.login') }}" class="w-full flex flex-col gap-4 items-center" post>
                         @if(session('message'))
                             <span class="text-green-500 text-sm text-center">{{ session('message') }}</span>
                         @endif

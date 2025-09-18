@@ -29,9 +29,9 @@
                     
                     <x-form.input-text name="email" label="E-mail" value="{{ $user->email }}" placeholder="Digite o e-mail do usuário" />
                     
-                    <x-form.input-date name="birth_date" max="{{ Carbon\Carbon::now()->subYears(16)->toDateString() }}" value="{{ $user->birth_date }}" label="Data de nascimento"/>
+                    <x-form.input-date name="birth_date" value="{{ $user->birth_date }}" label="Data de nascimento"/>
 
-                    <x-form.select name="gender" label="Sexo" :options="$gendersToSelect" value="{{ $user->gender }}" />
+                    <x-form.input-text name="gender" label="Sexo" placeholder="Digite o sexo do usuário" value="{{ $user->gender }}"/>
 
                     <x-form.input-text name="marital_status" label="Estado Civil" placeholder="Digite o estado civil do usuário" value="{{ $user->marital_status }}"/>
 
@@ -39,15 +39,15 @@
                     
                     <x-form.input-text name="department" label="Setor" placeholder="Digite o departamento do usuário" value="{{ $user->department }}"/>
                     
-                    <x-form.input-text name="occupation" label="Cargo" placeholder="Digite a cargo do usuário" value="{{ $user->occupation }}"/>
+                    <x-form.input-text name="occupation" label="Função" placeholder="Digite a função do usuário" value="{{ $user->occupation }}"/>
                     
                     <x-form.input-text name="work_shift" label="Turno" placeholder="Digite o turno do usuário" value="{{ $user->work_shift }}"/>
 
-                    <x-form.input-date name="admission" max="{{ Carbon\Carbon::now()->toDateString() }}" label="Data de admissão" value="{{ $user->admission }}" />
+                    <x-form.input-date name="admission" label="Data de admissão" value="{{ $user->admission }}" />
 
-                    <x-form.select name="role" label="Gestor/Colaborador" :options="$rolesToSelect" value="{{ $roleDisplayName }}" />
+                    <x-form.select name="role" label="Hierarquia" :options="$roles" value="{{ $user->role()->id }}" />
                     
-                    <x-form.select name="status" label="Status" :options="$employeeStatusToSelect" value="{{ $userStatus }}" />
+                    <x-form.select name="status" label="Status" :options="$status" value="{{ $user->status() }}" />
                 </x-form>
 
                 <div class="w-full flex flex-row justify-between gap-2">
@@ -61,6 +61,4 @@
             </div>
         </x-structure.main-content-container>    
     </x-structure.page-container>
-
-    
 </x-layouts.app>

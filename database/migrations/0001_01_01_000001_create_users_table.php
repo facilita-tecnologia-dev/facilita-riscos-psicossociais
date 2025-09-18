@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('cpf', 20)->unique();
             $table->string('email', 100)->unique()->nullable();
             $table->string('password')->nullable();
-            $table->string('department')->nullable();
-            $table->string('occupation')->nullable();
+            $table->boolean('is_temp_password')->default(false);
+            $table->string('department');
+            $table->string('occupation');
             $table->date('admission')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('gender')->nullable();

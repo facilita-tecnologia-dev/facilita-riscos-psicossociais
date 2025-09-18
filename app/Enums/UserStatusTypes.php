@@ -19,4 +19,10 @@ enum UserStatusTypes: int
     {
         return array_column(self::cases(), 'value');
     }
+
+    
+    public static function labelFromValue(int $value): ?string
+    {
+        return self::tryFrom($value)?->label();
+    }
 }

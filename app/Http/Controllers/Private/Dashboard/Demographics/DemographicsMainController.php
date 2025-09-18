@@ -38,7 +38,7 @@ class DemographicsMainController
 
     private function pageQuery()
     {
-        $query = session('company')->users()->getQuery();
+        $query = session('auth:company')->users()->getQuery();
 
         return $this->filterService->apply($query)
             ->select('users.id', 'users.department', 'users.gender', 'users.admission', 'users.birth_date')
@@ -49,7 +49,7 @@ class DemographicsMainController
 
     private function getCompanyMetrics()
     {
-        $metrics = session('company')->metrics()->get()->groupBy('metricType.display_name');
+        $metrics = session('auth:company')->metrics()->get()->groupBy('metricType.display_name');
         $metricsCompiled = [];
 
         foreach ($metrics as $metricName => $metric) {

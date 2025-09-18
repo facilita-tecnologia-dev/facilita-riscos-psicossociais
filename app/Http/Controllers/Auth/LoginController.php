@@ -2,59 +2,40 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Helpers\AuthGuardHelper;
-use App\Helpers\SessionErrorHelper;
+use App\Enums\RoleEnum;
 use App\Models\Company;
 use App\Models\User;
 use App\Rules\validateCNPJ;
 use App\Services\AuthService;
-use App\Services\CompanyService;
 use Illuminate\Http\Request;
 
 class LoginController
 {
-    protected $authService;
-
-    public function __construct(AuthService $authService)
+    public function authenticateUser(Request $request)
     {
-        $this->authService = $authService;    
-    }
-
-    public function attemptInternalUserLogin(Request $request)
-    {
-        $validatedData = $request->validate([
+        $credentials = $request->validate([
             'cpf' => ['required', 'string', 'cpf'],
         ]);
-        
-        $user = User::firstWhere('cpf', $validatedData['cpf']);
-        
-        if (! $user) {
-            SessionErrorHelper::flash('cpf', 'Usuário não cadastrado.');
-            return back();
-        }
 
-        $redirectRoute = $this->authService->authenticate($user, $validatedData);
+        if($redirectRoute = AuthService::attempt('user', $credentials)){
+            return redirect()->to($redirectRoute);
+        };
   
-        return redirect()->to($redirectRoute);
+        return back();
     }
 
-    public function attemptCompanyLogin(Request $request)
+    public function authenticateCompany(Request $request)
     {
-        $validatedData = $request->validate([
+        $credentials = $request->validate([
             'cnpj' => ['required', 'string', new validateCNPJ],
             'password' => ['required'],
         ]);
 
-        $company = Company::firstWhere('cnpj', $validatedData['cnpj']);
-
-        if (!$company) {
-            SessionErrorHelper::flash('cnpj', 'Empresa não cadastrada.');
-            return back();
+        if($redirectRoute = AuthService::attempt('company', $credentials)){
+            return redirect()->to($redirectRoute);
         }
 
-        $redirectRoute = $this->authService->authenticate($company, $validatedData);
-
-        return redirect()->to($redirectRoute);
+        return back();
     }
 
     public function showChooseCompany(User $user)
@@ -62,75 +43,64 @@ class LoginController
         return view('auth.login.user.choose-company', compact('user'));
     }
 
-    public function loginUserWithCompany(User $user, Company $company)
+    public function chooseCompany(User $user, Company $company)
     {
-        session(['company' => $company]);
+        AuthService::putCompanyOnSession($company);
 
-        if($user->hasRole('manager')){
-            return redirect()->to(route('employee.login.password', $user));
-        }
+        if(AuthService::checkUserIsManager($user)) return redirect()->to(route('user.login.password', $user));
 
-        $this->authService->login($user);
+        AuthService::authenticate('user', $user);
 
-        return redirect()->to($this->authService->getRedirectLoginRoute($user));
+        return redirect()->to(AuthService::redirectLoginRoute('user'));
     }
 
-    public function showPasswordForm(User $user){
+    public function showCheckPassword(User $user){
         return view('auth.login.user.password', compact('user'));
     }
 
-    public function checkManagerPassword(Request $request, User $user)
+    public function checkPassword(Request $request, User $user)
     {
-        $validatedData = $request->validate([
+        $credentials = $request->validate([
             'password' => ['required'],
         ]);
 
-        $isTempPassword = $user->hasTemporaryPassword();
-
-        if($isTempPassword){
-            if($validatedData['password'] !== $user->password){
-                SessionErrorHelper::flash('password', 'A senha está incorreta.');
-                return back();
-            }
+        if($user->is_temp_password){
+            if(!AuthService::checkTempPassword($credentials['password'], $user->password)) return back();
         } else{
-            if(!$this->authService->checkPasswordHash($validatedData['password'], $user->password)){
-                return back();
-            }
+            if(!AuthService::checkPassword($credentials['password'], $user->password)) return back();
         }
 
-        $this->authService->login($user);
+        AuthService::authenticate('user', $user);
         
-        // if($isTempPassword){
-        //     return redirect()->to(route('user.password.update'));
-        // }
+        if($user->is_temp_password){
+            return redirect()->to(route('user.reset-password', $user));
+        }
 
-        return redirect()->to($this->authService->getRedirectLoginRoute($user));
+        return redirect()->to(AuthService::redirectLoginRoute('user'));
     }
 
-    public function switchCompanyLogin(Request $request){
-        if(request('company_id') === session('company_id')){
-            return back();
-        }
+    public function switchCompany(Request $request){
+        $data = $request->validate([
+            'company_id' => ['required'],
+        ]);
+
+        if($data['company_id'] === session('auth:company')->id) return back();
      
-        /** @var User $user */
-        $user = AuthGuardHelper::user();
-        
-        $roleInCurrentCompany = $user->roleInCompany(session('company'));
+        $user = session('auth:user');   
+        $company = Company::find($data['company_id']);
 
-        $this->authService->logout($request);
-        
-        
-        $company = Company::firstWhere('id', request('company_id'));
-        $roleInRequestCompany = $user->roleInCompany($company);
-        
-        session(['company' => $company]);
-        
-        if($roleInCurrentCompany->name === 'employee' && $roleInRequestCompany->name === 'manager'){
-            return redirect()->to(route('employee.login.password', $user));
-        } 
+        $roleOnAuthCompany = $user->role(session('auth:company'));
+        $roleInRequestCompany = $user->role($company);
 
-        $this->authService->login($user);
+        AuthService::logout($request);
+        
+        AuthService::putCompanyOnSession($company);
+        AuthService::putGuardOnSession('user');
+        
+        if($roleOnAuthCompany->type === RoleEnum::EMPLOYEE->value && $roleInRequestCompany->type === RoleEnum::MANAGER->value) return redirect()->to(route('user.login.password', $user));
 
-        return redirect()->to($this->authService->getRedirectLoginRoute($user));
+        AuthService::authenticate('user', $user);
+
+        return redirect()->to(AuthService::redirectLoginRoute('user'));
     }
 }

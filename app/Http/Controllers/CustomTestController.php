@@ -29,7 +29,7 @@ class CustomTestController
             'order' => $validatedData['order'],
         ]);
 
-        session(['company' => session('company')->load('customCollections.tests')]);
+        session(['company' => session('auth:company')->load('customCollections.tests')]);
 
         return to_route('custom-collections.show', $customCollection);
     }

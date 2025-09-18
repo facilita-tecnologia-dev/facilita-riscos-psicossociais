@@ -75,7 +75,7 @@
                     </div>
                     <div class="">
                         <p class="font-semibold text-base sm:text-lg text-left">Status:</p>
-                        <p class="text-sm sm:text-base text-left">{{ App\Enums\UserStatusTypes::labelFromValue($userStatus) }}</p>
+                        <p class="text-sm sm:text-base text-left">{{ App\Enums\UserStatusTypes::labelFromValue($user->status()) }}</p>
                     </div>
                     <div class="">
                         <p class="font-semibold text-base sm:text-lg text-left">Último teste de Riscos Psicossociais realizado:</p>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
 
-                @if($hasTemporaryPassword)
+                @if($user->is_temp_password)
                     <div class="md:col-span-2 bg-blue-200/50 rounded-md p-4 space-y-1">
                         <p class="text-sm sm:text-base text-gray-800">Este gestor ainda não definiu uma senha. No próximo acesso, deverá usar a senha provisória e será solicitado a criar uma nova.</p> 
                         <button class="text-sm sm:text-base break-all text-left" onclick="navigator.clipboard.writeText('{{ $user->password }}')">
@@ -103,12 +103,12 @@
                     <div class="flex items-center gap-2" data-position="left">
                         @can('user-delete')
                             <x-form action="{{ route('user.destroy', $user) }}" delete onsubmit="return confirm('Você deseja desvincular o colaborador?')">
-                                <x-action tag="button" type="submit" variant="danger">Desvincular    colaborador</x-action>
+                                <x-action tag="button" type="submit" variant="danger">Desvincular colaborador</x-action>
                             </x-form>
                         @endcan
                     </div>
                     <div class="flex items-center gap-2" data-position="right">
-                        @if($user->id === App\Helpers\AuthGuardHelper::user()->id && $user->hasRole('manager'))
+                        @if(session('auth:guard') === 'user' && $user->hasRole(App\Enums\RoleEnum::MANAGER->value))
                             <x-action tag="button" variant="secondary" data-role="reset-password-modal-trigger">Redefinir senha</x-action>
                         @endif
                         @can('user-permission-edit')
@@ -126,7 +126,7 @@
                 </div>
             </div>
 
-            @if($hasTemporaryPassword /*session('password-warning')*/)
+            @if($user->is_temp_password)
                 <x-modal.background data-role="password-warning-modal" class="!flex">
                     <x-modal.wrapper class="max-w-[450px]">
                         <x-modal.title>Aviso - Senha do gestor</x-modal.title>
@@ -153,13 +153,19 @@
                     <x-modal.title>Redefinir senha do usuário</x-modal.title>
                     
                     <div class="w-full flex flex-col gap-2">
-                        <x-form action="{{ route('user.reset-password', $user) }}" put class="w-full flex flex-col gap-2">
+                        <x-form action="{{ route('user.reset-password-modal', $user) }}" put class="w-full flex flex-col gap-2">
                             <p class="text-center">Digite a senha atual:</p>
+                            
                             <x-form.input-text type="password" name="current_password" placeholder="Senha atual"/>
+                            
                             <p class="text-center">Digite e confirme a nova senha:</p>
+                            
                             <x-form.input-text type="password" name="new_password" placeholder="Nova senha" oninput="checkPasswordSteps(event)"/>
+                            
                             <x-password-requirements />
+
                             <x-form.input-text type="password" name="new_password_confirmation" placeholder="Confirme sua nova senha"/>
+                            
                             <x-action variant="secondary" tag="button" width="full">Redefinir senha</x-action>
                         </x-form>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BaseCollectionTypes;
 use App\Http\Requests\CampaignStoreRequest;
 use App\Http\Requests\CampaignUpdateRequest;
 use App\Mail\CampaignEmail;
@@ -28,37 +29,35 @@ class CampaignController
     public function index()
     {
         Gate::authorize('campaign-index');
-        $Campaigns = Company::firstWhere('id', session('company')->id)->campaigns()->with('collection')->paginate(15);
 
-        return view('private.campaign.index', compact('Campaigns'));
+        $campaigns = session('auth:company')->campaigns()->paginate(15);
+
+        return view('private.campaign.index', compact('campaigns'));
     }
 
     public function create()
     {
         Gate::authorize('campaign-create');
-   
-        $collectionsToSelect = session('company')['customCollections']
-        ->map(fn ($collection) => [
-            'option' => $collection['collection_id'] == 2 ? $collection->name . ' (Clima Organizacional)' :  $collection->name,
-            'value' => $collection->id,
-        ]);
 
-        return view('private.campaign.create', compact('collectionsToSelect'));
+        $collections = BaseCollection::all()
+            ->concat(session('auth:company')->customCollections)
+            ->map(fn($c) => [
+                'option' => $c->name . ($c instanceof BaseCollection ? ' (Padrão)' : ''), 
+                'value' => ($c instanceof BaseCollection ? 'base_' : 'custom_') . $c->id
+            ]);
+
+        return view('private.campaign.create', compact('collections'));
     }
 
     public function store(CampaignStoreRequest $request)
     {
         Gate::authorize('campaign-create');
-
-        $psychosocialCollection = session('company')['customCollections']->firstWhere('collection_id', 1);
-        $collectionId = request('collection_id') == $psychosocialCollection['id'] ? 1 : 2;
-        $companyHasSameCampaignThisYear = session('company')->hasCampaignThisYear($collectionId);
         
-        if ($companyHasSameCampaignThisYear) {
-            return back()->with('message', 'Sua empresa já cadastrou uma campanha de testes com o mesmo tipo em ' . now()->year . '.');
-        }
+        $collectionID = explode('_', $request->validated('collection_id'))[1];
+        
+        if (session('auth:company')->hasCampaignThisYear($collectionID)) return back()->with('message', 'Sua empresa já cadastrou uma campanha de testes com o mesmo tipo nesse ano');
 
-        $this->campaignRepository->store($request);
+        $this->campaignRepository->store($request->validated());
 
         return to_route('campaign.index');
     }
@@ -66,45 +65,33 @@ class CampaignController
     public function show(Campaign $campaign)
     {
         Gate::authorize('campaign-show');
-        
-        $hasCollectionTestsThisYear = Company::firstWhere('id', session('company')->id)->users()
-        ->whereHas('collections', function ($query) use($campaign) {
-            $query->where('collection_id', $campaign->collection_id);
-        })
-        ->exists();
 
-        return view('private.campaign.show', [
-            'campaign' => $campaign,
-            'hasCollectionTestsThisYear' => $hasCollectionTestsThisYear,
-        ]);
+        return view('private.campaign.show', compact('campaign'));
     }
 
     public function edit(Campaign $campaign)
     {
         Gate::authorize('campaign-edit');
-        $collectionsToSelect = BaseCollection::all()->map(fn ($collection) => [
-            'option' => $collection->name,
-            'value' => $collection->id,
-        ]);
+        
+        $collections = BaseCollection::all()
+            ->concat(session('auth:company')->customCollections)
+            ->map(fn($c) => [
+                'option' => $c->name . ($c instanceof BaseCollection ? ' (Padrão)' : ''), 
+                'value' => ($c instanceof BaseCollection ? 'base_' : 'custom_') . $c->id
+            ]);
 
-        return view('private.campaign.edit', compact('campaign', 'collectionsToSelect'));
+        return view('private.campaign.edit', compact('campaign', 'collections'));
     }
 
     public function update(CampaignUpdateRequest $request, Campaign $campaign)
     {
         Gate::authorize('campaign-edit');
 
-        $companyHasSameCampaignThisYear = Company::firstWhere('id', session('company')->id)
-            ->campaigns()
-            ->whereYear('start_date', now()->year)
-            ->where('collection_id', $request->validated('collection_id'))
-            ->first();
+        $collectionID = explode('_', $request->validated('collection_id'))[1];
+        
+        if (session('auth:company')->hasCampaignThisYear($collectionID) && $collectionID != $campaign->collection_id) return back()->with('message', 'Sua empresa já cadastrou uma campanha de testes com o mesmo tipo nesse ano');
 
-        if ($companyHasSameCampaignThisYear && $companyHasSameCampaignThisYear->id !== $campaign->id) {
-            return back()->with('message', 'Sua empresa já cadastrou uma campanha de testes de '.$companyHasSameCampaignThisYear->collection->name.' em 2025.');
-        }
-
-        $this->campaignRepository->update($campaign, $request);
+        $this->campaignRepository->update($campaign, $request->validated());
 
         return to_route('campaign.index')->with('message', 'Campanha editada com sucesso.');
     }
@@ -119,10 +106,10 @@ class CampaignController
 
     public function notify(Campaign $campaign)
     {
-        $usersWithEmail = session('company')->users->where('email');
+        $usersWithEmail = session('auth:company')->users->where('email');
         
         $usersWithEmail->each(function($user) use($campaign) {
-            Mail::to($user->email)->queue(new CampaignEmail($user, session('company'), $campaign));
+            Mail::to($user->email)->queue(new CampaignEmail($user, session('auth:company'), $campaign));
         });
 
         return back()->with('message', 'Notificações disparadas com sucesso!');
@@ -132,7 +119,7 @@ class CampaignController
     {
         $campaign->update(['end_date' => now()]);
         
-        session('company')->load('campaigns');
+        session('auth:company')->load('campaigns');
         
         return back()->with('message', 'Campanha encerrada com sucesso.');
     }

@@ -11,7 +11,7 @@ class PsychosocialRiskService
     public function getParticipation($userTests)
     {   
         if(count($userTests) > 0){
-            $activeUsers = session('company')->users()->wherePivot('status', 1)->get();
+            $activeUsers = session('auth:company')->users()->wherePivot('status', 1)->get();
             $usersByDepartment = $activeUsers->groupBy('department');
             
             $usersWithCollection = $userTests->map(fn($item) => $item->parentCollection->userOwner)

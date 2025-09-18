@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Private;
 use App\Helpers\SessionErrorHelper;
 use App\Models\Company;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -24,7 +25,7 @@ class CompanyController
     public function show(string $id)
     {
         Gate::authorize('company-show');
-        $company = session('company');
+        $company = session('auth:company');
 
         return view('private.company.show', compact('company'));
     }
@@ -32,7 +33,7 @@ class CompanyController
     public function edit(string $id)
     {
         Gate::authorize('company-edit');
-        $company = session('company');
+        $company = session('auth:company');
 
         return view('private.company.update', compact('company'));
     }
@@ -40,7 +41,7 @@ class CompanyController
     public function update(Request $request)
     {
         Gate::authorize('company-edit');
-        $company = session('company');
+        $company = session('auth:company');
 
         $validatedData = $request->validate([
             'logo' => ['nullable'],
@@ -68,12 +69,12 @@ class CompanyController
             'password' => ['required']
         ]);
 
-        if(!Hash::check($validatedData['password'], session('company')->password)){
+        if(!Hash::check($validatedData['password'], session('auth:company')->password)){
             SessionErrorHelper::flash('password', 'Senha incorreta.');
             return back();
         }
 
-        session('company')->delete();
+        session('auth:company')->delete();
 
         return redirect()->to(route('logout'));
     }
@@ -108,6 +109,20 @@ class CompanyController
             'token' => $token,
             'email' => request('email')
         ]);
+    }
+
+    public function resetPasswordModal(Request $request, Company $company)
+    {   
+        $credentials = $request->validate([
+            "current_password" => ['required'],
+            'new_password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+        ]);
+        
+        if(AuthService::resetPassword('company', $company, $credentials)){  
+            return back()->with('message', 'Senha redefinida com sucesso!');
+        };
+
+        return back()->with('message', 'Não foi possível redefinir sua senha.');
     }
 
     public function resetPassword(Request $request)

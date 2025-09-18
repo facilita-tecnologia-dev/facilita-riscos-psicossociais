@@ -2,25 +2,12 @@
 
 namespace App\Http\Controllers\Private\Dashboard\Organizational;
 
-use App\Helpers\AuthGuardHelper;
-use App\Models\Collection;
-use App\Models\Company;
-use App\Models\CustomCollection;
-use App\Models\CustomTest;
-use App\Models\Test;
 use App\Models\User;
-use App\Models\UserAnswer;
-use App\Models\UserCollection;
-use App\Models\UserCustomTest;
-use App\Repositories\TestRepository;
-use App\Services\Dashboard\OrganizationalClimateService;
 use App\Services\TestService;
 use App\Services\User\UserFilterService;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class OrganizationalMainController
@@ -61,7 +48,7 @@ class OrganizationalMainController
         return view('private.dashboard.organizational.index', [
             'organizationalClimateResults' => $organizationalClimateResults,
             'organizationalTestsParticipation' => $organizationalTestsParticipation,
-            'companyHasTests' => session('company')->users()->has('collections')->exists(),
+            'companyHasTests' => session('auth:company')->users()->has('collections')->exists(),
             'filtersApplied' => $filtersApplied,
             'filteredUserCount' => count($this->scopedTestResults) > 0 ? count($this->scopedTestResults) : null,
         ]);
@@ -69,7 +56,7 @@ class OrganizationalMainController
 
     private function query()
     {
-        $companyUserIds = session('company')->users->pluck('id');        
+        $companyUserIds = session('auth:company')->users->pluck('id');        
         $query = User::whereIn('id', $companyUserIds);
 
         return $this->filterService->apply($query)
@@ -87,8 +74,7 @@ class OrganizationalMainController
 
         $filtersApplied = [];
 
-        $isUser = AuthGuardHelper::user() instanceof User;
-        $userDepartmentScopes = $isUser ? AuthGuardHelper::user()->departmentScopes->where('allowed', 1) : false;
+        $userDepartmentScopes = session('auth:guard') === 'user' ? session('auth:user')->departmentScopes->where('allowed', 1) : false;
 
         foreach ($request->query() as $filterKeyName => $filter) {
             $filtersApplied[$this->filterService->getFilterDisplayName($filterKeyName)] = $filter;
@@ -103,7 +89,7 @@ class OrganizationalMainController
             }
         }
 
-        $company = session('company');
+        $company = session('auth:company');
 
         $companyLogo = $company->logo;
         $companyName = $company->name;
@@ -123,11 +109,10 @@ class OrganizationalMainController
     {   
         $testCompiled = [];
 
-        $isUser = AuthGuardHelper::user() instanceof User;
-        $userDepartmentScopes = $isUser ? AuthGuardHelper::user()->departmentScopes->where('allowed', 1) : false;
+        $userDepartmentScopes = session('auth:guard') === 'user' ? session('auth:user')->departmentScopes->where('allowed', 1) : false;
 
         foreach($this->pageData as $user){
-            if ($user->latestOrganizationalClimateCollection && (!$isUser || $userDepartmentScopes->where('department', $user->department)->count())) {
+            if ($user->latestOrganizationalClimateCollection && (!session('auth:guard') === 'user' || $userDepartmentScopes->where('department', $user->department)->count())) {
                 $this->compileUserTests($user, $testCompiled, $filtersApplied);
             }
         }
@@ -164,7 +149,7 @@ class OrganizationalMainController
 
         $tests->each(function($userTest) use($user, &$testCompiled, $filtersApplied, $onlyGeneral) {
             $testDisplayName = $userTest['testType']['display_name'];
-            $evaluatedTest = $this->testService->evaluateIndividualTest($userTest['testType'], $userTest, session('company')->metrics, 'organizational-climate');
+            $evaluatedTest = $this->testService->evaluateIndividualTest($userTest['testType'], $userTest, session('auth:company')->metrics, 'organizational-climate');
             $this->updateAnswers($testDisplayName, $evaluatedTest, $testCompiled, $user, $filtersApplied, $onlyGeneral);
         }); 
     }
@@ -200,7 +185,7 @@ class OrganizationalMainController
 
     private function getOrganizationalTestsParticipation()
     {
-        $activeUsers = session('company')->users()->wherePivot('status', 1)->get();
+        $activeUsers = session('auth:company')->users()->wherePivot('status', 1)->get();
 
         $usersWithCollection = $this->scopedTestResults->filter(fn($user) => $activeUsers->firstWhere('id', $user->id));
         $usersByDepartment = $this->organizationalClimateService->filterByDepartmentScope($activeUsers->groupBy('department'));
@@ -220,7 +205,7 @@ class OrganizationalMainController
         return [
             'Geral' => [
                 'count' => $usersWithCollection->count(),
-                'per_cent' => ($usersWithCollection->count() / session('company')->users->count()) * 100,
+                'per_cent' => ($usersWithCollection->count() / session('auth:company')->users->count()) * 100,
             ],
         ];
     }

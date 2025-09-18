@@ -2,39 +2,54 @@
 
 namespace App\Repositories;
 
+use App\Enums\CampaignStatusTypes;
+use App\Enums\CollectionTypes;
 use App\Models\Campaign;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 
 class CampaignRepository
 {
-    public function store(FormRequest $request): Campaign
+    public function store(array $data): Campaign
     {
-        return DB::transaction(function () use ($request) {
-            $validatedData = $request->validated();
-   
-            $campaign = Campaign::create([
-                'company_id' => session('company')->id,
-                'collection_id' => $validatedData['collection_id'],
-                'name' => $validatedData['name'],
-                'description' => $validatedData['description'],
-                'start_date' => $validatedData['start_date'],
-                'end_date' => $validatedData['end_date'],
+        return DB::transaction(function () use ($data) {
+            $collectionInfo = explode('_', $data['collection_id']);
+            $collectionType = $collectionInfo[0];
+            $collectionID = $collectionInfo[1];
+
+            $campaign = session('auth:company')->campaigns()->create([
+                'collection_id' => $collectionID,
+                'type' => CollectionTypes::from($collectionType)->value,
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'start_date' => $data['start_date'],
+                'end_date' => $data['end_date'],
+                'status' => CampaignStatusTypes::SCHEDULED
             ]);
 
-            session(['company' => session('company')->load('campaigns')]);
+            session(['company' => session('auth:company')->load('campaigns')]);
 
             return $campaign;
         });
     }
 
-    public function update(Campaign $campaign, FormRequest $request): Campaign
+    public function update(Campaign $campaign, array $data): Campaign
     {
-        return DB::transaction(function () use ($campaign, $request) {
-            $campaign->update($request->safe()->toArray());
+        return DB::transaction(function () use ($campaign, $data) {
+            $collectionInfo = explode('_', $data['collection_id']);
+            $collectionType = $collectionInfo[0];
+            $collectionID = $collectionInfo[1];
 
-            
-            session(['company' => session('company')->load('campaigns')]);
+            $campaign->update([
+                'collection_id' => $collectionID,
+                'type' => CollectionTypes::from($collectionType)->value,
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'start_date' => $data['start_date'],
+                'end_date' => $data['end_date'],
+            ]);
+
+            session(['company' => session('auth:company')->load('campaigns')]);
             
             return $campaign;
         });

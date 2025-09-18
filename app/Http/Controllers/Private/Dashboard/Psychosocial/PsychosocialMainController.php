@@ -45,7 +45,7 @@ class PsychosocialMainController
         return view('private.dashboard.psychosocial.index', [
             'psychosocialRiskResults' => $psychosocialRiskResults,
             'psychosocialTestsParticipation' => $psychosocialTestsParticipation,
-            'companyHasTests' => session('company')->users()->has('collections')->exists(),
+            'companyHasTests' => session('auth:company')->users()->has('collections')->exists(),
             'filtersApplied' => $filtersApplied,
             'filteredUserCount' => count($userTests) > 0 ? count($userTests) : null,
         ]);
@@ -53,7 +53,7 @@ class PsychosocialMainController
 
     private function query(Request $request)
     {
-        $psychosocialCampaign = session('company')->campaigns()
+        $psychosocialCampaign = session('auth:company')->campaigns()
             ->whereYear('end_date', now()->year)
             ->whereHas('collection', function($query){
                 $query->where('collection_id', 1);
@@ -72,7 +72,7 @@ class PsychosocialMainController
                     ->whereYear('created_at', $request->year ?? Carbon::now()->year)
                     ->whereHas('parentCollection', function ($query) {
                         $query
-                        ->where('company_id', session('company')->id)
+                        ->where('company_id', session('auth:company')->id)
                         ->whereHas('userOwner', function ($query) {
                             $this->filterService->apply($query);
                         });
@@ -126,7 +126,7 @@ class PsychosocialMainController
 
         $testType->average = round($testType['userTests']->avg('average_value'), 2);
         
-        $evaluatedTest = $this->testService->evaluateTests($testType, session('company')->metrics);
+        $evaluatedTest = $this->testService->evaluateTests($testType, session('auth:company')->metrics);
 
         foreach($evaluatedTest['risks'] as &$risk){
             $risk['riskCaption'] = RiskLevelEnum::labelFromValue($risk['riskLevel']);

@@ -25,8 +25,8 @@
                                 <i class="fa-solid fa-fingerprint text-lg"></i>
                                 Adicione o logotipo da sua empresa
                             </h2>
-                            <p class="text-sm text-center w-full">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto odio, ullam assumenda beatae.</p>
-                            <x-action variant="secondary" width="full" :href="route('company.edit', session('company'))">Editar perfil da empresa</x-action>
+                            <p class="text-sm text-center w-full">Faça upload de um logotipo da sua empresa para deixar seu perfil mais completo!</p>
+                            <x-action variant="secondary" width="full" :href="route('company.edit', session('auth:company'))">Editar perfil da empresa</x-action>
                         </div>
                     @endif
 
@@ -42,9 +42,9 @@
 
                             <h2 class="text-sm md:text-base flex items-center gap-3">
                                 <i class="fa-solid fa-users text-lg"></i>
-                                Importe ou crie colaboradores — assim você poderá começar a aplicar testes, acompanhar dados e gerar insights personalizados.
+                                Importe ou crie colaboradores
                             </h2>
-                            <p class="text-sm text-center w-full">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto odio, ullam assumenda beatae.</p>
+                            <p class="text-sm text-center w-full">Assim você poderá começar a aplicar testes, acompanhar dados e gerar insights personalizados.</p>
 
                             <div class="flex items-center flex-wrap sm:flex-nowrap gap-2">    
                                 <x-action variant="secondary" :href="route('user.import')">Importar colaboradores</x-action>
@@ -65,9 +65,9 @@
 
                             <h2 class="text-sm md:text-base flex items-center gap-3">
                                 <i class="fa-solid fa-briefcase"></i>
-                                Atribua um usuário como gestor e ajuste as permissões ou a visualização de setores, se necessário.
+                                Atribua um gestor
                             </h2>
-                            <p class="text-sm text-center w-full">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto odio, ullam assumenda beatae.</p>
+                            <p class="text-sm text-center w-full">Atribua um usuário como gestor e ajuste as permissões ou a visualização de setores, se necessário.</p>
                             <x-action variant="secondary" width="full" :href="route('user.index')">Lista de usuários</x-action>
                         </div>
                     @endif
@@ -111,7 +111,7 @@
                     @endif
                 </div>
             @else
-                <x-structure.page-title title="Bem vindo(a)! - {{ session('company')->name }}" centered="true" />
+                <x-structure.page-title title="Bem vindo(a)! - {{ session('auth:company')->name }}" centered="true" />
 
                 <x-structure.message>
                     <i class="fa-regular fa-heart"></i>
@@ -163,7 +163,7 @@
                             <i class="fa-solid fa-arrow-right text-sm"></i>
                         </div>
                     </a>
-                    <a href="{{ route('company.show', session('company')) }}" class="w-full bg-gray-100 rounded-md shadow-md p-4 flex items-center gap-3 relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
+                    <a href="{{ route('company.show', session('auth:company')) }}" class="w-full bg-gray-100 rounded-md shadow-md p-4 flex items-center gap-3 relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
                         <div class="w-10 aspect-square rounded-md border border-gray-300 flex items-center justify-center">
                             <i class="fa-solid fa-building"></i>
                         </div>

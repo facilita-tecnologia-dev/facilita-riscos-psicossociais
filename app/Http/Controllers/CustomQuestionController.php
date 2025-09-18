@@ -27,7 +27,7 @@ class CustomQuestionController
             ]);
         });
 
-        session(['company' => session('company')->load('customCollections.tests.questions')]);
+        session(['company' => session('auth:company')->load('customCollections.tests.questions')]);
 
         return back()->with('message', 'Questão adicionada com sucesso!');
     }

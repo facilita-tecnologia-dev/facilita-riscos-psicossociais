@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\AuthService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class AuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! Auth::guard('company')->check() && ! Auth::guard('user')->check()) {
+        if (!session('auth:user')) {
             return to_route('site.home');
         }
 

@@ -6,37 +6,25 @@
             <x-structure.page-title title="Bem vindo(a)!" centered />
 
             <div class="flex-1 w-full py-4 md:py-8 space-y-8 flex flex-col items-center mt-6">
-                @if(session('company')->getActiveCampaigns()->count())
+                @if(session('auth:company')->activeCampaigns()->isNotEmpty())
                     <div class="text-center space-y-2">
                         <h2 class="text-base md:text-2xl font-medium">Vamos responder aos testes?</h2>
                         <p class="text-sm md:text-base">Sua empresa tem campanhas de testes ativas no momento:</p>
                     </div>     
                     
-                    @foreach (session('company')->getActiveCampaigns() as $activeCampaign)
+                    @foreach (session('auth:company')->activeCampaigns() as $campaign)
                         <div class="w-full flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-100 rounded-md shadow-md p-4">
                             <span class="text-sm md:text-base flex items-center gap-3">
                                 <i class="fa-solid fa-question"></i>
-                                {{ $activeCampaign->name }}
+                                {{ $campaign->name }}
                             </span>
-                            @php
-                                $psychosocialCollection = session('company')['customCollections']->firstWhere('collection_id', 1);
-                                $collectionId = $activeCampaign['collection_id'] == $psychosocialCollection['id'] ? 1 : 2;
 
-                                $user = App\Helpers\AuthGuardHelper::user();
-
-                                if($collectionId == 1){
-                                    $hasCompatibleCollection = $user->latestPsychosocialCollection;
-                                } elseif($collectionId == 2){
-                                    $hasCompatibleCollection = $user->latestOrganizationalClimateCollection;
-                                }
-                            @endphp
-
-                            @if($hasCompatibleCollection)
+                            @if($campaign->userCollections->where('user_id', session('auth:user')->id)->isNotEmpty())
                                 <p class="p-2 bg-success/30 border border-green-300 text-green-800 rounded-md text-sm sm:text-base">
                                     Respondido
                                 </p>
                             @else
-                                <x-action variant="secondary" :href="route('answer-test', App\Models\CustomCollection::firstWhere('id', $activeCampaign['collection_id']))">Responder testes</x-action>
+                                <x-action variant="secondary" :href="route('welcome.user'){{-- route('answer-test', App\Models\CustomCollection::firstWhere('id', $campaign['collection_id'])) --}}">Responder testes</x-action>
                             @endif
                         </div>
                     @endforeach

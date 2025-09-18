@@ -21,8 +21,8 @@ return new class extends Migration
             $table->enum('type', CollectionTypes::values());
             $table->string('name', 100);
             $table->text('description')->nullable();
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->enum('status', CampaignStatusTypes::values())->default(CampaignStatusTypes::SCHEDULED->value);
         });
     }

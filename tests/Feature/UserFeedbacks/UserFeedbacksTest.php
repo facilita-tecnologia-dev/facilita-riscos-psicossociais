@@ -17,7 +17,7 @@ it('should be able to see the feedbacks list page', function () {
 });
 
 it('should be able to see feedback detail', function () {
-    $feedback = UserFeedback::where('company_id', session('company')->id)->first();
+    $feedback = UserFeedback::where('company_id', session('auth:company')->id)->first();
     $response = $this->get(route('feedback.show', $feedback));
 
     $response->assertOk();

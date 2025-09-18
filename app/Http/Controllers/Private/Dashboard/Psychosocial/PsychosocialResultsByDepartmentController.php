@@ -42,7 +42,7 @@ class PsychosocialResultsByDepartmentController
 
     private function query(Request $request, string $testName)
     {
-        $psychosocialCampaign = session('company')->campaigns()
+        $psychosocialCampaign = session('auth:company')->campaigns()
             ->whereYear('end_date', now()->year)
             ->whereHas('collection', function($query){
                 $query->where('collection_id', 1);
@@ -61,7 +61,7 @@ class PsychosocialResultsByDepartmentController
                     ->whereYear('created_at', $request->year ?? Carbon::now()->year)
                     ->whereHas('parentCollection', function ($query) {
                         $query
-                        ->where('company_id', session('company')->id)
+                        ->where('company_id', session('auth:company')->id)
                         ->whereHas('userOwner', function ($query) {
                             $this->filterService->apply($query);
                         });
@@ -104,7 +104,7 @@ class PsychosocialResultsByDepartmentController
             $userDepartment = $userTest['parentCollection']['userOwner']['department'];
             $this->sumDepartmentCount($userDepartment, $testCompiled);
 
-            $evaluatedTest = $this->testService->evaluateIndividualTest($testType, $userTest, session('company')->metrics);
+            $evaluatedTest = $this->testService->evaluateIndividualTest($testType, $userTest, session('auth:company')->metrics);
 
             $this->updateTestSeverities($userDepartment, $evaluatedTest, $riskName, $testCompiled);
             $this->sortSeveritiesByDepartment($userDepartment, $testCompiled);

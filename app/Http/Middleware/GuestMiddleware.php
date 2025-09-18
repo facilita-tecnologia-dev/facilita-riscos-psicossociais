@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\AuthGuardHelper;
 use App\Services\AuthService;
 use Closure;
 use Illuminate\Http\Request;
@@ -24,8 +23,8 @@ class GuestMiddleware
      */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-        if (AuthGuardHelper::user()) {
-            $redirect = $this->authService->getRedirectLoginRoute(AuthGuardHelper::user());
+        if (session('auth:user')) {
+            $redirect = AuthService::redirectLoginRoute(session('auth:guard'));
 
             return redirect()->to($redirect);
         }
