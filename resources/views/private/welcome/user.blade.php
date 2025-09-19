@@ -24,7 +24,7 @@
                                     Respondido
                                 </p>
                             @else
-                                <x-action variant="secondary" :href="route('welcome.user'){{-- route('answer-test', App\Models\CustomCollection::firstWhere('id', $campaign['collection_id'])) --}}">Responder testes</x-action>
+                                <x-action variant="secondary" :href="route('test', $campaign)">Responder testes</x-action>
                             @endif
                         </div>
                     @endforeach

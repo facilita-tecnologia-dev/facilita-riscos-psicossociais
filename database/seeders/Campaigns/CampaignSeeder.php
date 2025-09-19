@@ -40,7 +40,6 @@ class CampaignSeeder extends Seeder
                         'company_id' => $company->id,
                         'collection_id' => $campaign->collection_id, // ✅ corrigido
                         'type' => CollectionTypes::BASE,
-                        'score' => rand(1, 5),
                         'created_at' => Carbon::createFromTimestamp(
                             rand(
                                 Carbon::create(now()->year, 6, 31)->timestamp,
@@ -49,7 +48,7 @@ class CampaignSeeder extends Seeder
                         )
                     ]);
                     
-                    $campaign->collection->questions->each(function($question) use ($userCollection, $user, $company, $campaign) {
+                    $campaign->collection()->questions->each(function($question) use ($userCollection, $user, $company, $campaign) {
                         $userCollection->answers()->create([
                             'user_id' => $user->id,
                             'company_id' => $company->id,

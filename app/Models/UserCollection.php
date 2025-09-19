@@ -11,7 +11,6 @@ class UserCollection extends Model
     use HasFactory;
 
     protected $table = 'user_collections';
-    public $timestamps = false;
 
     public function answers(): HasMany
     {

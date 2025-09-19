@@ -46,7 +46,7 @@
                         <x-table.head.sortable-th class="hidden md:block flex-1" field="end_date">
                             Data de Encerramento
                         </x-table.head.sortable-th>
-                        <x-table.head.sortable-th class="w-24" field="end_date">
+                        <x-table.head.sortable-th class="w-32" field="end_date">
                             Status
                         </x-table.head.sortable-th>
                         @if(session('auth:company')->activeCampaigns()->count())
@@ -60,7 +60,7 @@
                                 <x-table.body.td class="truncate flex-1">{{ $campaign->name }}</x-table.body.td>
                                 <x-table.body.td class="hidden md:block truncate flex-1">{{ $campaign->start_date->format('d/m/Y - H:i') }}</x-table.body.td>
                                 <x-table.body.td class="hidden md:block truncate flex-1">{{ $campaign->end_date->format('d/m/Y - H:i') }}</x-table.body.td>
-                                <x-table.body.td class="truncate w-24">{{ $campaign->status->label() }}</x-table.body.td>
+                                <x-table.body.td class="truncate w-32">{{ $campaign->status->label() }}</x-table.body.td>
                                 @if(session('auth:company')->activeCampaigns()->isNotEmpty())
                                     <x-table.body.td class="w-32">
                                             @if($campaign->status === App\Enums\CampaignStatusTypes::IN_PROGRESS)

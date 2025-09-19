@@ -84,9 +84,9 @@
 
                             <h2 class="text-sm md:text-base flex items-center gap-3">
                                 <i class="fa-solid fa-percent text-lg"></i>
-                                Cadastre os Dados de Desempenho Organizacional da sua empresa nos últimos 12 meses (%)
+                                Dados de Desempenho
                             </h2>
-                            <p class="text-sm text-center w-full">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto odio, ullam assumenda beatae.</p>
+                            <p class="text-sm text-center w-full">Cadastre os Dados de Desempenho Organizacional da sua empresa nos últimos 12 meses (%)</p>
                             <x-action variant="secondary" width="full" :href="route('company-metrics.edit')">Cadastrar Dados de Desempenho</x-action>
                         </div>
                     @endif
@@ -105,7 +105,7 @@
                                 <i class="fa-solid fa-calendar-days text-lg"></i>
                                 Programe uma Campanha de Testes
                             </h2>
-                            <p class="text-sm text-center w-full">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto odio, ullam assumenda beatae.</p>
+                            <p class="text-sm text-center w-full">Agende uma campanha de testes para começar sua avaliação de Riscos Psicossociais</p>
                             <x-action variant="secondary" width="full" :href="route('campaign.create')">Programar campanha</x-action>
                         </div>
                     @endif

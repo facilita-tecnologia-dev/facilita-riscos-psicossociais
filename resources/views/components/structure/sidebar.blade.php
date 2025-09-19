@@ -90,7 +90,7 @@
                 @endcan
                 @can('answer-psychosocial-test')
                     @if($hasActivePsychosocialCampaign)
-                        <x-sidebar.item href="{{-- route('answer-test', $activePsychosocialCampaign->collection) --}}" class="{{ $hasAnsweredPsychosocial  ? 'pointer-events-none opacity-50' : '' }}">
+                        <x-sidebar.item href="{{ route('test', session('auth:company')->latestPsychosocialCampaign()) }}" class="{{ $hasAnsweredPsychosocial  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-question"></i>
                             </div>
@@ -100,7 +100,7 @@
                 @endcan
                 @can('answer-organizational-test')
                     @if($hasActiveOrganizationalCampaign)
-                        <x-sidebar.item href="{{-- route('answer-test', $activeOrganizationalCampaign->collection) --}}" class="{{ $hasAnsweredOrganizational  ? 'pointer-events-none opacity-50' : '' }}">
+                        <x-sidebar.item href="{{ route('test', session('auth:company')->latestOrganizationalCampaign()) }}" class="{{ $hasAnsweredOrganizational  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-question"></i>
                             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BaseCollectionTypes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -14,4 +15,8 @@ class BaseCollection extends Model
     {
         return $this->hasMany(BaseQuestion::class);
     }
+
+    protected $casts = [
+        'type' => BaseCollectionTypes::class,
+    ];
 }

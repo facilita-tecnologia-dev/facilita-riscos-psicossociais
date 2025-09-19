@@ -26,6 +26,7 @@ return new class extends Migration
             $table->enum('question_type', CollectionTypes::values());
             $table->integer('value');
 
+            $table->index('user_collection_id');
             $table->index('campaign_id');
         });
     }

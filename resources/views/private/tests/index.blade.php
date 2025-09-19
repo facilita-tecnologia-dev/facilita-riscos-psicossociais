@@ -3,19 +3,14 @@
         <x-structure.sidebar />
         
         <x-structure.main-content-container class="items-center">
-            <x-structure.page-title title="{{ $collection->collectionType->key_name == 'psychosocial-risks' ? 'Etapa - '.$testIndex : $test->display_name }}" centered />
+            <x-structure.page-title title="{{ $campaign->collection()->name }}" centered />
 
             <div class="w-full flex flex-col items-center gap-8">
-                <div class="flex flex-col gap-3 w-full max-w-[550px] max-h-full">
-                    <p class="text-lg font-semibold text-left text-gray-800">
-                        {{ $test->statement }}
-                    </p>
-                    
-                    <x-form action="{{ route('send-test', [$collection, $testIndex]) }}" class="flex-1 flex flex-col gap-5" id="test-form" post>
-                        @foreach ($test->questions as $key => $question)
+                <div class="relative flex flex-col gap-3 w-full max-w-[600px] max-h-full pb-12">
+                    <x-form action="{{ route('test', $campaign) }}" class="flex-1 flex flex-col gap-5" id="collection-form" post>
+                        @foreach ($campaign->collection()->questions->shuffle() as $key => $question)
                             @php
-                                $sessionKey = $collection->collectionType->key_name . "|" . $test->key_name ."|result";
-                                $options = $collection->collectionType->key_name == 'psychosocial-risks' 
+                                $options = $campaign->collection()->type == 'psychosocial-risks' 
                                                 ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PsychosocialQuestionOptionsEnum::cases())
                                                 : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\OrganizationalQuestionOptionsEnum::cases());
                             @endphp
@@ -29,11 +24,7 @@
                                 </div>
 
                                 @foreach ($options as $option)
-                                    <x-test.option 
-                                        :option="$option" 
-                                        name="{{  $question['id'] }}" 
-                                        id="{{ 'question_' . $question['id'] . '_' . $option['value'] }}"
-                                    />
+                                    <x-test.option  :option="$option"  name="{{  $question['id'] }}"  id="{{ 'question_' . $question['id'] . '_' . $option['value'] }}" />
                                 @endforeach
 
                                 @error("question_" . $question['id'])
@@ -41,18 +32,12 @@
                                 @enderror
                             </div>
                         @endforeach
-
-                        <div class="w-full flex items-center justify-between">
-                            <div class="{{ $testIndex == 1 ? 'pointer-events-none opacity-50' : '' }}">
-                                <x-action href="{{ route('answer-test', [$collection, $testIndex - 1]) }}" variant="primary">
-                                    Voltar
-                                </x-action>
-                            </div>
-                            <x-action form="test-form" type="submit" tag="button" variant="primary">
-                                Prosseguir
-                            </x-action>
-                        </div>
                     </x-form>
+                    <div class="w-full sticky bottom-6">
+                        <x-action form="collection-form" type="submit" tag="button" variant="secondary" width="full">
+                            Salvar
+                        </x-action>
+                    </div>
                 </div>
             </div>
         </x-structure.main-content-container>

@@ -13,7 +13,7 @@ class WelcomeController
         
         $companyLogo = session('auth:company')->logo;
         $companyUsers = session('auth:company')->users->count();
-        $companyManager = session('auth:company')->roles->where('type', RoleEnum::MANAGER->value)->isNotEmpty();
+        $companyManager = session('auth:company')->users()->wherePivot('role_id', RoleEnum::MANAGER->value)->exists();
         $companyMetrics = session('auth:company')->metrics()->where('value', '!=', null)->exists();
         $campaigns = session('auth:company')->campaigns()->exists();
 
@@ -33,7 +33,7 @@ class WelcomeController
     {
         $hasAnsweredPsychosocial = session('auth:user')->collections->where('campaign_id',  session('auth:company')->latestPsychosocialCampaign()?->id)->isNotEmpty();
         $hasAnsweredOrganizational = session('auth:user')->collections->where('campaign_id',  session('auth:company')->latestOrganizationalCampaign()?->id)->isNotEmpty();
-
+        
         return view('private.welcome.user', compact('hasAnsweredPsychosocial', 'hasAnsweredOrganizational'));
     }
 

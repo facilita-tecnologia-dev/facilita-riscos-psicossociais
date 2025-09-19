@@ -2,7 +2,7 @@
     <x-structure.page-container>
         <x-structure.sidebar />
         
-        <x-structure.main-content-container class="items-center justify-center">
+        <x-structure.main-content-container class="!items-center justify-center">
             <x-structure.page-title title="Obrigado por responder ao teste!" centered />
             
             <div class="flex flex-col items-center gap-6">

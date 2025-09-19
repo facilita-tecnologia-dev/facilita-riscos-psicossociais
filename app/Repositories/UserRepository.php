@@ -67,7 +67,9 @@ class UserRepository
             }
             
             $user->update($data->except(['role', 'status']));
+            
             $user->companies()->sync([session('auth:company')->id => ['role_id' => $role->value]]);
+
             session(['company' => session('auth:company')->load('users')]);
 
             return $user;

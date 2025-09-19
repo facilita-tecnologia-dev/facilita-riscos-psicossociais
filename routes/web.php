@@ -18,7 +18,7 @@ use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialMainControll
 use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialResultsByDepartmentController;
 use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialResultsListController;
 use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialRisksController;
-use App\Http\Controllers\Private\TestsController;
+use App\Http\Controllers\Private\TestController;
 use App\Http\Controllers\Private\UserController;
 use App\Http\Controllers\Private\UserFeedbackController;
 use App\Http\Controllers\Private\WelcomeController;
@@ -74,9 +74,9 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::get('/user', [WelcomeController::class, 'welcomeUser'])->name('welcome.user');
     });
 
-    Route::prefix('collection')->group(function(){
-        Route::get('/{collection}/test/{test?}', TestsController::class)->name('answer-test');
-        Route::post('/{collection}/test/{test}/send', [TestsController::class, 'handleTestSubmit'])->name('send-test');
+    Route::prefix('campaign')->group(function(){
+        Route::get('/{campaign}/test', [TestController::class, 'show'])->name('test');
+        Route::post('/{campaign}/test', [TestController::class, 'store']);
 
         Route::view('/thanks', 'private.tests.thanks')->name('complete-tests.thanks');
     });
