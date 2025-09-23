@@ -14,6 +14,14 @@ import "swiper/css/navigation";
 
 import Typed from "typed.js";
 
+import { Chart, registerables } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+// registra tudo do chart.js + o plugin
+Chart.register(...registerables, ChartDataLabels);
+
+window.Chart = Chart;
+
 document.addEventListener("DOMContentLoaded", () => {
     initializeAOS();
     initializeTippy();

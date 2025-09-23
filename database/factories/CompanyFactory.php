@@ -19,7 +19,7 @@ class CompanyFactory extends Factory
         return [
             'name' => $faker->company(),
             'cnpj' => $faker->cnpj(),
-            'email' => $faker->companyEmail(),
+            'email' => $faker->unique()->companyEmail(),
             'password' => static::$password ??= Hash::make('password'),
         ];
     }

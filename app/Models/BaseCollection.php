@@ -11,12 +11,17 @@ class BaseCollection extends Model
     protected $table = 'base_collections';
     public $timestamps = false;
 
+    protected $casts = [
+        'type' => BaseCollectionTypes::class,
+    ];
+
     public function questions(): HasMany
     {
         return $this->hasMany(BaseQuestion::class);
     }
 
-    protected $casts = [
-        'type' => BaseCollectionTypes::class,
-    ];
+    public function risks(): HasMany
+    {
+        return $this->hasMany(Risk::class);
+    }
 }

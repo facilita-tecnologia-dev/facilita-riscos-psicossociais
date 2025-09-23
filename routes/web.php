@@ -18,6 +18,7 @@ use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialMainControll
 use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialResultsByDepartmentController;
 use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialResultsListController;
 use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialRisksController;
+use App\Http\Controllers\Private\Dashboard\PsychosocialController;
 use App\Http\Controllers\Private\TestController;
 use App\Http\Controllers\Private\UserController;
 use App\Http\Controllers\Private\UserFeedbackController;
@@ -132,12 +133,13 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     });
 
     Route::prefix('dashboard')->group(function () {
-        Route::prefix('psychosocial')->group(function(){    
-            Route::get('/', PsychosocialMainController::class)->name('dashboard.psychosocial');
-            Route::get('/{testName}/{riskName}/departments', PsychosocialResultsByDepartmentController::class)->name('dashboard.psychosocial.department');
-            Route::get('/{testName}/{riskName}/list', PsychosocialResultsListController::class)->name('dashboard.psychosocial.list');
+        Route::prefix('psychosocial')->group(function(){
+            Route::get('/', [PsychosocialController::class, 'dashboard'])->name('dashboard.psychosocial');
+            // Route::get('/', PsychosocialMainController::class)->name('dashboard.psychosocial');
+            Route::get('/{risk}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
+            // Route::get('/{testName}/{riskName}/list', PsychosocialResultsListController::class)->name('dashboard.psychosocial.list');
             Route::get('/risks', PsychosocialRisksController::class)->name('dashboard.psychosocial.risks');
-            Route::get('/risks/report', [PsychosocialRisksController::class, 'createPDFReport'])->name('dashboard.psychosocial.risks.report');
+            // Route::get('/risks/report', [PsychosocialRisksController::class, 'createPDFReport'])->name('dashboard.psychosocial.risks.report');
         });
 
         Route::prefix('organizational-climate')->group(function(){

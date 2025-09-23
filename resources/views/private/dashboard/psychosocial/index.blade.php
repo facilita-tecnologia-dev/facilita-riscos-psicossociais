@@ -11,11 +11,11 @@
                 ]"
             />
 
-            @if($psychosocialTestsParticipation)
+            @if(session('auth:company')->latestPsychosocialCampaign() && session('auth:company')->latestPsychosocialCampaign()->userCollections->isNotEmpty())
                 <div class="w-full flex flex-col gap-4">
                     <div class="w-full flex flex-col md:flex-row gap-2">
                         <x-structure.message>
-                            @if($psychosocialTestsParticipation['Geral']['per_cent'] >= 75)
+                            @if($participation['Geral']['percentage'] >= 75)
                                 <i class="fa-solid fa-check"></i>
                                 A adesão é superior à 75%, portanto os resultados devem ser considerados válidos.
                             @else
@@ -23,64 +23,52 @@
                                 A adesão é inferior à 75%, portanto os resultados não devem ser considerados válidos.
                             @endif
                         </x-structure.message>
-        
+
                         <div class="w-full md:w-fit">
                             <x-action href="{{ route('dashboard.psychosocial.risks') }}" width="full">
                                 Visualizar Riscos
                             </x-action>
                         </div> 
                     </div>
-            
                     
                     <div class="w-full flex flex-col-reverse md:flex-row gap-4 items-start">
                         <div class="flex items-center gap-2 w-full flex-wrap">
-                            <x-numbers-of-records :value="$filteredUserCount" />
-
-                            <x-applied-filters
-                                :filtersApplied="$filtersApplied"
-                            />
+                            <x-numbers-of-records :value="$participation['Geral']['count']" />
+                          
+                            <x-applied-filters :filters="$filters"/>
                         </div>
 
                         <x-filter-actions
-                            :filtersApplied="$filtersApplied"
+                            :filters="$filters"
                             :modalFilters="['gender', 'department', 'occupation', 'work_shift', 'marital_status', 'education_level', 'age_range', 'admission_range', 'year']" 
                         />
                     </div>
                 </div>
 
-                <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    @foreach ($psychosocialRiskResults as $testTypeName => $results)
-                        <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60">
-                            <p class="text-center font-semibold truncate">{{ $testTypeName }}</p>
-                            {{-- <x-charts.doughnut :id="$testTypeName"/> --}}
+                <div class="w-full grid grid-cols-2 gap-4">
+                    @foreach ($dashboard as $group => $risks)
+                        <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60 {{ $loop->last ? 'col-span-2' : '' }}">
+                            <p class="text-center font-semibold truncate">{{ App\Enums\CollectionFactorTypes::from($group)->label() }}</p>
                             
-                            @if(isset($results['risks']))
-                                <div class="w-full flex flex-col gap-1 px-4">
-                                    @foreach ($results['risks'] as $riskName => $risk)
-                                        <x-charts.risk-bar :riskName="$riskName" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['testName' => $testTypeName, 'riskName' => $riskName ])}}" />
+                            @if(isset($risks) && $risks->isNotEmpty())
+                                <div class="w-full grid {{ $loop->last ? 'grid-cols-4' : 'grid-cols-2' }} gap-2 px-4">
+                                    @foreach ($risks as $type => $risk)
+                                        <x-charts.risk-bar type="{{ $type }}" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['risk' => $type ])}}" />
                                     @endforeach
-                                </div>
+                                </div>             
                             @endif
                         </div>
                     @endforeach
                 </div>
-                
-                @if(!$filtersApplied)
+
+                @if($filters->isEmpty())
                     <x-charts.bar-vertical id="psychosocial-participation" title="Participação no teste de Riscos Psicossociais" />
                 @endif
-
             @else
-                @if($companyHasTests)
-                    <div class="w-full flex flex-col items-center gap-2 justify-center flex-1">
-                        <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
-                        <p class="text-base text-center">Nenhum resultado encontrado, tente novamente.</p>
-                    </div>
-                @else
-                    <div class="w-full flex flex-col items-center justify-center gap-2 flex-1">
-                        <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
-                        <p class="text-base text-center">Você ainda não realizou testes de Riscos Psicossociais.</p>
-                    </div>
-                @endif
+                <div class="w-full flex flex-col items-center justify-center gap-2 flex-1">
+                    <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
+                    <p class="text-base text-center">Você ainda não realizou testes de Riscos Psicossociais.</p>
+                </div>
             @endif
             
         </x-structure.main-content-container>
@@ -88,13 +76,12 @@
 </x-layouts.app>
 
 
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
 <script>
-    const psychosocialTestsParticipation = @json($psychosocialTestsParticipation);
-    const psychosocialRiskResults = @json($psychosocialRiskResults)   
+     const participation = @json($participation);
+     const dashboard = @json($dashboard)
 </script>
 
 <script src="{{ asset('js/dashboard/charts.js') }}"></script>

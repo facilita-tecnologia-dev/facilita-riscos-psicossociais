@@ -58,6 +58,31 @@ class Company extends Authenticatable
     }
 
     /* --- End Relations --- */
+    public function absences(): float | null
+    {
+        return $this->metrics->where('metric.type', 'absences')->first()->value;
+    }
+
+    public function absenteeism(): float | null
+    {
+        return $this->metrics->where('metric.type', 'absenteeism')->first()->value;
+    }
+
+    public function accidents(): float | null
+    {
+        return $this->metrics->where('metric.type', 'accidents')->first()->value;
+    }
+
+    public function extraHours(): float | null
+    {
+        return $this->metrics->where('metric.type', 'extra-hours')->first()->value;
+    }
+
+    public function turnover(): float | null
+    {
+        return $this->metrics->where('metric.type', 'turnover')->first()->value;
+    }
+
 
     public function hasCampaignThisYear(string $collectionID, ?string $status = null): bool
     {
@@ -77,12 +102,12 @@ class Company extends Authenticatable
 
     public function latestPsychosocialCampaign()
     {
-        return $this->campaigns()->where('collection_id', 1)->orderByDesc('start_date')->first();
+        return $this->campaigns->where('collection_id', 1)->sortByDesc('start_date')->first();
     }
 
     public function latestOrganizationalCampaign()
     {
-        return $this->campaigns()->where('collection_id', 2)->orderByDesc('start_date')->first();
+        return $this->campaigns->where('collection_id', 2)->sortByDesc('start_date')->first();
     }
 
     // public function hasCompletedBasicData() : bool

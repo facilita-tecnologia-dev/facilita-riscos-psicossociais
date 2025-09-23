@@ -10,17 +10,11 @@ class CompanyMetric extends Model
     protected $table = 'company_metric';
     public $timestamps = false;
 
-    /**
-     * Returns the company to which this company metric belongs.
-     */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
 
-    /**
-     * Returns the base metric of this company metric.
-     */
     public function metric(): BelongsTo
     {
         return $this->belongsTo(Metric::class, 'metric_id');

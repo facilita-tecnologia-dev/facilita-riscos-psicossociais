@@ -22,9 +22,9 @@ use Illuminate\Support\Facades\DB;
 class UserFilterService
 {
     /**
-     * @var UserFilterInterface[]
+     * @var class-string<UserFilterInterface>[]
      */
-    protected array $filters = [
+    protected static array $filters = [
         DepartmentScopeFilter::class,
         NameFilter::class,
         CPFFilter::class,
@@ -43,50 +43,50 @@ class UserFilterService
     /**
      * @var array<string, string>
      */
-    protected array $customSorts = [
+    protected static array $customSorts = [
         'age' => 'birth_date',
     ];
 
-    public function apply(Builder $query): Builder
+    public static function apply(Builder $query): Builder
     {
         return app(Pipeline::class)
             ->send($query)
-            ->through($this->filters)
+            ->through(self::$filters)
             ->thenReturn();
     }
 
-    public function sort(Builder $query): Builder
+    public static function sort(Builder $query): Builder
     {
         $orderBy = request('order_by') ?? null;
 
         if ($orderBy) {
+            $direction = strtolower(request('order_direction', 'asc')) === 'desc'
+                ? 'desc'
+                : 'asc';
 
-            $direction = strtolower(request('order_direction', 'asc')) === 'desc' ? 'desc' : 'asc';
-
-            if ($orderBy == 'psychosocial-risks') {
-                dd(session('auth:company')->latestPsychosocialCampaign()->userCollections()->latest());
-                // $latestPsychosocialSub = DB::table('user_collections')
-                //     ->select('user_id', DB::raw('MAX(created_at) as latest_created_at'))
-                //     ->where('collection_id', 1)
-                //     ->groupBy('user_id');
-
-                // return $query->leftJoinSub($latestPsychosocialSub, 'latest_psychosocial', function ($join) {
-                //     $join->on('users.id', '=', 'latest_psychosocial.user_id');
-                // })->orderBy('latest_psychosocial.latest_created_at', $direction);
+            if ($orderBy === 'psychosocial-risks') {
+                dd(session('auth:company')
+                    ->latestPsychosocialCampaign()
+                    ->userCollections()
+                    ->latest());
             }
 
-            if ($orderBy == 'organizational-climate') {
+            if ($orderBy === 'organizational-climate') {
                 $latestOrganizationalSub = DB::table('user_collections')
                     ->select('user_id', DB::raw('MAX(created_at) as latest_created_at'))
                     ->where('collection_id', 2)
                     ->groupBy('user_id');
 
-                return $query->leftJoinSub($latestOrganizationalSub, 'latest_organizational', function ($join) {
-                    $join->on('users.id', '=', 'latest_organizational.user_id');
-                })->orderBy('latest_organizational.latest_created_at', $direction);
+                return $query->leftJoinSub(
+                    $latestOrganizationalSub,
+                    'latest_organizational',
+                    function ($join) {
+                        $join->on('users.id', '=', 'latest_organizational.user_id');
+                    }
+                )->orderBy('latest_organizational.latest_created_at', $direction);
             }
 
-            $column = $this->customSorts[$orderBy] ?? $orderBy;
+            $column = self::$customSorts[$orderBy] ?? $orderBy;
 
             return $query->orderBy($column, $direction);
         }
@@ -94,7 +94,7 @@ class UserFilterService
         return $query;
     }
 
-    public function getFilterDisplayName(string $filterKeyName): string
+    public static function getFilterDisplayName(string $filterKeyName): string
     {
         return match ($filterKeyName) {
             'name' => 'Nome',

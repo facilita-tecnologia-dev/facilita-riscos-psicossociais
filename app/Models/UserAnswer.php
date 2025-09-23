@@ -13,4 +13,9 @@ class UserAnswer extends Model
 
     protected $table = 'user_answers';
     public $timestamps = false;
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
