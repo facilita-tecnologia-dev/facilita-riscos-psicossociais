@@ -13,7 +13,7 @@ class organizationalRigidity
     {
         $initialRating = self::initialRating($average);
         $needsWeightedAverage = self::needsWeightedAverage($initialRating);
-        
+
         if(!$needsWeightedAverage){
             return self::determineRisk($initialRating);
         }
@@ -95,10 +95,10 @@ class organizationalRigidity
 
         $weightedAverage = 
                   ($scoreWeight * $initialRating) +
-                  ($metricWeight * $metrics[0] ? RiskService::metricToProbabilityScale($metrics[0], 4) : 0) +
-                  ($metricWeight * $metrics[1] ? RiskService::metricToProbabilityScale($metrics[1], 4) : 0) +
-                  ($metricWeight * $metrics[2] ? RiskService::metricToProbabilityScale($metrics[2], 4) : 0);      
-        
+                  ($metricWeight * ($metrics[0] ? RiskService::metricToProbabilityScale($metrics[0], 4) : 0)) +
+                  ($metricWeight * ($metrics[1] ? RiskService::metricToProbabilityScale($metrics[1], 4) : 0)) +
+                  ($metricWeight * ($metrics[2] ? RiskService::metricToProbabilityScale($metrics[2], 4) : 0));      
+
         return round($weightedAverage);
     }
 

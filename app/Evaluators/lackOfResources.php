@@ -83,8 +83,8 @@ class lackOfResources
         }
 
         $weightedAverage = ($scoreWeight * $initialRating) +
-                  ($metricWeight * $metrics[0] ? RiskService::metricToProbabilityScale($metrics[0], 3) : 0) +
-                  ($metricWeight * $metrics[1] ? RiskService::metricToProbabilityScale($metrics[1], 3) : 0);
+                  ($metricWeight * ($metrics[0] ? RiskService::metricToProbabilityScale($metrics[0], 3) : 0)) +
+                  ($metricWeight * ($metrics[1] ? RiskService::metricToProbabilityScale($metrics[1], 3) : 0));
                   
         return round($weightedAverage);
     }
