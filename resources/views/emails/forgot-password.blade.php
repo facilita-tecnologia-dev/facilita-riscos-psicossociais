@@ -2,10 +2,10 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Campanha Ativa</title>
+    <title>Redefinição de Senha</title>
     <style>
         body {
-            background-color: #f4f4f4;
+            background-color: #FAFAFA;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -18,38 +18,47 @@
             overflow: hidden;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .header {
-            background-color: #4c78af;
-            color: white;
-            padding: 24px;
+
+        header {
+            background-color: #5EC8BC;
+            color: #FAFAFA;
+            padding: 18px;
             text-align: center;
         }
-        .header h1 {
+
+        header h1 {
             margin: 0;
-            font-size: 22px;
+            font-size: 20px;
+            font-weight: semibold;
         }
+
         .content {
             padding: 24px;
-            color: #333333;
+            color: #1F1F1F;
         }
+
         .content p {
             font-size: 16px;
             line-height: 1.6;
         }
+
         .button {
             display: inline-block;
             margin-top: 20px;
+            background-color: #5EC8BC;
+            color: #FAFAFA;
             border-width: 2px;
-            border-color: #4c78af;
-            color: white;
-            padding: 12px 20px;
+            border-color: #5EC8BC;
             border-radius: 4px;
+            padding: 12px 20px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: semibold;
+            font-size: 14px;
         }
+
         .footer {
-            background-color: #f1f1f1;
-            color: #777777;
+            background-color: #F5F5F5;
+            color: #5F6368;
             padding: 16px;
             text-align: center;
             font-size: 13px;
@@ -58,22 +67,19 @@
 </head>
 <body>
     <div class="email-container">
-        <div class="header">
+        <header>
             <h1>Redefinição de Senha</h1>
-        </div>
+        </header>
         <div class="content">
-            <p>Olá,</p>
-
             <p>Recebemos uma solicitação de redefinição de senha no <strong>Facilita Riscos Psicossociais</strong>.</p>
-            <p>Clique no link abaixo para acessar a página de redefinição de senha</p>
+            <p>Clique no botão abaixo para acessar a página de redefinição de senha</p>
 
-            <a href="{{ $url }}"
-                style="display: inline-block; padding: 12px 24px; background-color: #3490dc; color: white; text-decoration: none; border-radius: 4px;">
+            <a href="{{ $url }}" class="button">
                 Redefinir Senha
             </a>
         </div>
         <div class="footer">
-            © {{ date('Y') }} {{ config('app.name') }}. Todos os direitos reservados.
+            &copy; {{ date('Y') }} {{ config('app.name') }}. Todos os direitos reservados.
         </div>
     </div>
 </body>

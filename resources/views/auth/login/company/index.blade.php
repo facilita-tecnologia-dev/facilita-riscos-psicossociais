@@ -12,7 +12,7 @@
 
                     <x-form action="{{ route('company.login') }}" class="w-full flex flex-col gap-3 items-center" post>
                         @if(session('message'))
-                            <span class="text-green-500 text-sm text-center">{{ session('message') }}</span>
+                            <span class="text-success text-sm text-center">{{ session('message') }}</span>
                         @endif
                         <x-form.input-text name="cnpj" placeholder="CNPJ (00.000.000/0000-00)" />
                         <x-form.input-text type="password" name="password" placeholder="Senha" />

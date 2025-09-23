@@ -15,8 +15,11 @@
                 <x-form action="{{ route('company.password.update') }}" class="w-full flex flex-col gap-4 items-center" post>
                     <input type="hidden" name="token" value={{ $token }}>
                     <input type="hidden" name="email" value={{ $email }}>
+
                     <x-form.input-text type="password" name="password" placeholder="Digite sua senha" oninput="checkPasswordSteps(event)" />
+
                     <x-password-requirements/>
+                    
                     <x-form.input-text type="password" name="password_confirmation" placeholder="Digite sua senha novamente" />
                     <x-action tag="button" type="submit" variant="secondary">Fazer login</x-action>
                 </x-form>

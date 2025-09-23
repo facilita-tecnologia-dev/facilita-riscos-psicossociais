@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Notifications\CustomResetPassword;
+use App\Notifications\ResetPassword;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -146,6 +146,6 @@ class User extends Authenticatable
 
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new CustomResetPassword($token, 'user'));
+        $this->notify(new ResetPassword($token, 'user'));
     }
 }

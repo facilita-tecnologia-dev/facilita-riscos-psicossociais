@@ -41,16 +41,16 @@
                             Nome
                         </x-table.head.sortable-th>
                         <x-table.head.sortable-th class="hidden md:block flex-1" field="start_date">
-                            Data de Início
+                            Início
                         </x-table.head.sortable-th>
                         <x-table.head.sortable-th class="hidden md:block flex-1" field="end_date">
-                            Data de Encerramento
+                            Encerramento
                         </x-table.head.sortable-th>
                         <x-table.head.sortable-th class="w-32" field="end_date">
                             Status
                         </x-table.head.sortable-th>
                         @if(session('auth:company')->activeCampaigns()->count())
-                            <x-table.head.th class="w-32">
+                            <x-table.head.th class="w-48">
                             </x-table.head.th>
                         @endif
                     </x-table.head>
@@ -62,10 +62,10 @@
                                 <x-table.body.td class="hidden md:block truncate flex-1">{{ $campaign->end_date->format('d/m/Y - H:i') }}</x-table.body.td>
                                 <x-table.body.td class="truncate w-32">{{ $campaign->status->label() }}</x-table.body.td>
                                 @if(session('auth:company')->activeCampaigns()->isNotEmpty())
-                                    <x-table.body.td class="w-32">
+                                    <x-table.body.td class="w-48">
                                             @if($campaign->status === App\Enums\CampaignStatusTypes::IN_PROGRESS)
-                                                <x-form action="{{ route('campaign.notify', $campaign) }}" class="w-full" post>
-                                                    <x-action tag="button" data-tippy-content="Notificar colaboradores sobre essa campanha" width="full">
+                                                <x-form action="{{ route('campaign.notify', $campaign) }}" class="w-full flex justify-end" post>
+                                                    <x-action width="fit" tag="button" data-tippy-content="Notificar colaboradores sobre essa campanha">
                                                         <i class="fa-solid fa-envelope"></i>
                                                         Notificar
                                                     </x-action>

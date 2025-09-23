@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CustomResetPassword extends Notification
+class ResetPassword extends Notification
 {
     use Queueable;
 
@@ -28,7 +28,9 @@ class CustomResetPassword extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $route = $this->guard == 'company' ? 'company.password.reset' : 'user.password.reset';
+        $route = $this->guard == 'company' 
+                            ? 'company.password.reset' 
+                            : 'user.password.reset';
         
         $url = url(route($route, [
             'token' => $this->token,

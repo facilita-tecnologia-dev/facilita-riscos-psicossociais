@@ -25,7 +25,7 @@ class LoginExternalRequest extends FormRequest
     {
         return [
             'cpf' => ['required', 'string', new validateCPF],
-            'password' => ['required', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'password' => ['required', Password::defaults()],
         ];
     }
 }

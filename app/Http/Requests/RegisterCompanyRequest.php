@@ -26,7 +26,7 @@ class RegisterCompanyRequest extends FormRequest
             'name' => ['required', 'string', 'min:6', 'max:255'],
             'cnpj' => ['required', 'string', 'unique:companies', 'cnpj'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
 }

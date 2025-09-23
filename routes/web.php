@@ -26,6 +26,12 @@ use App\Http\Controllers\Private\WelcomeController;
 use App\Http\Controllers\ResetUserPasswordController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\GuestMiddleware;
+use App\Mail\CampaignEmail;
+use App\Models\Campaign;
+use App\Models\Company;
+use App\Models\User;
+use App\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'site.home.index')->name('site.home');

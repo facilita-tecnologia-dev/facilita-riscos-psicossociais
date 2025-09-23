@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         data.user.admission;
                 } else {
                     messageDiv.textContent = "CPF disponível.";
-                    messageDiv.classList.add("text-sucess");
+                    messageDiv.classList.add("text-success");
                     messageDiv.classList.remove("text-danger");
                 }
             } catch (error) {

@@ -20,7 +20,7 @@
                     </div>
                     <div class="">
                         <p class="font-semibold text-base sm:text-lg text-left">Tipo:</p>
-                        <p class="text-sm sm:text-base text-left">{{ $campaign->collection->name }}</p>
+                        <p class="text-sm sm:text-base text-left">{{ $campaign->collection()->name }}</p>
                     </div>
                     <div class="">
                         <p class="font-semibold text-base sm:text-lg text-left">Data de início:</p>

@@ -90,11 +90,10 @@ class CompanyController
             'email' => ['required', 'email'],
         ]);
 
-        // Usa o broker de "users"
         $status = FacadePassword::broker('companies')->sendResetLink(
             $request->only('email'),
-            function ($user, $token) {
-                $user->sendPasswordResetNotification($token, 'company');
+            function ($company, $token) {
+                $company->sendPasswordResetNotification($token, 'company');
             }
         );
 
@@ -111,35 +110,21 @@ class CompanyController
         ]);
     }
 
-    public function resetPasswordModal(Request $request, Company $company)
-    {   
-        $credentials = $request->validate([
-            "current_password" => ['required'],
-            'new_password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-        ]);
-        
-        if(AuthService::resetPassword('company', $company, $credentials)){  
-            return back()->with('message', 'Senha redefinida com sucesso!');
-        };
-
-        return back()->with('message', 'Não foi possível redefinir sua senha.');
-    }
-
+    
     public function resetPassword(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
         
         $status = FacadePassword::broker('companies')->reset( // 👈 usa o broker certo
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function (Company $company, string $password) {
                 $company->forceFill([
-                    'password' => Hash::make($password)
-                ]);
-    
+                    'password' => Hash::make($password)]);
+
                 $company->save();
     
                 event(new PasswordReset($company));
@@ -150,5 +135,20 @@ class CompanyController
         ? to_route('company.login')->with('message', __($status))
         : back()->withErrors(['password' => [__($status)]]);
     }
+
+    public function resetPasswordModal(Request $request, Company $company)
+    {   
+        $credentials = $request->validate([
+            "current_password" => ['required'],
+            'new_password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+        
+        if(AuthService::resetPassword('company', $company, $credentials)){  
+            return back()->with('message', 'Senha redefinida com sucesso!');
+        };
+
+        return back()->with('message', 'Não foi possível redefinir sua senha.');
+    }
+
 
 }

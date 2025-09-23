@@ -13,7 +13,7 @@
 
                     <x-form action="{{ route('user.login') }}" class="w-full flex flex-col gap-4 items-center" post>
                         @if(session('message'))
-                            <span class="text-green-500 text-sm text-center">{{ session('message') }}</span>
+                            <span class="text-success text-sm text-center">{{ session('message') }}</span>
                         @endif
                         <x-form.input-text name="cpf" placeholder="CPF (000.000.000-00)" />
                         <x-action tag="button" type="submit" variant="secondary" width="full">Fazer login</x-action>

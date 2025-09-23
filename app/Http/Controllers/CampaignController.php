@@ -30,6 +30,8 @@ class CampaignController
     {
         Gate::authorize('campaign-index');
 
+        session('auth:company')->load('campaigns');
+
         $campaigns = session('auth:company')->campaigns()->paginate(15);
 
         return view('private.campaign.index', compact('campaigns'));
@@ -105,10 +107,8 @@ class CampaignController
     }
 
     public function notify(Campaign $campaign)
-    {
-        $usersWithEmail = session('auth:company')->users->where('email');
-        
-        $usersWithEmail->each(function($user) use($campaign) {
+    {   
+        session('auth:company')->users->where('email')->each(function($user) use($campaign) {
             Mail::to($user->email)->queue(new CampaignEmail($user, session('auth:company'), $campaign));
         });
 

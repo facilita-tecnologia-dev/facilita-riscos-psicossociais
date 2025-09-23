@@ -58,7 +58,7 @@ class UserController
         ->paginate(15)
         ->appends(request()->query());
 
-        $filters = collect(request()->query())->except(['order_by', 'order_direction'])->filter(fn ($value) => $value !== null);
+        $filters = collect(request()->query())->except(['order_by', 'order_direction'])->filter();
 
         return view('private.user.index', [
             'users' => $users,
@@ -306,7 +306,7 @@ class UserController
     {   
         $credentials = $request->validate([
             "current_password" => ['required'],
-            'new_password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'new_password' => ['required', 'confirmed', Password::defaults()],
         ]);
         
         if(AuthService::resetPassword('user', $user, $credentials)){  
@@ -320,7 +320,7 @@ class UserController
     {   
         $credentials = $request->validate([
             "current_password" => ['required'],
-            'new_password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'new_password' => ['required', 'confirmed', Password::defaults()],
         ]);
         
         if(AuthService::resetPassword('user', $user, $credentials)){  

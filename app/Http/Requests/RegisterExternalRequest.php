@@ -26,7 +26,7 @@ class RegisterExternalRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:6', 'max:255'],
             'cpf' => ['required', 'string', 'unique:users', new validateCPF],
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
 }

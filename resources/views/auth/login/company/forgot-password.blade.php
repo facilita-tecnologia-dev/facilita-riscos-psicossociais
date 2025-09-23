@@ -15,11 +15,15 @@
                 
                 <x-form action="{{ route('company.password.email') }}" class="w-full flex flex-col gap-4 items-center" post>
                     @if(session('message'))
-                        <span class="text-green-500 text-sm text-center">{{ session('message') }}</span>
+                        <span class="text-success text-sm text-center">{{ session('message') }}</span>
                     @endif
                     <x-form.input-text name="email" placeholder="Digite seu e-mail" />
                     <x-action tag="button" type="submit" variant="secondary">Enviar e-mail</x-action>
                 </x-form>
+
+                <div class="w-full flex justify-center">
+                    <a href="{{ route('company.login') }}" class="text-sm underline">Voltar</a>
+                </div>
 
             </div>
         </div>

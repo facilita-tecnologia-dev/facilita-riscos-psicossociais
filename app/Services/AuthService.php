@@ -46,7 +46,6 @@ class AuthService {
         return self::redirectLoginRoute($guard); 
     }
 
-
     public static function authenticate(string $guard, $actor)
     {
         if($guard === 'user') Auth::guard('user')->login($actor);
