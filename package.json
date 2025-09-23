@@ -16,6 +16,8 @@
     },
     "dependencies": {
         "aos": "^2.3.4",
+        "chart.js": "^4.5.0",
+        "chartjs-plugin-datalabels": "^2.2.0",
         "swiper": "^11.2.10",
         "tailwind-scrollbar-hide": "^2.0.0",
         "tippy.js": "^6.3.7",
