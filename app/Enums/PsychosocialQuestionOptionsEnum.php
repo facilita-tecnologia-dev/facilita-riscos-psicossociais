@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum PsychosocialQuestionOptionsEnum: int
 {
-    case NEVER = 1;
-    case RARELY = 2;
-    case SOMETIMES = 3;
-    case FREQUENTLY = 4;
     case ALWAYS = 5;
+    case FREQUENTLY = 4;
+    case SOMETIMES = 3;
+    case RARELY = 2;
+    case NEVER = 1;
 
     public function label(): string
     {

@@ -22,17 +22,4 @@ class Risk extends Model
     {
         return 'type';
     }
-
-    public function scopeWithQuestionAvg(Builder $query, Campaign $campaign)
-    {
-        $query->with([
-            'questions' => function ($q) use ($campaign) {
-                $q->withAvg([
-                    'answers as average' => function ($query) use ($campaign) {
-                        $query->where('campaign_id', $campaign->id)->whereHas('user', fn($user) => UserFilterService::apply($user));
-                    }
-                ], 'value');
-            }
-        ]);
-    }
 }

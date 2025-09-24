@@ -129,7 +129,7 @@ class PsychosocialService
         return $globalParticipation->merge($departmentParticipation);
     }
 
-    private static function invertAnswerScore(float $score)
+    public static function invertAnswerScore(float $score)
     {
         return 6 - $score;
     }

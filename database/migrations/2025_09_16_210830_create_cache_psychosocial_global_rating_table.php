@@ -17,9 +17,10 @@ return new class extends Migration
         Schema::create('cache_psychosocial_global_rating', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Company::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Campaign::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Risk::class)->constrained()->onDelete('cascade');
-            $table->integer('rating');
+            $table->foreignIdFor(Campaign::class)->constrained()->onDelete('cascade');
+            $table->string('department');
+            $table->float('rating');
         });
     }
 

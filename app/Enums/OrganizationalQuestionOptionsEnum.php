@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum OrganizationalQuestionOptionsEnum: int
 {
-    case STRONGLY_DISAGREE = 1;
-    case DISAGREE = 2;
-    case NEUTRAL = 3;
-    case AGREE = 4;
     case STRONGLY_AGREE = 5;
+    case AGREE = 4;
+    case NEUTRAL = 3;
+    case DISAGREE = 2;
+    case STRONGLY_DISAGREE = 1;
 
     public function label(): string
     {

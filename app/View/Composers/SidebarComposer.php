@@ -15,8 +15,8 @@ class SidebarComposer
             $hasActivePsychosocialCampaign = session('auth:company')->hasCampaignThisYear(1, CampaignStatusTypes::IN_PROGRESS->value);
             $hasActiveOrganizationalCampaign = session('auth:company')->hasCampaignThisYear(2, CampaignStatusTypes::IN_PROGRESS->value);
             
-            $hasAnsweredPsychosocial = session('auth:company')->latestPsychosocialCampaign()?->userCollections->where('user_id', session('auth:user')->id)->isNotEmpty();
-            $hasAnsweredOrganizational = session('auth:company')->latestOrganizationalCampaign()?->userCollections->where('user_id', session('auth:user')->id)->isNotEmpty();
+            $hasAnsweredPsychosocial = session('auth:user')->hasAnsweredCampaign(session('auth:company')->latestPsychosocialCampaign()?->id);
+            $hasAnsweredOrganizational = session('auth:user')->hasAnsweredCampaign(session('auth:company')->latestOrganizationalCampaign()?->id);
             
             $view->with([
                 'companies' => $companies,

@@ -108,6 +108,8 @@ class CampaignController
 
     public function notify(Campaign $campaign)
     {   
+        if (session('auth:company')->users->where('email')->isEmpty()) return back()->with('message', 'Sua empresa não tem colaboradores com e-mail cadastrados.');
+
         session('auth:company')->users->where('email')->each(function($user) use($campaign) {
             Mail::to($user->email)->queue(new CampaignEmail($user, session('auth:company'), $campaign));
         });
