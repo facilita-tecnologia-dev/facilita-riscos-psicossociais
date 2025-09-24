@@ -6,6 +6,7 @@
     'value' => null,
     'label' => null,
     'disabled' => null,
+    'readonly' => null,
     
     'icon' => null,
 ])
@@ -25,6 +26,7 @@
                 id="{{ $id ? $id : $name }}"
                 value="{{ old($name, $value) }}"
                 {{ $disabled ? 'disabled' : '' }}
+                {{ $readonly ? 'readonly' : '' }}
             >
         </x-form.input-wrapper>
 
