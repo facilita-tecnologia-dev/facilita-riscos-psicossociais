@@ -11,6 +11,7 @@ class PsychosocialController
     public function dashboard()
     {
         Gate::authorize('psychosocial-dashboard-view');
+        if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
         
         return view('private.dashboard.psychosocial.index', [
             'dashboard' => session('auth:company')->latestPsychosocialCampaign() ? PsychosocialService::dashboard() : false,
@@ -22,6 +23,7 @@ class PsychosocialController
     public function departments(Risk $risk)
     {
         Gate::authorize('psychosocial-dashboard-view');
+        if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
         
         return view('private.dashboard.psychosocial.department', [
             'risk' => $risk,
@@ -32,6 +34,7 @@ class PsychosocialController
     public function list(Risk $risk, string $department)
     {
         Gate::authorize('psychosocial-dashboard-view');
+        if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
         
         return view('private.dashboard.psychosocial.list', [
             'risk' => $risk,
@@ -43,6 +46,7 @@ class PsychosocialController
     public function risks()
     {
         Gate::authorize('psychosocial-dashboard-view');
+        if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
 
         return view('private.dashboard.psychosocial.risks', [
             'risks' => PsychosocialService::risks(),

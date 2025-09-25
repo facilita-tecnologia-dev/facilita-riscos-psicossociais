@@ -79,7 +79,7 @@
                         @foreach($reports as $risk => $count)
                             <div class="w-full bg-main-background shadow-sm rounded-sm py-2 px-4 flex items-center justify-between">
                                 <span class="text-main-text font-normal text-left text-sm">{{ App\Enums\RiskTypes::from($risk)->label() }}</span>
-                                <span class="text-main-text font-normal text-left text-sm">{{ $count }}</span>
+                                <span class="text-main-text font-normal text-left text-sm">{{ $count }}%</span>
                             </div>
                         @endforeach
                     </div>

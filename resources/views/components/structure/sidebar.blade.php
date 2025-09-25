@@ -24,48 +24,58 @@
         @canany(['psychosocial-dashboard-view', 'organizational-dashboard-view', 'feedbacks-index', 'metrics-edit', 'demographics-dashboard-view'])
             <x-sidebar.menu title="Dados">
                 @can('psychosocial-dashboard-view')
-                    <x-sidebar.item href="{{ route('dashboard.psychosocial') }}" class="{{ request()->routeIs('dashboard.psychosocial') ? 'bg-gray-200' : ''}}">
-                        <div class="w-5 flex justify-center items-center">
-                            <i class="fa-solid fa-brain"></i>
-                        </div>
-                        Riscos Psicossociais
-                    </x-sidebar.item>
+                    <div @if(!session('auth:company')->latestPsychosocialCampaign() || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou testes de Riscos Psicossociais" @endif>
+                        <x-sidebar.item href="{{ route('dashboard.psychosocial') }}" class="{{ request()->routeIs('dashboard.psychosocial') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestPsychosocialCampaign() || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
+                            <div class="w-5 flex justify-center items-center">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            Riscos Psicossociais
+                        </x-sidebar.item>
+                    </div>
                 @endcan
-            
+    
                 @can('organizational-dashboard-view')
-                    <x-sidebar.item href="{{ route('dashboard.organizational-climate') }}" class="{{ request()->routeIs('dashboard.organizational-climate') ? 'bg-gray-200' : ''}}">
-                        <div class="w-5 flex justify-center items-center">
-                            <i class="fa-solid fa-cloud"></i>
-                        </div>
-                        Clima Organizacional
-                    </x-sidebar.item>
+                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou testes de Pesquisa de Clima" @endif>
+                        <x-sidebar.item href="{{ route('dashboard.organizational-climate') }}" class="{{ request()->routeIs('dashboard.organizational-climate') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
+                            <div class="w-5 flex justify-center items-center">
+                                <i class="fa-solid fa-cloud"></i>
+                            </div>
+                            Clima Organizacional
+                        </x-sidebar.item>
+                    </div>
                 @endcan
             
                 @can('feedbacks-index')
-                    <x-sidebar.item href="{{ route('feedback.index') }}" class="{{ request()->routeIs('feedback.index') ? 'bg-gray-200' : ''}}">
-                        <div class="w-5 flex justify-center items-center">
-                            <i class="fa-solid fa-comments"></i>
-                        </div>
-                        Lista de comentários
-                    </x-sidebar.item>
+                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou campanhas de Pesquisa de Clima" @endif>
+                        <x-sidebar.item href="{{ route('feedback.index') }}" class="{{ request()->routeIs('feedback.index') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
+                            <div class="w-5 flex justify-center items-center">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                            Lista de comentários
+                        </x-sidebar.item>
+                    </div>
                 @endcan
                     
                 @can('metrics-edit')
-                    <x-sidebar.item href="{{ route('company-metrics.edit') }}" class="{{ request()->routeIs('company-metrics.edit') ? 'bg-gray-200' : ''}}">
-                        <div class="w-5 flex justify-center items-center">
-                            <i class="fa-solid fa-percent"></i>
-                        </div>
-                        Dados de Desempenho Organizacional
-                    </x-sidebar.item>
+                    <div @if(session('auth:company')->users->isEmpty()) data-tippy-content="Você deve cadastrar colaboradores antes de editar os dados de desempenho" @endif>
+                        <x-sidebar.item href="{{ route('company-metrics.edit') }}" class="{{ request()->routeIs('company-metrics.edit') ? 'bg-gray-200' : ''}} {{ session('auth:company')->users->isEmpty()  ? 'pointer-events-none opacity-50' : '' }}">
+                            <div class="w-5 flex justify-center items-center">
+                                <i class="fa-solid fa-percent"></i>
+                            </div>
+                            Dados de Desempenho Organizacional
+                        </x-sidebar.item>
+                    </div>
                 @endcan
 
                 @can('demographics-dashboard-view')
-                    <x-sidebar.item href="{{ route('dashboard.demographics') }}">
-                        <div class="w-5 flex justify-center items-center" class="{{ request()->routeIs('dashboard.demographics') ? 'bg-gray-200' : ''}}">
-                            <i class="fa-solid fa-chart-pie"></i>
-                        </div>
-                        Demografia
-                    </x-sidebar.item>
+                    <div @if(session('auth:company')->users->isEmpty()) data-tippy-content="Você deve cadastrar colaboradores antes de visualizar dados demográficos" @endif>
+                        <x-sidebar.item href="{{ route('dashboard.demographics') }}" class="{{ request()->routeIs('dashboard.demographics') ? 'bg-gray-200' : ''}} {{ session('auth:company')->users->isEmpty()  ? 'pointer-events-none opacity-50' : '' }}">
+                            <div class="w-5 flex justify-center items-center">
+                                <i class="fa-solid fa-chart-pie"></i>
+                            </div>
+                            Demografia
+                        </x-sidebar.item>
+                    </div>
                 @endcan
             </x-sidebar.menu>
         @endcanany

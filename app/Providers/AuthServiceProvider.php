@@ -10,15 +10,11 @@ use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    // protected $policies = [
-    //     User::class => UserPolicy::class,
-    // ];
 
     public function register(): void {}
 
     public function boot(): void
     {
-        // $this->registerPolicies();
 
         Gate::define('user-index', function (?Authenticatable $user) {
             if (session('auth:guard') === 'user') {
@@ -166,8 +162,8 @@ class AuthServiceProvider extends ServiceProvider
             if (session('auth:guard') === 'user') {
                 /** @var User $user */
                 $user = session('auth:user');
-
-                return $user->hasPermission('metrics_edit');
+          
+                return $user->hasPermission('metrics_edit') && session('auth:company')->users->isNotEmpty();
             }
 
             if (session('auth:guard') === 'company') {

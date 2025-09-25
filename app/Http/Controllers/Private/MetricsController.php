@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Private;
 
+use App\Models\Risk;
 use App\Services\ReportChannelService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,11 +13,13 @@ class MetricsController
     public function edit(Request $request)
     {
         Gate::authorize('metrics-edit');
-        
-        $hasReportChannel = ReportChannelService::hasReportChannel(session('auth:company'));
+     
+        if(session('auth:company')->users->isEmpty()) return back();
 
+        $hasReportChannel = ReportChannelService::hasReportChannel(session('auth:company'));
+        
         if($hasReportChannel){
-            $risks = session('auth:company')->latestPsychosocialCampaign()->collection()->risks;
+            $risks = Risk::all();
             $reportChannelReports = ReportChannelService::reports(session('auth:company'));
             $reports = $risks->mapWithKeys(fn($risk) => [$risk->type => $reportChannelReports->get($risk->type, 0)]);
         } else{
