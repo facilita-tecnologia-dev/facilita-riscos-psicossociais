@@ -4,11 +4,12 @@
         
         <x-structure.main-content-container>   
             <x-structure.page-title 
-                :title="$riskName" 
-                :back="route('dashboard.psychosocial.department', ['testName' => $testName, 'riskName' => $riskName])"
+                :title="$risk->name" 
+                :back="route('dashboard.psychosocial.department', ['risk' => $risk])"
                 :breadcrumbs="[
                     'Riscos Psicossociais' => route('dashboard.psychosocial'),
-                    'Divisão por departamento' => route('dashboard.psychosocial.department', ['testName' => $testName, 'riskName' => $riskName]),
+                    $risk->name => '',
+                    'Departamentos' => route('dashboard.psychosocial.department', ['risk' => $risk]),
                     'Lista de Resultados' => ''
                 ]"
             />
@@ -16,10 +17,10 @@
             <div class="w-full flex flex-col gap-4">
                 <x-structure.message>
                     <i class="fa-solid fa-circle-info"></i>
-                    Lista de resultados do risco de {{ trim($riskName) }} por colaborador.
+                    Lista de resultados do risco de {{ trim($risk->name) }} por colaborador.
                 </x-structure.message>
                 
-                <div class="w-full flex flex-col-reverse md:flex-row gap-4 items-start">
+                {{-- <div class="w-full flex flex-col-reverse md:flex-row gap-4 items-start">
                     <div class="flex items-center gap-2 w-full flex-wrap">
                         <x-numbers-of-records :value="$filteredUserCount" />
 
@@ -41,31 +42,31 @@
                             'admission_range',
                         ]" 
                     />
-                </div>
+                </div> --}}
             </div>
 
             <x-table>
                 <x-table.head class="flex items-center gap-3">
-                    <x-table.head.sortable-th class="hidden lg:block flex-1" field="department" :queryParam="['testName' => $testName, 'riskName' => $riskName]">
+                    <x-table.head.sortable-th class="hidden lg:block flex-1" field="department" :queryParam="['risk' => $risk, 'department' => $department]">
                         Setor
                     </x-table.head.sortable-th>
-                    <x-table.head.sortable-th class="hidden sm:block flex-1" field="occupation" :queryParam="['testName' => $testName, 'riskName' => $riskName]">
+                    <x-table.head.sortable-th class="hidden sm:block flex-1" field="occupation" :queryParam="['risk' => $risk, 'department' => $department]">
                         Função
                     </x-table.head.sortable-th>
                     <x-table.head.th class="w-40">Severidade</x-table.head.th>
                 </x-table.head>
                 <x-table.body>
-                    @forelse ($usersList as $user)
+                    @forelse ($list as $user)
                         <x-table.body.tr class="
                                 flex items-center gap-3
-                                {{ $user['severity']['severity_key'] == App\Enums\RiskSeverityEnum::CRITICA->value ? 'to-[#F26C6C75]' : '' }}
-                                {{ $user['severity']['severity_key'] == App\Enums\RiskSeverityEnum::ALTA->value ? 'to-[#F6B26B75]' : '' }}
-                                {{ $user['severity']['severity_key'] == App\Enums\RiskSeverityEnum::MODERADA->value ? 'to-[#DDE26F75]' : '' }}
-                                {{ $user['severity']['severity_key'] == App\Enums\RiskSeverityEnum::BAIXA->value ? 'to-[#A8E6CFCC]' : '' }}
+                                {{ $user->evaluated == App\Enums\FinalRiskTypes::CRITICAL ? 'to-[#F26C6C75]' : '' }}
+                                {{ $user->evaluated == App\Enums\FinalRiskTypes::HIGH ? 'to-[#F6B26B75]' : '' }}
+                                {{ $user->evaluated == App\Enums\FinalRiskTypes::MEDIUM ? 'to-[#DDE26F75]' : '' }}
+                                {{ $user->evaluated == App\Enums\FinalRiskTypes::LOW ? 'to-[#A8E6CFCC]' : '' }}
                             ">
-                            <x-table.body.td class="hidden lg:block flex-1" title="{{ $user['user']->department ?? '(Vazio)'}}">{{ $user['user']->department ?? '(Vazio)'}}</x-table.body.td>
-                            <x-table.body.td class="hidden sm:block flex-1" title="{{ $user['user']->occupation ?? '(Vazio)'}}">{{ $user['user']->occupation ?? '(Vazio)'}}</x-table.body.td>
-                            <x-table.body.td class="truncate w-40" data-value="{{ $user['severity']['severity_key'] }}">{{ $user['severity']['severity_name'] }}</x-table.body.td>
+                            <x-table.body.td class="hidden lg:block flex-1" title="{{ $user->department ?? '(Vazio)'}}">{{ $user->department ?? '(Vazio)'}}</x-table.body.td>
+                            <x-table.body.td class="hidden sm:block flex-1" title="{{ $user->occupation ?? '(Vazio)'}}">{{ $user->occupation ?? '(Vazio)'}}</x-table.body.td>
+                            <x-table.body.td class="truncate w-40" data-value="{{ $user->evaluated->value }}">{{ $user->evaluated->label() }}</x-table.body.td>
                         </x-table.body.tr>
                     @empty
                         <p class="w-full text-center mt-6">Não há testes cadastrados.</p>
@@ -75,7 +76,4 @@
             
         </x-structure.main-content-container>
     </x-structure.page-container>
-
-    
-    <script src="{{ asset('js/test-results-list.js') }}"></script>
 </x-layouts.app>

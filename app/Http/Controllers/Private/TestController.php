@@ -30,7 +30,6 @@ class TestController
         if(self::storeCollection($campaign, $answers)){
             session(['auth:user' => session('auth:user')->load('collections')]);
             
-            if($campaign->collection()->type === BaseCollectionTypes::PSYCHOSOCIAL) self::updatedCachedResults($campaign);
             if($campaign->collection()->type === BaseCollectionTypes::ORGANIZATIONAL) return to_route('feedback.create');
 
             return to_route('complete-tests.thanks');
@@ -66,31 +65,6 @@ class TestController
         } catch (\Throwable $e) {
             return false;
         }
-    }
-
-    private function updatedCachedResults(Campaign $campaign)
-    {
-        $campaign->collection()->risks()
-        ->with('questions', fn($query) => $query->withUserDepartmentAVG($campaign, session('auth:user')->department))
-        ->get()
-        ->each(function($risk) use($campaign) {
-            $questionAverages = $risk->questions->map(function ($q) {
-                return $q->inverted
-                    ? PsychosocialService::invertAnswerScore((float) $q->average)
-                    : (float) $q->average;
-            });
-            
-            $average = round($questionAverages->sum() / $questionAverages->count(), 2);
-  
-            DB::table('cache_psychosocial_global_rating')->updateOrInsert([
-                'company_id' => session('auth:company')->id,
-                'campaign_id' => $campaign->id,
-                'risk_id' => $risk->id,
-                'department' => session('auth:user')->department,
-            ], [
-                'rating' => $average
-            ]);
-        });
     }
 
     private static function generateValidationRules(Campaign $campaign): array

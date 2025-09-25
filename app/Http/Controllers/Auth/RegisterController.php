@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\RiskTypes;
 use App\Http\Requests\RegisterCompanyRequest;
 use App\Models\Company;
+use App\Models\CompanyReport;
 use App\Models\Metric;
 use App\Services\AuthService;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +44,18 @@ class RegisterController
     {
         DB::transaction(function() use($company) {
             Metric::each(fn($metric) => $company->metrics()->create(['metric_id' => $metric->id]));
+        });
+    }
+    
+    private function createReports(Company $company)
+    {
+        DB::transaction(function() use($company) {
+            CompanyReport::insert([
+                ['company_id' => $company->id, 'type' => RiskTypes::MORAL_HARASSMENT->value],
+                ['company_id' => $company->id, 'type' => RiskTypes::SEXUAL_HARASSMENT->value],
+                ['company_id' => $company->id, 'type' => RiskTypes::DISCRIMINATION->value],
+                ['company_id' => $company->id, 'type' => RiskTypes::OTHER_FORMS_OF_VIOLENCE->value],
+            ]);
         });
     }
 

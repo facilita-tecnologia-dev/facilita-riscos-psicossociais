@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\CampaignStatusTypes;
 use App\Notifications\ResetPassword;
+use App\Services\ReportChannelService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -40,6 +41,11 @@ class Company extends Authenticatable
     public function metrics(): HasMany
     {
         return $this->hasMany(CompanyMetric::class, 'company_id');
+    }
+
+    public function reports():HasMany
+    {
+        return $this->hasMany(CompanyReport::class, 'company_id');
     }
 
     public function campaigns(): HasMany
@@ -81,6 +87,15 @@ class Company extends Authenticatable
     public function turnover(): float | null
     {
         return $this->metrics->where('metric.type', 'turnover')->first()->value;
+    }
+    
+    public function getReports()
+    {
+        return ReportChannelService::hasReportChannel($this) ? 
+                        ReportChannelService::reports($this) :
+                        $this->reports->mapWithKeys(
+                            fn($report) => [$report->type => $report->value]
+                        );
     }
 
 

@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RiskTypes;
 use App\Models\Company;
+use App\Models\CompanyReport;
 use App\Models\Metric;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -23,6 +25,14 @@ class CompanySeeder extends Seeder
 
             // Metrics
             Metric::all()->each(fn($metric) => $company->metrics()->create(['metric_id' => $metric->id]));
+
+            // Reports
+            CompanyReport::insert([
+                ['company_id' => $company->id, 'type' => RiskTypes::MORAL_HARASSMENT->value],
+                ['company_id' => $company->id, 'type' => RiskTypes::SEXUAL_HARASSMENT->value],
+                ['company_id' => $company->id, 'type' => RiskTypes::DISCRIMINATION->value],
+                ['company_id' => $company->id, 'type' => RiskTypes::OTHER_FORMS_OF_VIOLENCE->value],
+            ]);
         });
     }
 }

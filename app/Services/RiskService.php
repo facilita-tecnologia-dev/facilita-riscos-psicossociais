@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\RiskTypes;
 use App\Evaluators\anxietyOrStress;
 use App\Evaluators\deteriorationOfPersonalLife;
 use App\Evaluators\difficultyConcentrating;
@@ -65,13 +66,13 @@ class RiskService
         "other-forms-of-violence" => otherFormsOfViolence::class
     ];
 
-    public static function evaluate(Risk $risk, float $average) 
+    public static function evaluate(RiskTypes $risk, float $average) 
     {
-        if(!isset(self::$evaluators[$risk->type])) return false;
+        if(!isset(self::$evaluators[$risk->value])) return false;
 
-        $class = self::$evaluators[$risk->type];
+        $class = self::$evaluators[$risk->value];
 
-        return $class::evaluate($risk, $average);
+        return $class::evaluate($average);
     }
 
     public static function metricToProbabilityScale(float $percentage, int $scale)

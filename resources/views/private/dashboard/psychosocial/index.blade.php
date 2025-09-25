@@ -45,13 +45,13 @@
                     </div>
                 </div>
 
-                <div class="w-full grid grid-cols-2 gap-4">
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
                     @foreach ($dashboard as $group => $risks)
-                        <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60 {{ $loop->last ? 'col-span-2' : '' }}">
+                        <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60 {{ $loop->last ? 'md:col-span-2' : '' }}">
                             <p class="text-center font-semibold truncate">{{ App\Enums\CollectionFactorTypes::from($group)->label() }}</p>
                             
                             @if(isset($risks) && $risks->isNotEmpty())
-                                <div class="w-full grid {{ $loop->last ? 'grid-cols-4' : 'grid-cols-2' }} gap-2 px-4">
+                                <div class="w-full grid {{ $loop->last ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2' }} gap-2 px-2 md:px-4">
                                     @foreach ($risks as $type => $risk)
                                         <x-charts.risk-bar type="{{ $type }}" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['risk' => $type ])}}" />
                                     @endforeach

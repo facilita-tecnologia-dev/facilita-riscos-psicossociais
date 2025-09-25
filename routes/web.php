@@ -10,7 +10,7 @@ use App\Http\Controllers\CustomControlActionController;
 use App\Http\Controllers\CustomQuestionController;
 use App\Http\Controllers\CustomTestController;
 use App\Http\Controllers\Private\CompanyController;
-use App\Http\Controllers\Private\CompanyMetricsController;
+use App\Http\Controllers\Private\MetricsController;
 use App\Http\Controllers\Private\Dashboard\Demographics\DemographicsMainController;
 use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalAnswersController;
 use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalMainController;
@@ -20,6 +20,7 @@ use App\Http\Controllers\Private\TestController;
 use App\Http\Controllers\Private\UserController;
 use App\Http\Controllers\Private\UserFeedbackController;
 use App\Http\Controllers\Private\WelcomeController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ResetUserPasswordController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\GuestMiddleware;
@@ -125,18 +126,21 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     });
 
     Route::prefix('company-metrics')->group(function() {
-        Route::get('/', [CompanyMetricsController::class, 'edit'])->name('company-metrics.edit');
-        Route::post('/', [CompanyMetricsController::class, 'update'])->name('company-metrics.update');
+        Route::get('/', [MetricsController::class, 'edit'])->name('company-metrics.edit');
+        Route::post('/', [MetricsController::class, 'update'])->name('company-metrics.update');
+    });
+
+    Route::prefix('company-reports')->group(function() {
+        Route::post('/', [ReportsController::class, 'update'])->name('company-reports.update');
     });
 
     Route::prefix('dashboard')->group(function () {
         Route::prefix('psychosocial')->group(function(){
             Route::get('/', [PsychosocialController::class, 'dashboard'])->name('dashboard.psychosocial');
-            // Route::get('/', PsychosocialMainController::class)->name('dashboard.psychosocial');
             Route::get('/{risk}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
-            // Route::get('/{testName}/{riskName}/list', PsychosocialResultsListController::class)->name('dashboard.psychosocial.list');
-            Route::get('/risks', PsychosocialRisksController::class)->name('dashboard.psychosocial.risks');
-            // Route::get('/risks/report', [PsychosocialRisksController::class, 'createPDFReport'])->name('dashboard.psychosocial.risks.report');
+            Route::get('/{risk}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
+            Route::get('/risks', [PsychosocialController::class, 'risks'])->name('dashboard.psychosocial.risks');
+            Route::get('/risks/report', [PsychosocialRisksController::class, 'createPDFReport'])->name('dashboard.psychosocial.risks.report');
         });
 
         Route::prefix('organizational-climate')->group(function(){

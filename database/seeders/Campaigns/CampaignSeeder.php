@@ -59,28 +59,6 @@ class CampaignSeeder extends Seeder
                             'value' => rand(1, 5)
                         ]);
                     });
-
-                    $campaign->collection()->risks()
-                        ->with('questions', fn($query) => $query->withUserDepartmentAVG($campaign, $user->department))
-                        ->get()
-                        ->each(function($risk) use($campaign, $company, $user) {
-                            $questionAverages = $risk->questions->map(function ($q) {
-                                return $q->inverted
-                                    ? PsychosocialService::invertAnswerScore((float) $q->average)
-                                    : (float) $q->average;
-                            });
-                            
-                            $average = round($questionAverages->sum() / $questionAverages->count(), 2);
-                
-                            DB::table('cache_psychosocial_global_rating')->updateOrInsert([
-                                'company_id' => $company->id,
-                                'campaign_id' => $campaign->id,
-                                'risk_id' => $risk->id,
-                                'department' => $user->department,
-                            ], [
-                                'rating' => $average
-                            ]);
-                        });
                 }
             });
         });

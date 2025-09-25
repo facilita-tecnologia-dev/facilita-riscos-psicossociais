@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\FinalRiskTypes;
+use App\Enums\RiskTypes;
 use App\Models\Risk;
 use App\Services\User\UserFilterService;
 
@@ -9,12 +11,20 @@ class PsychosocialService
 {
     public static function dashboard()
     {
-        session('auth:company', [session('auth:company')->load('metrics')]);
+        session('auth:company', [session('auth:company')->load(['metrics', 'reports'])]);
 
         $campaign = session('auth:company')->latestPsychosocialCampaign();
 
         $groupedRisks = $campaign->collection()->risks()
-            ->withQuestionAvg($campaign)
+            ->with([
+                'questions' => function ($q) use ($campaign) {
+                    $q->withAvg([
+                        'answers as average' => function ($query) use ($campaign) {
+                            $query->where('campaign_id', $campaign->id)->whereHas('user', fn($user) => UserFilterService::apply($user));
+                        }
+                    ], 'value');
+                }
+            ])
             ->get()
             ->groupBy('group');
 
@@ -29,7 +39,7 @@ class PsychosocialService
 
                 $riskAverage = round($questionAverages->sum() / $questionAverages->count(), 1);
     
-                $evaluated = RiskService::evaluate($risk, $riskAverage);
+                $evaluated = RiskService::evaluate(RiskTypes::from($risk->type), $riskAverage);
                 
                 return [$risk->type => $evaluated];
             });
@@ -42,61 +52,114 @@ class PsychosocialService
 
     public static function departments(Risk $risk)
     {
-        session('auth:company', [session('auth:company')->load('metrics')]);
+        session('auth:company', [session('auth:company')->load(['metrics', 'reports'])]);
+
+        $departments = $risk->questions()
+            ->with(['answers' => fn($q) => 
+                $q->where('campaign_id', session('auth:company')->latestPsychosocialCampaign()->id)
+                    ->with('user')
+            ])
+            ->get()
+            ->flatMap(fn($question) => $question->answers)
+            ->groupBy(['user.department', 'user.id'])
+            ->mapWithKeys(function($user, $department) use($risk) { // Calcula o risco de cada usuário
+                $userEvaluated = $user->mapWithKeys(function($answers, $user) use($risk) {
+                    $average = round($answers->sum('value') / $answers->count(), 1);
+                    $evaluated = RiskService::evaluate(RiskTypes::from($risk->type), $average);
+
+                    return [$user => $evaluated];
+                });
+
+                return [$department => $userEvaluated];
+            })
+            ->map(function ($items) { // Agrupa por risco
+                return $items->sortByDesc(fn($enum) => $enum->value) // Ordena os níveis de risco
+                            ->groupBy(fn($enum) => $enum->label()) // Agrupa por nível de risco
+                            ->map(function ($users) use ($items) { // Calcula a porcentagem
+                                return floor(($users->count() / $items->count()) * 100);
+                            });
+            });
+
+
+        return $departments;
+    }
+
+    public static function list(Risk $risk, string $department)
+    {
+        session('auth:company', [session('auth:company')->load(['metrics', 'reports'])]);
+
+        $list = $risk->questions()
+            ->with(['answers' => fn($q) => 
+                $q->where('campaign_id', session('auth:company')->latestPsychosocialCampaign()->id)
+                    ->with('user:id,department,occupation')
+                    ->whereHas('user', fn($u) => $u->where('department', $department))
+            ])
+            ->get()
+            ->flatMap(fn($question) => $question->answers)
+            ->groupBy('user.id')
+            ->map(function($answers, $user) use($risk) {
+                $average = round($answers->sum('value') / $answers->count(), 1);
+                $evaluated = RiskService::evaluate(RiskTypes::from($risk->type), $average);
+
+                $user = $answers->first()->user;
+                $user->setRelation('evaluated', $evaluated);
+                
+                return $user;
+            })
+            ->sortByDesc(fn($user) => $user->evaluated->value);
+
+        return $list;
+    }
+
+    public static function risks()
+    {
+        session('auth:company', [session('auth:company')->load(['metrics', 'reports'])]);
 
         $campaign = session('auth:company')->latestPsychosocialCampaign();
 
-        // $groupedRisks = $campaign->collection()->risks()
-        //     ->with('questions', fn($query) => 
-        //         $query->with('answers', fn($q) => 
-        //             $q->where('campaign_id', $campaign->id)
-        //         )
-        //     )
-        //     ->get()
-        //     ->groupBy('group');
-
         $groupedRisks = $campaign->collection()->risks()
-            ->with(['questions' => function ($query) use ($campaign) {
-                $query->with(['answers' => function ($q) use ($campaign) {
-                    $q->from('user_answers')
-                    ->select('question_id')
-                    ->selectRaw('AVG(user_answers.value) as average, users.department')
-                    ->join('users', 'user_answers.user_id', '=', 'users.id')
-                    ->where('user_answers.campaign_id', $campaign->id)
-                    ->groupBy('question_id', 'users.department');
-                }]);
-            }])
+            ->with([
+                'questions' => function ($q) use ($campaign) {
+                    $q->withAvg([
+                        'answers as average' => function ($query) use ($campaign) {
+                            $query->where('campaign_id', $campaign->id)->whereHas('user', fn($user) => UserFilterService::apply($user));
+                        }
+                    ], 'value');
+                },
+                'controlActions'
+            ])
             ->get()
             ->groupBy('group');
-        
-        
 
-        dd($groupedRisks['work-organization'][0]['questions'][0]['answers']->sum('average') / $groupedRisks['work-organization'][0]['questions'][0]['answers']->count());
-        // $departments = $groupedRisks->mapWithKeys(function($risks, $group) use($campaign) {
-        //     $groupEvaluated = $risks->mapWithKeys(function($risk) use($campaign) {       
-        //         dd($risk);
-        //         $divided = 
 
-        //         // $questionAverages = $risk->questions
-        //         //                         ->each(fn($question) => $question->inverted 
-        //         //                             ? $question->average = self::invertAnswerScore($question->average) 
-        //         //                             : $question)
-        //         //                         ->pluck('average');
+        $dashboard = $groupedRisks->mapWithKeys(function($risks, $group) {
+            $groupEvaluated = $risks->mapWithKeys(function($risk) {                
+                $questionAverages = $risk->questions
+                                        ->each(fn($question) => $question->inverted 
+                                            ? $question->average = self::invertAnswerScore($question->average) 
+                                            : $question)
+                                        ->pluck('average');
 
-        //         // $riskAverage = round($questionAverages->sum() / $questionAverages->count(), 1);
+                $riskAverage = round($questionAverages->sum() / $questionAverages->count(), 1);
     
-        //         // $evaluated = RiskService::evaluate($risk, $riskAverage);
+                $evaluated = RiskService::evaluate(RiskTypes::from($risk->type), $riskAverage);
                 
-        //         // return [$risk->type => $evaluated];
-        //     });
+                return [$risk->type => [
+                    'evaluated' => $evaluated,
+                    // 'control_actions' => $risk->controlActions
+                    'control_actions' => [
+                        'oi',
+                        'tchau'
+                    ]
+                ]];
+            })
+            ->filter(fn($risk) => $risk['evaluated'] === FinalRiskTypes::HIGH ||
+                                 $risk['evaluated'] === FinalRiskTypes::CRITICAL); // Filtra só os altos e críticos
 
-        //     return [$group => $groupEvaluated];
-        // });
+            return [$group => $groupEvaluated];
+        });
 
-        dd($departments);
-
-        
-        dd('departments', $groupedRisks['work-organization'][0]);
+        return $dashboard;
     }
 
     public static function participation()
