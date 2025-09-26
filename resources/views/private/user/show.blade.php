@@ -115,7 +115,7 @@
                             <x-action href="{{ route('user.permissions', $user) }}" variant="secondary">Gerenciar permissões</x-action>
                         @endcan
                         @can('user-department-scope-edit')
-                            @if($user->hasRole('manager'))
+                            @if($user->hasRole(App\Enums\RoleEnum::MANAGER->value))
                                 <x-action href="{{ route('user.department-scope', $user) }}" variant="secondary">Gerenciar Visão de Setores</x-action>
                             @endif
                         @endcan

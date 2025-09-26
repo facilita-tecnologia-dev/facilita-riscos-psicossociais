@@ -125,11 +125,6 @@ class Company extends Authenticatable
         return $this->campaigns->where('collection_id', 2)->sortByDesc('start_date')->first();
     }
 
-    // public function hasCompletedBasicData() : bool
-    // {
-    //     return $this->users->count() && $this->logo && $this->metrics()->where('value')->count();
-    // }
-
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token, 'company'));

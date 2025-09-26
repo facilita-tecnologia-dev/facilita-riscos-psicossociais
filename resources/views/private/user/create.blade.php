@@ -66,6 +66,10 @@
         </x-structure.main-content-container>   
     </x-structure.page-container>
 
+    <script>
+        const csrfToken = "{{ csrf_token() }}";
+    </script>
+
     <script src="{{ asset('js/user/create.js') }}"></script>
 
 </x-layouts.app>

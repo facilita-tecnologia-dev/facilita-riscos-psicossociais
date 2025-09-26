@@ -19,7 +19,7 @@
                                 {{ $campaign->name }}
                             </span>
 
-                            @if($campaign->userCollections->where('user_id', session('auth:user')->id)->isNotEmpty())
+                            @if(session('auth:user')->collections()->where('campaign_id', $campaign->id)->exists())
                                 <p class="p-2 bg-success/30 border border-green-300 text-green-800 rounded-md text-sm sm:text-base">
                                     Respondido
                                 </p>

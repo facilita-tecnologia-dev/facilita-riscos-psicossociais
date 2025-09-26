@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Notifications\CustomResetPassword;
 use App\Notifications\ResetPassword;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,7 +35,7 @@ class User extends Authenticatable
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'company_user')
-                    ->withPivot('company_id');
+                    ->withPivot('company_id', 'role_id');
     }
 
     public function feedbacks(): HasMany

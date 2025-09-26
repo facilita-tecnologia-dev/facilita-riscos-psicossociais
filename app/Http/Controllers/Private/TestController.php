@@ -4,27 +4,25 @@ namespace App\Http\Controllers\Private;
 
 use App\Enums\BaseCollectionTypes;
 use App\Models\Campaign;
-use App\Services\PsychosocialService;
-use App\Services\TestService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class TestController
 {
-    protected $testService;
-
-    public function __construct(TestService $testService)
-    {
-        $this->testService = $testService;
-    }
-
     public function show(Campaign $campaign)
     {        
+        if($campaign->collection()->type === BaseCollectionTypes::PSYCHOSOCIAL) Gate::authorize('answer-psychosocial-test');
+        if($campaign->collection()->type === BaseCollectionTypes::ORGANIZATIONAL) Gate::authorize('answer-organizational-test');
+
         return view('private.tests.index', compact('campaign'));
     }
 
     public function store(Request $request, Campaign $campaign)
     {
+        if($campaign->collection()->type === BaseCollectionTypes::PSYCHOSOCIAL) Gate::authorize('answer-psychosocial-test');
+        if($campaign->collection()->type === BaseCollectionTypes::ORGANIZATIONAL) Gate::authorize('answer-organizational-test');
+
         $answers = $request->validate(self::generateValidationRules($campaign));
 
         if(self::storeCollection($campaign, $answers)){

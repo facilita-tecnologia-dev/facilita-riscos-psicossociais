@@ -65,16 +65,28 @@ class UserFilterService
                 : 'asc';
 
             if ($orderBy === 'psychosocial-risks') {
-                dd(session('auth:company')
-                    ->latestPsychosocialCampaign()
-                    ->userCollections()
-                    ->latest());
+                $latestOrganizationalSub = DB::table('user_collections')
+                    ->select('user_id', DB::raw('MAX(created_at) as latest_created_at'))
+                    ->where('collection_id', 1)
+                    ->where('company_id', session('auth:company')->id)
+                    ->where('campaign_id', session('auth:company')->latestPsychosocialCampaign()?->id)
+                    ->groupBy('user_id');
+
+                return $query->leftJoinSub(
+                    $latestOrganizationalSub,
+                    'latest_psychosocial',
+                    function ($join) {
+                        $join->on('users.id', '=', 'latest_psychosocial.user_id');
+                    }
+                )->orderBy('latest_psychosocial.latest_created_at', $direction);
             }
 
             if ($orderBy === 'organizational-climate') {
                 $latestOrganizationalSub = DB::table('user_collections')
                     ->select('user_id', DB::raw('MAX(created_at) as latest_created_at'))
                     ->where('collection_id', 2)
+                    ->where('company_id', session('auth:company')->id)
+                    ->where('campaign_id', session('auth:company')->latestOrganizationalCampaign()?->id)
                     ->groupBy('user_id');
 
                 return $query->leftJoinSub(

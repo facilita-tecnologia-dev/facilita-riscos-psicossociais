@@ -31,10 +31,6 @@ class WelcomeController
 
     public function welcomeUser()
     {
-        $hasAnsweredPsychosocial = session('auth:user')->collections->where('campaign_id',  session('auth:company')->latestPsychosocialCampaign()?->id)->isNotEmpty();
-        $hasAnsweredOrganizational = session('auth:user')->collections->where('campaign_id',  session('auth:company')->latestOrganizationalCampaign()?->id)->isNotEmpty();
-        
-        return view('private.welcome.user', compact('hasAnsweredPsychosocial', 'hasAnsweredOrganizational'));
+        return view('private.welcome.user');
     }
-
 }

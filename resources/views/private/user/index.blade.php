@@ -21,7 +21,7 @@
                 @if($users)
                     <div class="w-full flex flex-col-reverse md:flex-row gap-4 items-start">
                         <div class="flex items-center gap-2 w-full flex-wrap">
-                            <x-numbers-of-records :value="$users->count()" />
+                            <x-numbers-of-records :value="$filtered" />
 
                             <x-applied-filters
                                 :filters="$filters"

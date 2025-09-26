@@ -47,24 +47,18 @@ class UserController
         $latestPsychosocialCampaign = session('auth:company')->latestPsychosocialCampaign();
         $latestOrganizationalCampaign = session('auth:company')->latestOrganizationalCampaign();
 
-        // $query = session('auth:company')->users()->getQuery();
-        // $users = $this->filterService->sort($this->filterService->apply($query))
-        // ->with(['collections'])
-        // ->paginate(15)
-        // ->appends(request()->query());
-        
-        $users = session('auth:company')->users() 
-        ->with(['collections'])
-        ->paginate(15)
-        ->appends(request()->query());
-
+        $query = session('auth:company')->users()->getQuery()->select('users.*');
+        $users = $this->filterService->sort($this->filterService->apply($query))
+        ->with(['collections']);
+  
         $filters = collect(request()->query())->except(['order_by', 'order_direction'])->filter();
 
         return view('private.user.index', [
-            'users' => $users,
+            'users' => $users->paginate(15)->appends(request()->query()),
             'latestPsychosocialCampaign' => $latestPsychosocialCampaign,
             'latestOrganizationalCampaign' => $latestOrganizationalCampaign,
             'filters' => $filters,
+            'filtered' => $users->count()
         ]);
     }
 
@@ -83,7 +77,7 @@ class UserController
 
         $user = $this->userRepository->store($request->safe());
 
-        if($user->hasRole('manager')){
+        if($user->hasRole(RoleEnum::MANAGER->value)){
             return to_route('user.department-scope', $user)->with('message', 'Perfil do colaborador criado com sucesso!');
         }
 

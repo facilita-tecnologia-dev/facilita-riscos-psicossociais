@@ -21,7 +21,9 @@
                 </div>
                 @if($demographics)
                     @foreach ($demographics as $demographicName => $demographic)
-                        <x-charts.bar-vertical :id="$demographicName" :title="$demographicName" />
+                        @if($demographic->isNotEmpty())
+                            <x-charts.bar-vertical :id="$demographicName" :title="$demographicName" />
+                        @endif
                     @endforeach
                 @else
                     <div class="w-full flex flex-col items-center gap-2">
@@ -34,13 +36,8 @@
     </x-structure.page-container>
 </x-layouts.app>
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-
 <script>
-    const companyMetrics = @json($companyMetrics)    
+    const metrics = @json($metrics)    
     const demographics = @json($demographics)    
 </script>
 

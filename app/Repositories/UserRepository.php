@@ -20,7 +20,7 @@ class UserRepository
             $user = User::firstWhere('cpf', $data['cpf']);
 
             if($user){
-                session('auth:company')->users()->attach($user, ['role_id', 2]);
+                session('auth:company')->users()->attach($user, ['role_id' => 2]);
             } else{
                 $role = RoleEnum::from($data['role']);
                 

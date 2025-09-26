@@ -73,7 +73,7 @@
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-chart-pie"></i>
                             </div>
-                            Demografia
+                            Índices Demográficos
                         </x-sidebar.item>
                     </div>
                 @endcan

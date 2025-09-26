@@ -11,9 +11,10 @@ use App\Http\Controllers\CustomQuestionController;
 use App\Http\Controllers\CustomTestController;
 use App\Http\Controllers\Private\CompanyController;
 use App\Http\Controllers\Private\MetricsController;
-use App\Http\Controllers\Private\Dashboard\Demographics\DemographicsMainController;
+use App\Http\Controllers\Private\Dashboard\DemographicsController;
 use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalAnswersController;
 use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalMainController;
+use App\Http\Controllers\Private\Dashboard\OrganizationalController;
 use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialRisksController;
 use App\Http\Controllers\Private\Dashboard\PsychosocialController;
 use App\Http\Controllers\Private\TestController;
@@ -144,13 +145,14 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         });
 
         Route::prefix('organizational-climate')->group(function(){
-            Route::get('/', OrganizationalMainController::class)->name('dashboard.organizational-climate');
+            Route::get('/', [OrganizationalController::class, 'dashboard'])->name('dashboard.organizational-climate');
+            // Route::get('/', OrganizationalMainController::class)->name('dashboard.organizational-climate');
             Route::post('/report', [OrganizationalMainController::class, 'createPDFReport'])->name('dashboard.organizational-climate.report');
             Route::get('/answers', OrganizationalAnswersController::class)->name('dashboard.organizational-climate.answers');
             Route::get('/answers/report', [OrganizationalAnswersController::class, 'createPDFReport'])->name('dashboard.organizational-climate.answers.report');
         });
 
-        Route::get('/demographics', DemographicsMainController::class)->name('dashboard.demographics');
+        Route::get('/demographics', [DemographicsController::class, 'demographics'])->name('dashboard.demographics');
     });
 
     Route::prefix('company')->group(function(){

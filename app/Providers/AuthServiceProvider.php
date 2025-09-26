@@ -96,7 +96,9 @@ class AuthServiceProvider extends ServiceProvider
                 /** @var User $user */
                 $user = session('auth:user');
 
-                return $user->hasPermission('answer_tests') && session('auth:company')->hasCampaignThisYear(1, CampaignStatusTypes::IN_PROGRESS->value);
+                return $user->hasPermission('answer_tests') &&
+                        session('auth:company')->hasCampaignThisYear(1, CampaignStatusTypes::IN_PROGRESS->value) &&
+                        !$user->hasAnsweredCampaign(session('auth:company')->latestPsychosocialCampaign()->id);
             }
 
             return false;
@@ -107,7 +109,9 @@ class AuthServiceProvider extends ServiceProvider
                 /** @var User $user */
                 $user = session('auth:user');
 
-                return $user->hasPermission('answer_tests') && session('auth:company')->hasCampaignThisYear(1, CampaignStatusTypes::IN_PROGRESS->value);
+                return $user->hasPermission('answer_tests') && 
+                        session('auth:company')->hasCampaignThisYear(2, CampaignStatusTypes::IN_PROGRESS->value) &&
+                        !$user->hasAnsweredCampaign(session('auth:company')->latestOrganizationalCampaign()->id);
             }
 
             return false;
