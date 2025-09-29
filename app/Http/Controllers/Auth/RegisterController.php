@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\RiskTypes;
 use App\Http\Requests\RegisterCompanyRequest;
+use App\Models\BaseControlAction;
 use App\Models\Company;
 use App\Models\CompanyReport;
 use App\Models\Metric;
@@ -29,6 +30,7 @@ class RegisterController
             ]);
 
             $this->createMetrics($company);
+            $this->createReports($company);
             $this->createActionPlan($company);
             
             AuthService::authenticate('company', $company);
@@ -62,7 +64,17 @@ class RegisterController
     private function createActionPlan(Company $company)
     {
         DB::transaction(function() use($company) {
-            $company->actionPlan()->create();
+            $actionPlan = $company->actionPlan()->create();
+
+            BaseControlAction::all()->each(fn($controlAction) => 
+                $actionPlan->controlActions()->create([
+                    'action_plan_id' => $actionPlan->id,
+                    'risk_id' => $controlAction->risk_id,
+                    'control_action_type_id' => $controlAction->control_action_type_id,
+                    'gravity' => $controlAction->gravity,
+                    'content' => $controlAction->content,
+                ])
+            );
         });
     }
 }

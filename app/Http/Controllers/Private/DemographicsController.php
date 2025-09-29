@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Private\Dashboard;
+namespace App\Http\Controllers\Private;
 
 use App\Services\DemographicsService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class DemographicsController

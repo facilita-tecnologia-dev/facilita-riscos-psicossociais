@@ -9,11 +9,11 @@ use App\Services\RiskService;
 
 class sleepDisorders
 {
-    public static function evaluate(float $average)
+    public static function evaluate(Risk $risk, float $average)
     {
         $initialRating = self::initialRating($average);
 
-        $reports = session('auth:company')->getReports()->first(fn($_, $risk) => $risk === RiskTypes::SLEEP_DISORDERS->value);
+        $reports = session('auth:company')->reports->first(fn($_, $risk) => $risk === RiskTypes::SLEEP_DISORDERS->value);
     
         $needsWeightedAverage = self::needsWeightedAverage($initialRating, $reports);
 
@@ -23,7 +23,11 @@ class sleepDisorders
 
         $weightedAverage = self::weightedAverage($initialRating, $reports);
         
-        return self::determineRisk($weightedAverage);
+        return [
+            'evaluated' => self::determineRisk($weightedAverage),
+            'probability' => $needsWeightedAverage ? $weightedAverage : $initialRating,
+            'gravity' => $risk->gravity
+        ];
     }
 
     private static function initialRating(float $average): int

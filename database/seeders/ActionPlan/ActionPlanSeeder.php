@@ -10,6 +10,7 @@ class ActionPlanSeeder extends Seeder
     {
         $this->call([
             ControlActionTypesSeeder::class,
+            ControlActionsSeeder::class,
         ]);
     }
 }

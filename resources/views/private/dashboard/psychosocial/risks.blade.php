@@ -13,50 +13,56 @@
 
                 @can('action-plan-edit')
                     <div class="w-full md:w-fit">
-                        <x-action href="{{ route('action-plan.show', App\Models\ActionPlan::firstWhere('company_id', session('auth:company')->id)) }}" width="full">
-                            Editar Plano de Ação
+                        <x-action href="{{ route('control-actions.update') }}" width="full">
+                            Editar medidas de controle
                         </x-action>
                     </div>
                 @endcan
                 <div class="w-full md:w-fit">
                     <x-action href="{{ route('dashboard.psychosocial.risks.report') }}" width="full">
-                        Visualizar Inventário de Riscos
+                        Exportar Inventário de Riscos
                     </x-action>
                 </div>
             </div>
     
             <div class="w-full space-y-8">
                 @foreach ($risks as $group => $groupRisks)
-                    @if(session('auth:company')->latestPsychosocialCampaign())
-                        <div class="space-y-4">
-                            <div class="bg-gray-100 px-4 py-2 w-full rounded-md shadow-md">
-                                <h2 class="text-lg md:text-xl font-semibold">{{ App\Enums\CollectionFactorTypes::from($group)->label() }}</h2>
-                            </div>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                @foreach ($groupRisks as $riskName => $risk)
-                                    <div class="flex flex-col gap-4 bg-white/25 w-full p-4 rounded-md shadow-md relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
-                                        <div class="flex items-center justify-between bg-gradient-to-b from-[#FFFFFF25] gap-4 px-4 py-2 w-full rounded-md shadow-md
-                                            {{ $risk['evaluated'] == App\Enums\FinalRiskTypes::CRITICAL ? 'to-[#fc6f6f50]' : '' }}
-                                            {{ $risk['evaluated'] == App\Enums\FinalRiskTypes::HIGH ? 'to-[#dc933250]' : '' }}
-                                            {{ $risk['evaluated'] == App\Enums\FinalRiskTypes::MEDIUM ? 'to-[#faed5d50]' : '' }}
-                                            {{ $risk['evaluated'] == App\Enums\FinalRiskTypes::LOW ? 'to-[#76fc7150]' : '' }}
-                                        ">
-                                            <p class="truncate">{{ App\Enums\RiskTypes::from($riskName)->label() }}</p>
-                                            <p class="truncate">{{ $risk['evaluated']->label() }}</p>
-                                        </div>
-                                        <p class="px-3 font-semibold">Medidas de Controle e Prevenção</p>
-                                        <ul class="grid grid-cols-1 px-4 gap-y-3 gap-x-4 list-disc pl-5">
-                                            @foreach ($risk['control_actions'] as $action)
-                                                <li class="text-sm w-full rounded-md">
-                                                    {{ $action }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endforeach
-                            </div>
+                    <div class="space-y-4">
+                        <div class="bg-gray-100 px-4 py-2 w-full rounded-md shadow-md">
+                            <h2 class="text-lg md:text-xl font-semibold">{{ App\Enums\CollectionFactorTypes::from($group)->label() }}</h2>
                         </div>
-                    @endif
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            @foreach ($groupRisks as $riskName => $risk)
+                                <div class="flex flex-col gap-4 bg-white/25 w-full px-4 py-6 rounded-md shadow-md relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
+                                    <div class="flex items-center justify-between bg-gradient-to-b from-[#FFFFFF25] gap-4 px-4 py-2 w-full rounded-md shadow-md
+                                        {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::CRITICAL ? 'to-[#fc6f6f50]' : '' }}
+                                        {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::HIGH ? 'to-[#dc933250]' : '' }}
+                                        {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::MEDIUM ? 'to-[#faed5d50]' : '' }}
+                                        {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::LOW ? 'to-[#76fc7150]' : '' }}
+                                    ">
+                                        <p class="truncate">{{ App\Enums\RiskTypes::from($riskName)->label() }}</p>
+                                        <p class="truncate">{{ $risk['risk']['evaluated']->label() }}</p>
+                                    </div>
+                                    <p class="px-3 font-semibold">Medidas de Controle e Prevenção</p>
+                                    <ul class="grid grid-cols-1 px-4 gap-y-4 gap-x-4 list-disc pl-5">
+                                        @foreach ($risk['control_actions'] as $type => $controlActions)
+                                            <div class="space-y-2">
+                                                <p class="text-sm text-main-text font-semibold">
+                                                    {{ App\Enums\ControlActionTypes::from($type)->label() }}
+                                                </p>
+                                            
+                                                @foreach ($controlActions as $action)
+                                                    <li class="text-sm w-full rounded-md">
+                                                        {{ $action->content }}
+                                                    </li>
+                                                @endforeach
+                                            </div>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 @endforeach
             </div>
         </x-structure.main-content-container>

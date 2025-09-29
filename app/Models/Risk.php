@@ -21,7 +21,7 @@ class Risk extends Model
 
     public function controlActions(): HasMany
     {
-        return $this->hasMany(ControlAction::class);
+        return $this->hasMany(BaseControlAction::class);
     }
 
     public function getRouteKeyName()

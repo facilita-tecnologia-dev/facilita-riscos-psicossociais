@@ -3,6 +3,9 @@ import "./bootstrap";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
+
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -25,6 +28,7 @@ window.Chart = Chart;
 document.addEventListener("DOMContentLoaded", () => {
     initializeAOS();
     initializeTippy();
+    initializeToastr();
     initializeSidebar();
     initializeLGPDBar();
     initializeTogglePasswordVisibilityButtons();
@@ -63,6 +67,26 @@ function initializeTippy() {
     });
 
     initalizeDropdowns();
+}
+
+function initializeToastr() {
+    // Toast
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: "toast-bottom-right",
+        timeOut: "3000",
+    };
+
+    if (typeof Livewire !== "undefined") {
+        Livewire.on("alert:success", (data) => {
+            toastr.success(data);
+        });
+
+        Livewire.on("alert:danger", (data) => {
+            toastr.error(data);
+        });
+    }
 }
 
 function initializeSidebar() {
@@ -222,7 +246,6 @@ function checkPasswordSteps(event) {
     function updatePasswordRequirement(requirementId, satisfied) {
         const requirement = document.getElementById(requirementId);
 
-        console.log(requirementId, satisfied);
         const requirementBar = requirement.querySelector(".requirement-bar");
         const iconChecked = requirement.querySelector(".checked-icon");
         const iconUnchecked = requirement.querySelector(".unchecked-icon");

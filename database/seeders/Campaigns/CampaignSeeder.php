@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Campaigns;
 
+use App\Enums\CampaignStatusTypes;
 use App\Enums\CollectionTypes;
 use App\Models\Company;
 use App\Services\PsychosocialService;
@@ -29,7 +30,8 @@ class CampaignSeeder extends Seeder
                         Carbon::create(now()->year, 6, 1)->timestamp,
                         Carbon::create(now()->year, 8, 31)->timestamp,
                     )
-                )
+                ),
+                'status' => CampaignStatusTypes::COMPLETED
             ]);
 
             $company->users()->each(function($user) use ($campaign, $company) {

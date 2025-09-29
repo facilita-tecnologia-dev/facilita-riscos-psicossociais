@@ -66,13 +66,13 @@ class RiskService
         "other-forms-of-violence" => otherFormsOfViolence::class
     ];
 
-    public static function evaluate(RiskTypes $risk, float $average) 
+    public static function evaluate(Risk $risk, float $average) 
     {
-        if(!isset(self::$evaluators[$risk->value])) return false;
+        if(!isset(self::$evaluators[$risk->type])) return false;
 
-        $class = self::$evaluators[$risk->value];
+        $class = self::$evaluators[$risk->type];
 
-        return $class::evaluate($average);
+        return $class::evaluate($risk, $average);
     }
 
     public static function metricToProbabilityScale(float $percentage, int $scale)

@@ -9,4 +9,19 @@ class CustomControlAction extends Model
 {
     protected $table = 'custom_control_actions';
     public $timestamps = false;
+
+    public function actionPlan(): BelongsTo
+    {
+        return $this->belongsTo(ActionPlan::class);
+    }
+
+    public function risk(): BelongsTo
+    {
+        return $this->belongsTo(Risk::class);
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(ControlActionType::class, 'control_action_type_id');
+    }
 }

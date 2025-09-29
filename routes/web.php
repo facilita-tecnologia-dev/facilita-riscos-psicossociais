@@ -1,22 +1,20 @@
 <?php
 
-use App\Http\Controllers\ActionPlanController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\ControlActionsController;
 use App\Http\Controllers\CustomCollectionController;
-use App\Http\Controllers\CustomControlActionController;
 use App\Http\Controllers\CustomQuestionController;
 use App\Http\Controllers\CustomTestController;
 use App\Http\Controllers\Private\CompanyController;
 use App\Http\Controllers\Private\MetricsController;
-use App\Http\Controllers\Private\Dashboard\DemographicsController;
 use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalAnswersController;
 use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalMainController;
-use App\Http\Controllers\Private\Dashboard\OrganizationalController;
-use App\Http\Controllers\Private\Dashboard\Psychosocial\PsychosocialRisksController;
-use App\Http\Controllers\Private\Dashboard\PsychosocialController;
+use App\Http\Controllers\Private\DemographicsController;
+use App\Http\Controllers\Private\OrganizationalController;
+use App\Http\Controllers\Private\PsychosocialController;
 use App\Http\Controllers\Private\TestController;
 use App\Http\Controllers\Private\UserController;
 use App\Http\Controllers\Private\UserFeedbackController;
@@ -83,10 +81,10 @@ Route::middleware(AuthMiddleware::class)->group(function() {
 
     Route::prefix('feedback')->group(function(){
         Route::get('/', [UserFeedbackController::class, 'index'])->name('feedback.index');
-        Route::get('/{feedback}', [UserFeedbackController::class, 'show'])->name('feedback.show');
         Route::get('/create', [UserFeedbackController::class, 'create'])->name('feedback.create');
         Route::post('/create', [UserFeedbackController::class, 'store']);
         Route::get('/export', [UserFeedbackController::class, 'export'])->name('feedback.export');
+        Route::get('/{feedback}', [UserFeedbackController::class, 'show'])->name('feedback.show');
     });
 
     Route::prefix('campaigns')->group(function(){
@@ -101,30 +99,35 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::put('{campaign}/close', [CampaignController::class, 'close'])->name('campaign.close');
     });
 
-    Route::prefix('action-plan')->group(function(){
-        Route::get('{actionPlan}', [ActionPlanController::class, 'show'])->name('action-plan.show');
+    // Route::prefix('action-plan')->group(function(){
+    //     Route::get('{actionPlan}', [ActionPlanController::class, 'show'])->name('action-plan.show');
 
-        Route::get('{actionPlan}/risk/{risk}/edit', [ActionPlanController::class, 'edit'])->name('action-plan.risk.edit');
-        Route::put('{actionPlan}/risk/{risk}/update', [ActionPlanController::class, 'update'])->name('action-plan.risk.update');
+    //     Route::get('{actionPlan}/risk/{risk}/edit', [ActionPlanController::class, 'edit'])->name('action-plan.risk.edit');
+    //     Route::put('{actionPlan}/risk/{risk}/update', [ActionPlanController::class, 'update'])->name('action-plan.risk.update');
 
-        Route::post('{actionPlan}/risk/{risk}/medidas-de-controle/store', [CustomControlActionController::class, 'store'])->name('action-plan.risk.control-action.store');
-        Route::get('{actionPlan}/risk/{risk}/medidas-de-controle/{controlAction}/delete', [CustomControlActionController::class, 'destroy'])->name('action-plan.risk.control-action.destroy');
+    //     Route::post('{actionPlan}/risk/{risk}/medidas-de-controle/store', [CustomControlActionController::class, 'store'])->name('action-plan.risk.control-action.store');
+    //     Route::get('{actionPlan}/risk/{risk}/medidas-de-controle/{controlAction}/delete', [CustomControlActionController::class, 'destroy'])->name('action-plan.risk.control-action.destroy');
+    // });
+
+    Route::prefix('control-actions')->group(function() {
+        Route::get('/', [ControlActionsController::class, 'edit'])->name('control-actions.update');
+        Route::put('/', [ControlActionsController::class, 'update']);
     });
 
-    Route::prefix('custom-collections')->group(function(){
-        Route::get('/', [CustomCollectionController::class, 'index'])->name('custom-collections.index');
-        Route::get('{customCollection}', [CustomCollectionController::class, 'show'])->name('custom-collections.show');
-        Route::get('create', [CustomCollectionController::class, 'create'])->name('custom-collections.create');
-        Route::post('store', [CustomCollectionController::class, 'store'])->name('custom-collections.store');
-        Route::put('{customCollection}/update', [CustomCollectionController::class, 'update'])->name('custom-collections.update');
-        Route::delete('{customCollection}/delete', [CustomCollectionController::class, 'destroy'])->name('custom-collections.destroy');
+    // Route::prefix('custom-collections')->group(function(){
+    //     Route::get('/', [CustomCollectionController::class, 'index'])->name('custom-collections.index');
+    //     Route::get('{customCollection}', [CustomCollectionController::class, 'show'])->name('custom-collections.show');
+    //     Route::get('create', [CustomCollectionController::class, 'create'])->name('custom-collections.create');
+    //     Route::post('store', [CustomCollectionController::class, 'store'])->name('custom-collections.store');
+    //     Route::put('{customCollection}/update', [CustomCollectionController::class, 'update'])->name('custom-collections.update');
+    //     Route::delete('{customCollection}/delete', [CustomCollectionController::class, 'destroy'])->name('custom-collections.destroy');
         
-        Route::post('{customCollection}/tests/store', [CustomTestController::class, 'store'])->name('custom-collections.tests.store');
-        Route::get('{customCollection}/tests/{customTest}/delete', [CustomTestController::class, 'destroy'])->name('custom-collections.tests.destroy');    
+    //     Route::post('{customCollection}/tests/store', [CustomTestController::class, 'store'])->name('custom-collections.tests.store');
+    //     Route::get('{customCollection}/tests/{customTest}/delete', [CustomTestController::class, 'destroy'])->name('custom-collections.tests.destroy');    
         
-        Route::post('{customCollection}/questions/store', [CustomQuestionController::class, 'store'])->name('custom-collections.tests.questions.store');
-        Route::get('{customCollection}/questions/{customQuestion}/delete', [CustomQuestionController::class, 'destroy'])->name('custom-collections.tests.questions.destroy');
-    });
+    //     Route::post('{customCollection}/questions/store', [CustomQuestionController::class, 'store'])->name('custom-collections.tests.questions.store');
+    //     Route::get('{customCollection}/questions/{customQuestion}/delete', [CustomQuestionController::class, 'destroy'])->name('custom-collections.tests.questions.destroy');
+    // });
 
     Route::prefix('company-metrics')->group(function() {
         Route::get('/', [MetricsController::class, 'edit'])->name('company-metrics.edit');
@@ -141,7 +144,7 @@ Route::middleware(AuthMiddleware::class)->group(function() {
             Route::get('/{risk}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
             Route::get('/{risk}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
             Route::get('/risks', [PsychosocialController::class, 'risks'])->name('dashboard.psychosocial.risks');
-            Route::get('/risks/report', [PsychosocialRisksController::class, 'createPDFReport'])->name('dashboard.psychosocial.risks.report');
+            Route::get('/risks/report', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
         });
 
         Route::prefix('organizational-climate')->group(function(){

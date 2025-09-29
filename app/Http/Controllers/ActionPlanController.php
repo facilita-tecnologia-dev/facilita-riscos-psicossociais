@@ -15,16 +15,6 @@ use Illuminate\Support\Facades\Gate;
 
 class ActionPlanController
 {
-    protected $testService;
-
-    protected $pageData;
-
-    public function __construct(TestService $testService)
-    {
-        $this->testService = $testService;        
-        $this->pageData = $this->query();
-    }
-
     public function show(ActionPlan $actionPlan)
     {
         Gate::authorize('action-plan-edit');

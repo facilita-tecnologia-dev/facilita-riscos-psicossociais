@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Private\Dashboard;
+namespace App\Http\Controllers\Private;
 
 use App\Models\Risk;
 use App\Services\PsychosocialService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Gate;
 
 class PsychosocialController
@@ -11,7 +12,7 @@ class PsychosocialController
     public function dashboard()
     {
         Gate::authorize('psychosocial-dashboard-view');
-        if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
+        if(!session('auth:company')->latestPsychosocialCampaign()  || !session('auth:company')->latestPsychosocialCampaign()->userCollections()->exists()) return back();
         
         return view('private.dashboard.psychosocial.index', [
             'dashboard' => session('auth:company')->latestPsychosocialCampaign() ? PsychosocialService::dashboard() : false,
@@ -49,7 +50,15 @@ class PsychosocialController
         if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
 
         return view('private.dashboard.psychosocial.risks', [
-            'risks' => PsychosocialService::risks(),
+            'risks' => PsychosocialService::risks(onlyHigh: true),
         ]);
+    }
+
+    public function report()
+    {
+        Gate::authorize('psychosocial-dashboard-view');
+        if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
+
+        return PsychosocialService::report();
     }
 }

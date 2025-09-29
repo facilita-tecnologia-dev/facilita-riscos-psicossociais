@@ -16,16 +16,16 @@ class ControlActionTypesSeeder extends Seeder
                 'display_name' => ControlActionTypes::REDUCTION->label(),
             ],
             [
+                'type' => ControlActionTypes::ADMINISTRATIVE->value,
+                'display_name' => ControlActionTypes::ADMINISTRATIVE->label(),
+            ],
+            [
                 'type' => ControlActionTypes::PROTECTION->value,
                 'display_name' => ControlActionTypes::PROTECTION->label(),
             ],
             [
                 'type' => ControlActionTypes::PREVENTION->value,
                 'display_name' => ControlActionTypes::PREVENTION->label(),
-            ],
-            [
-                'type' => ControlActionTypes::LEGISLATION->value,
-                'display_name' => ControlActionTypes::LEGISLATION->label(),
             ]
         ]);
     }

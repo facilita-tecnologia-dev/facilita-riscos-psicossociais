@@ -9,12 +9,12 @@
         font-family: Arial, Helvetica, sans-serif; 
         font-size: 14px; 
         color:#1f2937; 
-        margin: 20px 20px 30px 20px;
+        margin: 20px 16px 30px 16px;
     }
 
-    table {margin:0 auto; width:90%; border-collapse:collapse;}
+    table {margin:0 auto; width:100%; border-collapse:collapse;}
     td, th {border:1px solid #999; padding: 5px; vertical-align:center; font-size:12px; color: #333;}
-    th {background-color: #c3e9fd; color: #333;}
+    th {background-color: #E0E0E0; color: #333;}
 
     p, h2 {margin: 2px;}
 
@@ -38,57 +38,51 @@
 
 <body>
     <x-pdf.cover>          
-        @if($companyLogo)
-            <img src="{{ public_path($companyLogo) }}" style="max-width: 8cm; object-fit:contain; margin-bottom: 24px;">            
+        @if(session('auth:company')->logo)
+            <img src="{{ public_path(session('auth:company')->logo) }}" style="max-width: 8cm; object-fit:contain; margin-bottom: 24px;">            
         @endif
-        <h2 style="margin-bottom: 18px;">{{ $companyName }}</h2>
+        <h2 style="margin-bottom: 18px;">{{ session('auth:company')->name }}</h2>
         <h1 style="margin-bottom: 8px; font-size: 32px;">Inventário de Riscos Psicossociais</h1>
-        <p>Resultado detalhado da avaliação de riscos psicossociais.</p>
+        <p style="font-size: 16px;">Resultado detalhado da avaliação de riscos psicossociais.</p>
     </x-pdf.cover>
 
     <div class="page-break"></div>
-    
-    {{-- Matriz de Risco --}}
-    <x-pdf.main-content>
-        <x-pdf.risk-matrix />
-    </x-pdf.main-content>
-    
-    <div class="page-break"></div>
 
-    @foreach ($risks as $testName => $test)
-        {{-- Title --}}
-        <table>
-            <thead>
-                <tr>
-                    <th style="text-align: left;">Fator Identificado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><h2>{{ $testName }}</h2></td>
-                </tr>
-            </tbody>
-        </table>
+        @foreach ($risks as $type => $risk)
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Risco</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h2 style="font-size: 18px;">{{ App\Enums\RiskTypes::from($type)->label() }}</h2>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-        @foreach ($test['risks'] as $key => $risk)
             <table style="margin-top: 12px;">
                 <tbody>
                     <tr>
-                        <td style="width:25%;">
-                            <p>Risco Identificado:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ $key }}</span>
-                        </td>
-                        <td style="width:15%;">
+                        <td style="width:35%;">
                             <p>Severidade:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ $risk['severity'] }}</span>
+                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\GravityTypes::from($risk['risk']['gravity'])->label() }}</span>
                         </td>
-                        <td style="width:15%;">
+                        <td style="width:35%;">
                             <p>Probabilidade:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ $risk['probability'] }}</span>
+                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\ProbabilityTypes::from($risk['risk']['probability'])->label() }}</span>
                         </td>
-                        <td style="width:15%;">
+                        <td style="width:30%; background-color:
+                                {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::CRITICAL ? '#fc6f6f50' : '' }}
+                                {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::HIGH ? '#dc933250' : '' }}
+                                {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::MEDIUM ? '#faed5d50' : '' }}
+                                {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::LOW ? '#76fc7150' : '' }}
+                        ">
                             <p>Nível de Risco:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ $risk['riskCaption'] }}</span>
+                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\FinalRiskTypes::from($risk['risk']['evaluated']->value)->label() }}</span>
                         </td>
                     </tr>                            
                 </tbody>
@@ -96,28 +90,32 @@
 
             <table>
                 <thead>
-                    <tr>
-                        <th style="width:25%; font-size: 10px">Medida de Controle</th>
-                        <th style="width:15%; font-size: 10px">Prazo</th>
-                        <th style="width:15%; font-size: 10px">Responsável</th>
-                        <th style="width:15%; font-size: 10px">Situação</th>
-                    </tr>
+                    <th style="width:35%; font-size: 10px">Medida de Controle</th>
+                    <th style="width:20%; font-size: 10px">Tipo</th>
+                    <th style="width:15%; font-size: 10px">Prazo</th>
+                    <th style="width:15%; font-size: 10px">Responsável</th>
+                    <th style="width:15%; font-size: 10px">Situação</th>
                 </thead>
                 <tbody>
-                    @foreach ($risk['controlActions'] as $ca) 
-                        <tr>
-                            <td style="width:25%; font-size: 10px;">{{ $ca['content'] }}</td>
-                            <td style="width:15%; font-size: 10px;">{{ $ca['deadline'] ?? 'Indefinido' }}</td>
-                            <td style="width:15%; font-size: 10px;">{{ $ca['assignee'] ?? 'Indefinido' }}</td>
-                            <td style="width:15%; font-size: 10px;">{{ $ca['status'] ?? 'Indefinido' }}</td>
-                        </tr>
+                    @foreach ($risk['control_actions'] as $type => $actions) 
+                        @foreach ($actions as $action) 
+                            <tr>
+                                <td style="width:35%; font-size: 10px;">{{ $action->content }}</td>
+                                <td style="width:20%; font-size: 10px;">{{ App\Enums\ControlActionTypes::from($type)->label() }}</td>
+                                <td style="width:15%; font-size: 10px;">{{ $action->deadline ?? 'Indefinido' }}</td>
+                                <td style="width:15%; font-size: 10px;">{{ $action->assignee ?? 'Indefinido' }}</td>
+                                <td style="width:15%; font-size: 10px;">{{ $action->status ?? 'Indefinido' }}</td>
+                            </tr>
+                        @endforeach
                     @endforeach
                 </tbody>
             </table>
-        @endforeach
 
-        <div class="page-break"></div>
-    @endforeach
+            @if(!$loop->last)
+                <div class="page-break"></div>
+            @endif
+        @endforeach
+    
 
     <x-pdf.footer />
 </body>

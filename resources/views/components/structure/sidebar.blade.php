@@ -24,8 +24,8 @@
         @canany(['psychosocial-dashboard-view', 'organizational-dashboard-view', 'feedbacks-index', 'metrics-edit', 'demographics-dashboard-view'])
             <x-sidebar.menu title="Dados">
                 @can('psychosocial-dashboard-view')
-                    <div @if(!session('auth:company')->latestPsychosocialCampaign() || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou testes de Riscos Psicossociais" @endif>
-                        <x-sidebar.item href="{{ route('dashboard.psychosocial') }}" class="{{ request()->routeIs('dashboard.psychosocial') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestPsychosocialCampaign() || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
+                    <div @if(!session('auth:company')->latestPsychosocialCampaign() || !session('auth:company')->latestPsychosocialCampaign()->userCollections()->exists()) data-tippy-content="Você ainda não realizou testes de Riscos Psicossociais" @endif>
+                        <x-sidebar.item href="{{ route('dashboard.psychosocial') }}" class="{{ request()->routeIs('dashboard.psychosocial') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestPsychosocialCampaign() || !session('auth:company')->latestPsychosocialCampaign()->userCollections()->exists() ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-brain"></i>
                             </div>
@@ -35,8 +35,8 @@
                 @endcan
     
                 @can('organizational-dashboard-view')
-                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou testes de Pesquisa de Clima" @endif>
-                        <x-sidebar.item href="{{ route('dashboard.organizational-climate') }}" class="{{ request()->routeIs('dashboard.organizational-climate') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
+                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists()) data-tippy-content="Você ainda não realizou testes de Pesquisa de Clima" @endif>
+                        <x-sidebar.item href="{{ route('dashboard.organizational-climate') }}" class="{{ request()->routeIs('dashboard.organizational-climate') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists() ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-cloud"></i>
                             </div>
@@ -46,8 +46,8 @@
                 @endcan
             
                 @can('feedbacks-index')
-                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou campanhas de Pesquisa de Clima" @endif>
-                        <x-sidebar.item href="{{ route('feedback.index') }}" class="{{ request()->routeIs('feedback.index') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
+                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists()) data-tippy-content="Você ainda não realizou campanhas de Pesquisa de Clima" @endif>
+                        <x-sidebar.item href="{{ route('feedback.index') }}" class="{{ request()->routeIs('feedback.index') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists() ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-comments"></i>
                             </div>
@@ -90,14 +90,14 @@
                         Campanhas
                     </x-sidebar.item>
                 @endcan
-                @can('custom-collections-index')
+                {{-- @can('custom-collections-index')
                     <x-sidebar.item href="{{ route('custom-collections.index') }}" class="{{ request()->routeIs('custom-collections.index') ? 'bg-gray-200' : ''}}">
                         <div class="w-5 flex justify-center items-center">
                             <i class="fa-solid fa-book"></i>
                         </div>
                         Formulários de Pesquisa
                     </x-sidebar.item>
-                @endcan
+                @endcan --}}
                 @can('answer-psychosocial-test')
                     @if($hasActivePsychosocialCampaign)
                         <x-sidebar.item href="{{ route('test', session('auth:company')->latestPsychosocialCampaign()) }}" class="{{ $hasAnsweredPsychosocial  ? 'pointer-events-none opacity-50' : '' }}">
@@ -139,12 +139,20 @@
                         Colaboradores
                     </x-sidebar.item>
                 @endcan
-                @can('action-plan-edit')
+                {{-- @can('action-plan-edit')
                     <x-sidebar.item href="{{ route('action-plan.show', App\Models\ActionPlan::firstWhere('company_id', session('auth:company')->id)) }}" class="{{ request()->routeIs('action-plan.show') ? 'bg-gray-200' : ''}}">
                         <div class="w-5 flex justify-center items-center">
                             <i class="fa-solid fa-list-ul"></i>
                         </div>
                         Plano de Ação
+                    </x-sidebar.item>
+                @endcan --}}
+                @can('control-actions-edit')
+                    <x-sidebar.item href="{{ route('control-actions.update') }}" class="{{ request()->routeIs('action-plan.show') ? 'bg-gray-200' : ''}}">
+                        <div class="w-5 flex justify-center items-center">
+                            <i class="fa-solid fa-list-ul"></i>
+                        </div>
+                        Medidas de controle
                     </x-sidebar.item>
                 @endcan
             </x-sidebar.menu>

@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function renderMetrics() {
     let data = [];
     let labels = [];
-    console.log(Object.values(metrics));
+
     Object.values(metrics).forEach((department) => {
         data.push(department);
     });

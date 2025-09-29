@@ -6,13 +6,15 @@ use App\Enums\FinalRiskTypes;
 use App\Enums\RiskTypes;
 use App\Models\Risk;
 use App\Services\User\UserFilterService;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PsychosocialService
 {
     public static function dashboard()
     {
         session('auth:company', [session('auth:company')->load(['metrics', 'reports'])]);
-
+        session('auth:company')->setRelation('reports', session('auth:company')->getReports());
+   
         $campaign = session('auth:company')->latestPsychosocialCampaign();
 
         $groupedRisks = $campaign->collection()->risks()
@@ -39,9 +41,9 @@ class PsychosocialService
 
                 $riskAverage = round($questionAverages->sum() / $questionAverages->count(), 1);
     
-                $evaluated = RiskService::evaluate(RiskTypes::from($risk->type), $riskAverage);
+                $evaluated = RiskService::evaluate($risk, $riskAverage);
                 
-                return [$risk->type => $evaluated];
+                return [$risk->type => $evaluated['evaluated']];
             });
 
             return [$group => $groupEvaluated];
@@ -53,6 +55,7 @@ class PsychosocialService
     public static function departments(Risk $risk)
     {
         session('auth:company', [session('auth:company')->load(['metrics', 'reports'])]);
+        session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $departments = $risk->questions()
             ->with(['answers' => fn($q) => 
@@ -65,9 +68,9 @@ class PsychosocialService
             ->mapWithKeys(function($user, $department) use($risk) { // Calcula o risco de cada usuário
                 $userEvaluated = $user->mapWithKeys(function($answers, $user) use($risk) {
                     $average = round($answers->sum('value') / $answers->count(), 1);
-                    $evaluated = RiskService::evaluate(RiskTypes::from($risk->type), $average);
+                    $evaluated = RiskService::evaluate($risk, $average);
 
-                    return [$user => $evaluated];
+                    return [$user => $evaluated['evaluated']];
                 });
 
                 return [$department => $userEvaluated];
@@ -87,6 +90,7 @@ class PsychosocialService
     public static function list(Risk $risk, string $department)
     {
         session('auth:company', [session('auth:company')->load(['metrics', 'reports'])]);
+        session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $list = $risk->questions()
             ->with(['answers' => fn($q) => 
@@ -99,10 +103,10 @@ class PsychosocialService
             ->groupBy('user.id')
             ->map(function($answers, $user) use($risk) {
                 $average = round($answers->sum('value') / $answers->count(), 1);
-                $evaluated = RiskService::evaluate(RiskTypes::from($risk->type), $average);
+                $evaluated = RiskService::evaluate($risk, $average);
 
                 $user = $answers->first()->user;
-                $user->setRelation('evaluated', $evaluated);
+                $user->setRelation('evaluated', $evaluated['evaluated']);
                 
                 return $user;
             })
@@ -111,9 +115,10 @@ class PsychosocialService
         return $list;
     }
 
-    public static function risks()
+    public static function risks($onlyHigh = false)
     {
-        session('auth:company', [session('auth:company')->load(['metrics', 'reports'])]);
+        session('auth:company', [session('auth:company')->load(['metrics', 'reports', 'actionPlan'])]);
+        session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $campaign = session('auth:company')->latestPsychosocialCampaign();
 
@@ -132,7 +137,7 @@ class PsychosocialService
             ->groupBy('group');
 
 
-        $dashboard = $groupedRisks->mapWithKeys(function($risks, $group) {
+        $evaluatedRisks = $groupedRisks->mapWithKeys(function($risks, $group) use($onlyHigh) {
             $groupEvaluated = $risks->mapWithKeys(function($risk) {                
                 $questionAverages = $risk->questions
                                         ->each(fn($question) => $question->inverted 
@@ -142,24 +147,35 @@ class PsychosocialService
 
                 $riskAverage = round($questionAverages->sum() / $questionAverages->count(), 1);
     
-                $evaluated = RiskService::evaluate(RiskTypes::from($risk->type), $riskAverage);
-                
+                $evaluated = RiskService::evaluate($risk, $riskAverage);
+             
                 return [$risk->type => [
-                    'evaluated' => $evaluated,
-                    // 'control_actions' => $risk->controlActions
-                    'control_actions' => [
-                        'oi',
-                        'tchau'
-                    ]
+                    'risk' => $evaluated,
+                    'control_actions' => session('auth:company')->actionPlan
+                                                                ->controlActions
+                                                                ->where('risk_id', $risk->id)
+                                                                ->where('gravity', $evaluated['evaluated']->value)
+                                                                ->groupBy('type.type')
                 ]];
             })
-            ->filter(fn($risk) => $risk['evaluated'] === FinalRiskTypes::HIGH ||
-                                 $risk['evaluated'] === FinalRiskTypes::CRITICAL); // Filtra só os altos e críticos
+            ->filter(fn($risk) => $onlyHigh ? $risk['risk']['evaluated'] === FinalRiskTypes::HIGH || $risk['risk']['evaluated'] === FinalRiskTypes::CRITICAL : $risk); // Filtra só os altos e críticos
 
             return [$group => $groupEvaluated];
         });
+ 
+        return $evaluatedRisks;
+    }
 
-        return $dashboard;
+    public static function report()
+    {
+        $risks = PsychosocialService::risks(onlyHigh: false)
+                ->flatMap(fn($risks) => $risks);
+
+        $pdf = Pdf::loadView('pdf.risks-inventory', [
+            'risks' => $risks,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->stream(session('auth:company')->name . ' - Inventário de Riscos Psicossociais.pdf');
     }
 
     public static function participation()

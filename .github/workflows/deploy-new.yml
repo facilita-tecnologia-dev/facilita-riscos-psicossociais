@@ -24,7 +24,7 @@ jobs:
       - name: Execute remote deploy
         run: |
           ssh -i $HOME/.ssh/id_rsa -p 65002 u958695462@151.106.96.153 << 'EOF'
-            cd domains/facilitatecnologia.com.br/public/backup-psicossociais
+            cd domains/facilitatecnologia.com.br/public/riscos-psicossociais
             git pull origin new-test-structure
             php artisan migrate --force
             php artisan route:cache

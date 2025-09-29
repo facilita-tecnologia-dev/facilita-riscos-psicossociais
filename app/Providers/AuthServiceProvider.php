@@ -412,5 +412,20 @@ class AuthServiceProvider extends ServiceProvider
 
             return false;
         });
+
+        Gate::define('control-actions-edit', function (?Authenticatable $user) {
+            if (session('auth:guard') === 'user') {
+                /** @var User $user */
+                $user = session('auth:user');
+
+                return $user->hasPermission('action_plan_edit');
+            }
+
+            if (session('auth:guard') === 'company') {
+                return true;
+            }
+
+            return false;
+        });
     }
 }

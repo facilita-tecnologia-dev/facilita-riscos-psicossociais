@@ -1,5 +1,3 @@
-console.log("oidpasid");
-
 const passwordWarningModal = document.querySelector(
     '[data-role="password-warning-modal"]'
 );

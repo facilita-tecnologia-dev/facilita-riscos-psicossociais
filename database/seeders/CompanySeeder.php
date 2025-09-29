@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\RiskTypes;
+use App\Models\BaseControlAction;
 use App\Models\Company;
 use App\Models\CompanyReport;
 use App\Models\Metric;
@@ -21,7 +22,17 @@ class CompanySeeder extends Seeder
             });
 
             // Action Plan
-            $company->actionPlan()->create();
+            $actionPlan = $company->actionPlan()->create();
+
+            BaseControlAction::all()->each(fn($controlAction) => 
+                $actionPlan->controlActions()->create([
+                    'action_plan_id' => $actionPlan->id,
+                    'risk_id' => $controlAction->risk_id,
+                    'control_action_type_id' => $controlAction->control_action_type_id,
+                    'gravity' => $controlAction->gravity,
+                    'content' => $controlAction->content,
+                ])
+            );
 
             // Metrics
             Metric::all()->each(fn($metric) => $company->metrics()->create(['metric_id' => $metric->id]));

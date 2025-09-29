@@ -13,10 +13,10 @@ enum GravityTypes: string
     public function label(): string
     {
         return match ($this) {
-            self::LOW => 'Baixo',
-            self::MEDIUM => 'Médio',
-            self::HIGH => 'Alto',
-            self::CRITICAL => 'Crítico',
+            self::LOW => 'Baixa',
+            self::MEDIUM => 'Média',
+            self::HIGH => 'Alta',
+            self::CRITICAL => 'Crítica',
         };
     }
 

@@ -1,3 +1,3 @@
 <div class="footer">
-    Facilita Tecnologia &copy; | Emissão: {{ date('d/m/Y') }} | Página <span class="pagenum"></span>
+    <span style="font-size: 12px;">Página <span class="pagenum"></span></span>
 </div>

@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                console.log(url);
                 const response = await fetch(url, {
                     method: "POST",
                     headers: {
@@ -95,7 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     messageDiv.classList.remove("text-danger");
                 }
             } catch (error) {
-                console.log(error);
                 messageDiv.textContent = "Erro ao verificar CPF.";
             }
         });

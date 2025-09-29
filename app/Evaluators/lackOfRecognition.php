@@ -4,15 +4,16 @@ namespace App\Evaluators;
 
 use App\Enums\FinalRiskTypes;
 use App\Enums\RiskTypes;
+use App\Models\Risk;
 use App\Services\RiskService;
 
 class lackOfRecognition
 {
-    public static function evaluate(float $average)
+    public static function evaluate(Risk $risk, float $average)
     {
         $initialRating = self::initialRating($average);
         
-        $reports = session('auth:company')->getReports()->first(fn($_, $risk) => $risk === RiskTypes::LACK_OF_RECOGNITION->value);
+        $reports = session('auth:company')->reports->first(fn($_, $risk) => $risk === RiskTypes::LACK_OF_RECOGNITION->value);
     
         $needsWeightedAverage = self::needsWeightedAverage($initialRating, $reports);
         
@@ -22,7 +23,11 @@ class lackOfRecognition
 
         $weightedAverage = self::weightedAverage($initialRating, $reports);
         
-        return self::determineRisk($weightedAverage);
+        return [
+            'evaluated' => self::determineRisk($weightedAverage),
+            'probability' => $needsWeightedAverage ? $weightedAverage : $initialRating,
+            'gravity' => $risk->gravity
+        ];
     }
 
     private static function initialRating(float $average): int

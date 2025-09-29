@@ -19,11 +19,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BaseCollectionsSeeder::class,
             RoleSeeder::class,
+            RiskSeeder::class,
             PermissionSeeder::class,
             MetricsSeeder::class,
             ActionPlanSeeder::class,
             CompanySeeder::class,
-            RiskSeeder::class,
             CampaignSeeder::class
         ]);
     }

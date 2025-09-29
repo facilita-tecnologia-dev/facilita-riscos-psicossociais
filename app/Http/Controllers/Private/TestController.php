@@ -27,7 +27,7 @@ class TestController
 
         if(self::storeCollection($campaign, $answers)){
             session(['auth:user' => session('auth:user')->load('collections')]);
-            
+
             if($campaign->collection()->type === BaseCollectionTypes::ORGANIZATIONAL) return to_route('feedback.create');
 
             return to_route('complete-tests.thanks');
