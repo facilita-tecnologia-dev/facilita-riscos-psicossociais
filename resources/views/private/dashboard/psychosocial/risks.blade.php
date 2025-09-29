@@ -19,7 +19,7 @@
                     </div>
                 @endcan
                 <div class="w-full md:w-fit">
-                    <x-action href="{{ route('dashboard.psychosocial.risks.report') }}" width="full">
+                    <x-action href="{{ route('dashboard.psychosocial.risks.report') }}" target="_blank" width="full">
                         Exportar Inventário de Riscos
                     </x-action>
                 </div>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             @foreach ($groupRisks as $riskName => $risk)
-                                <div class="flex flex-col gap-4 bg-white/25 w-full px-4 py-6 rounded-md shadow-md relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
+                                <div class="flex flex-col gap-4 bg-white w-full px-4 py-6 rounded-md shadow-md relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
                                     <div class="flex items-center justify-between bg-gradient-to-b from-[#FFFFFF25] gap-4 px-4 py-2 w-full rounded-md shadow-md
                                         {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::CRITICAL ? 'to-[#fc6f6f50]' : '' }}
                                         {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::HIGH ? 'to-[#dc933250]' : '' }}

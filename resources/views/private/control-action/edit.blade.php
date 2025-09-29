@@ -11,7 +11,7 @@
             />
 
             <div class="w-full flex justify-end gap-4">
-                <x-action href="{{ route('dashboard.psychosocial.risks.report') }}" width="fit">
+                <x-action href="{{ route('dashboard.psychosocial.risks.report') }}" target="_blank" width="fit">
                     Exportar Inventário de Riscos
                 </x-action>
             </div>

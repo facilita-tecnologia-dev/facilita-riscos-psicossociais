@@ -27,36 +27,36 @@
                 <x-form action="{{ route('company-metrics.update') }}" id="form-update-company-metrics" post class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <div class="flex gap-2 items-end">
-                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="turnover" value="{{ $metrics['turnover']['value'] }}" label="Rotatividade" placeholder="Digite a porcentagem de rotatividade na sua empresa"/>
+                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="turnover" value="{{ $metrics['turnover']['value'] }}" label="Rotatividade" placeholder="Digite a porcentagem de rotatividade na sua empresa nos últimos 12 meses"/>
                         <x-action  tag="button"  type="button"  variant="secondary" data-tippy-content="Cálculo: (Nº de funcionários que saíram durante o ano / quadro médio) * 100">
                             <i class="fa-solid fa-question text-base"></i>
                         </x-action>
                     </div>
                     
                     <div class="flex gap-2 items-end">
-                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="absenteeism" value="{{ $metrics['absenteeism']['value'] }}" label="Absenteísmo" placeholder="Digite a porcentagem de absenteísmo na sua empresa"/>
+                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="absenteeism" value="{{ $metrics['absenteeism']['value'] }}" label="Absenteísmo" placeholder="Digite a porcentagem de absenteísmo na sua empresa nos últimos 12 meses"/>
                         <x-action  tag="button" type="button" variant="secondary" data-tippy-content="Cálculo: (Nº de horas de faltas, atestados / Nº de horas trabalhadas disponíveis) * 100 <br/> OBS: Horas disponíveis: nº de funcionários * nº de horas produtivas disponíveis no mês">
                             <i class="fa-solid fa-question text-base"></i>
                         </x-action>
                     </div>
                     
                     <div class="flex gap-2 items-end">
-                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="extra-hours" value="{{ $metrics['extra-hours']['value'] }}" label="Horas Extras / Horas Trabalhadas" type="number" placeholder="Digite a porcentagem de horas extras na sua empresa"/>
+                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="extra-hours" value="{{ $metrics['extra-hours']['value'] }}" label="Horas Extras / Horas Trabalhadas" type="number" placeholder="Digite a porcentagem de horas extras na sua empresa nos últimos 12 meses"/>
                         <x-action  tag="button" type="button" variant="secondary" data-tippy-content="Cálculo: Nº total de horas extras / Nº de horas trabalhadas * 100">
                             <i class="fa-solid fa-question text-base"></i>
                         </x-action>
                     </div>
                     
                     <div class="flex gap-2 items-end">
-                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="accidents" value="{{ $metrics['accidents']['value'] }}" label="Acidentes" placeholder="Digite a porcentagem de acidentes na sua empresa"/>
-                        <x-action  tag="button" type="button" variant="secondary" data-tippy-content="Número de acidentes no ano.">
+                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="accidents" value="{{ $metrics['accidents']['value'] }}" label="Acidentes" placeholder="Digite a porcentagem de acidentes na sua empresa nos últimos 12 meses"/>
+                        <x-action  tag="button" type="button" variant="secondary" data-tippy-content="Cálculo: Nº total de acidentes / Nº de funcionários * 100">
                             <i class="fa-solid fa-question text-base"></i>
                         </x-action>
                     </div>
                     
                     <div class="flex gap-2 items-end">
-                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="absences" value="{{ $metrics['absences']['value'] }}" label="Afastamentos" placeholder="Digite a porcentagem de afastamentos na sua empresa"/>
-                        <x-action  tag="button" type="button" variant="secondary" data-tippy-content="Número de afastamentos ao INSS no ano.">
+                        <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="absences" value="{{ $metrics['absences']['value'] }}" label="Afastamentos" placeholder="Digite a porcentagem de afastamentos na sua empresa nos últimos 12 meses"/>
+                        <x-action  tag="button" type="button" variant="secondary" data-tippy-content="Cálculo: Nº total de afastamentos / Nº de funcionários * 100">
                             <i class="fa-solid fa-question text-base"></i>
                         </x-action>
                     </div>
