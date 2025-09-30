@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Private;
 
 use App\Models\Risk;
+use App\Services\PsychosocialReportService;
 use App\Services\PsychosocialService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Gate;
@@ -54,11 +55,11 @@ class PsychosocialController
         ]);
     }
 
-    public function report()
+    public function report(string $type, string $format)
     {
         Gate::authorize('psychosocial-dashboard-view');
         if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
 
-        return PsychosocialService::report();
+        return PsychosocialReportService::report($type, $format);
     }
 }

@@ -144,7 +144,7 @@ Route::middleware(AuthMiddleware::class)->group(function() {
             Route::get('/{risk}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
             Route::get('/{risk}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
             Route::get('/risks', [PsychosocialController::class, 'risks'])->name('dashboard.psychosocial.risks');
-            Route::get('/risks/report', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
+            Route::get('/risks/report/{type}/{format}', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
         });
 
         Route::prefix('organizational-climate')->group(function(){

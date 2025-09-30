@@ -19,30 +19,6 @@
                     <i class="fa-solid fa-circle-info"></i>
                     Lista de resultados do risco de {{ trim($risk->name) }} por colaborador.
                 </x-structure.message>
-                
-                {{-- <div class="w-full flex flex-col-reverse md:flex-row gap-4 items-start">
-                    <div class="flex items-center gap-2 w-full flex-wrap">
-                        <x-numbers-of-records :value="$filteredUserCount" />
-
-                        <x-applied-filters
-                            :filtersApplied="$filtersApplied"
-                        />
-                    </div>
-
-                    <x-filter-actions
-                        :filtersApplied="$filtersApplied"
-                        :modalFilters="[
-                            'gender', 
-                            'department', 
-                            'occupation', 
-                            'work_shift', 
-                            'marital_status', 
-                            'education_level', 
-                            'age_range', 
-                            'admission_range',
-                        ]" 
-                    />
-                </div> --}}
             </div>
 
             <x-table>
@@ -53,7 +29,7 @@
                     <x-table.head.sortable-th class="hidden sm:block flex-1" field="occupation" :queryParam="['risk' => $risk, 'department' => $department]">
                         Função
                     </x-table.head.sortable-th>
-                    <x-table.head.th class="w-40">Severidade</x-table.head.th>
+                    <x-table.head.th class="w-40">Nível de Risco</x-table.head.th>
                 </x-table.head>
                 <x-table.body>
                     @forelse ($list as $user)

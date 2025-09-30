@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Enums\FinalRiskTypes;
-use App\Enums\RiskTypes;
 use App\Models\Risk;
 use App\Services\User\UserFilterService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -164,18 +163,6 @@ class PsychosocialService
         });
  
         return $evaluatedRisks;
-    }
-
-    public static function report()
-    {
-        $risks = PsychosocialService::risks(onlyHigh: false)
-                ->flatMap(fn($risks) => $risks);
-
-        $pdf = Pdf::loadView('pdf.risks-inventory', [
-            'risks' => $risks,
-        ])->setPaper('a4', 'portrait');
-
-        return $pdf->stream(session('auth:company')->name . ' - Inventário de Riscos Psicossociais.pdf');
     }
 
     public static function participation()

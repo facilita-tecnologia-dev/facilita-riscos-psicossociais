@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Livewire\Private;
+namespace App\Livewire\Private\ActionPlan;
 
 use App\Models\ControlActionType;
-use App\Models\Risk;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -24,7 +22,7 @@ class ControlActionEditComponent extends Component
 
     public function render()
     {
-        return view('livewire.private.control-action-edit-component');
+        return view('livewire.private.action-plan.control-action-edit-component');
     }
 
     public function create($risk, $type, $gravity)

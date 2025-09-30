@@ -11,17 +11,15 @@
                     Resultado detalhado da avaliação de riscos psicossociais que necessitam intervenção.
                 </x-structure.message>
 
-                @can('action-plan-edit')
-                    <div class="w-full md:w-fit">
-                        <x-action href="{{ route('control-actions.update') }}" width="full">
-                            Editar medidas de controle
-                        </x-action>
-                    </div>
-                @endcan
                 <div class="w-full md:w-fit">
-                    <x-action href="{{ route('dashboard.psychosocial.risks.report') }}" target="_blank" width="full">
-                        Exportar Inventário de Riscos
+                    <x-action href="{{ route('control-actions.update') }}" width="full">
+                        Editar medidas de controle
                     </x-action>
+                </div>
+                <div class="w-full md:w-fit">
+                    @can('action-plan-edit')
+                        <livewire:private.action-plan.generate-report-component>
+                    @endcan
                 </div>
             </div>
     
