@@ -200,16 +200,16 @@ class PsychosocialReportOccupationExport implements FromCollection, WithEvents
                     $risk = $riskData['risk'];
 
                     switch ($risk) {
-                        case '1':
+                        case '4':
                             $color = 'F26C6C';
                             break;
-                        case '2':
+                        case '3':
                             $color = 'F6B26B';
                             break;
-                        case '3':
+                        case '2':
                             $color = 'DDE26F';
                             break;
-                        case '4':
+                        case '1':
                             $color = 'A8E6CF';
                             break;
                         default:
