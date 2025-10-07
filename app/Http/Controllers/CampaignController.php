@@ -41,7 +41,7 @@ class CampaignController
     {
         Gate::authorize('campaign-create');
 
-        $collections = BaseCollection::all()
+        $collections = session('auth:company')->collections()
             ->concat(session('auth:company')->customCollections)
             ->map(fn($c) => [
                 'option' => $c->name . ($c instanceof BaseCollection ? ' (Padrão)' : ''), 

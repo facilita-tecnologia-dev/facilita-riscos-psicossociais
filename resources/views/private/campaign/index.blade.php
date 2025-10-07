@@ -15,7 +15,7 @@
                     <i class="fa-solid fa-circle-info"></i>
                     {{ session('message') }}
                 </x-structure.message>
-            @elseif(session('auth:company')->hasCampaignThisYear(1, App\Enums\CampaignStatus::IN_PROGRESS->value))
+            @elseif(session('auth:company')->hasCampaignThisYear(session('auth:company')->psychosocialCollection()->id, App\Enums\CampaignStatus::IN_PROGRESS->value))
                 <x-structure.message>
                     <i class="fa-solid fa-circle-info"></i>
                     O Plano de Ação só poderá ser acessado e editado após a finalização da campanha de Riscos Psicossociais.

@@ -97,7 +97,7 @@ class AuthServiceProvider extends ServiceProvider
                 $user = session('auth:user');
 
                 return $user->hasPermission('answer_tests') &&
-                        session('auth:company')->hasCampaignThisYear(1, CampaignStatus::IN_PROGRESS->value) &&
+                        session('auth:company')->hasCampaignThisYear(session('auth:company')->psychosocialCollection()->id, CampaignStatus::IN_PROGRESS->value) &&
                         !$user->hasAnsweredCampaign(session('auth:company')->latestPsychosocialCampaign()->id);
             }
 
@@ -110,7 +110,7 @@ class AuthServiceProvider extends ServiceProvider
                 $user = session('auth:user');
 
                 return $user->hasPermission('answer_tests') && 
-                        session('auth:company')->hasCampaignThisYear(2, CampaignStatus::IN_PROGRESS->value) &&
+                        session('auth:company')->hasCampaignThisYear(session('auth:company')->organizationalCollection()->id, CampaignStatus::IN_PROGRESS->value) &&
                         !$user->hasAnsweredCampaign(session('auth:company')->latestOrganizationalCampaign()->id);
             }
 
@@ -403,11 +403,11 @@ class AuthServiceProvider extends ServiceProvider
                 /** @var User $user */
                 $user = session('auth:user');
 
-                return $user->hasPermission('action_plan_edit') && session('auth:company')->hasCampaignThisYear(1, CampaignStatus::COMPLETED->value);
+                return $user->hasPermission('action_plan_edit') && session('auth:company')->hasCampaignThisYear(session('auth:company')->psychosocialCollection()->id, CampaignStatus::COMPLETED->value);
             }
 
             if (session('auth:guard') === 'company') {
-                return session('auth:company')->hasCampaignThisYear(1, CampaignStatus::COMPLETED->value);
+                return session('auth:company')->hasCampaignThisYear(session('auth:company')->psychosocialCollection()->id, CampaignStatus::COMPLETED->value);
             }
 
             return false;

@@ -10,8 +10,14 @@
                     <x-form action="{{ route('test', $campaign) }}" class="flex-1 flex flex-col gap-5" id="collection-form" post>
                         @foreach ($campaign->collection()->questions->shuffle() as $key => $question)
                             @php
-                                $options = $campaign->collection()->type == 'psychosocial-risks' 
-                                                ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PROART\PROARTOption::cases())
+                                $collection = $campaign->collection();
+
+                                $options = $collection->type->value == 'psychosocial-risks'
+                                                ?   (
+                                                        $collection->key == 'hse' 
+                                                        ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\HSE\HSEOption::cases())
+                                                        : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PROART\PROARTOption::cases())
+                                                    )
                                                 : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\OC\OCOption::cases());
                             @endphp
 

@@ -57,6 +57,7 @@ class Company extends Authenticatable
     {
         return $this->hasOne(ActionPlan::class);
     }
+    
 
     public function customCollections(): HasMany
     {
@@ -64,6 +65,25 @@ class Company extends Authenticatable
     }
 
     /* --- End Relations --- */
+
+    public function psychosocialCollection()
+    {
+        return BaseCollection::firstWhere('key', $this->psychosocial_collection_type);
+    }
+
+    public function organizationalCollection()
+    {
+        return BaseCollection::firstWhere('key', 'organizational-climate');
+    }
+
+    public function collections()
+    {
+        return collect([
+            $this->psychosocialCollection(),
+            $this->organizationalCollection()
+        ]);
+    }
+
     public function absences(): float | null
     {
         return $this->metrics->where('metric.type', 'absences')->first()->value;
@@ -117,12 +137,12 @@ class Company extends Authenticatable
 
     public function latestPsychosocialCampaign()
     {
-        return $this->campaigns->where('collection_id', 1)->sortByDesc('start_date')->first();
+        return $this->campaigns->where('collection_id', $this->psychosocialCollection()->id)->sortByDesc('start_date')->first();
     }
 
     public function latestOrganizationalCampaign()
     {
-        return $this->campaigns->where('collection_id', 2)->sortByDesc('start_date')->first();
+        return $this->campaigns->where('collection_id', $this->organizationalCollection()->id)->sortByDesc('start_date')->first();
     }
 
     public function sendPasswordResetNotification($token)

@@ -45,5 +45,12 @@ class CompanySeeder extends Seeder
                 ['company_id' => $company->id, 'type' => PROARTHazard::OTHER_FORMS_OF_VIOLENCE->value],
             ]);
         });
+
+        Company::factory()->create(['password' => Hash::make('facilita3015')])->each(function($company){
+            // Users
+            User::factory(rand(8, 100))->create(['password' => null])->each(function($user) use($company) {
+                $company->users()->attach($user, ['role_id' => rand(1, 2)]);
+            });
+        });
     }
 }

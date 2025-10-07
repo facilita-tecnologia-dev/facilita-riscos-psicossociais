@@ -14,7 +14,7 @@ class CampaignSeeder extends Seeder
 {
     public function run(): void
     {
-        Company::all()->each(function($company){
+        Company::all()->except(Company::latest('id')->value('id'))->each(function($company){
             $campaign = $company->campaigns()->create([
                 'collection_id' => 1,
                 'type' => CollectionType::BASE,

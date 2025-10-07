@@ -12,8 +12,8 @@ class SidebarComposer
         if (session('auth:guard') === 'user') {
             $companies = session('auth:user')->companies->map(fn($company) => ['id' => $company->id, 'name' => $company->name]);
 
-            $hasActivePsychosocialCampaign = session('auth:company')->hasCampaignThisYear(1, CampaignStatus::IN_PROGRESS->value);
-            $hasActiveOrganizationalCampaign = session('auth:company')->hasCampaignThisYear(2, CampaignStatus::IN_PROGRESS->value);
+            $hasActivePsychosocialCampaign = session('auth:company')->hasCampaignThisYear(session('auth:company')->psychosocialCollection()->id, CampaignStatus::IN_PROGRESS->value);
+            $hasActiveOrganizationalCampaign = session('auth:company')->hasCampaignThisYear(session('auth:company')->organizationalCollection()->id, CampaignStatus::IN_PROGRESS->value);
             
             $hasAnsweredPsychosocial = session('auth:user')->hasAnsweredCampaign(session('auth:company')->latestPsychosocialCampaign()?->id);
             $hasAnsweredOrganizational = session('auth:user')->hasAnsweredCampaign(session('auth:company')->latestOrganizationalCampaign()?->id);
