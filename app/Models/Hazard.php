@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Models;
+
+use App\Services\User\UserFilterService;
+use Closure;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Hazard extends Model
+{
+    protected $table = 'hazards';
+    public $timestamps = false;
+
+    public function questions(): BelongsToMany
+    {
+        return $this->belongsToMany(BaseQuestion::class, 'question_risk');
+    }
+
+    public function controlActions(): HasMany
+    {
+        return $this->hasMany(BaseControlAction::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'type';
+    }
+}

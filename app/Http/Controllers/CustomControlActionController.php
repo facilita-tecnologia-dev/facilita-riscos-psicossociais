@@ -6,7 +6,7 @@ use App\Enums\RiskSeverityEnum;
 use App\Models\ActionPlan;
 use App\Models\ControlAction;
 use App\Models\CustomControlAction;
-use App\Models\Risk;
+use App\Models\Hazard;
 use Illuminate\Http\Request;
 
 class CustomControlActionController
@@ -14,7 +14,7 @@ class CustomControlActionController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, ActionPlan $actionPlan, Risk $risk)
+    public function store(Request $request, ActionPlan $actionPlan, Hazard $risk)
     {
         $validatedData = $request->validate([
             'control_action' => ['required'],
@@ -27,7 +27,7 @@ class CustomControlActionController
         CustomControlAction::create([
             'company_id' => session('auth:company')->id,
             'action_plan_id' => $actionPlan->id,
-            'risk_id' => $risk->id,
+            'hazard_id' => $risk->id,
             'content' => $validatedData['control_action'],
             'severity' => $validatedData['severity'],
             'deadline' => $validatedData['deadline'] ?? null,
@@ -43,7 +43,7 @@ class CustomControlActionController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ActionPlan $actionPlan, Risk $risk, CustomControlAction $controlAction)
+    public function destroy(ActionPlan $actionPlan, Hazard $risk, CustomControlAction $controlAction)
     {
         $controlAction->delete();
 

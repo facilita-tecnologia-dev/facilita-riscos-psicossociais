@@ -14,7 +14,7 @@ class WelcomeController
         $companyLogo = session('auth:company')->logo;
         $companyUsers = session('auth:company')->users->count();
         $companyManager = session('auth:company')->users()->wherePivot('role_id', RoleEnum::MANAGER->value)->exists();
-        $companyMetrics = session('auth:company')->metrics()->where('value', '!=', null)->exists();
+        $companyMetrics = session('auth:company')->proartIndicators()->where('value', '!=', null)->exists();
         $campaigns = session('auth:company')->campaigns()->exists();
 
         if($companyLogo){$currentStep++;}

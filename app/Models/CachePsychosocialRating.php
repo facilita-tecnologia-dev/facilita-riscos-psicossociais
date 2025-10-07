@@ -17,7 +17,7 @@ class CachePsychosocialRating extends Model
  
     public function risk(): BelongsTo
     {
-        return $this->belongsTo(Risk::class);
+        return $this->belongsTo(Hazard::class);
     }
  
     public function campaign(): BelongsTo

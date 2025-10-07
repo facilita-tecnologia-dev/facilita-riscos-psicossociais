@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\RiskTypes;
+use App\Enums\PROART\PROARTHazard;
 use App\Models\Company;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('company_reports', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Company::class);
-            $table->enum('type', RiskTypes::values());
+            $table->enum('type', PROARTHazard::values());
             $table->string('value', 20)->nullable();
         });
     }

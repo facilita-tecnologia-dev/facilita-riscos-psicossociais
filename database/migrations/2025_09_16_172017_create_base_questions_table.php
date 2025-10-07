@@ -1,8 +1,6 @@
 <?php
 
-use App\Enums\CollectionFactorTypes;
 use App\Models\BaseCollection;
-use App\Models\BaseQuestion;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +15,7 @@ return new class extends Migration
         Schema::create('base_questions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(BaseCollection::class)->constrained()->onDelete('cascade');
-            $table->enum('group', CollectionFactorTypes::values());
+            $table->string('group');
             $table->string('statement');
             $table->boolean('inverted')->default(false);
         });

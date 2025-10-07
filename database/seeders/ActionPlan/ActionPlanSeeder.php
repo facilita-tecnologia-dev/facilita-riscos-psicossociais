@@ -9,8 +9,8 @@ class ActionPlanSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            ControlActionTypesSeeder::class,
-            ControlActionsSeeder::class,
+            PROARTControlActionTypesSeeder::class,
+            PROARTControlActionsSeeder::class,
         ]);
     }
 }

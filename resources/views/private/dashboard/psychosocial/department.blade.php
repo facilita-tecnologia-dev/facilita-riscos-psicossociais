@@ -29,10 +29,10 @@
                                 @foreach ($results as $riskName => $percentage)
                                     <x-table.body.tr class="
                                         flex items-center justify-between gap-4
-                                        {{ $riskName == App\Enums\FinalRiskTypes::CRITICAL->label() ? 'to-[#F26C6C75]' : '' }}
-                                        {{ $riskName == App\Enums\FinalRiskTypes::HIGH->label() ? 'to-[#F6B26B75]' : '' }}
-                                        {{ $riskName == App\Enums\FinalRiskTypes::MEDIUM->label() ? 'to-[#DDE26F75]' : '' }}
-                                        {{ $riskName == App\Enums\FinalRiskTypes::LOW->label() ? 'to-[#A8E6CFCC]' : '' }}
+                                        {{ $riskName == App\Enums\PROART\PROARTRisk::CRITICAL->label() ? 'to-[#F26C6C75]' : '' }}
+                                        {{ $riskName == App\Enums\PROART\PROARTRisk::HIGH->label() ? 'to-[#F6B26B75]' : '' }}
+                                        {{ $riskName == App\Enums\PROART\PROARTRisk::MEDIUM->label() ? 'to-[#DDE26F75]' : '' }}
+                                        {{ $riskName == App\Enums\PROART\PROARTRisk::LOW->label() ? 'to-[#A8E6CFCC]' : '' }}
                                     ">
                                         <x-table.body.td class="truncate">{{ $riskName }}</x-table.body.td>
                                         <x-table.body.td>{{ $percentage }}%</x-table.body.td>

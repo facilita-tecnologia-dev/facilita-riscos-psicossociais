@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\CollectionTypes;
+use App\Enums\CollectionType;
 use App\Models\Campaign;
 use App\Models\Company;
 use App\Models\User;
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(Company::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Campaign::class)->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('collection_id');
-            $table->enum('type', CollectionTypes::values());
+            $table->enum('type', CollectionType::values());
             $table->timestamps();
             $table->index('campaign_id');
         });

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Enums\FinalRiskTypes;
-use App\Models\Risk;
+use App\Enums\PROART\PROARTRisk;
+use App\Models\Hazard;
 use App\Services\User\UserFilterService;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -152,12 +152,12 @@ class PsychosocialService
                     'risk' => $evaluated,
                     'control_actions' => session('auth:company')->actionPlan
                                                                 ->controlActions
-                                                                ->where('risk_id', $risk->id)
+                                                                ->where('hazard_id', $risk->id)
                                                                 ->where('gravity', $evaluated['evaluated']->value)
                                                                 ->groupBy('type.type')
                 ]];
             })
-            ->filter(fn($risk) => $onlyHigh ? $risk['risk']['evaluated'] === FinalRiskTypes::HIGH || $risk['risk']['evaluated'] === FinalRiskTypes::CRITICAL : $risk); // Filtra só os altos e críticos
+            ->filter(fn($risk) => $onlyHigh ? $risk['risk']['evaluated'] === PROARTRisk::HIGH || $risk['risk']['evaluated'] === PROARTRisk::CRITICAL : $risk); // Filtra só os altos e críticos
 
             return [$group => $groupEvaluated];
         });

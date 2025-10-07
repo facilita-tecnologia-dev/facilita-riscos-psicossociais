@@ -2,16 +2,14 @@
 
 namespace App\Livewire\Private\ActionPlan;
 
-use App\Enums\PsychosocialReportFormatTypes;
-use App\Enums\PsychosocialReportTypes;
-use App\Services\PsychosocialReportService;
-use App\Services\PsychosocialService;
+use App\Enums\RiskInventory\RiskInventoryFormat;
+use App\Enums\RiskInventory\RiskInventoryType;
 use Livewire\Component;
 
 class GenerateReportComponent extends Component
 {
-    public string $type = PsychosocialReportTypes::DEPARTMENT->value; 
-    public string $format = PsychosocialReportFormatTypes::PDF->value; 
+    public string $type = RiskInventoryType::DEPARTMENT->value; 
+    public string $format = RiskInventoryFormat::PDF->value; 
 
     public function render()
     {

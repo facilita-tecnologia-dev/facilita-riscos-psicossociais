@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Enums\PsychosocialReportFormatTypes;
-use App\Enums\PsychosocialReportTypes;
+use App\Enums\RiskInventory\RiskInventoryFormat;
+use App\Enums\RiskInventory\RiskInventoryType;
 use App\Exports\PsychosocialReportDepartmentExport;
 use App\Exports\PsychosocialReportOccupationExport;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -16,12 +16,12 @@ class PsychosocialReportService
         ini_set('memory_limit', '512M');
         set_time_limit(120);
 
-        $risks = $type === PsychosocialReportTypes::DEPARTMENT->value ?
+        $risks = $type === RiskInventoryType::DEPARTMENT->value ?
                                                 self::departments() :
                                                 self::occupations();
 
-        if($format === PsychosocialReportFormatTypes::PDF->value){
-            $view = $type === PsychosocialReportTypes::DEPARTMENT->value ?
+        if($format === RiskInventoryFormat::PDF->value){
+            $view = $type === RiskInventoryType::DEPARTMENT->value ?
                                 'pdf.psychosocial-report.department' :
                                 'pdf.psychosocial-report.occupation';
     
@@ -29,19 +29,19 @@ class PsychosocialReportService
                 'risks' => $risks,
             ])->setPaper('a4', 'portrait');
     
-            $fileName = session('auth:company')->name . ' - Inventário de Riscos Psicossociais (' . ($type === PsychosocialReportTypes::DEPARTMENT->value ? 'Setor' : 'Funcao') . ').pdf';
+            $fileName = session('auth:company')->name . ' - Inventário de Riscos Psicossociais (' . ($type === RiskInventoryType::DEPARTMENT->value ? 'Setor' : 'Funcao') . ').pdf';
     
             return $pdf->download($fileName);
         }
 
-        if($format === PsychosocialReportFormatTypes::EXCEL->value){
-            $fileName = session('auth:company')->name . ' - Inventário de Riscos Psicossociais (' . ($type === PsychosocialReportTypes::DEPARTMENT->value ? 'Setor' : 'Funcao') . ').xlsx';
+        if($format === RiskInventoryFormat::EXCEL->value){
+            $fileName = session('auth:company')->name . ' - Inventário de Riscos Psicossociais (' . ($type === RiskInventoryType::DEPARTMENT->value ? 'Setor' : 'Funcao') . ').xlsx';
             
-            if($type === PsychosocialReportTypes::DEPARTMENT->value){
+            if($type === RiskInventoryType::DEPARTMENT->value){
                 return Excel::download(new PsychosocialReportDepartmentExport($risks), $fileName);
             }
 
-            if($type === PsychosocialReportTypes::OCCUPATION->value){
+            if($type === RiskInventoryType::OCCUPATION->value){
                 return Excel::download(new PsychosocialReportOccupationExport($risks), $fileName);
             }
             
@@ -106,7 +106,7 @@ class PsychosocialReportService
                                         'risk' => $evaluated,
                                         'control_actions' => session('auth:company')->actionPlan
                                                                                     ->controlActions
-                                                                                    ->where('risk_id', $risk->id)
+                                                                                    ->where('hazard_id', $risk->id)
                                                                                     ->where('gravity', $evaluated['evaluated']->value)
                                                                                     ->groupBy('type.type')
                                     ]];
@@ -188,7 +188,7 @@ class PsychosocialReportService
                                         'risk' => $evaluated,
                                         'control_actions' => session('auth:company')->actionPlan
                                                                                     ->controlActions
-                                                                                    ->where('risk_id', $risk->id)
+                                                                                    ->where('hazard_id', $risk->id)
                                                                                     ->where('gravity', $evaluated['evaluated']->value)
                                                                                     ->groupBy('type.type')
                                     ]];

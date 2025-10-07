@@ -35,10 +35,10 @@
                     @forelse ($list as $user)
                         <x-table.body.tr class="
                                 flex items-center gap-3
-                                {{ $user->evaluated == App\Enums\FinalRiskTypes::CRITICAL ? 'to-[#F26C6C75]' : '' }}
-                                {{ $user->evaluated == App\Enums\FinalRiskTypes::HIGH ? 'to-[#F6B26B75]' : '' }}
-                                {{ $user->evaluated == App\Enums\FinalRiskTypes::MEDIUM ? 'to-[#DDE26F75]' : '' }}
-                                {{ $user->evaluated == App\Enums\FinalRiskTypes::LOW ? 'to-[#A8E6CFCC]' : '' }}
+                                {{ $user->evaluated == App\Enums\PROART\PROARTRisk::CRITICAL ? 'to-[#F26C6C75]' : '' }}
+                                {{ $user->evaluated == App\Enums\PROART\PROARTRisk::HIGH ? 'to-[#F6B26B75]' : '' }}
+                                {{ $user->evaluated == App\Enums\PROART\PROARTRisk::MEDIUM ? 'to-[#DDE26F75]' : '' }}
+                                {{ $user->evaluated == App\Enums\PROART\PROARTRisk::LOW ? 'to-[#A8E6CFCC]' : '' }}
                             ">
                             <x-table.body.td class="hidden lg:block flex-1" title="{{ $user->department ?? '(Vazio)'}}">{{ $user->department ?? '(Vazio)'}}</x-table.body.td>
                             <x-table.body.td class="hidden sm:block flex-1" title="{{ $user->occupation ?? '(Vazio)'}}">{{ $user->occupation ?? '(Vazio)'}}</x-table.body.td>

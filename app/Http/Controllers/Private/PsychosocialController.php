@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Private;
 
-use App\Models\Risk;
+use App\Models\Hazard;
 use App\Services\PsychosocialReportService;
 use App\Services\PsychosocialService;
 use Barryvdh\DomPDF\Facade\Pdf;

@@ -12,7 +12,7 @@
                 <div class="w-full flex flex-col gap-3 items-center">
                     <h3 class="text-sm text-center font-semibold text-main-text">Tipo</h3>
                     <div class="w-full grid grid-cols-2 gap-2">
-                        @foreach (App\Enums\PsychosocialReportTypes::cases() as $type)
+                        @foreach (App\Enums\RiskInventory\RiskInventoryType::cases() as $type)
                             <label class="py-2 border border-borders rounded-md flex justify-center items-center has-checked:bg-primary-solid cursor-pointer hover:bg-secondary-background transition">
                                 <input type="radio" wire:model="type" id="department" value="{{ $type->value }}" class="hidden peer">
                                 <span class="text-sm text-center text-main-text font-normal peer-checked:text-main-background transition">{{ $type->label() }}</span>
@@ -23,7 +23,7 @@
                 <div class="w-full flex flex-col gap-3 items-center">
                     <h3 class="text-sm text-center font-semibold text-main-text">Formato</h3>
                     <div class="w-full grid grid-cols-2 gap-2">
-                        @foreach (App\Enums\PsychosocialReportFormatTypes::cases() as $format)
+                        @foreach (App\Enums\RiskInventory\RiskInventoryFormat::cases() as $format)
                             <label class="py-2 border border-borders rounded-md has-checked:bg-primary-solid flex justify-center items-center cursor-pointer hover:bg-secondary-background transition">
                                 <input type="radio" wire:model="format" id="pdf" value="{{ $format->value }}" class="hidden peer">
                                 <span class="text-sm text-center text-main-text font-normal peer-checked:text-main-background transition">{{ $format->label() }}</span>

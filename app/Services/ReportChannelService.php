@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\RiskTypes;
+use App\Enums\PROART\PROARTHazard;
 use App\Models\Company;
 use Illuminate\Support\Facades\Http;
 
@@ -15,7 +15,7 @@ class ReportChannelService
         ]); 
 
         $data = collect($response->json())
-            ->filter(fn($_, $nature) => RiskTypes::tryFrom($nature))
+            ->filter(fn($_, $nature) => PROARTHazard::tryFrom($nature))
             ->mapWithKeys(fn($count, $risk) => [$risk => round(($count / session('auth:company')->users->count()) * 100)]);
             
         return $data;

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Enums\CampaignStatusTypes;
+use App\Enums\CampaignStatus;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -97,7 +97,7 @@ class AuthServiceProvider extends ServiceProvider
                 $user = session('auth:user');
 
                 return $user->hasPermission('answer_tests') &&
-                        session('auth:company')->hasCampaignThisYear(1, CampaignStatusTypes::IN_PROGRESS->value) &&
+                        session('auth:company')->hasCampaignThisYear(1, CampaignStatus::IN_PROGRESS->value) &&
                         !$user->hasAnsweredCampaign(session('auth:company')->latestPsychosocialCampaign()->id);
             }
 
@@ -110,7 +110,7 @@ class AuthServiceProvider extends ServiceProvider
                 $user = session('auth:user');
 
                 return $user->hasPermission('answer_tests') && 
-                        session('auth:company')->hasCampaignThisYear(2, CampaignStatusTypes::IN_PROGRESS->value) &&
+                        session('auth:company')->hasCampaignThisYear(2, CampaignStatus::IN_PROGRESS->value) &&
                         !$user->hasAnsweredCampaign(session('auth:company')->latestOrganizationalCampaign()->id);
             }
 
@@ -403,11 +403,11 @@ class AuthServiceProvider extends ServiceProvider
                 /** @var User $user */
                 $user = session('auth:user');
 
-                return $user->hasPermission('action_plan_edit') && session('auth:company')->hasCampaignThisYear(1, CampaignStatusTypes::COMPLETED->value);
+                return $user->hasPermission('action_plan_edit') && session('auth:company')->hasCampaignThisYear(1, CampaignStatus::COMPLETED->value);
             }
 
             if (session('auth:guard') === 'company') {
-                return session('auth:company')->hasCampaignThisYear(1, CampaignStatusTypes::COMPLETED->value);
+                return session('auth:company')->hasCampaignThisYear(1, CampaignStatus::COMPLETED->value);
             }
 
             return false;

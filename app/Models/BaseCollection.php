@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\BaseCollectionTypes;
+use App\Enums\BaseCollectionType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -12,7 +12,7 @@ class BaseCollection extends Model
     public $timestamps = false;
 
     protected $casts = [
-        'type' => BaseCollectionTypes::class,
+        'type' => BaseCollectionType::class,
     ];
 
     public function questions(): HasMany
@@ -22,6 +22,6 @@ class BaseCollection extends Model
 
     public function risks(): HasMany
     {
-        return $this->hasMany(Risk::class);
+        return $this->hasMany(Hazard::class);
     }
 }

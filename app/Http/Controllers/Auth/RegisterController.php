@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\RiskTypes;
+use App\Enums\PROART\PROARTHazard;
 use App\Http\Requests\RegisterCompanyRequest;
 use App\Models\BaseControlAction;
 use App\Models\Company;
@@ -45,7 +45,7 @@ class RegisterController
     private function createMetrics(Company $company)
     {
         DB::transaction(function() use($company) {
-            Metric::each(fn($metric) => $company->metrics()->create(['metric_id' => $metric->id]));
+            PROARTIndicator::each(fn($metric) => $company->proartIndicators()->create(['indicator_id' => $metric->id]));
         });
     }
     
@@ -53,10 +53,10 @@ class RegisterController
     {
         DB::transaction(function() use($company) {
             CompanyReport::insert([
-                ['company_id' => $company->id, 'type' => RiskTypes::MORAL_HARASSMENT->value],
-                ['company_id' => $company->id, 'type' => RiskTypes::SEXUAL_HARASSMENT->value],
-                ['company_id' => $company->id, 'type' => RiskTypes::DISCRIMINATION->value],
-                ['company_id' => $company->id, 'type' => RiskTypes::OTHER_FORMS_OF_VIOLENCE->value],
+                ['company_id' => $company->id, 'type' => PROARTHazard::MORAL_HARASSMENT->value],
+                ['company_id' => $company->id, 'type' => PROARTHazard::SEXUAL_HARASSMENT->value],
+                ['company_id' => $company->id, 'type' => PROARTHazard::DISCRIMINATION->value],
+                ['company_id' => $company->id, 'type' => PROARTHazard::OTHER_FORMS_OF_VIOLENCE->value],
             ]);
         });
     }
@@ -69,7 +69,7 @@ class RegisterController
             BaseControlAction::all()->each(fn($controlAction) => 
                 $actionPlan->controlActions()->create([
                     'action_plan_id' => $actionPlan->id,
-                    'risk_id' => $controlAction->risk_id,
+                    'hazard_id' => $controlAction->hazard_id,
                     'control_action_type_id' => $controlAction->control_action_type_id,
                     'gravity' => $controlAction->gravity,
                     'content' => $controlAction->content,

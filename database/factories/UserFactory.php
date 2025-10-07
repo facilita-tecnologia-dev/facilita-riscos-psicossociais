@@ -19,7 +19,7 @@ class UserFactory extends Factory
         return [
             'name' => $faker->name(),
             'cpf' => $faker->cpf(),
-            'email' => $faker->unique()->safeEmail(),
+            'email' => $faker->unique()->uuid . '@example.com',
             'password' => static::$password ??= Hash::make('password'),
             'department' => $faker->randomElement(['Administrativo', 'RH', 'Produção', 'Engenharia', 'Financeiro', 'TI']),
             'occupation' => $faker->randomElement(['Auxiliar Administrativo', 'Auxiliar de Escritório', 'Soldador', 'Engenheiro de Segurança', 'Contador', 'Desenvolvedor']),

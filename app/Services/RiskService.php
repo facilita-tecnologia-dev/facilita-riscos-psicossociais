@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\RiskTypes;
+use App\Enums\PROART\PROARTHazard;
 use App\Evaluators\anxietyOrStress;
 use App\Evaluators\deteriorationOfPersonalLife;
 use App\Evaluators\difficultyConcentrating;
@@ -31,7 +31,7 @@ use App\Evaluators\sleepDisorders;
 use App\Evaluators\socialIsolation;
 use App\Evaluators\unpredictability;
 use App\Evaluators\workOverload;
-use App\Models\Risk;
+use App\Models\Hazard;
 
 class RiskService
 {

@@ -7,7 +7,6 @@ enum RoleEnum: string
     case MANAGER = '1';
     case EMPLOYEE = '2';
 
-    
     public function label(): string
     {
         return match ($this) {

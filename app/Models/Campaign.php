@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Enums\CampaignStatusTypes;
-use App\Enums\CollectionTypes;
+use App\Enums\CampaignStatus;
+use App\Enums\CollectionType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -13,8 +13,8 @@ class Campaign extends Model
     public $timestamps = false;
 
     protected $casts = [
-        'type' => CollectionTypes::class,
-        'status' => CampaignStatusTypes::class,
+        'type' => CollectionType::class,
+        'status' => CampaignStatus::class,
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];
@@ -22,7 +22,7 @@ class Campaign extends Model
 
     public function collection(): BaseCollection | CustomCollection
     {   
-        if($this->type === CollectionTypes::CUSTOM){
+        if($this->type === CollectionType::CUSTOM){
             return CustomCollection::find($this->collection_id);
         }
      

@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Enums\FinalRiskTypes;
-use App\Enums\RiskTypes;
-use App\Models\Risk;
+use App\Enums\PROART\PROARTRisk;
+use App\Enums\PROART\PROARTHazard;
+use App\Models\Hazard;
 use App\Services\User\UserFilterService;
 use Barryvdh\DomPDF\Facade\Pdf;
 

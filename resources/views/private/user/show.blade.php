@@ -75,7 +75,7 @@
                     </div>
                     <div class="">
                         <p class="font-semibold text-base sm:text-lg text-left">Status:</p>
-                        <p class="text-sm sm:text-base text-left">{{ App\Enums\UserStatusTypes::labelFromValue($user->status()) }}</p>
+                        <p class="text-sm sm:text-base text-left">{{ App\Enums\UserStatus::labelFromValue($user->status()) }}</p>
                     </div>
                     <div class="">
                         <p class="font-semibold text-base sm:text-lg text-left">Último teste de Riscos Psicossociais realizado:</p>

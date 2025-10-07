@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\CollectionFactorTypes;
 use App\Models\CustomCollection;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(CustomCollection::class)->constrained()->onDelete('cascade');
             $table->string('statement');
             $table->boolean('inverted')->default(false);
-            $table->enum('group', CollectionFactorTypes::values());
+            $table->string('group');
         });
     }
 

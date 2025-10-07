@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Private;
 
-use App\Enums\UserStatusTypes;
+use App\Enums\UserStatus;
 use App\Enums\GenderEnum;
 use App\Enums\RoleEnum;
 use App\Helpers\SessionErrorHelper;
@@ -102,7 +102,7 @@ class UserController
     {
         Gate::authorize('user-edit');
 
-        $status = array_map(fn (UserStatusTypes $status) => ['option' => UserStatusTypes::labelFromValue($status->value), 'value' => $status->value], UserStatusTypes::cases());
+        $status = array_map(fn (UserStatus $status) => ['option' => UserStatus::labelFromValue($status->value), 'value' => $status->value], UserStatus::cases());
         $roles = array_map(fn($role) => ['option' => $role->label(), 'value' => $role->value], RoleEnum::cases());
 
         return view('private.user.update', compact(

@@ -2,7 +2,7 @@
 
 namespace App\Filters;
 
-use App\Enums\AdmissionRangeEnum;
+use App\Enums\Filters\AdmissionRangeEnum;
 use App\Services\User\UserFilterInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;

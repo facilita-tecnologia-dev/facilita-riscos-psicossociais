@@ -8,7 +8,7 @@ class DemographicsService
 {
     public static function metrics()
     {
-        $metrics = session('auth:company')->metrics()
+        $metrics = session('auth:company')->proartIndicators()
                                         ->with('metric')
                                         ->get()
                                         ->mapWithKeys(fn($companyMetric) => 

@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Company;
-use App\Models\Risk;
+use App\Models\Hazard;
 use App\Models\Test;
 use App\Services\TestService;
 

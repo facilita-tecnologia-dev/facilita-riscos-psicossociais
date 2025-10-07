@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Private;
 
-use App\Models\Risk;
+use App\Models\Hazard;
 use App\Services\ReportChannelService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +19,7 @@ class MetricsController
         $hasReportChannel = ReportChannelService::hasReportChannel(session('auth:company'));
         
         if($hasReportChannel){
-            $risks = Risk::all();
+            $risks = Hazard::all();
             $reportChannelReports = ReportChannelService::reports(session('auth:company'));
             $reports = $risks->mapWithKeys(fn($risk) => [$risk->type => $reportChannelReports->get($risk->type, 0)]);
         } else{
@@ -29,7 +29,7 @@ class MetricsController
 
 
         return view('private.company.company-metrics.edit', [
-            'metrics' => session('auth:company')->metrics()->with('metric')->get()->keyBy('metric.type'),
+            'metrics' => session('auth:company')->proartIndicators()->with('metric')->get()->keyBy('metric.type'),
             'hasReportChannel' => $hasReportChannel,
             'reports' => $reports,
         ]);

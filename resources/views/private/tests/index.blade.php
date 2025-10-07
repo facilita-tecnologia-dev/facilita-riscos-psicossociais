@@ -11,8 +11,8 @@
                         @foreach ($campaign->collection()->questions->shuffle() as $key => $question)
                             @php
                                 $options = $campaign->collection()->type == 'psychosocial-risks' 
-                                                ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PsychosocialQuestionOptionsEnum::cases())
-                                                : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\OrganizationalQuestionOptionsEnum::cases());
+                                                ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PROART\PROARTOption::cases())
+                                                : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\OC\OCOption::cases());
                             @endphp
 
                             <div data-role="test-question" class="w-full flex flex-col gap-2 items-center">

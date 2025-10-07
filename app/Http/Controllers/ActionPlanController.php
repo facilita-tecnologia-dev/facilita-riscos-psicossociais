@@ -6,7 +6,7 @@ use App\Enums\RiskLevelEnum;
 use App\Enums\RiskSeverityEnum;
 use App\Models\ActionPlan;
 use App\Models\CustomControlAction;
-use App\Models\Risk;
+use App\Models\Hazard;
 use App\Models\Test;
 use App\Services\TestService;
 use Carbon\Carbon;
@@ -28,7 +28,7 @@ class ActionPlanController
     {
         Gate::authorize('action-plan-edit');
 
-        $risk = Risk::firstWhere('name', $riskName);
+        $risk = Hazard::firstWhere('name', $riskName);
 
         $severities = collect(RiskSeverityEnum::cases())
             ->map(fn($case) => [
@@ -44,7 +44,7 @@ class ActionPlanController
         return view('private.action-plan.edit', compact('actionPlan', 'riskName', 'risk', 'severities', 'identifiedRisk'));
     }
 
-    public function update(Request $request, ActionPlan $actionPlan, Risk $risk)
+    public function update(Request $request, ActionPlan $actionPlan, Hazard $risk)
     {
         $validatedData = $request->validate([
             'risk.*.control_actions' => ['required', 'array'],

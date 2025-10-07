@@ -28,7 +28,7 @@ class ControlActionEditComponent extends Component
     public function create($risk, $type, $gravity)
     {
         session('auth:company')->actionPlan->controlActions()->create([
-            'risk_id' => session('auth:company')->latestPsychosocialCampaign()->collection()->risks->where('type', $risk)->first()->id,
+            'hazard_id' => session('auth:company')->latestPsychosocialCampaign()->collection()->risks->where('type', $risk)->first()->id,
             'control_action_type_id' => ControlActionType::firstWhere('type', $type)->id,
             'gravity' => $gravity,
             'content' => 'Indefinido',

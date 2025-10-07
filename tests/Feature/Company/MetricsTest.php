@@ -28,7 +28,7 @@ it('should be able to update company metrics', function () {
 
     $this->assertDatabaseHas('company_metrics', [
         'company_id' => session('auth:company')->id,
-        'metric_id' => 1,
+        'indicator_id' => 1,
         'value' => 10,
     ]);
 });

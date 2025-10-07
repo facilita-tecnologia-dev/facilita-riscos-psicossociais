@@ -58,7 +58,7 @@
                         </div>
                         <div class="flex items-center gap-2" data-position="right">
                             @can('campaign-edit')
-                                @if($campaign->status === App\Enums\CampaignStatusTypes::IN_PROGRESS)
+                                @if($campaign->status === App\Enums\CampaignStatus::IN_PROGRESS)
                                     <x-form action="{{ route('campaign.close', $campaign) }}" put onsubmit="return confirm('Você deseja encerrar a campanha?')">
                                         <x-action tag="button" type="submit" variant="secondary">Encerrar campanha</x-action>
                                     </x-form>

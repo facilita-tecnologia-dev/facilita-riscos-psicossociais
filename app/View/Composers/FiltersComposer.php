@@ -2,8 +2,8 @@
 
 namespace App\View\Composers;
 
-use App\Enums\AdmissionRangeEnum;
-use App\Enums\AgeRangeEnum;
+use App\Enums\Filters\AdmissionRangeEnum;
+use App\Enums\Filters\AgeRangeEnum;
 use App\Models\Company;
 use App\Models\User;
 use Carbon\Carbon;

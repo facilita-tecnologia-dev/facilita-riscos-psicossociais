@@ -2,9 +2,9 @@
 
 namespace App\Evaluators;
 
-use App\Enums\FinalRiskTypes;
-use App\Enums\RiskTypes;
-use App\Models\Risk;
+use App\Enums\PROART\PROARTRisk;
+use App\Enums\PROART\PROARTHazard;
+use App\Models\Hazard;
 use App\Services\RiskService;
 
 class emotionalExhaustion
@@ -13,7 +13,7 @@ class emotionalExhaustion
     {
         $initialRating = self::initialRating($average);
         
-        $reports = session('auth:company')->reports->first(fn($_, $risk) => $risk === RiskTypes::EMOTIONAL_EXHAUSTION->value);
+        $reports = session('auth:company')->reports->first(fn($_, $risk) => $risk === PROARTHazard::EMOTIONAL_EXHAUSTION->value);
     
         $needsWeightedAverage = self::needsWeightedAverage($initialRating, $reports);
 
@@ -104,13 +104,13 @@ class emotionalExhaustion
         return round($weightedAverage);
     }
 
-    private static function determineRisk(int $rating): FinalRiskTypes
+    private static function determineRisk(int $rating): PROARTRisk
     {
         return match($rating) {
-            1 => FinalRiskTypes::LOW,
-            2 => FinalRiskTypes::MEDIUM,
-            3 => FinalRiskTypes::HIGH,
-            4 => FinalRiskTypes::CRITICAL,
+            1 => PROARTRisk::LOW,
+            2 => PROARTRisk::MEDIUM,
+            3 => PROARTRisk::HIGH,
+            4 => PROARTRisk::CRITICAL,
         };
     }
 }

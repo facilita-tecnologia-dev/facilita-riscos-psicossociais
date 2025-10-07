@@ -78,7 +78,7 @@
                     <div class="grid grid-cols-4 gap-4">
                         @foreach($reports as $risk => $count)
                             <div class="w-full bg-main-background shadow-sm rounded-sm py-2 px-4 flex items-center justify-between">
-                                <span class="text-main-text font-normal text-left text-sm">{{ App\Enums\RiskTypes::from($risk)->label() }}</span>
+                                <span class="text-main-text font-normal text-left text-sm">{{ App\Enums\PROART\PROARTHazard::from($risk)->label() }}</span>
                                 <span class="text-main-text font-normal text-left text-sm">{{ $count }}%</span>
                             </div>
                         @endforeach
@@ -91,28 +91,28 @@
 
                     <x-form action="{{ route('company-reports.update') }}" id="form-update-reports" post class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex gap-2 items-end">
-                            <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="{{ App\Enums\RiskTypes::MORAL_HARASSMENT->value }}" label="{{ App\Enums\RiskTypes::MORAL_HARASSMENT->label() }}" placeholder="Digite a porcentagem de denúncias recebidas" value="{{ $reports[App\Enums\RiskTypes::MORAL_HARASSMENT->value] }}" />
+                            <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="{{ App\Enums\PROART\PROARTHazard::MORAL_HARASSMENT->value }}" label="{{ App\Enums\PROART\PROARTHazard::MORAL_HARASSMENT->label() }}" placeholder="Digite a porcentagem de denúncias recebidas" value="{{ $reports[App\Enums\PROART\PROARTHazard::MORAL_HARASSMENT->value] }}" />
                             <x-action  tag="button"  type="button"  variant="secondary" data-tippy-content="Cálculo: (nº de denúncias recebidas / nº de funcionários) * 100">
                                 <i class="fa-solid fa-question text-base"></i>
                             </x-action>
                         </div>
 
                         <div class="flex gap-2 items-end">
-                            <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="{{ App\Enums\RiskTypes::SEXUAL_HARASSMENT->value }}" label="{{ App\Enums\RiskTypes::SEXUAL_HARASSMENT->label() }}" placeholder="Digite a porcentagem de denúncias recebidas" value="{{ $reports[App\Enums\RiskTypes::SEXUAL_HARASSMENT->value] }}"/>
+                            <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="{{ App\Enums\PROART\PROARTHazard::SEXUAL_HARASSMENT->value }}" label="{{ App\Enums\PROART\PROARTHazard::SEXUAL_HARASSMENT->label() }}" placeholder="Digite a porcentagem de denúncias recebidas" value="{{ $reports[App\Enums\PROART\PROARTHazard::SEXUAL_HARASSMENT->value] }}"/>
                             <x-action  tag="button"  type="button"  variant="secondary" data-tippy-content="Cálculo: (nº de denúncias recebidas / nº de funcionários) * 100">
                                 <i class="fa-solid fa-question text-base"></i>
                             </x-action>
                         </div>
 
                         <div class="flex gap-2 items-end">
-                            <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="{{ App\Enums\RiskTypes::DISCRIMINATION->value }}" label="{{ App\Enums\RiskTypes::DISCRIMINATION->label() }}" placeholder="Digite a porcentagem de denúncias recebidas" value="{{ $reports[App\Enums\RiskTypes::DISCRIMINATION->value] }}"/>
+                            <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="{{ App\Enums\PROART\PROARTHazard::DISCRIMINATION->value }}" label="{{ App\Enums\PROART\PROARTHazard::DISCRIMINATION->label() }}" placeholder="Digite a porcentagem de denúncias recebidas" value="{{ $reports[App\Enums\PROART\PROARTHazard::DISCRIMINATION->value] }}"/>
                             <x-action  tag="button"  type="button"  variant="secondary" data-tippy-content="Cálculo: (nº de denúncias recebidas / nº de funcionários) * 100">
                                 <i class="fa-solid fa-question text-base"></i>
                             </x-action>
                         </div>
 
                         <div class="flex gap-2 items-end">
-                            <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="{{ App\Enums\RiskTypes::OTHER_FORMS_OF_VIOLENCE->value }}" label="{{ App\Enums\RiskTypes::OTHER_FORMS_OF_VIOLENCE->label() }}" placeholder="Digite a porcentagem de denúncias recebidas" value="{{ $reports[App\Enums\RiskTypes::OTHER_FORMS_OF_VIOLENCE->value] }}"/>
+                            <x-form.input-text type="number" icon="%" min="0" max="100" step="0.01" name="{{ App\Enums\PROART\PROARTHazard::OTHER_FORMS_OF_VIOLENCE->value }}" label="{{ App\Enums\PROART\PROARTHazard::OTHER_FORMS_OF_VIOLENCE->label() }}" placeholder="Digite a porcentagem de denúncias recebidas" value="{{ $reports[App\Enums\PROART\PROARTHazard::OTHER_FORMS_OF_VIOLENCE->value] }}"/>
                             <x-action  tag="button"  type="button"  variant="secondary" data-tippy-content="Cálculo: (nº de denúncias recebidas / nº de funcionários) * 100">
                                 <i class="fa-solid fa-question text-base"></i>
                             </x-action>

@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Enums\CampaignStatusTypes;
-use App\Enums\CollectionTypes;
+use App\Enums\CampaignStatus;
+use App\Enums\CollectionType;
 use App\Jobs\UpdateCampaignStatusJob;
 use App\Models\Campaign;
 use Carbon\Carbon;
@@ -21,16 +21,16 @@ class CampaignRepository
   
             $campaign = session('auth:company')->campaigns()->create([
                 'collection_id' => $collectionID,
-                'type' => CollectionTypes::from($collectionType)->value,
+                'type' => CollectionType::from($collectionType)->value,
                 'name' => $data['name'],
                 'description' => $data['description'],
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'],
-                'status' => CampaignStatusTypes::SCHEDULED
+                'status' => CampaignStatus::SCHEDULED
             ]);
 
-            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatusTypes::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
-            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatusTypes::COMPLETED)->delay(Carbon::parse($data['end_date']));
+            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
+            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::COMPLETED)->delay(Carbon::parse($data['end_date']));
 
             session(['company' => session('auth:company')->load('campaigns')]);
 
@@ -51,15 +51,15 @@ class CampaignRepository
 
             $campaign->update([
                 'collection_id' => $collectionID,
-                'type' => CollectionTypes::from($collectionType)->value,
+                'type' => CollectionType::from($collectionType)->value,
                 'name' => $data['name'],
                 'description' => $data['description'],
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'],
             ]);
 
-            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatusTypes::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
-            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatusTypes::COMPLETED)->delay(Carbon::parse($data['end_date']));
+            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
+            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::COMPLETED)->delay(Carbon::parse($data['end_date']));
 
             session(['company' => session('auth:company')->load('campaigns')]);
             

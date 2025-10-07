@@ -2,9 +2,9 @@
 
 namespace App\Evaluators;
 
-use App\Enums\FinalRiskTypes;
-use App\Enums\RiskTypes;
-use App\Models\Risk;
+use App\Enums\PROART\PROARTRisk;
+use App\Enums\PROART\PROARTHazard;
+use App\Models\Hazard;
 use App\Services\RiskService;
 
 class lackOfRecognition
@@ -13,7 +13,7 @@ class lackOfRecognition
     {
         $initialRating = self::initialRating($average);
         
-        $reports = session('auth:company')->reports->first(fn($_, $risk) => $risk === RiskTypes::LACK_OF_RECOGNITION->value);
+        $reports = session('auth:company')->reports->first(fn($_, $risk) => $risk === PROARTHazard::LACK_OF_RECOGNITION->value);
     
         $needsWeightedAverage = self::needsWeightedAverage($initialRating, $reports);
         
@@ -95,13 +95,13 @@ class lackOfRecognition
         return round($weightedAverage);
     }
 
-    private static function determineRisk(int $rating): FinalRiskTypes
+    private static function determineRisk(int $rating): PROARTRisk
     {
         return match($rating) {
-            1 => FinalRiskTypes::LOW,
-            2 => FinalRiskTypes::LOW,
-            3 => FinalRiskTypes::MEDIUM,
-            4 => FinalRiskTypes::MEDIUM,
+            1 => PROARTRisk::LOW,
+            2 => PROARTRisk::LOW,
+            3 => PROARTRisk::MEDIUM,
+            4 => PROARTRisk::MEDIUM,
         };
     }
 }

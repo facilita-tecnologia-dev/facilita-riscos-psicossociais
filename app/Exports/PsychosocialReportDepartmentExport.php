@@ -2,17 +2,15 @@
 
 namespace App\Exports;
 
-use App\Enums\ControlActionTypes;
-use App\Enums\GravityTypes;
-use App\Enums\ProbabilityTypes;
-use App\Enums\RiskTypes;
+use App\Enums\PROART\PROARTControlActionTypes;
+use App\Enums\PROART\PROARTGravity;
+use App\Enums\PROART\PROARTProbability;
+use App\Enums\PROART\PROARTHazard;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class PsychosocialReportDepartmentExport implements FromCollection, WithEvents
 {
@@ -77,10 +75,10 @@ class PsychosocialReportDepartmentExport implements FromCollection, WithEvents
 
             foreach ($departmentRisks as $type => $risk) {
                 $rows->push([
-                    'Perigo Psicossocial: ' . RiskTypes::from($type)->label(),
+                    'Perigo Psicossocial: ' . PROARTHazard::from($type)->label(),
                     '',
-                    'Severidade: ' . GravityTypes::from($risk['risk']['gravity'])->label(),
-                    'Probabilidade: ' . ProbabilityTypes::from($risk['risk']['probability'])->label(),
+                    'Severidade: ' . PROARTGravity::from($risk['risk']['gravity'])->label(),
+                    'Probabilidade: ' . PROARTProbability::from($risk['risk']['probability'])->label(),
                     'Risco Identificado: ' . $risk['risk']['evaluated']->label()
                 ]);
 
@@ -108,7 +106,7 @@ class PsychosocialReportDepartmentExport implements FromCollection, WithEvents
                     {
                         $rows->push([
                             $action->content,
-                            ControlActionTypes::from($actionType)->label(),
+                            PROARTControlActionTypes::from($actionType)->label(),
                             $action->deadline ?? 'Indefinido',
                             $action->assignee ?? 'Indefinido',
                             $action->status ?? 'Indefinido',

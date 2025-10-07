@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\UserStatusTypes;
+use App\Enums\UserStatus;
 use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(Company::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Role::class)->constrained()->onDelete('cascade')->default(2);
-            $table->enum('status', UserStatusTypes::values())->default(UserStatusTypes::ACTIVE);
+            $table->enum('status', UserStatus::values())->default(UserStatus::ACTIVE);
         });
     }
 

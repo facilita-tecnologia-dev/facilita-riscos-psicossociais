@@ -2,8 +2,15 @@
 
 namespace Database\Seeders\BaseTests;
 
-use App\Enums\BaseCollectionTypes;
+use App\Enums\BaseCollectionType;
 use App\Models\BaseCollection;
+use App\Enums\BaseCollection as EnumBaseCollection;
+use Database\Seeders\BaseTests\HSEQuestions\ChangeSeeder;
+use Database\Seeders\BaseTests\HSEQuestions\ControlSeeder;
+use Database\Seeders\BaseTests\HSEQuestions\DemandsSeeder;
+use Database\Seeders\BaseTests\HSEQuestions\RelationshipsSeeder;
+use Database\Seeders\BaseTests\HSEQuestions\RoleSeeder;
+use Database\Seeders\BaseTests\HSEQuestions\SupportSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\CommunicationAndInformationSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\DevelopmentCarreerRecognitionSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\EngagementAndPrideSeeder;
@@ -25,11 +32,18 @@ class BaseCollectionsSeeder extends Seeder
         BaseCollection::insert([
             [
                 'name' => 'Riscos Psicossociais',
-                'type' => BaseCollectionTypes::PSYCHOSOCIAL->value
+                'key' => EnumBaseCollection::PROART->value,
+                'type' => BaseCollectionType::PSYCHOSOCIAL->value
+            ],
+            [
+                'name' => 'Riscos Psicossociais',
+                'key' => EnumBaseCollection::HSE->value,
+                'type' => BaseCollectionType::PSYCHOSOCIAL->value
             ],
             [
                 'name' => 'Clima Organizacional',
-                'type' => BaseCollectionTypes::ORGANIZATIONAL->value
+                'key' => EnumBaseCollection::ORGANIZATIONAL->value,
+                'type' => BaseCollectionType::ORGANIZATIONAL->value
             ],
         ]);
 
@@ -41,6 +55,15 @@ class BaseCollectionsSeeder extends Seeder
             WorkContentSeeder::class,
             EmploymentConditionsSeeder::class,
             WorkRelatedDisordersSeeder::class,
+
+            // HSE
+            DemandsSeeder::class,
+            ControlSeeder::class,
+            SupportSeeder::class,
+            RelationshipsSeeder::class,
+            RoleSeeder::class,
+            ChangeSeeder::class,
+            
 
             // Organizational
             WorkConditionsSeeder::class,

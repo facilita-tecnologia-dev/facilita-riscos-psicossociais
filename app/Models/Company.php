@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\CampaignStatusTypes;
+use App\Enums\CampaignStatus;
 use App\Notifications\ResetPassword;
 use App\Services\ReportChannelService;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,9 +38,9 @@ class Company extends Authenticatable
         return $this->hasMany(UserFeedback::class);
     }
 
-    public function metrics(): HasMany
+    public function proartIndicators(): HasMany
     {
-        return $this->hasMany(CompanyMetric::class, 'company_id');
+        return $this->hasMany(CompanyPROARTIndicator::class, 'company_id');
     }
 
     public function reports():HasMany
@@ -112,7 +112,7 @@ class Company extends Authenticatable
 
     public function activeCampaigns() : Collection
     {
-        return $this->campaigns->where('status', CampaignStatusTypes::IN_PROGRESS);
+        return $this->campaigns->where('status', CampaignStatus::IN_PROGRESS);
     }
 
     public function latestPsychosocialCampaign()

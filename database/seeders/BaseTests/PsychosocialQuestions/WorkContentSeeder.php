@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\BaseTests\PsychosocialQuestions;
 
-use App\Enums\CollectionFactorTypes;
+use App\Enums\PROART\PROARTGroup;
 use App\Models\BaseQuestion;
 use Illuminate\Database\Seeder;
 
@@ -15,43 +15,43 @@ class WorkContentSeeder extends Seeder
                 'base_collection_id' => 1,
                 'statement' => 'Tenho autonomia para realizar as tarefas como julgo melhor.',
                 'inverted' => true,
-                'group' => CollectionFactorTypes::WORK_CONTENT
+                'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
                 'statement' => 'Minhas tarefas são banais.',
                 'inverted' => false,
-                'group' => CollectionFactorTypes::WORK_CONTENT
+                'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
                 'statement' => 'Meu trabalho é sem sentido.',
                 'inverted' => false,
-                'group' => CollectionFactorTypes::WORK_CONTENT
+                'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
                 'statement' => 'Meu trabalho é irrelevante para o desenvolvimento da sociedade.',
                 'inverted' => false,
-                'group' => CollectionFactorTypes::WORK_CONTENT
+                'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
                 'statement' => 'A identificação com minhas tarefas é inexistente.',
                 'inverted' => false,
-                'group' => CollectionFactorTypes::WORK_CONTENT
+                'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
                 'statement' => 'Sinto-me improdutivo no meu trabalho.',
                 'inverted' => false,
-                'group' => CollectionFactorTypes::WORK_CONTENT
+                'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
                 'statement' => 'A inovação é valorizada nesta organização.',
                 'inverted' => true,
-                'group' => CollectionFactorTypes::WORK_CONTENT
+                'group' => PROARTGroup::WORK_CONTENT
             ],
         ]);
     }

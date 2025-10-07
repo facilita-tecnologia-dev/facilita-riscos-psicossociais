@@ -99,7 +99,7 @@
                     <x-modal.title>Adicionar Medida de Controle</x-modal.title>
 
                     <x-form action="{{ route('action-plan.risk.control-action.store', ['actionPlan' => $actionPlan, 'risk' => $risk]) }}" post class="w-full space-y-2">
-                        <input type="hidden" name="risk_id" value="{{ $risk->id }}">
+                        <input type="hidden" name="hazard_id" value="{{ $risk->id }}">
                         <x-form.input-text name="control_action" label="Conteúdo" placeholder="Digite a medida de controle" />
                         <x-form.input-text name="deadline" label="Prazo" placeholder="Digite o prazo" />
                         <x-form.input-text name="assignee" label="Responsável" placeholder="Digite o responsável" />

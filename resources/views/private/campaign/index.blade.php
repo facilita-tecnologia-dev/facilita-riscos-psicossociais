@@ -15,7 +15,7 @@
                     <i class="fa-solid fa-circle-info"></i>
                     {{ session('message') }}
                 </x-structure.message>
-            @elseif(session('auth:company')->hasCampaignThisYear(1, App\Enums\CampaignStatusTypes::IN_PROGRESS->value))
+            @elseif(session('auth:company')->hasCampaignThisYear(1, App\Enums\CampaignStatus::IN_PROGRESS->value))
                 <x-structure.message>
                     <i class="fa-solid fa-circle-info"></i>
                     O Plano de Ação só poderá ser acessado e editado após a finalização da campanha de Riscos Psicossociais.
@@ -63,7 +63,7 @@
                                 <x-table.body.td class="truncate w-32">{{ $campaign->status->label() }}</x-table.body.td>
                                 @if(session('auth:company')->activeCampaigns()->isNotEmpty())
                                     <x-table.body.td class="w-48">
-                                            @if($campaign->status === App\Enums\CampaignStatusTypes::IN_PROGRESS)
+                                            @if($campaign->status === App\Enums\CampaignStatus::IN_PROGRESS)
                                                 <x-form action="{{ route('campaign.notify', $campaign) }}" class="w-full flex justify-end" post>
                                                     <x-action width="fit" tag="button" data-tippy-content="Notificar colaboradores sobre essa campanha">
                                                         <i class="fa-solid fa-envelope"></i>

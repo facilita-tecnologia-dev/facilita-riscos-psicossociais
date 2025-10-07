@@ -58,7 +58,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <h2 style="font-size: 18px;">{{ App\Enums\RiskTypes::from($type)->label() }}</h2>
+                            <h2 style="font-size: 18px;">{{ App\Enums\PROART\PROARTHazard::from($type)->label() }}</h2>
                         </td>
                     </tr>
                 </tbody>
@@ -69,20 +69,20 @@
                     <tr>
                         <td style="width:35%;">
                             <p>Severidade:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\GravityTypes::from($risk['risk']['gravity'])->label() }}</span>
+                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTGravity::from($risk['risk']['gravity'])->label() }}</span>
                         </td>
                         <td style="width:35%;">
                             <p>Probabilidade:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\ProbabilityTypes::from($risk['risk']['probability'])->label() }}</span>
+                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTProbability::from($risk['risk']['probability'])->label() }}</span>
                         </td>
                         <td style="width:30%; background-color:
-                                {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::CRITICAL ? '#fc6f6f50' : '' }}
-                                {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::HIGH ? '#dc933250' : '' }}
-                                {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::MEDIUM ? '#faed5d50' : '' }}
-                                {{ $risk['risk']['evaluated'] == App\Enums\FinalRiskTypes::LOW ? '#76fc7150' : '' }}
+                                {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::CRITICAL ? '#fc6f6f50' : '' }}
+                                {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::HIGH ? '#dc933250' : '' }}
+                                {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::MEDIUM ? '#faed5d50' : '' }}
+                                {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::LOW ? '#76fc7150' : '' }}
                         ">
                             <p>Nível de Risco:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\FinalRiskTypes::from($risk['risk']['evaluated']->value)->label() }}</span>
+                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTRisk::from($risk['risk']['evaluated']->value)->label() }}</span>
                         </td>
                     </tr>                            
                 </tbody>
@@ -101,7 +101,7 @@
                         @foreach ($actions as $action) 
                             <tr>
                                 <td style="width:35%; font-size: 10px;">{{ $action->content }}</td>
-                                <td style="width:20%; font-size: 10px;">{{ App\Enums\ControlActionTypes::from($type)->label() }}</td>
+                                <td style="width:20%; font-size: 10px;">{{ App\Enums\PROART\PROARTControlActionTypes::from($type)->label() }}</td>
                                 <td style="width:15%; font-size: 10px;">{{ $action->deadline ?? 'Indefinido' }}</td>
                                 <td style="width:15%; font-size: 10px;">{{ $action->assignee ?? 'Indefinido' }}</td>
                                 <td style="width:15%; font-size: 10px;">{{ $action->status ?? 'Indefinido' }}</td>

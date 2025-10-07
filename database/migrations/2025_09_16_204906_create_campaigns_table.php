@@ -1,7 +1,7 @@
 <?php
 
-use App\Enums\CampaignStatusTypes;
-use App\Enums\CollectionTypes;
+use App\Enums\CampaignStatus;
+use App\Enums\CollectionType;
 use App\Models\Company;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,12 +18,12 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Company::class)->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('collection_id');
-            $table->enum('type', CollectionTypes::values());
+            $table->enum('type', CollectionType::values());
             $table->string('name', 100);
             $table->text('description')->nullable();
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->enum('status', CampaignStatusTypes::values())->default(CampaignStatusTypes::SCHEDULED->value);
+            $table->enum('status', CampaignStatus::values())->default(CampaignStatus::SCHEDULED->value);
         });
     }
 
