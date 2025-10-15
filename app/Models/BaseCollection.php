@@ -20,7 +20,7 @@ class BaseCollection extends Model
         return $this->hasMany(BaseQuestion::class);
     }
 
-    public function risks(): HasMany
+    public function hazards(): HasMany
     {
         return $this->hasMany(Hazard::class);
     }

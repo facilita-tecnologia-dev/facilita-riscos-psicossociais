@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Private;
 
 use App\Enums\UserStatus;
-use App\Enums\GenderEnum;
 use App\Enums\RoleEnum;
-use App\Helpers\SessionErrorHelper;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Company;
@@ -17,26 +15,21 @@ use App\Models\UserDepartmentPermission;
 use App\Repositories\UserRepository;
 use App\Services\AuthService;
 use App\Services\User\UserFilterService;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password as FacadePassword;
 use Illuminate\Validation\Rules\Password;
 
 class UserController
 {
-    protected UserFilterService $filterService;
     protected UserRepository $userRepository;
 
     protected $companyCustomTests;
 
     protected $defaultTests;
 
-    public function __construct(UserFilterService $filterService, UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->filterService = $filterService;
         $this->userRepository = $userRepository;
     }
 
@@ -47,9 +40,8 @@ class UserController
         $latestPsychosocialCampaign = session('auth:company')->latestPsychosocialCampaign();
         $latestOrganizationalCampaign = session('auth:company')->latestOrganizationalCampaign();
 
-        $query = session('auth:company')->users()->getQuery()->select('users.*');
-        $users = $this->filterService->sort($this->filterService->apply($query))
-        ->with(['collections']);
+        $users = UserFilterService::sort(UserFilterService::apply(session('auth:company')->users()))->with('collections');
+
   
         $filters = collect(request()->query())->except(['order_by', 'order_direction'])->filter();
 

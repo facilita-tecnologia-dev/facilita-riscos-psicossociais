@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Campaigns;
 
+use App\Enums\BaseCollection;
 use App\Enums\CampaignStatus;
 use App\Enums\CollectionType;
 use App\Models\Company;
@@ -14,9 +15,9 @@ class CampaignSeeder extends Seeder
 {
     public function run(): void
     {
-        Company::all()->except(Company::latest('id')->value('id'))->each(function($company){
+        Company::all()->each(function($company){
             $campaign = $company->campaigns()->create([
-                'collection_id' => 1,
+                'collection_id' => $company->psychosocial_collection_type === BaseCollection::HSE->value ? '2' : '1',
                 'type' => CollectionType::BASE,
                 'name' => 'Campanha de Riscos Psicossociais',
                 'start_date' => Carbon::createFromTimestamp(
@@ -41,7 +42,7 @@ class CampaignSeeder extends Seeder
                     $userCollection = $campaign->userCollections()->create([
                         'user_id' => $user->id,
                         'company_id' => $company->id,
-                        'collection_id' => $campaign->collection_id, // ✅ corrigido
+                        'collection_id' => $campaign->collection_id,
                         'type' => CollectionType::BASE,
                         'created_at' => Carbon::createFromTimestamp(
                             rand(

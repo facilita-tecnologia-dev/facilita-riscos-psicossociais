@@ -113,7 +113,7 @@ class OrganizationalAnswersController
         $tests->each(function($userTest) use($user, &$testCompiled) {
             $testDisplayName = $userTest['testType']['display_name'];
             
-            $evaluatedTest = $this->testService->evaluateIndividualTest($userTest['testType'], $userTest, session('auth:company')->metrics, 'organizational-climate');
+            $evaluatedTest = $this->testService->evaluateIndividualTest($userTest['testType'], $userTest, session('auth:company')->proartIndicators, 'organizational-climate');
             $questions = $userTest->answers->map(fn($answer) => $answer->parentQuestion);
 
             $this->updateAnswers($user, $testDisplayName, $evaluatedTest, $questions->keyBy('id'), $testCompiled);

@@ -19,4 +19,14 @@ enum PROARTRisk: string
             self::CRITICAL => 'Risco Crítico',
         };
     }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::LOW => "#A8E6CFCC",
+            self::MEDIUM => "#DDE26F75",
+            self::HIGH => "#F6B26B75",
+            self::CRITICAL => "#F26C6C75",
+        };
+    }
 }

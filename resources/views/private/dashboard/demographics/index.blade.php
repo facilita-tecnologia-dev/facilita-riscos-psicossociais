@@ -11,11 +11,13 @@
             />
 
             <div class="w-full grid grid-cols-1 gap-4 items-start">
-                <div class="bg-gray-100 rounded-md py-2 px-4 text-center shadow-md">
-                    <h2 class="text-base sm:text-lg font-semibold text-gray-800">Dados de Desempenho Organizacional (%)</h2>
-                </div>
-                <x-charts.bar-vertical id="company-metrics" title="Dados de Desempenho Organizacional (%)" />
-                
+                @if(!session('auth:company')->usesHSE())
+                    <div class="bg-gray-100 rounded-md py-2 px-4 text-center shadow-md">
+                        <h2 class="text-base sm:text-lg font-semibold text-gray-800">Dados de Desempenho Organizacional (%)</h2>
+                    </div>
+                    <x-charts.bar-vertical id="company-indicators" title="Dados de Desempenho Organizacional (%)" />
+                @endif
+
                 <div class="bg-gray-100 rounded-md py-2 px-4 text-center shadow-md">
                     <h2 class="text-base sm:text-lg font-semibold text-gray-800">Índices Demográficos da Empresa</h2>
                 </div>
@@ -37,7 +39,7 @@
 </x-layouts.app>
 
 <script>
-    const metrics = @json($metrics)    
+    const proartIndicators = @json($proartIndicators)    
     const demographics = @json($demographics)    
 </script>
 

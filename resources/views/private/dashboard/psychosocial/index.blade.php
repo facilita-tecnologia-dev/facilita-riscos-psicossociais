@@ -39,26 +39,45 @@
 
                     <x-filter-actions
                         :filters="$filters"
-                        :modalFilters="['gender', 'department', 'occupation', 'work_shift', 'marital_status', 'education_level', 'age_range', 'admission_range', 'year']" 
+                        :modalFilters="['gender', 'department', 'occupation', 'work_shift', 'marital_status', 'education_level', 'age_range', 'admission_range']" 
                     />
                 </div>
             </div>
 
-            <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                @foreach ($dashboard as $group => $risks)
-                    <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60 {{ $loop->last ? 'md:col-span-2' : '' }}">
-                        <p class="text-center font-semibold truncate">{{ App\Enums\PROART\PROARTGroup::from($group)->label() }}</p>
-                        
-                        @if(isset($risks) && $risks->isNotEmpty())
-                            <div class="w-full grid {{ $loop->last ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2' }} gap-2 px-2 md:px-4">
-                                @foreach ($risks as $type => $risk)
-                                    <x-charts.risk-bar type="{{ $type }}" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['risk' => $type ])}}" />
-                                @endforeach
-                            </div>             
-                        @endif
-                    </div>
-                @endforeach
-            </div>
+            @if(session('auth:company')->usesHSE())
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach ($dashboard as $group => $hazards)
+                        <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60">
+
+                            <p class="text-center font-semibold truncate">{{ App\Enums\HSE\HSEGroup::from($group)->label() }}</p>
+                            
+                            @if(isset($hazards) && $hazards->isNotEmpty())
+                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 px-2 md:px-4">
+                                    @foreach ($hazards as $hazard => $risk)
+                                        <x-charts.risk-bar hazard="{{ $hazard }}" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['hazard' => $hazard ])}}" />
+                                    @endforeach
+                                </div>             
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach ($dashboard as $group => $hazards)
+                        <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60 {{ $loop->last ? 'md:col-span-2' : '' }}">
+                            <p class="text-center font-semibold truncate">{{ App\Enums\PROART\PROARTGroup::from($group)->label() }}</p>
+                            
+                            @if(isset($hazards) && $hazards->isNotEmpty())
+                                <div class="w-full grid {{ $loop->last ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2' }} gap-2 px-2 md:px-4">
+                                    @foreach ($hazards as $hazard => $risk)
+                                        <x-charts.risk-bar hazard="{{ $hazard }}" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['hazard' => $hazard ])}}" />
+                                    @endforeach
+                                </div>             
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
 
             @if($filters->isEmpty())
                 <x-charts.bar-vertical id="psychosocial-participation" title="Participação no teste de Riscos Psicossociais" />
@@ -70,7 +89,8 @@
 
 <script>
      const participation = @json($participation);
-     const dashboard = @json($dashboard)
+     const dashboard = @json($dashboard);
+     const usesHSE = @json(session('auth:company')->usesHSE());
 </script>
 
 <script src="{{ asset('js/dashboard/charts.js') }}"></script>

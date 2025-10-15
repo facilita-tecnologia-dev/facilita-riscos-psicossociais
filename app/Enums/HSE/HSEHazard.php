@@ -4,35 +4,35 @@ namespace App\Enums\HSE;
 
 enum HSEHazard: string
 {
-    case WORK_OVERLOAD ='work-overload';
-    case DEADLINE_PRESSURE = 'deadline-pressure';
-    case LONG_WORKING_HOURS = 'long-working-hours';
-    case CONSTANT_INTERRUPTIONS = 'constant-interruptions';
-    case INSUFFICIENT_RESOURCES = 'insufficient-resources';
-    case HIGH_EMOTIONAL_DEMANDS = 'high-emotional-demands';
-    case LOW_AUTONOMY = 'low-autonomy';
-    case MICROMANAGEMENT = 'micromanagement';
-    case LOW_SCHEDULE_FLEXIBILITY = 'low-schedule-flexibility';
-    case RIGID_PROCEDURES = 'rigid-procedures';
-    case LACK_OF_FEEDBACK = 'lack-of-feedback';
-    case TOXIC_LEADERSHIP = 'toxic-leadership';
-    case INSUFFICIENT_TRAINING = 'insufficient-training';
-    case SOCIAL_ISOLATION = 'social-isolation';
-    case CHRONIC_TEAM_CONFLICTS = 'chronic-team-conflicts';
-    case MORAL_HARASSMENT = 'moral-harassment';
-    case SEXUAL_HARASSMENT = 'sexual-harassment';
-    case INCIVILITY = 'incivility';
-    case DISCRIMINATION = 'discrimination';
-    case VIOLENCE = 'violence';
-    case ROLE_AMBIGUITY = 'role-ambiguity';
-    case ROLE_CONFLICT = 'role-conflict';
-    case RESPONSIBILITY_WITHOUT_AUTHORITY = 'responsibility-without-authority';
-    case FREQUENT_PRIORITY_CHANGES = 'frequent-priority-changes';
-    case POOR_CHANGE_COMMUNICATION = 'poor-change-communication';
-    case JOB_INSECURITY = 'job-insecurity';
-    case RESTRUCTURING = 'restructuring';
-    case NEW_TECHNOLOGY_WITHOUT_TRAINING = 'new-technology-without-training';
-    case LOSS_OF_BENEFITS = 'loss-of-benefits';
+    case WORK_OVERLOAD = 'hse-work-overload';
+    case DEADLINE_PRESSURE = 'hse-deadline-pressure';
+    case LONG_WORKING_HOURS = 'hse-long-working-hours';
+    case CONSTANT_INTERRUPTIONS = 'hse-constant-interruptions';
+    case INSUFFICIENT_RESOURCES = 'hse-insufficient-resources';
+    case HIGH_EMOTIONAL_DEMANDS = 'hse-high-emotional-demands';
+    case LOW_AUTONOMY = 'hse-low-autonomy';
+    case MICROMANAGEMENT = 'hse-micromanagement';
+    case LOW_SCHEDULE_FLEXIBILITY = 'hse-low-schedule-flexibility';
+    case RIGID_PROCEDURES = 'hse-rigid-procedures';
+    case LACK_OF_FEEDBACK = 'hse-lack-of-feedback';
+    case TOXIC_LEADERSHIP = 'hse-toxic-leadership';
+    case INSUFFICIENT_TRAINING = 'hse-insufficient-training';
+    case SOCIAL_ISOLATION = 'hse-social-isolation';
+    case CHRONIC_TEAM_CONFLICTS = 'hse-chronic-team-conflicts';
+    case MORAL_HARASSMENT = 'hse-moral-harassment';
+    case SEXUAL_HARASSMENT = 'hse-sexual-harassment';
+    case INCIVILITY = 'hse-incivility';
+    case DISCRIMINATION = 'hse-discrimination';
+    case VIOLENCE = 'hse-violence';
+    case ROLE_AMBIGUITY = 'hse-role-ambiguity';
+    case ROLE_CONFLICT = 'hse-role-conflict';
+    case RESPONSIBILITY_WITHOUT_AUTHORITY = 'hse-responsibility-without-authority';
+    case FREQUENT_PRIORITY_CHANGES = 'hse-frequent-priority-changes';
+    case POOR_CHANGE_COMMUNICATION = 'hse-poor-change-communication';
+    case JOB_INSECURITY = 'hse-job-insecurity';
+    case RESTRUCTURING = 'hse-restructuring';
+    case NEW_TECHNOLOGY_WITHOUT_TRAINING = 'hse-new-technology-without-training';
+    case LOSS_OF_BENEFITS = 'hse-loss-of-benefits';
 
 
     public function label(): string

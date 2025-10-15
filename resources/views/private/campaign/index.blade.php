@@ -49,10 +49,6 @@
                         <x-table.head.sortable-th class="w-32" field="end_date">
                             Status
                         </x-table.head.sortable-th>
-                        @if(session('auth:company')->activeCampaigns()->count())
-                            <x-table.head.th class="w-48">
-                            </x-table.head.th>
-                        @endif
                     </x-table.head>
                     <x-table.body>
                         @foreach ($campaigns as $campaign)
@@ -60,20 +56,7 @@
                                 <x-table.body.td class="truncate flex-1">{{ $campaign->name }}</x-table.body.td>
                                 <x-table.body.td class="hidden md:block truncate flex-1">{{ $campaign->start_date->format('d/m/Y - H:i') }}</x-table.body.td>
                                 <x-table.body.td class="hidden md:block truncate flex-1">{{ $campaign->end_date->format('d/m/Y - H:i') }}</x-table.body.td>
-                                <x-table.body.td class="truncate w-32">{{ $campaign->status->label() }}</x-table.body.td>
-                                @if(session('auth:company')->activeCampaigns()->isNotEmpty())
-                                    <x-table.body.td class="w-48">
-                                            @if($campaign->status === App\Enums\CampaignStatus::IN_PROGRESS)
-                                                <x-form action="{{ route('campaign.notify', $campaign) }}" class="w-full flex justify-end" post>
-                                                    <x-action width="fit" tag="button" data-tippy-content="Notificar colaboradores sobre essa campanha">
-                                                        <i class="fa-solid fa-envelope"></i>
-                                                        Notificar
-                                                    </x-action>
-                                                </x-form>
-                                            @endif
-                                    </x-table.body.td>
-                                @endif
-                                
+                                <x-table.body.td class="truncate w-32">{{ $campaign->status->label() }}</x-table.body.td>                                
                             </x-table.body.tr>
                         @endforeach
                     </x-table.body>

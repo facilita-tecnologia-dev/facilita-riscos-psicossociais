@@ -13,20 +13,18 @@ class MetricsController
     public function edit(Request $request)
     {
         Gate::authorize('metrics-edit');
-     
-        if(session('auth:company')->users->isEmpty()) return back();
+        if(session('auth:company')->usesHSE()) return back();
 
         $hasReportChannel = ReportChannelService::hasReportChannel(session('auth:company'));
         
         if($hasReportChannel){
-            $risks = Hazard::all();
+            $risks = Hazard::where('base_collection_id', 1)->get();
             $reportChannelReports = ReportChannelService::reports(session('auth:company'));
             $reports = $risks->mapWithKeys(fn($risk) => [$risk->type => $reportChannelReports->get($risk->type, 0)]);
         } else{
             $companyReports = session('auth:company')->reports()->get();
             $reports = $companyReports->mapWithKeys(fn($report) => [$report->type => $report->value]);
         }
-
 
         return view('private.company.company-metrics.edit', [
             'metrics' => session('auth:company')->proartIndicators()->with('metric')->get()->keyBy('metric.type'),
@@ -38,6 +36,7 @@ class MetricsController
     public function update(Request $request)
     {
         Gate::authorize('metrics-edit');
+        if(session('auth:company')->usesHSE()) return back();
 
         $data = $request->validate([
             'turnover' => 'nullable|between:0,100',
@@ -48,10 +47,10 @@ class MetricsController
         ]);
 
         DB::transaction(function () use ($data) {
-            session('auth:company')->metrics->each(fn($companyMetric) => $companyMetric->update(['value' => $data[$companyMetric->metric['type']]]));
+            session('auth:company')->proartIndicators->each(fn($companyMetric) => $companyMetric->update(['value' => $data[$companyMetric->metric['type']]]));
         });
 
-        session(['company' => session('auth:company')->load('metrics')]);
+        session(['company' => session('auth:company')->load('proartIndicators')]);
 
         return back()->with('message', 'Indicadores armazenados com sucesso!');
     }

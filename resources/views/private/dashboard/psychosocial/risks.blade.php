@@ -22,47 +22,89 @@
                     @endcan
                 </div>
             </div>
-    
-            <div class="w-full space-y-8">
-                @foreach ($risks as $group => $groupRisks)
-                    <div class="space-y-4">
-                        <div class="bg-gray-100 px-4 py-2 w-full rounded-md shadow-md">
-                            <h2 class="text-lg md:text-xl font-semibold">{{ App\Enums\PROART\PROARTGroup::from($group)->label() }}</h2>
-                        </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                            @foreach ($groupRisks as $riskName => $risk)
-                                <div class="flex flex-col gap-4 bg-white w-full px-4 py-6 rounded-md shadow-md relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
-                                    <div class="flex items-center justify-between bg-gradient-to-b from-[#FFFFFF25] gap-4 px-4 py-2 w-full rounded-md shadow-md
-                                        {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::CRITICAL ? 'to-[#fc6f6f50]' : '' }}
-                                        {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::HIGH ? 'to-[#dc933250]' : '' }}
-                                        {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::MEDIUM ? 'to-[#faed5d50]' : '' }}
-                                        {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::LOW ? 'to-[#76fc7150]' : '' }}
-                                    ">
-                                        <p class="truncate">{{ App\Enums\PROART\PROARTHazard::from($riskName)->label() }}</p>
-                                        <p class="truncate">{{ $risk['risk']['evaluated']->label() }}</p>
-                                    </div>
-                                    <p class="px-3 font-semibold">Medidas de Controle e Prevenção</p>
-                                    <ul class="grid grid-cols-1 px-4 gap-y-4 gap-x-4 list-disc pl-5">
-                                        @foreach ($risk['control_actions'] as $type => $controlActions)
-                                            <div class="space-y-2">
-                                                <p class="text-sm text-main-text font-semibold">
-                                                    {{ App\Enums\PROART\PROARTControlActionTypes::from($type)->label() }}
-                                                </p>
-                                            
-                                                @foreach ($controlActions as $action)
+            
+            @if(session('auth:company')->usesHSE())
+                <div class="w-full space-y-8">
+                    @forelse ($risks as $group => $groupRisks)
+                        <div class="space-y-4">
+                            <div class="bg-gray-100 px-4 py-2 w-full rounded-md shadow-md">
+                                <h2 class="text-lg md:text-xl font-semibold">{{ App\Enums\HSE\HSEGroup::from($group)->label() }}</h2>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                @foreach ($groupRisks as $riskName => $risk)
+                                    <div class="flex flex-col gap-4 bg-white w-full px-4 py-6 rounded-md shadow-md relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
+                                        <div style="background: linear-gradient(to bottom, #FFFFFF25, {{ $risk['risk']['evaluated']->color() }});" class="flex items-center justify-between gap-4 px-4 py-2 w-full rounded-md shadow-md">
+                                            <p class="truncate">{{ App\Enums\HSE\HSEHazard::from($riskName)->label() }}</p>
+                                            <p class="truncate">{{ $risk['risk']['evaluated']->label() }}</p>
+                                        </div>
+                                        
+                                        <p class="px-3 font-semibold">Medidas de Controle e Prevenção</p>
+
+                                        <ul class="grid grid-cols-1 px-4 gap-y-4 gap-x-4 list-disc pl-5">
+                                            @foreach ($risk['control_actions'] as $action) 
                                                     <li class="text-sm w-full rounded-md">
                                                         {{ $action->content }}
                                                     </li>
-                                                @endforeach
-                                            </div>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endforeach
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
+                    @empty
+                        <div class="w-full flex flex-col items-center gap-2">
+                            <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
+                            <p class="text-base text-center">Nenhum risco susbtancial ou intolerável foi identificado.</p>
+                        </div>     
+                    @endforelse
+                </div>
+            @else
+                <div class="w-full space-y-8">
+                    @forelse ($risks as $group => $groupRisks)
+                        <div class="space-y-4">
+                            <div class="bg-gray-100 px-4 py-2 w-full rounded-md shadow-md">
+                                <h2 class="text-lg md:text-xl font-semibold">{{ App\Enums\PROART\PROARTGroup::from($group)->label() }}</h2>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                @foreach ($groupRisks as $riskName => $risk)
+                                    <div class="flex flex-col gap-4 bg-white w-full px-4 py-6 rounded-md shadow-md relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
+                                        <div class="flex items-center justify-between bg-gradient-to-b from-[#FFFFFF25] gap-4 px-4 py-2 w-full rounded-md shadow-md
+                                            {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::CRITICAL ? 'to-[#fc6f6f50]' : '' }}
+                                            {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::HIGH ? 'to-[#dc933250]' : '' }}
+                                            {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::MEDIUM ? 'to-[#faed5d50]' : '' }}
+                                            {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::LOW ? 'to-[#76fc7150]' : '' }}
+                                        ">
+                                            <p class="truncate">{{ App\Enums\PROART\PROARTHazard::from($riskName)->label() }}</p>
+                                            <p class="truncate">{{ $risk['risk']['evaluated']->label() }}</p>
+                                        </div>
+                                        <p class="px-3 font-semibold">Medidas de Controle e Prevenção</p>
+                                        <ul class="grid grid-cols-1 px-4 gap-y-4 gap-x-4 list-disc pl-5">
+                                            @foreach ($risk['control_actions'] as $type => $controlActions)
+                                                <div class="space-y-2">
+                                                    <p class="text-sm text-main-text font-semibold">
+                                                        {{ App\Enums\PROART\PROARTControlActionTypes::from($type)->label() }}
+                                                    </p>
+                                                
+                                                    @foreach ($controlActions as $action)
+                                                        <li class="text-sm w-full rounded-md">
+                                                            {{ $action->content }}
+                                                        </li>
+                                                    @endforeach
+                                                </div>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @empty
+                        <div class="w-full flex flex-col items-center gap-2">
+                            <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
+                            <p class="text-base text-center">Nenhum risco alto ou crítico foi identificado.</p>
+                        </div>     
+                    @endforelse
+                </div>
+            @endif
         </x-structure.main-content-container>
     </x-structure.page-container>
 

@@ -1,13 +1,11 @@
 <?php
 
+use App\Http\Controllers\AbsencesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ControlActionsController;
-use App\Http\Controllers\CustomCollectionController;
-use App\Http\Controllers\CustomQuestionController;
-use App\Http\Controllers\CustomTestController;
 use App\Http\Controllers\Private\CompanyController;
 use App\Http\Controllers\Private\MetricsController;
 use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalAnswersController;
@@ -99,16 +97,6 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::put('{campaign}/close', [CampaignController::class, 'close'])->name('campaign.close');
     });
 
-    // Route::prefix('action-plan')->group(function(){
-    //     Route::get('{actionPlan}', [ActionPlanController::class, 'show'])->name('action-plan.show');
-
-    //     Route::get('{actionPlan}/risk/{risk}/edit', [ActionPlanController::class, 'edit'])->name('action-plan.risk.edit');
-    //     Route::put('{actionPlan}/risk/{risk}/update', [ActionPlanController::class, 'update'])->name('action-plan.risk.update');
-
-    //     Route::post('{actionPlan}/risk/{risk}/medidas-de-controle/store', [CustomControlActionController::class, 'store'])->name('action-plan.risk.control-action.store');
-    //     Route::get('{actionPlan}/risk/{risk}/medidas-de-controle/{controlAction}/delete', [CustomControlActionController::class, 'destroy'])->name('action-plan.risk.control-action.destroy');
-    // });
-
     Route::prefix('control-actions')->group(function() {
         Route::get('/', [ControlActionsController::class, 'edit'])->name('control-actions.update');
         Route::put('/', [ControlActionsController::class, 'update']);
@@ -134,6 +122,10 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::post('/', [MetricsController::class, 'update'])->name('company-metrics.update');
     });
 
+    Route::prefix('company-absence')->group(function() {
+        Route::get('/', [AbsencesController::class, 'index'])->name('company-absence.index');
+    });
+
     Route::prefix('company-reports')->group(function() {
         Route::post('/', [ReportsController::class, 'update'])->name('company-reports.update');
     });
@@ -141,8 +133,8 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     Route::prefix('dashboard')->group(function () {
         Route::prefix('psychosocial')->group(function(){
             Route::get('/', [PsychosocialController::class, 'dashboard'])->name('dashboard.psychosocial');
-            Route::get('/{risk}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
-            Route::get('/{risk}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
+            Route::get('/{hazard}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
+            Route::get('/{hazard}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
             Route::get('/risks', [PsychosocialController::class, 'risks'])->name('dashboard.psychosocial.risks');
             Route::get('/risks/report/{type}/{format}', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
         });

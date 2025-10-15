@@ -4,34 +4,34 @@ namespace App\Enums\PROART;
 
 enum PROARTHazard: string
 {
-    case ORGANIZATIONAL_RIGIDITY ='organizational-rigidity';
-    case WORK_OVERLOAD ='work-overload';
-    case LACK_OF_RESOURCES ='lack-of-resources';
-    case UNPREDICTABILITY ='unpredictability';
-    case MONOTONY ='monotony';
-    case ROLE_CONFLICT ='role-conflict';
-    case INDIVIDUALISTIC_MANAGEMENT ='individualistic-management';
-    case LACK_OF_RECOGNITION ='lack-of-recognition';
-    case MANAGEMENT_CONFLICTS ='management-conflicts';
-    case LACK_OF_MANAGERIAL_SUPPORT ='lack-of-managerial-support';
-    case PERCEIVED_INJUSTICE ='perceived-injustice';
-    case EXCESSIVE_MANAGEMENT_PRESSURE ='excessive-management-pressure';
-    case EMOTIONAL_EXHAUSTION ='emotional-exhaustion';
-    case ANXIETY_OR_STRESS ='anxiety-or-stress';
-    case SOCIAL_ISOLATION ='social-isolation';
-    case FRUSTRATION_OR_DEMOTIVATION ='frustration-or-demotivation';
-    case IRRITABILITY ='irritability';
-    case DIFFICULTY_CONCENTRATING ='difficulty-concentrating';
-    case PHYSICAL_DAMAGE ='physical-damage';
-    case PSYCHOLOGICAL_DAMAGE ='psychological-damage';
-    case FREQUENT_ABSENTEEISM ='frequent-absenteeism';
-    case SLEEP_DISORDERS ='sleep-disorders';
-    case PSYCHOSOMATIC_PROBLEMS ='psychosomatic-problems';
-    case DETERIORATION_OF_PERSONAL_LIFE ='deterioration-of-personal-life';
-    case MORAL_HARASSMENT ='moral-harassment';
-    case SEXUAL_HARASSMENT ='sexual-harassment';
-    case DISCRIMINATION ='discrimination';
-    case OTHER_FORMS_OF_VIOLENCE ='other-forms-of-violence';
+    case ORGANIZATIONAL_RIGIDITY ='proart-organizational-rigidity';
+    case WORK_OVERLOAD ='proart-work-overload';
+    case LACK_OF_RESOURCES ='proart-lack-of-resources';
+    case UNPREDICTABILITY ='proart-unpredictability';
+    case MONOTONY ='proart-monotony';
+    case ROLE_CONFLICT ='proart-role-conflict';
+    case INDIVIDUALISTIC_MANAGEMENT ='proart-individualistic-management';
+    case LACK_OF_RECOGNITION ='proart-lack-of-recognition';
+    case MANAGEMENT_CONFLICTS ='proart-management-conflicts';
+    case LACK_OF_MANAGERIAL_SUPPORT ='proart-lack-of-managerial-support';
+    case PERCEIVED_INJUSTICE ='proart-perceived-injustice';
+    case EXCESSIVE_MANAGEMENT_PRESSURE ='proart-excessive-management-pressure';
+    case EMOTIONAL_EXHAUSTION ='proart-emotional-exhaustion';
+    case ANXIETY_OR_STRESS ='proart-anxiety-or-stress';
+    case SOCIAL_ISOLATION ='proart-social-isolation';
+    case FRUSTRATION_OR_DEMOTIVATION ='proart-frustration-or-demotivation';
+    case IRRITABILITY ='proart-irritability';
+    case DIFFICULTY_CONCENTRATING ='proart-difficulty-concentrating';
+    case PHYSICAL_DAMAGE ='proart-physical-damage';
+    case PSYCHOLOGICAL_DAMAGE ='proart-psychological-damage';
+    case FREQUENT_ABSENTEEISM ='proart-frequent-absenteeism';
+    case SLEEP_DISORDERS ='proart-sleep-disorders';
+    case PSYCHOSOMATIC_PROBLEMS ='proart-psychosomatic-problems';
+    case DETERIORATION_OF_PERSONAL_LIFE ='proart-deterioration-of-personal-life';
+    case MORAL_HARASSMENT ='proart-moral-harassment';
+    case SEXUAL_HARASSMENT ='proart-sexual-harassment';
+    case DISCRIMINATION ='proart-discrimination';
+    case OTHER_FORMS_OF_VIOLENCE ='proart-other-forms-of-violence';
 
     public function label(): string
     {

@@ -33,7 +33,6 @@
                                 'education_level', 
                                 'age_range', 
                                 'admission_range', 
-                                'year'
                             ]" 
                         />
                     </div>

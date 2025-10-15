@@ -59,6 +59,8 @@ class TestController
                 });
             });
 
+            session('auth:company', [session('auth:company')->load(['campaigns'])]);
+
             return true;
         } catch (\Throwable $e) {
             return false;

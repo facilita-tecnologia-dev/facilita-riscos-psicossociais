@@ -15,9 +15,9 @@
     @endif
 
     <x-form.input-wrapper>
-        <select  name="{{ $name }}" id="{{ $name }}" {{ $disabled ? 'disabled' : '' }} class="flex-1 pl-3 pr-9 bg-transparent appearance-none focus:outline-none cursor-pointer">
+        <select  name="{{ $name }}" id="{{ $name }}" {{ $disabled ? 'disabled' : '' }} class="flex-1 pl-3 pr-9 bg-transparent appearance-none focus:outline-none cursor-pointer" {{ $attributes }}>
             @if($defaultValue)
-                <option value="" {{ !$value ? 'selected' : '' }}>Todos</option>
+                <option value="" {{ !$value ? 'selected' : '' }}>{{ is_string($defaultValue) ? $defaultValue : 'Todos' }}</option>
             @endif
             @foreach ($options as $option)
                 @php

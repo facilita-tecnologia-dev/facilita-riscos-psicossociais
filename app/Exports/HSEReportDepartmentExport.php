@@ -1,0 +1,382 @@
+<?php
+
+namespace App\Exports;
+
+use App\Enums\HSE\HSEGravity;
+use App\Enums\HSE\HSEHazard;
+use App\Enums\HSE\HSEProbability;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
+class HSEReportDepartmentExport implements FromCollection, WithEvents
+{
+
+    protected Collection $risks;
+    protected Collection $absences;
+
+    protected array $documentTitleRows;
+
+    protected array $departmentTitleRows;
+    protected array $departmentRows;
+
+    protected array $riskRows;
+
+    protected array $controlActionHeadingRows;
+    protected array $controlActionRows;
+
+    protected array $absenceHeadingRows;
+    protected array $absenceRows;
+
+    protected array $emptyRows;
+
+    public function __construct(Collection $risks, Collection $absences)
+    {
+        $this->risks = $risks;
+        $this->absences = $absences;
+    }
+
+    public function collection()
+    {
+        $rows = collect();
+
+        $this->documentTitleRows = [];
+
+        $this->departmentTitleRows = [];
+        $this->departmentRows = [];
+
+        $this->riskRows = [];
+        
+        $this->controlActionHeadingRows = [];
+        $this->controlActionRows = [];
+
+        $this->absenceHeadingRows = [];
+        $this->absenceRows = [];
+
+        $this->emptyRows = [];
+
+        $currentRow = 1;
+
+        $rows->push([session('auth:company')->name . ' - Inventário de Riscos Psicossociais (Setor)']);
+        $this->documentTitleRows[] = $currentRow;
+        $currentRow++;
+        
+        $rows->push(['']);
+        $this->emptyRows[] = $currentRow;
+        $currentRow++;
+
+        foreach ($this->risks as $department => $departmentRisks) {
+            $rows->push(['Setor']);
+            $this->departmentTitleRows[] = $currentRow;
+            $currentRow++;
+
+            $rows->push([$department]);
+            $this->departmentRows[] = $currentRow;
+            $currentRow++;
+
+            $rows->push(['']);
+            $this->emptyRows[] = $currentRow;
+            $currentRow++;
+
+            foreach ($departmentRisks as $hazard => $risk) {
+                $rows->push([
+                    'Perigo Psicossocial: ' . HSEHazard::from($hazard)->label(),
+                    '',
+                    'Severidade: ' . HSEGravity::from($risk['risk']['gravity'])->label(),
+                    'Probabilidade: ' . HSEProbability::from($risk['risk']['probability'])->label(),
+                    'Risco Identificado: ' . $risk['risk']['evaluated']->label()
+                ]);
+
+                $this->riskRows[] = [
+                    'currentRow' => $currentRow,
+                    'risk' => $risk['risk']['evaluated']->value
+                ];
+
+                $currentRow++;
+
+                $rows->push([
+                    'Medida de Controle',
+                    '',
+                    'Prazo',
+                    'Responsável',
+                    'Situação',
+                ]);
+
+                $this->controlActionHeadingRows[] = $currentRow;
+                $currentRow++;
+
+                foreach ($risk['control_actions'] as $action)
+                {
+                    $rows->push([
+                        $action->content,
+                        '',
+                        $action->deadline ?? 'Indefinido',
+                        $action->assignee ?? 'Indefinido',
+                        $action->status ?? 'Indefinido',
+                    ]);
+
+                    $this->controlActionRows[] = $currentRow;
+                    $currentRow++;
+                }
+
+                $rows->push(['']);
+                $this->emptyRows[] = $currentRow;
+                $currentRow++;
+            }
+
+            $rows->push(['']);
+            $this->emptyRows[] = $currentRow;
+            $currentRow++;
+            $rows->push(['']);
+            $this->emptyRows[] = $currentRow;
+            $currentRow++;
+        }
+
+        $rows->push([session('auth:company')->name . ' - Relatório de Afastamentos (Setor)']);
+        $this->documentTitleRows[] = $currentRow;
+        $currentRow++;
+        
+        $rows->push(['']);
+        $this->emptyRows[] = $currentRow;
+        $currentRow++;
+
+        if($this->absences->isNotEmpty()){
+            foreach ($this->absences as $department => $departmentAbsences){
+                $rows->push(['Setor']);
+                $this->departmentTitleRows[] = $currentRow;
+                $currentRow++;
+
+                $rows->push([$department]);
+                $this->departmentRows[] = $currentRow;
+                $currentRow++;
+
+                $rows->push([
+                    'Código CID',
+                    'Data de Registro',
+                    'Setor',
+                    'Função',
+                    'Duração',
+                ]);
+
+                $this->absenceHeadingRows[] = $currentRow;
+                $currentRow++;
+
+                foreach ($departmentAbsences as $absence){
+                    $rows->push([
+                        $absence->cid->type,
+                        $absence->created_at->format('d/m/Y'),
+                        $absence->department,
+                        $absence->occupation,
+                        $absence->duration . ' dias',
+                    ]);
+
+                    $this->absenceRows[] = $currentRow;
+                    $currentRow++;
+                }
+
+                $rows->push(['']);
+                $this->emptyRows[] = $currentRow;
+                $currentRow++;
+                $rows->push(['']);
+                $this->emptyRows[] = $currentRow;
+                $currentRow++;
+            }
+        } else {
+            $rows->push(['Sua empresa não tem afastamentos cadastrados']);
+            $this->emptyRows[] = $currentRow;
+            $currentRow++;
+        }
+
+
+        return $rows;
+    }
+
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function(AfterSheet $event) {
+                $sheet = $event->sheet->getDelegate();
+
+                foreach ($this->documentTitleRows as $row) {
+                    $sheet->mergeCells("A{$row}:E{$row}");
+                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 16,
+                            'color' => ['rgb' => '333333'],
+                        ],
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['rgb' => 'E0E0E0'],
+                        ],
+                    ]);
+                    $sheet->getStyle("A{$row}:E{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                }
+
+                foreach ($this->departmentTitleRows as $row) {
+                    $sheet->mergeCells("A{$row}:E{$row}");
+                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 14,
+                            'color' => ['rgb' => '333333'],
+                        ],
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['rgb' => 'E0E0E0'],
+                        ],
+                    ]);
+                    $sheet->getStyle("A{$row}:E{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_LEFT)
+                    ->setVertical(Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                }
+
+                foreach ($this->departmentRows as $row) {
+                    $sheet->mergeCells("A{$row}:E{$row}");
+                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                        'font' => [
+                            'size' => 13,
+                            'color' => ['rgb' => '333333'],
+                        ],
+                    ]);
+                    $sheet->getStyle("A{$row}:E{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_LEFT)
+                    ->setVertical(Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                }
+
+                foreach ($this->riskRows as $riskData) {
+                    $row = $riskData['currentRow'];
+                    $risk = $riskData['risk'];
+
+                    switch ($risk) {
+                        case '5':
+                            $color = 'F44336';
+                            break;
+                        case '4':
+                            $color = 'FF9800';
+                            break;
+                        case '3':
+                            $color = 'FFC107';
+                            break;
+                        case '2':
+                            $color = 'CDDC39';
+                            break;
+                        case '1':
+                            $color = '4CAF50';
+                            break;
+                        default:
+                            $color = 'FFFFFF';
+                    }
+
+                    $sheet->mergeCells("A{$row}:B{$row}");
+                    
+                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                        'font' => [
+                            'size' => 12,
+                            'color' => ['rgb' => '333333'],
+                        ],
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['rgb' => 'E0E0E0'],
+                        ],
+                    ]);
+
+                    $sheet->getStyle("E{$row}")->applyFromArray([
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['rgb' => $color],
+                        ],
+                    ]);
+
+                    $sheet->getStyle("A{$row}:E{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_LEFT)
+                    ->setVertical(Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                }
+
+                foreach ($this->controlActionHeadingRows as $row) {
+                    $sheet->mergeCells("A{$row}:B{$row}");
+                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 11,
+                            'color' => ['rgb' => '333333'],
+                        ],
+                    ]);
+                    $sheet->getStyle("A{$row}:E{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                }
+
+                foreach ($this->controlActionRows as $row) {
+                    $sheet->mergeCells("A{$row}:B{$row}");
+                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                        'font' => [
+                            'size' => 11,
+                            'color' => ['rgb' => '333333'],
+                        ],
+                    ]);
+                    $sheet->getStyle("A{$row}:E{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_LEFT)
+                    ->setVertical(Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                }
+
+                foreach ($this->absenceHeadingRows as $row) {
+                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 11,
+                            'color' => ['rgb' => '333333'],
+                        ],
+                    ]);
+                    $sheet->getStyle("A{$row}:E{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                }
+
+                foreach ($this->absenceRows as $row) {
+                    $sheet->getStyle("A{$row}:E{$row}")->applyFromArray([
+                        'font' => [
+                            'size' => 11,
+                            'color' => ['rgb' => '333333'],
+                        ],
+                    ]);
+                    $sheet->getStyle("A{$row}:E{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_LEFT)
+                    ->setVertical(Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                }
+
+                foreach ($this->emptyRows as $row) {
+                    $sheet->mergeCells("A{$row}:E{$row}");
+                }
+
+
+                $sheet->getColumnDimension('A')->setWidth(70);
+                $sheet->getColumnDimension('B')->setWidth(30);
+                $sheet->getColumnDimension('C')->setWidth(30);
+                $sheet->getColumnDimension('D')->setWidth(30);
+                $sheet->getColumnDimension('E')->setWidth(40);
+            }
+        ];
+    }
+}

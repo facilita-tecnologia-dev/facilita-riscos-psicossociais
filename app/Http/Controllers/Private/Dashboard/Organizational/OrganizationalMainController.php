@@ -149,7 +149,7 @@ class OrganizationalMainController
 
         $tests->each(function($userTest) use($user, &$testCompiled, $filtersApplied, $onlyGeneral) {
             $testDisplayName = $userTest['testType']['display_name'];
-            $evaluatedTest = $this->testService->evaluateIndividualTest($userTest['testType'], $userTest, session('auth:company')->metrics, 'organizational-climate');
+            $evaluatedTest = $this->testService->evaluateIndividualTest($userTest['testType'], $userTest, session('auth:company')->proartIndicators, 'organizational-climate');
             $this->updateAnswers($testDisplayName, $evaluatedTest, $testCompiled, $user, $filtersApplied, $onlyGeneral);
         }); 
     }

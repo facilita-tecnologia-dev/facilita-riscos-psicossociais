@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 
 class OrganizationalClimateHandler
 {
-    public function processIndividualTest(Test | CustomTest $testType, UserTest $userTest, Collection $metrics): array
+    public function processIndividualTest(Test | CustomTest $testType, UserTest $userTest, Collection $proartIndicators): array
     {
       $processedAnswers = [];
         foreach ($userTest->answers as $answer) {

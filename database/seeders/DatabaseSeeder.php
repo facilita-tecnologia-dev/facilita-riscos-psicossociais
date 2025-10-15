@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Database\Seeders\ActionPlan\ActionPlanSeeder;
 use Database\Seeders\BaseTests\BaseCollectionsSeeder;
 use Database\Seeders\Campaigns\CampaignSeeder;
+use Database\Seeders\CIDS\CIDSeeder;
 use Database\Seeders\PROARTIndicator\PROARTIndicatorSeeder;
 use Database\Seeders\Risks\HSERiskSeeder;
 use Database\Seeders\Risks\PROARTRiskSeeder;
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PROARTRiskSeeder::class,
             HSERiskSeeder::class,
+            CIDSeeder::class,
             PermissionSeeder::class,
             PROARTIndicatorSeeder::class,
             ActionPlanSeeder::class,

@@ -12,7 +12,7 @@ class DemographicsController
         Gate::authorize('demographics-dashboard-view');
 
         return view('private.dashboard.demographics.index', [
-            'metrics' => DemographicsService::metrics(),
+            'proartIndicators' => DemographicsService::metrics(),
             'demographics' => DemographicsService::demographics(),
         ]);
     }

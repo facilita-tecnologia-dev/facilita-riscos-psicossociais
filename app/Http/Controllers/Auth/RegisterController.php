@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\BaseCollection;
 use App\Enums\PROART\PROARTHazard;
 use App\Http\Requests\RegisterCompanyRequest;
 use App\Models\BaseControlAction;
 use App\Models\Company;
 use App\Models\CompanyReport;
 use App\Models\Metric;
+use App\Models\PROARTIndicator;
 use App\Services\AuthService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -27,6 +29,7 @@ class RegisterController
                 'cnpj' => $request->validated('cnpj'),
                 'email' => $request->validated('email'),
                 'password' => Hash::make($request->validated('password')),
+                'psychosocial_collection_type' => BaseCollection::HSE->value,
             ]);
 
             $this->createMetrics($company);

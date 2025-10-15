@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BaseCollectionType;
+use App\Enums\CampaignStatus;
 use App\Http\Requests\CampaignStoreRequest;
 use App\Http\Requests\CampaignUpdateRequest;
 use App\Mail\CampaignEmail;
@@ -119,7 +120,7 @@ class CampaignController
 
     public function close(Campaign $campaign)
     {
-        $campaign->update(['end_date' => now()]);
+        $campaign->update(['end_date' => now(), 'status' => CampaignStatus::COMPLETED]);
         
         session('auth:company')->load('campaigns');
         

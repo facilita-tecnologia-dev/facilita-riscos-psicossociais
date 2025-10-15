@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Private;
 
 use App\Models\Hazard;
+use App\Services\HSEService;
+use App\Services\PROARTService;
 use App\Services\PsychosocialReportService;
-use App\Services\PsychosocialService;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Gate;
 
 class PsychosocialController
@@ -16,32 +16,38 @@ class PsychosocialController
         if(!session('auth:company')->latestPsychosocialCampaign()  || !session('auth:company')->latestPsychosocialCampaign()->userCollections()->exists()) return back();
         
         return view('private.dashboard.psychosocial.index', [
-            'dashboard' => session('auth:company')->latestPsychosocialCampaign() ? PsychosocialService::dashboard() : false,
-            'participation' => session('auth:company')->latestPsychosocialCampaign() ? PsychosocialService::participation() : false,
+            'dashboard' => session('auth:company')->latestPsychosocialCampaign() ? 
+                        (session('auth:company')->usesHSE() ? HSEService::dashboard() : PROARTService::dashboard()) :
+                         false,
+            'participation' => session('auth:company')->latestPsychosocialCampaign() ? HSEService::participation() : false,
             'filters' => collect(request()->query())->filter()
         ]);
     }
 
-    public function departments(Risk $risk)
+    public function departments(Hazard $hazard)
     {
         Gate::authorize('psychosocial-dashboard-view');
         if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
         
         return view('private.dashboard.psychosocial.department', [
-            'risk' => $risk,
-            'departments' => PsychosocialService::departments($risk),
+            'hazard' => $hazard,
+            'departments' => session('auth:company')->latestPsychosocialCampaign() ? 
+                        (session('auth:company')->usesHSE() ? HSEService::departments($hazard) : PROARTService::departments($hazard)) :
+                         false,
         ]);
     }
     
-    public function list(Risk $risk, string $department)
+    public function list(Hazard $hazard, string $department)
     {
         Gate::authorize('psychosocial-dashboard-view');
         if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
         
         return view('private.dashboard.psychosocial.list', [
-            'risk' => $risk,
+            'hazard' => $hazard,
             'department' => $department,
-            'list' => PsychosocialService::list($risk, $department),
+            'list' => session('auth:company')->latestPsychosocialCampaign() ? 
+                    (session('auth:company')->usesHSE() ? HSEService::list($hazard, $department) : PROARTService::list($hazard, $department)) :
+                        false,
         ]);
     }
 
@@ -51,7 +57,9 @@ class PsychosocialController
         if(!session('auth:company')->latestPsychosocialCampaign()  || session('auth:company')->latestPsychosocialCampaign()->userCollections->isEmpty()) return back();
 
         return view('private.dashboard.psychosocial.risks', [
-            'risks' => PsychosocialService::risks(onlyHigh: true),
+            'risks' => session('auth:company')->latestPsychosocialCampaign() ? 
+                    (session('auth:company')->usesHSE() ? HSEService::risks(onlyHigh: true) : PROARTService::risks(onlyHigh: true)) :
+                        false,
         ]);
     }
 

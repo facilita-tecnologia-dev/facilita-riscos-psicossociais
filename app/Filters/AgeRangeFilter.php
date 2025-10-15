@@ -3,13 +3,14 @@
 namespace App\Filters;
 
 use App\Enums\Filters\AgeRangeEnum;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Services\User\UserFilterInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class AgeRangeFilter implements UserFilterInterface
 {
-    public function handle(Builder $query, \Closure $next): Builder
+    public function handle(Builder | Relation $query, \Closure $next): Builder | Relation
     {
         if (request()->filled('age_range')) {
             assert(is_string(request('age_range')));

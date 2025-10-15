@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('gravity');
             $table->string('group');
+            $table->integer('baseline')->nullable();
         });
     }
 

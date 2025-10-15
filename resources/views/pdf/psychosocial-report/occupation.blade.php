@@ -63,32 +63,133 @@
                 </tr>
             </tbody>
         </table>
+        @if(session('auth:company')->usesHSE())
+            @foreach ($occupationRisks as $hazard => $risk)
+                <table style="margin-top: 28px;">
+                    <tbody>
+                        <tr>
+                            <td style="width:40%;">
+                                <span style="font-size: 8px; display:block; margin: 0 2px 0 2px;">Setor: {{ $occupation }}</span>
+                                <p>Perigo Psicossocial:</p> 
+                                <span style="font-weight:bold; margin: 2px;">{{ App\Enums\HSE\HSEHazard::from($hazard)->label() }}</span>
+                            </td>
+                            <td style="width:20%;">
+                                <p>Severidade:</p> 
+                                <span style="font-weight:bold; margin: 2px;">{{ App\Enums\HSE\HSEGravity::from($risk['risk']['gravity'])->label() }}</span>
+                            </td>
+                            <td style="width:20%;">
+                                <p>Probabilidade:</p> 
+                                <span style="font-weight:bold; margin: 2px;">{{ App\Enums\HSE\HSEProbability::from($risk['risk']['probability'])->label() }}</span>
+                            </td>
+                            <td style="width:20%; background-color: {{ $risk['risk']['evaluated']->color() }}
+                            ">
+                                <p>Risco Identificado:</p> 
+                                <span style="font-weight:bold; margin: 2px;">{{ $risk['risk']['evaluated']->label() }}</span>
+                            </td>
+                        </tr>                            
+                    </tbody>
+                </table>
 
-        @foreach ($occupationRisks as $type => $risk)
+                <table>
+                    <thead>
+                        <th style="width:40%; font-size: 10px">Medida de Controle</th>
+                        <th style="width:20%; font-size: 10px">Prazo</th>
+                        <th style="width:20%; font-size: 10px">Responsável</th>
+                        <th style="width:20%; font-size: 10px">Situação</th>
+                    </thead>
+                    <tbody>
+                        @foreach ($risk['control_actions'] as $action) 
+                            <tr>
+                                <td style="width:40%; font-size: 10px;">{{ $action->content }}</td>
+                                <td style="width:20%; font-size: 10px;">{{ $action->deadline ?? 'Indefinido' }}</td>
+                                <td style="width:20%; font-size: 10px;">{{ $action->assignee ?? 'Indefinido' }}</td>
+                                <td style="width:20%; font-size: 10px;">{{ $action->status ?? 'Indefinido' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endforeach
+        @else
+            @foreach ($occupationRisks as $hazard => $risk)
+                <table style="margin-top: 28px;">
+                    <tbody>
+                        <tr>
+                            <td style="width:40%;">
+                                <span style="font-size: 8px; display:block; margin-bottom:4px;">Função: {{ $occupation }}</span>
+                                <p>Perigo Psicossocial:</p> 
+                                <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTHazard::from($hazard)->label() }}</span>
+                            </td>
+                            <td style="width:20%;">
+                                <p>Severidade:</p> 
+                                <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTGravity::from($risk['risk']['gravity'])->label() }}</span>
+                            </td>
+                            <td style="width:20%;">
+                                <p>Probabilidade:</p> 
+                                <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTProbability::from($risk['risk']['probability'])->label() }}</span>
+                            </td>
+                            <td style="width:20%; background-color:
+                                    {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::CRITICAL ? '#fc6f6f50' : '' }}
+                                    {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::HIGH ? '#dc933250' : '' }}
+                                    {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::MEDIUM ? '#faed5d50' : '' }}
+                                    {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::LOW ? '#76fc7150' : '' }}
+                            ">
+                                <p>Risco Identificado:</p> 
+                                <span style="font-weight:bold; margin: 2px;">{{ $risk['risk']['evaluated']->label() }}</span>
+                            </td>
+                        </tr>                            
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                        <th style="width:40%; font-size: 10px">Medida de Controle</th>
+                        <th style="width:15%; font-size: 10px">Tipo</th>
+                        <th style="width:15%; font-size: 10px">Prazo</th>
+                        <th style="width:15%; font-size: 10px">Responsável</th>
+                        <th style="width:15%; font-size: 10px">Situação</th>
+                    </thead>
+                    <tbody>
+                        @foreach ($risk['control_actions'] as $actionType => $actions) 
+                            @foreach ($actions as $action) 
+                                <tr>
+                                    <td style="width:40%; font-size: 10px;">{{ $action->content }}</td>
+                                    <td style="width:15%; font-size: 10px;">{{ App\Enums\PROART\PROARTControlActionTypes::from($actionType)->label() }}</td>
+                                    <td style="width:15%; font-size: 10px;">{{ $action->deadline ?? 'Indefinido' }}</td>
+                                    <td style="width:15%; font-size: 10px;">{{ $action->assignee ?? 'Indefinido' }}</td>
+                                    <td style="width:15%; font-size: 10px;">{{ $action->status ?? 'Indefinido' }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+            @endforeach
+        @endif
+        @if(!$loop->last)
+            <div class="page-break"></div>
+        @endif
+    @endforeach
+
+    @if(session('auth:company')->usesHSE())
+        <div class="page-break"></div>
+
+        <x-pdf.cover>          
+            @if(session('auth:company')->logo)
+                <img src="{{ public_path(session('auth:company')->logo) }}" style="max-width: 8cm; object-fit:contain; margin-bottom: 24px;">            
+            @endif
+            <h2 style="margin-bottom: 18px;">{{ session('auth:company')->name }}</h2>
+            <h1 style="margin-bottom: 8px; font-size: 32px;">Relatório de Afastamentos</h1>
+            <p style="font-size: 16px;">Lista de afastamentos registrados agrupados por função.</p>
+        </x-pdf.cover>
+        
+        <div class="page-break"></div>
+        
+        @foreach ($absences as $evaluationFactor => $factorAbsences)
             <table style="margin-top: 28px;">
                 <tbody>
                     <tr>
-                        <td style="width:40%;">
-                            <span style="font-size: 8px; display:block; margin-bottom:4px;">Função: {{ $occupation }}</span>
-                            <p>Perigo Psicossocial:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTHazard::from($type)->label() }}</span>
-                        </td>
-                        <td style="width:20%;">
-                            <p>Severidade:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTGravity::from($risk['risk']['gravity'])->label() }}</span>
-                        </td>
-                        <td style="width:20%;">
-                            <p>Probabilidade:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ App\Enums\PROART\PROARTProbability::from($risk['risk']['probability'])->label() }}</span>
-                        </td>
-                        <td style="width:20%; background-color:
-                                {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::CRITICAL ? '#fc6f6f50' : '' }}
-                                {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::HIGH ? '#dc933250' : '' }}
-                                {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::MEDIUM ? '#faed5d50' : '' }}
-                                {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::LOW ? '#76fc7150' : '' }}
-                        ">
-                            <p>Risco Identificado:</p> 
-                            <span style="font-weight:bold; margin: 2px;">{{ $risk['risk']['evaluated']->label() }}</span>
+                        <td style="width:100%;">
+                            <p>Função:</p> 
+                            <span style="font-weight:bold; margin: 2px;">{{ $evaluationFactor }}</span>
                         </td>
                     </tr>                            
                 </tbody>
@@ -96,33 +197,26 @@
 
             <table>
                 <thead>
-                    <th style="width:40%; font-size: 10px">Medida de Controle</th>
-                    <th style="width:15%; font-size: 10px">Tipo</th>
-                    <th style="width:15%; font-size: 10px">Prazo</th>
-                    <th style="width:15%; font-size: 10px">Responsável</th>
-                    <th style="width:15%; font-size: 10px">Situação</th>
+                    <th style="width:20%; font-size: 10px">Código CID</th>
+                    <th style="width:20%; font-size: 10px">Data de Registro</th>
+                    <th style="width:20%; font-size: 10px">Setor</th>
+                    <th style="width:20%; font-size: 10px">Função</th>
+                    <th style="width:20%; font-size: 10px">Duração</th>
                 </thead>
                 <tbody>
-                    @foreach ($risk['control_actions'] as $actionType => $actions) 
-                        @foreach ($actions as $action) 
-                            <tr>
-                                <td style="width:40%; font-size: 10px;">{{ $action->content }}</td>
-                                <td style="width:15%; font-size: 10px;">{{ App\Enums\PROART\PROARTControlActionTypes::from($actionType)->label() }}</td>
-                                <td style="width:15%; font-size: 10px;">{{ $action->deadline ?? 'Indefinido' }}</td>
-                                <td style="width:15%; font-size: 10px;">{{ $action->assignee ?? 'Indefinido' }}</td>
-                                <td style="width:15%; font-size: 10px;">{{ $action->status ?? 'Indefinido' }}</td>
-                            </tr>
-                        @endforeach
+                    @foreach ($factorAbsences as $absence)
+                        <tr>
+                            <td style="width:20%; font-size: 10px;">{{ $absence->cid->type }}</td>
+                            <td style="width:20%; font-size: 10px;">{{ $absence->created_at->format('d/m/Y') }}</td>
+                            <td style="width:20%; font-size: 10px;">{{ $absence->department }}</td>
+                            <td style="width:20%; font-size: 10px;">{{ $absence->occupation }}</td>
+                            <td style="width:20%; font-size: 10px;">{{ $absence->duration }} dias</td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
         @endforeach
-
-
-        @if(!$loop->last)
-            <div class="page-break"></div>
-        @endif
-    @endforeach
+    @endif
     
 
     <x-pdf.footer />

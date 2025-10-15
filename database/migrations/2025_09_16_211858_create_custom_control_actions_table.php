@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(ActionPlan::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Hazard::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(ControlActionType::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(ControlActionType::class)->nullable();
             $table->integer('gravity');
             $table->text('content');
             $table->string('assignee')->nullable();

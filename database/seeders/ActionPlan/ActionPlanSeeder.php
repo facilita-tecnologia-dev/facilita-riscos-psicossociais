@@ -11,6 +11,8 @@ class ActionPlanSeeder extends Seeder
         $this->call([
             PROARTControlActionTypesSeeder::class,
             PROARTControlActionsSeeder::class,
+
+            HSEControlActionsSeeder::class,
         ]);
     }
 }

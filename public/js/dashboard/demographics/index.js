@@ -7,17 +7,17 @@ function renderMetrics() {
     let data = [];
     let labels = [];
 
-    Object.values(metrics).forEach((department) => {
+    Object.values(proartIndicators).forEach((department) => {
         data.push(department);
     });
 
-    Object.keys(metrics).forEach((department) => {
+    Object.keys(proartIndicators).forEach((department) => {
         labels.push(department);
     });
 
-    const chartId = "company_metrics_chart";
+    const chartId = "company_indicators_chart";
 
-    const wrapper = document.getElementById("company-metrics");
+    const wrapper = document.getElementById("company-indicators");
     const colors = [chartDefaultColors.PRIMARY];
     if (data.length > 0) {
         createBarChart(

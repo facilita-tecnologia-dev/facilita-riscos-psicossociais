@@ -31,12 +31,16 @@ class ControlActionFormComponent extends Component
 
     public function update()
     {
-        $this->action->update([
-            'content' => $this->content,
-            'deadline' => $this->deadline,
-            'assignee' => $this->assignee,
-            'status' => $this->status,
+        $this->action->fill([
+            'content'  => $this->content !== '' ? $this->content : null,
+            'deadline' => $this->deadline !== '' ? $this->deadline : null,
+            'assignee' => $this->assignee !== '' ? $this->assignee : null,
+            'status'   => $this->status !== '' ? $this->status : null,
         ]);
+
+        if (! $this->action->isDirty()) return;
+
+        $this->action->save();
 
         $this->dispatch('control-action:update');
         $this->dispatch('alert:success', 'Medida atualizada!');

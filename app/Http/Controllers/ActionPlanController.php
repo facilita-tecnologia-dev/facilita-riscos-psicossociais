@@ -147,7 +147,7 @@ class ActionPlanController
 
         $testType->average = round($testType['userTests']->avg('average_value'), 2);
         
-        $evaluatedTest = $this->testService->evaluateTests($testType, session('auth:company')->metrics);
+        $evaluatedTest = $this->testService->evaluateTests($testType, session('auth:company')->proartIndicators);
         
         foreach($evaluatedTest['risks'] as &$risk){
             $risk['riskCaption'] = RiskLevelEnum::labelFromValue($risk['riskLevel']);

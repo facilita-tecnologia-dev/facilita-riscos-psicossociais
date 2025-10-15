@@ -123,6 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'absence-deadline' => env('ABSENCE_DEADLINE', 24),
+    
     'facilita-contact-email' => env('FACILITA_CONTACT_EMAIL'),
     
     'facilita-contact-landline' => env('FACILITA_CONTACT_LANDLINE'),

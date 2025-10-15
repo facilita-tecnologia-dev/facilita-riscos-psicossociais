@@ -15,7 +15,7 @@ class CustomControlAction extends Model
         return $this->belongsTo(ActionPlan::class);
     }
 
-    public function risk(): BelongsTo
+    public function hazard(): BelongsTo
     {
         return $this->belongsTo(Hazard::class);
     }

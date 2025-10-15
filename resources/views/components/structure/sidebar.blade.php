@@ -57,14 +57,25 @@
                 @endcan
                     
                 @can('metrics-edit')
-                    <div @if(session('auth:company')->users->isEmpty()) data-tippy-content="Você deve cadastrar colaboradores antes de editar os dados de desempenho" @endif>
-                        <x-sidebar.item href="{{ route('company-metrics.edit') }}" class="{{ request()->routeIs('company-metrics.edit') ? 'bg-gray-200' : ''}} {{ session('auth:company')->users->isEmpty()  ? 'pointer-events-none opacity-50' : '' }}">
-                            <div class="w-5 flex justify-center items-center">
-                                <i class="fa-solid fa-percent"></i>
-                            </div>
-                            Dados de Desempenho Organizacional
-                        </x-sidebar.item>
-                    </div>
+                    @if(session('auth:company')->usesHSE())
+                        <div @if(session('auth:company')->users->isEmpty()) data-tippy-content="Você deve cadastrar colaboradores antes de editar os Indicadores Epidemiológicos" @endif>
+                            <x-sidebar.item href="{{ route('company-absence.index') }}" class="{{ request()->routeIs('company-absence.index') ? 'bg-gray-200' : ''}} {{ session('auth:company')->users->isEmpty()  ? 'pointer-events-none opacity-50' : '' }}">
+                                <div class="w-5 flex justify-center items-center">
+                                    <i class="fa-solid fa-percent"></i>
+                                </div>
+                                Indicadores Epidemiológicos
+                            </x-sidebar.item>
+                        </div>
+                    @else      
+                        <div @if(session('auth:company')->users->isEmpty()) data-tippy-content="Você deve cadastrar colaboradores antes de editar os dados de desempenho" @endif>
+                            <x-sidebar.item href="{{ route('company-metrics.edit') }}" class="{{ request()->routeIs('company-metrics.edit') ? 'bg-gray-200' : ''}} {{ session('auth:company')->users->isEmpty()  ? 'pointer-events-none opacity-50' : '' }}">
+                                <div class="w-5 flex justify-center items-center">
+                                    <i class="fa-solid fa-percent"></i>
+                                </div>
+                                Dados de Desempenho Organizacional
+                            </x-sidebar.item>
+                        </div>
+                    @endif
                 @endcan
 
                 @can('demographics-dashboard-view')
@@ -139,14 +150,6 @@
                         Colaboradores
                     </x-sidebar.item>
                 @endcan
-                {{-- @can('action-plan-edit')
-                    <x-sidebar.item href="{{ route('action-plan.show', App\Models\ActionPlan::firstWhere('company_id', session('auth:company')->id)) }}" class="{{ request()->routeIs('action-plan.show') ? 'bg-gray-200' : ''}}">
-                        <div class="w-5 flex justify-center items-center">
-                            <i class="fa-solid fa-list-ul"></i>
-                        </div>
-                        Plano de Ação
-                    </x-sidebar.item>
-                @endcan --}}
                 @can('control-actions-edit')
                     <x-sidebar.item href="{{ route('control-actions.update') }}" class="{{ request()->routeIs('action-plan.show') ? 'bg-gray-200' : ''}}">
                         <div class="w-5 flex justify-center items-center">

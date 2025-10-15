@@ -16,6 +16,7 @@ use App\Filters\NameFilter;
 use App\Filters\OccupationFilter;
 use App\Filters\WorkShiftFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
 
@@ -47,7 +48,7 @@ class UserFilterService
         'age' => 'birth_date',
     ];
 
-    public static function apply(Builder $query): Builder
+    public static function apply(Builder | Relation $query): Builder | Relation
     {
         return app(Pipeline::class)
             ->send($query)
@@ -55,7 +56,7 @@ class UserFilterService
             ->thenReturn();
     }
 
-    public static function sort(Builder $query): Builder
+    public static function sort(Builder | Relation $query): Builder | Relation
     {
         $orderBy = request('order_by') ?? null;
 

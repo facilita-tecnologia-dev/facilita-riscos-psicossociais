@@ -5,14 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function renderPsychosocialRiskBars() {
     const riskBars = document.querySelectorAll('[data-role="risk-bar"]');
+
     riskBars.forEach((risk) => {
         const value = risk.dataset.value;
-        const bar = risk.querySelector(".bar");
-        const barWidth = (value / 4) * 100;
+        const bar = risk.querySelector("#bar");
+        const division = usesHSE ? 5 : 4;
+        const barWidth = (value / division) * 100;
 
-        let barBGColor = riskColors[value] ?? riskColors.default;
-
-        bar.style.backgroundColor = barBGColor;
+        bar.style.backgroundColor = bar.dataset.color;
         bar.style.width = barWidth.toFixed() + "%";
     });
 }
@@ -41,11 +41,3 @@ function renderPsychosocialTestsParticipation() {
 
     createBarChart(wrapper, chartId, labels, data, tooltips, colors);
 }
-
-const riskColors = {
-    1: "#A8E6CFCC",
-    2: "#DDE26F75",
-    3: "#F6B26B75",
-    4: "#F26C6C75",
-    default: "#333",
-};
