@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Private;
 
+use App\Models\BaseCollection;
+use App\Enums\BaseCollection as EnumBaseCollection;
 use App\Models\Hazard;
 use App\Services\ReportChannelService;
 use Illuminate\Http\Request;
@@ -18,9 +20,10 @@ class MetricsController
         $hasReportChannel = ReportChannelService::hasReportChannel(session('auth:company'));
         
         if($hasReportChannel){
-            $risks = Hazard::where('base_collection_id', 1)->get();
+            $baseCollection = BaseCollection::firstWhere('key', EnumBaseCollection::PROART);
+            $hazards = Hazard::where('base_collection_id', $baseCollection->id)->get();
             $reportChannelReports = ReportChannelService::reports(session('auth:company'));
-            $reports = $risks->mapWithKeys(fn($risk) => [$risk->type => $reportChannelReports->get($risk->type, 0)]);
+            $reports = $hazards->mapWithKeys(fn($risk) => [$risk->type => $reportChannelReports->get($risk->type, 0)]);
         } else{
             $companyReports = session('auth:company')->reports()->get();
             $reports = $companyReports->mapWithKeys(fn($report) => [$report->type => $report->value]);

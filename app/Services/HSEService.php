@@ -14,7 +14,7 @@ class HSEService
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
         
         $campaign = session('auth:company')->latestPsychosocialCampaign();
-        $hazards = $campaign->collection()->hazards->groupBy('group');
+        $hazards = $campaign->collection()->hazards()->with('cids')->get()->groupBy('group');
        
         $dashboard = $campaign->collection()
                                 ->questions()

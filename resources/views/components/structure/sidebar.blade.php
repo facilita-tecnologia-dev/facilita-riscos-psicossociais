@@ -24,8 +24,8 @@
         @canany(['psychosocial-dashboard-view', 'organizational-dashboard-view', 'feedbacks-index', 'metrics-edit', 'demographics-dashboard-view'])
             <x-sidebar.menu title="Dados">
                 @can('psychosocial-dashboard-view')
-                    <div @if(!session('auth:company')->latestPsychosocialCampaign() || !session('auth:company')->latestPsychosocialCampaign()->userCollections()->exists()) data-tippy-content="Você ainda não realizou testes de Riscos Psicossociais" @endif>
-                        <x-sidebar.item href="{{ route('dashboard.psychosocial') }}" class="{{ request()->routeIs('dashboard.psychosocial') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestPsychosocialCampaign() || !session('auth:company')->latestPsychosocialCampaign()->userCollections()->exists() ? 'pointer-events-none opacity-50' : '' }}">
+                    <div @if(!session('auth:company')->latestPsychosocialCampaign() || session('auth:company')->latestPsychosocialCampaign()?->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou testes de Riscos Psicossociais" @endif>
+                        <x-sidebar.item href="{{ route('dashboard.psychosocial') }}" class="{{ request()->routeIs('dashboard.psychosocial') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestPsychosocialCampaign() || session('auth:company')->latestPsychosocialCampaign()?->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-brain"></i>
                             </div>
@@ -33,10 +33,10 @@
                         </x-sidebar.item>
                     </div>
                 @endcan
-    
+
                 @can('organizational-dashboard-view')
-                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists()) data-tippy-content="Você ainda não realizou testes de Pesquisa de Clima" @endif>
-                        <x-sidebar.item href="{{ route('dashboard.organizational-climate') }}" class="{{ request()->routeIs('dashboard.organizational-climate') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists() ? 'pointer-events-none opacity-50' : '' }}">
+                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()?->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou testes de Pesquisa de Clima" @endif>
+                        <x-sidebar.item href="{{ route('dashboard.organizational-climate') }}" class="{{ request()->routeIs('dashboard.organizational-climate') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()?->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-cloud"></i>
                             </div>
@@ -46,8 +46,8 @@
                 @endcan
             
                 @can('feedbacks-index')
-                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists()) data-tippy-content="Você ainda não realizou campanhas de Pesquisa de Clima" @endif>
-                        <x-sidebar.item href="{{ route('feedback.index') }}" class="{{ request()->routeIs('feedback.index') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists() ? 'pointer-events-none opacity-50' : '' }}">
+                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()?->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou campanhas de Pesquisa de Clima" @endif>
+                        <x-sidebar.item href="{{ route('feedback.index') }}" class="{{ request()->routeIs('feedback.index') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()?->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
                                 <i class="fa-solid fa-comments"></i>
                             </div>

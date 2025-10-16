@@ -12,6 +12,8 @@ class Campaign extends Model
     protected $table = 'campaigns';
     public $timestamps = false;
 
+    protected BaseCollection | CustomCollection $collection;
+
     protected $casts = [
         'type' => CollectionType::class,
         'status' => CampaignStatus::class,
@@ -22,11 +24,15 @@ class Campaign extends Model
 
     public function collection(): BaseCollection | CustomCollection
     {   
-        if($this->type === CollectionType::CUSTOM){
-            return CustomCollection::find($this->collection_id);
+        if(!isset($this->collection)){
+            if($this->type === CollectionType::CUSTOM){
+                $this->collection = CustomCollection::find($this->collection_id);
+            }
+         
+            $this->collection = BaseCollection::find($this->collection_id);
         }
-     
-        return BaseCollection::find($this->collection_id);
+
+        return $this->collection;
     }
 
     public function userCollections(): HasMany

@@ -25,9 +25,10 @@ class AbsenceEditComponent extends Component
         return view('livewire.private.absences.absence-edit-component');
     }
 
-    public function mount(CompanyAbsence $absence)
+    public function mount(CompanyAbsence $absence, Collection $cids)
     {
         $this->absence = $absence;
+        $this->cids = $cids;
 
         $users = session('auth:company')->users;
         
@@ -36,7 +37,7 @@ class AbsenceEditComponent extends Component
         $this->occupation = $absence->occupation;
         $this->duration = $absence->duration;
 
-        $this->cids = CID::all()->map(fn($cid) => ['option' => $cid->type, 'value' => $cid->id]);
+        // $this->cids = CID::all()->map(fn($cid) => ['option' => $cid->type, 'value' => $cid->id]);
         $this->departments = $users->pluck('department')->unique()->map(fn($department) => ['option' => $department, 'value' => $department]);
         $this->occupations = $users->pluck('occupation')->unique()->map(fn($occupation) => ['option' => $occupation, 'value' => $occupation]);
     }

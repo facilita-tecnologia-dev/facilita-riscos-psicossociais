@@ -21,6 +21,9 @@ class Company extends Authenticatable
 
     protected $table = 'companies';
 
+    protected BaseCollection $psychosocialCollection;
+    protected BaseCollection $organizationalCollection;
+
     /* --- Relations --- */
 
     public function users(): BelongsToMany
@@ -64,7 +67,6 @@ class Company extends Authenticatable
     {
         return $this->hasOne(ActionPlan::class);
     }
-    
 
     public function customCollections(): HasMany
     {
@@ -75,12 +77,20 @@ class Company extends Authenticatable
 
     public function psychosocialCollection()
     {
-        return BaseCollection::firstWhere('key', $this->psychosocial_collection_type);
+        if(!isset($this->psychosocialCollection)){
+            $this->psychosocialCollection = BaseCollection::firstWhere('key', $this->psychosocial_collection_type);
+        }
+     
+        return $this->psychosocialCollection;
     }
 
     public function organizationalCollection()
     {
-        return BaseCollection::firstWhere('key', 'organizational-climate');
+        if(!isset($this->organizationalCollection)){
+            $this->organizationalCollection = BaseCollection::firstWhere('key', 'organizational-climate');
+        }
+     
+        return $this->organizationalCollection;
     }
 
     public function collections()

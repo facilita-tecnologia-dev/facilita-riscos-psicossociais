@@ -29,7 +29,7 @@
                         <x-table.body.td class="hidden sm:block flex-1 truncate">{{ $absence->occupation }}</x-table.body.td>
                         <x-table.body.td class="flex-1 sm:w-28">{{ $absence->duration }} dias</x-table.body.td>
                         <x-table.body.td class="w-12">
-                            <livewire:private.absences.absence-edit-component wire:key="edit-{{ $absence->id }}" :absence="$absence">
+                            <livewire:private.absences.absence-edit-component wire:key="edit-{{ $absence->id }}" :absence="$absence" :cids="$cids">
                         </x-table.body.td>
                         <x-table.body.td class="w-12">
                             <livewire:private.absences.absence-delete-component wire:key="delete-{{ $absence->id }}" :absence="$absence">

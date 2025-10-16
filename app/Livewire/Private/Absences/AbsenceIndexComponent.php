@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Private\Absences;
 
+use App\Models\CID;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -19,7 +20,8 @@ class AbsenceIndexComponent extends Component
     public function render()
     {    
         return view('livewire.private.absences.absence-index-component', [
-            'absences' => $this->fetchAbsences()
+            'absences' => $this->fetchAbsences(),
+            'cids' => CID::all()
         ]);
     }
 
