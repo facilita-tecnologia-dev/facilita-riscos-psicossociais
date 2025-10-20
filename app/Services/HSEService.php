@@ -26,7 +26,11 @@ class HSEService
                                 ->get()
                                 ->groupBy('group')
                                 ->mapWithKeys(function($questions, $group) use($hazards) {
-                                    $questionAverages = $questions->pluck('average');
+                                    $questionAverages = $questions
+                                                            ->each(fn($question) => $question->inverted 
+                                                                ? $question->average = self::invertAnswerScore($question->average) 
+                                                                : $question)
+                                                            ->pluck('average');
                                     $groupScore = $questionAverages->sum() / $questionAverages->count();
                                     
                                     $groupRisks = $hazards[$group]->mapWithKeys(fn($hazard) => 
@@ -177,5 +181,10 @@ class HSEService
         ]]);
 
         return $globalParticipation->merge($departmentParticipation);
+    }
+
+    public static function invertAnswerScore(float $score)
+    {
+        return 4 - $score;
     }
 }
