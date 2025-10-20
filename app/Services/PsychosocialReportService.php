@@ -9,8 +9,6 @@ use App\Exports\HSEReportDepartmentExport;
 use App\Exports\HSEReportOccupationExport;
 use App\Exports\PROARTReportDepartmentExport;
 use App\Exports\PROARTReportOccupationExport;
-use App\Exports\PsychosocialReportDepartmentExport;
-use App\Exports\PsychosocialReportOccupationExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -91,14 +89,7 @@ class PsychosocialReportService
                 $riskAverages = $risk->questions
                                         ->map(function($question) {
                                             $evaluatedAnswers = $question->answers->mapWithKeys(function($answers, $department) use($question) {
-                                                $processedAnswers = $answers->map(function($answer) use($question){
-                                                    $answer->value = $question->inverted 
-                                                                    ? PROARTService::invertAnswerScore($answer->value) 
-                                                                    : $answer->value;
-                                                    return $answer;
-                                                });
-                                                
-                                                $average = round($processedAnswers->sum('value') / $processedAnswers->count());
+                                                $average = round($answers->sum('value') / $answers->count());
 
                                                 return [$department => $average];
                                             });
@@ -248,16 +239,8 @@ class PsychosocialReportService
             )->mapWithKeys(function($risk) {
                 $riskAverages = $risk->questions
                                         ->map(function($question) {
-                                            $evaluatedAnswers = $question->answers->mapWithKeys(function($answers, $occupation) use($question) {
-                                                $processedAnswers = $answers->map(function($answer) use($question){
-                                                    $answer->value = $question->inverted 
-                                                                    ? PROARTService::invertAnswerScore($answer->value) 
-                                                                    : $answer->value;
-                                                    return $answer;
-                                                });
-                                                
-                                                $average = round($processedAnswers->sum('value') / $processedAnswers->count());
-
+                                            $evaluatedAnswers = $question->answers->mapWithKeys(function($answers, $occupation) use($question) {                                                
+                                                $average = round($answers->sum('value') / $answers->count());
                                                 return [$occupation => $average];
                                             });
 
@@ -383,11 +366,5 @@ class PsychosocialReportService
     public static function HSEAbsences(HSEEvaluationType $evaluationType)
     {
         return session('auth:company')->CIDabsences()->with('cid')->get()->groupBy($evaluationType->value);
-        // foreach ($absences as $evaluationFactor => $absences){
-        //     foreach ($absences as $absence){   
-        //         dump($absence->cid->type, $absence->department, $absence->duration);
-        //     }
-        // }
-        // dd($absences['Engenharia'][0]->cid->type);
     }
 }

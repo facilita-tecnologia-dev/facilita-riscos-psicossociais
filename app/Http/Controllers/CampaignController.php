@@ -76,12 +76,12 @@ class CampaignController
     {
         Gate::authorize('campaign-edit');
         
-        $collections = BaseCollection::all()
-            ->concat(session('auth:company')->customCollections)
-            ->map(fn($c) => [
-                'option' => $c->name . ($c instanceof BaseCollection ? ' (Padrão)' : ''), 
-                'value' => ($c instanceof BaseCollection ? 'base_' : 'custom_') . $c->id
-            ]);
+        $collections = [
+            [
+                'option' => session('auth:company')->psychosocialCollection()->name . " (" . (session('auth:company')->usesHSE() ? 'HSE' : 'PROART') . ")", 
+                'value' => session('auth:company')->psychosocialCollection()->id
+            ]
+        ];
 
         return view('private.campaign.edit', compact('campaign', 'collections'));
     }
@@ -90,7 +90,7 @@ class CampaignController
     {
         Gate::authorize('campaign-edit');
 
-        $collectionID = explode('_', $request->validated('collection_id'))[1];
+        $collectionID = $request->validated('collection_id');
         
         if (session('auth:company')->hasCampaignThisYear($collectionID) && $collectionID != $campaign->collection_id) return back()->with('message', 'Sua empresa já cadastrou uma campanha de testes com o mesmo tipo nesse ano');
 

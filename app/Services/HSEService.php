@@ -26,11 +26,7 @@ class HSEService
                                 ->get()
                                 ->groupBy('group')
                                 ->mapWithKeys(function($questions, $group) use($hazards) {
-                                    $questionAverages = $questions
-                                                            ->each(fn($question) => $question->inverted 
-                                                                ? $question->average = self::invertAnswerScore($question->average) 
-                                                                : $question)
-                                                            ->pluck('average');
+                                    $questionAverages = $questions->pluck('average');
                                     $groupScore = $questionAverages->sum() / $questionAverages->count();
                                     
                                     $groupRisks = $hazards[$group]->mapWithKeys(fn($hazard) => 

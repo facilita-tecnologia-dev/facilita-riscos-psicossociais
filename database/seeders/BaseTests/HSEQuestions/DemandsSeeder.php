@@ -14,49 +14,49 @@ class DemandsSeeder extends Seeder
             [
                 'base_collection_id' => 2,
                 'statement' => 'As exigências de trabalho feitas por colegas e supervisores são difíceis de conciliar?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::DEMANDS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Tenho prazos impossíveis de serem cumpridos?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::DEMANDS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Tenho que trabalhar muito intensamente?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::DEMANDS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Preciso deixar de lado algumas tarefas porque tenho coisas demais para fazer?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::DEMANDS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Não consigo fazer pausas suficientes?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::DEMANDS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Sou pressionado para trabalhar por longos períodos?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::DEMANDS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Tenho que trabalhar muito rápido?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::DEMANDS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'As pausas temporárias são impossíveis de cumprir?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::DEMANDS
             ],
         ]);

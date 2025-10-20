@@ -10,6 +10,17 @@ enum OCOption: int
     case DISAGREE = 2;
     case STRONGLY_DISAGREE = 1;
 
+    public function inverted(): string
+    {
+        return match ($this) {
+            self::STRONGLY_AGREE => 1,
+            self::AGREE => 2,
+            self::NEUTRAL => 3,
+            self::DISAGREE => 4,
+            self::STRONGLY_DISAGREE => 5,
+        };
+    }
+    
     public function label(): string
     {
         return match ($this) {

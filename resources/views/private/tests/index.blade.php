@@ -11,14 +11,13 @@
                         @foreach ($campaign->collection()->questions->shuffle() as $key => $question)
                             @php
                                 $collection = $campaign->collection();
-
-                                $options = $collection->type->value == 'psychosocial-risks'
-                                                ?   (
+                                $options = ($collection->type->value == 'psychosocial-risks'
+                                                ?  (
                                                         $collection->key == 'hse' 
-                                                        ? array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\HSE\HSEOption::cases())
-                                                        : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\PROART\PROARTOption::cases())
+                                                        ? array_map(fn($option) => ['label' => $option->label(), 'value' => $question->inverted ? $option->inverted() : $option->value] , App\Enums\HSE\HSEOption::cases())
+                                                        : array_map(fn($option) => ['label' => $option->label(), 'value' => $question->inverted ? $option->inverted() : $option->value] , App\Enums\PROART\PROARTOption::cases())
                                                     )
-                                                : array_map(fn($option) => ['label' => $option->label(), 'value' => $option->value] , App\Enums\OC\OCOption::cases());
+                                                : array_map(fn($option) => ['label' => $option->label(), 'value' => $question->inverted ? $option->inverted() : $option->value] , App\Enums\OC\OCOption::cases()));
                             @endphp
 
                             <div data-role="test-question" class="w-full flex flex-col gap-2 items-center">
@@ -30,7 +29,7 @@
                                 </div>
 
                                 @foreach ($options as $option)
-                                    <x-test.option  :option="$option"  name="{{  $question['id'] }}"  id="{{ 'question_' . $question['id'] . '_' . $option['value'] }}" />
+                                    <x-test.option :option="$option" name="{{ $question['id'] }}" id="{{ 'question_' . $question['id'] . '_' . $option['value'] }}" />
                                 @endforeach
 
                                 @error("question_" . $question['id'])

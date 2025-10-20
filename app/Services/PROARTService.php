@@ -31,11 +31,7 @@ class PROARTService
 
         $dashboard = $groupedRisks->mapWithKeys(function($risks, $group) {
             $groupEvaluated = $risks->mapWithKeys(function($risk) {    
-                $questionAverages = $risk->questions
-                                        ->each(fn($question) => $question->inverted 
-                                            ? $question->average = self::invertAnswerScore($question->average) 
-                                            : $question)
-                                        ->pluck('average');
+                $questionAverages = $risk->questions->pluck('average');
 
                 $riskAverage = round($questionAverages->sum() / $questionAverages->count(), 1);
     
@@ -137,11 +133,7 @@ class PROARTService
 
         $evaluatedRisks = $groupedRisks->mapWithKeys(function($risks, $group) use($onlyHigh) {
             $groupEvaluated = $risks->mapWithKeys(function($risk) {                
-                $questionAverages = $risk->questions
-                                        ->each(fn($question) => $question->inverted 
-                                            ? $question->average = self::invertAnswerScore($question->average) 
-                                            : $question)
-                                        ->pluck('average');
+                $questionAverages = $risk->questions->pluck('average');
 
                 $riskAverage = round($questionAverages->sum() / $questionAverages->count(), 1);
     

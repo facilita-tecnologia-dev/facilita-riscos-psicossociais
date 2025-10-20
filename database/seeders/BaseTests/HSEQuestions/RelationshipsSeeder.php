@@ -14,25 +14,25 @@ class RelationshipsSeeder extends Seeder
             [
                 'base_collection_id' => 2,
                 'statement' => 'Estou sujeito a assédio pessoal na forma de palavras ou comportamentos rudes?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::RELATIONSHIPS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Existem conflitos entre os colegas de trabalho?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::RELATIONSHIPS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Estou sujeito a constrangimentos no trabalho?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::RELATIONSHIPS
             ],
             [
                 'base_collection_id' => 2,
                 'statement' => 'Os relacionamentos no trabalho são tensos?',
-                'inverted' => false,
+                'inverted' => true,
                 'group' => HSEGroup::RELATIONSHIPS
             ],
         ]);

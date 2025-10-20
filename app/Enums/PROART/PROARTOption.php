@@ -10,6 +10,17 @@ enum PROARTOption: int
     case RARELY = 2;
     case NEVER = 1;
 
+    public function inverted(): string
+    {
+        return match ($this) {
+            self::ALWAYS => 1,
+            self::FREQUENTLY => 2,
+            self::SOMETIMES => 3,
+            self::RARELY => 4,
+            self::NEVER => 5,
+        };
+    }
+
     public function label(): string
     {
         return match ($this) {

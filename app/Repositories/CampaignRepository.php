@@ -37,13 +37,9 @@ class CampaignRepository
     public function update(Campaign $campaign, array $data): Campaign
     {
         return DB::transaction(function () use ($campaign, $data) {
-            $collectionInfo = explode('_', $data['collection_id']);
-            $collectionType = $collectionInfo[0];
-            $collectionID = $collectionInfo[1];
-
             $campaign->update([
-                'collection_id' => $collectionID,
-                'type' => CollectionType::from($collectionType)->value,
+                'collection_id' => $data['collection_id'],
+                'type' => CollectionType::BASE->value,
                 'name' => $data['name'],
                 'description' => $data['description'],
                 'start_date' => $data['start_date'],
