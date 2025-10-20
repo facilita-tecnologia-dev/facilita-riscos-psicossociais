@@ -17,12 +17,12 @@ use Database\Seeders\BaseTests\OrganizationalQuestions\EngagementAndPrideSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\MotivationValuesAndPurposesSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\WorkConditionsSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\WorkSocialRelationsSeeder;
-use Database\Seeders\BaseTests\PsychosocialQuestions\EmploymentConditionsSeeder;
-use Database\Seeders\BaseTests\PsychosocialQuestions\InterpersonalRelationsSeeder;
-use Database\Seeders\BaseTests\PsychosocialQuestions\ManagementStyleSeeder;
-use Database\Seeders\BaseTests\PsychosocialQuestions\WorkContentSeeder;
-use Database\Seeders\BaseTests\PsychosocialQuestions\WorkOrganizationSeeder;
-use Database\Seeders\BaseTests\PsychosocialQuestions\WorkRelatedDisordersSeeder;
+use Database\Seeders\BaseTests\PROARTQuestions\EmploymentConditionsSeeder;
+use Database\Seeders\BaseTests\PROARTQuestions\InterpersonalRelationsSeeder;
+use Database\Seeders\BaseTests\PROARTQuestions\ManagementStyleSeeder;
+use Database\Seeders\BaseTests\PROARTQuestions\WorkContentSeeder;
+use Database\Seeders\BaseTests\PROARTQuestions\WorkOrganizationSeeder;
+use Database\Seeders\BaseTests\PROARTQuestions\WorkRelatedDisordersSeeder;
 use Illuminate\Database\Seeder;
 
 class BaseCollectionsSeeder extends Seeder

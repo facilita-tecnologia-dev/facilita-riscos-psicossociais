@@ -42,12 +42,12 @@ class CampaignController
     {
         Gate::authorize('campaign-create');
 
-        $collections = session('auth:company')->collections()
-            ->concat(session('auth:company')->customCollections)
-            ->map(fn($c) => [
-                'option' => $c->name . ($c instanceof BaseCollection ? ' (Padrão)' : ''), 
-                'value' => ($c instanceof BaseCollection ? 'base_' : 'custom_') . $c->id
-            ]);
+        $collections = [
+            [
+                'option' => session('auth:company')->psychosocialCollection()->name . " (" . (session('auth:company')->usesHSE() ? 'HSE' : 'PROART') . ")", 
+                'value' => session('auth:company')->psychosocialCollection()->id
+            ]
+        ];
 
         return view('private.campaign.create', compact('collections'));
     }
@@ -55,8 +55,8 @@ class CampaignController
     public function store(CampaignStoreRequest $request)
     {
         Gate::authorize('campaign-create');
-        
-        $collectionID = explode('_', $request->validated('collection_id'))[1];
+
+        $collectionID = $request->validated('collection_id');
         
         if (session('auth:company')->hasCampaignThisYear($collectionID)) return back()->with('message', 'Sua empresa já cadastrou uma campanha de testes com o mesmo tipo nesse ano');
 
@@ -106,18 +106,7 @@ class CampaignController
 
         return to_route('campaign.index')->with('message', 'Campanha excluída com sucesso.');
     }
-
-    public function notify(Campaign $campaign)
-    {   
-        if (session('auth:company')->users->where('email')->isEmpty()) return back()->with('message', 'Sua empresa não tem colaboradores com e-mail cadastrados.');
-
-        session('auth:company')->users->where('email')->each(function($user) use($campaign) {
-            Mail::to($user->email)->queue(new CampaignEmail($user, session('auth:company'), $campaign));
-        });
-
-        return back()->with('message', 'Notificações disparadas com sucesso!');
-    }
-
+    
     public function close(Campaign $campaign)
     {
         $campaign->update(['end_date' => now(), 'status' => CampaignStatus::COMPLETED]);

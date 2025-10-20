@@ -15,13 +15,9 @@ class CampaignRepository
     public function store(array $data): Campaign
     {
         return DB::transaction(function () use ($data) {
-            $collectionInfo = explode('_', $data['collection_id']);
-            $collectionType = $collectionInfo[0];
-            $collectionID = $collectionInfo[1];
-  
             $campaign = session('auth:company')->campaigns()->create([
-                'collection_id' => $collectionID,
-                'type' => CollectionType::from($collectionType)->value,
+                'collection_id' => $data['collection_id'],
+                'type' => CollectionType::BASE->value,
                 'name' => $data['name'],
                 'description' => $data['description'],
                 'start_date' => $data['start_date'],
@@ -40,10 +36,6 @@ class CampaignRepository
 
     public function update(Campaign $campaign, array $data): Campaign
     {
-        // DB::table('jobs')    
-        // ->where('payload', 'like', "%update-campaign-status-{$campaign->id}%")
-        // ->delete();
-
         return DB::transaction(function () use ($campaign, $data) {
             $collectionInfo = explode('_', $data['collection_id']);
             $collectionType = $collectionInfo[0];

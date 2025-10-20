@@ -34,7 +34,7 @@
                     </div>
                 @endcan
 
-                @can('organizational-dashboard-view')
+                {{-- @can('organizational-dashboard-view')
                     <div @if(!session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()?->userCollections->isEmpty()) data-tippy-content="Você ainda não realizou testes de Pesquisa de Clima" @endif>
                         <x-sidebar.item href="{{ route('dashboard.organizational-climate') }}" class="{{ request()->routeIs('dashboard.organizational-climate') ? 'bg-gray-200' : ''}} {{ !session('auth:company')->latestOrganizationalCampaign() || session('auth:company')->latestOrganizationalCampaign()?->userCollections->isEmpty() ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
@@ -54,7 +54,7 @@
                             Lista de comentários
                         </x-sidebar.item>
                     </div>
-                @endcan
+                @endcan --}}
                     
                 @can('metrics-edit')
                     @if(session('auth:company')->usesHSE())
@@ -119,7 +119,7 @@
                         </x-sidebar.item>
                     @endif
                 @endcan
-                @can('answer-organizational-test')
+                {{-- @can('answer-organizational-test')
                     @if($hasActiveOrganizationalCampaign)
                         <x-sidebar.item href="{{ route('test', session('auth:company')->latestOrganizationalCampaign()) }}" class="{{ $hasAnsweredOrganizational  ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-5 flex justify-center items-center">
@@ -128,7 +128,7 @@
                             Clima Organizacional
                         </x-sidebar.item>
                     @endif
-                @endcan
+                @endcan --}}
             </x-sidebar.menu>
         @endcanany
 

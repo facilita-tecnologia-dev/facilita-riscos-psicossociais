@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\BaseTests\PsychosocialQuestions;
+namespace Database\Seeders\BaseTests\PROARTQuestions;
 
 use App\Enums\PROART\PROARTGroup;
 use App\Models\BaseQuestion;
@@ -13,67 +13,67 @@ class WorkRelatedDisordersSeeder extends Seeder
         BaseQuestion::insert([
             [
                 'base_collection_id' => 1,
-                'statement' => 'Alterações no apetite.',
+                'statement' => 'Alterações no apetite?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Distúrbios circulatórios.',
+                'statement' => 'Distúrbios circulatórios?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Dores nas pernas.',
+                'statement' => 'Dores nas pernas?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Alterações no sono.',
+                'statement' => 'Alterações no sono?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Dores nas costas.',
+                'statement' => 'Dores nas costas?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Distúrbios digestivos.',
+                'statement' => 'Distúrbios digestivos?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Dor de cabeça.',
+                'statement' => 'Dor de cabeça?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Dores no braço.',
+                'statement' => 'Dores no braço?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Conflitos nas relações familiares.',
+                'statement' => 'Conflitos nas relações familiares?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Dificuldade com os amigos.',
+                'statement' => 'Dificuldade com os amigos?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Meu trabalho é desgastante.',
+                'statement' => 'Meu trabalho é desgastante?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_RELATED_DISORDERS
             ],

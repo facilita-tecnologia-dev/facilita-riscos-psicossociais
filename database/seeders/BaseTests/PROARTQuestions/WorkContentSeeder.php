@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\BaseTests\PsychosocialQuestions;
+namespace Database\Seeders\BaseTests\PROARTQuestions;
 
 use App\Enums\PROART\PROARTGroup;
 use App\Models\BaseQuestion;
@@ -13,43 +13,43 @@ class WorkContentSeeder extends Seeder
         BaseQuestion::insert([
             [
                 'base_collection_id' => 1,
-                'statement' => 'Tenho autonomia para realizar as tarefas como julgo melhor.',
+                'statement' => 'Tenho autonomia para realizar as tarefas como julgo melhor?',
                 'inverted' => true,
                 'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Minhas tarefas são banais.',
+                'statement' => 'Minhas tarefas são banais?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Meu trabalho é sem sentido.',
+                'statement' => 'Meu trabalho é sem sentido?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Meu trabalho é irrelevante para o desenvolvimento da sociedade.',
+                'statement' => 'Meu trabalho é irrelevante para o desenvolvimento da sociedade?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'A identificação com minhas tarefas é inexistente.',
+                'statement' => 'A identificação com minhas tarefas é inexistente?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Sinto-me improdutivo no meu trabalho.',
+                'statement' => 'Sinto-me improdutivo no meu trabalho?',
                 'inverted' => false,
                 'group' => PROARTGroup::WORK_CONTENT
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'A inovação é valorizada nesta organização.',
+                'statement' => 'A inovação é valorizada nesta organização?',
                 'inverted' => true,
                 'group' => PROARTGroup::WORK_CONTENT
             ],

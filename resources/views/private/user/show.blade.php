@@ -81,10 +81,10 @@
                         <p class="font-semibold text-base sm:text-lg text-left">Último teste de Riscos Psicossociais realizado:</p>
                         <p class="text-sm sm:text-base text-left">{{ $latestPsychosocialCollectionDate ?? 'Nunca' }}</p>
                     </div>
-                    <div class="">
+                    {{-- <div class="">
                         <p class="font-semibold text-base sm:text-lg text-left">Último teste de Clima Organizacional realizado:</p>
                         <p class="text-sm sm:text-base text-left">{{ $latestOrganizationalClimateCollectionDate ?? 'Nunca' }}</p>
-                    </div>
+                    </div> --}}
                 </div>
 
                 @if($user->is_temp_password)

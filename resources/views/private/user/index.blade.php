@@ -68,9 +68,9 @@
                         <x-table.head.sortable-th class="truncate text-center w-6 sm:w-12" field="psychosocial-risks">
                             <i class="fa-solid fa-brain"></i>
                         </x-table.head.sortable-th>
-                        <x-table.head.sortable-th class="truncate text-center w-6 sm:w-12" field="organizational-climate">
+                        {{-- <x-table.head.sortable-th class="truncate text-center w-6 sm:w-12" field="organizational-climate">
                             <i class="fa-solid fa-cloud"></i>
-                        </x-table.head.sortable-th>
+                        </x-table.head.sortable-th> --}}
                     </x-table.head>
                     <x-table.body>
                         @foreach ($users as $user)
@@ -90,13 +90,13 @@
                                         <i class="fa-solid fa-xmark"></i>
                                     @endif
                                 </x-table.body.td>
-                                <x-table.body.td class="text-center w-6 sm:w-12">
+                                {{-- <x-table.body.td class="text-center w-6 sm:w-12">
                                     @if($user->hasAnsweredCampaign($latestOrganizationalCampaign?->id))
                                         <i class="fa-solid fa-check"></i>
                                     @else
                                         <i class="fa-solid fa-xmark"></i>
                                     @endif
-                                </x-table.body.td>
+                                </x-table.body.td> --}}
                             </x-table.body.tr>
                         @endforeach
                     </x-table.body>
@@ -111,7 +111,4 @@
             @endif
         </div>
     </div>
-
-    
-    <script src="{{ asset('js/user/index.js') }}"></script>
 </x-layouts.app>

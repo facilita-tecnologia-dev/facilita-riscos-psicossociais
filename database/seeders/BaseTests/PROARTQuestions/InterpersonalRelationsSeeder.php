@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\BaseTests\PsychosocialQuestions;
+namespace Database\Seeders\BaseTests\PROARTQuestions;
 
 use App\Enums\PROART\PROARTGroup;
 use App\Models\BaseQuestion;
@@ -13,109 +13,109 @@ class InterpersonalRelationsSeeder extends Seeder
         BaseQuestion::insert([
             [
                 'base_collection_id' => 1,
-                'statement' => 'Há qualidade na comunicação entre os funcionários.',
+                'statement' => 'Há qualidade na comunicação entre os funcionários?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'A submissão do meu chefe a ordens superiores me causa revolta.',
+                'statement' => 'A submissão do meu chefe a ordens superiores me causa revolta?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Meu trabalho me faz sofrer.',
+                'statement' => 'Meu trabalho me faz sofrer?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Submeter meu trabalho a decisões políticas é fonte de revolta.',
+                'statement' => 'Submeter meu trabalho a decisões políticas é fonte de revolta?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Sinto-me isolado(a) no trabalho.',
+                'statement' => 'Sinto-me isolado(a) no trabalho?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Recebo comentários ou gestos de conotação sexual indesejados.',
+                'statement' => 'Recebo comentários ou gestos de conotação sexual indesejados?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Sinto-me pressionado(a) por avanços não consentidos no ambiente de trabalho.',
+                'statement' => 'Sinto-me pressionado(a) por avanços não consentidos no ambiente de trabalho?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Evito interações com certos colegas por medo de assédio.',
+                'statement' => 'Evito interações com certos colegas por medo de assédio?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Sofro intimidações ou ameaças verbais no trabalho.',
+                'statement' => 'Sofro intimidações ou ameaças verbais no trabalho?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Há comportamentos agressivos ou hostis entre colegas/gestores.',
+                'statement' => 'Há comportamentos agressivos ou hostis entre colegas/gestores?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Sinto medo de retaliação por denunciar problemas.',
+                'statement' => 'Sinto medo de retaliação por denunciar problemas?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Impaciência com as pessoas em geral.',
+                'statement' => 'Impaciência com as pessoas em geral?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Vontade de ficar sozinho.',
+                'statement' => 'Vontade de ficar sozinho?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Perda da autoconfiança.',
+                'statement' => 'Perda da autoconfiança?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Tristeza.',
+                'statement' => 'Tristeza?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Vontade de desistir de tudo.',
+                'statement' => 'Vontade de desistir de tudo?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Sensação de vazio.',
+                'statement' => 'Sensação de vazio?',
                 'inverted' => false,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],
             [
                 'base_collection_id' => 1,
-                'statement' => 'Posso contar com ajuda dos meus colegas quando o trabalho é difícil.',
+                'statement' => 'Posso contar com ajuda dos meus colegas quando o trabalho é difícil?',
                 'inverted' => true,
                 'group' => PROARTGroup::INTERPERSONAL_RELATIONS
             ],

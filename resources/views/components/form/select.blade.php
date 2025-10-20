@@ -40,9 +40,11 @@
             @endforeach
         </select>
     
-        <div class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2">
-            <i class="fa-solid fa-chevron-down text-sm"></i>
-        </div>
+        @if(!$disabled)
+            <div class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2">
+                <i class="fa-solid fa-chevron-down text-sm"></i>
+            </div>
+        @endif
     </x-form.input-wrapper>
 
     @error($name)

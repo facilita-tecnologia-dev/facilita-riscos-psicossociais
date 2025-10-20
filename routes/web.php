@@ -77,13 +77,13 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::view('/thanks', 'private.tests.thanks')->name('complete-tests.thanks');
     });
 
-    Route::prefix('feedback')->group(function(){
-        Route::get('/', [UserFeedbackController::class, 'index'])->name('feedback.index');
-        Route::get('/create', [UserFeedbackController::class, 'create'])->name('feedback.create');
-        Route::post('/create', [UserFeedbackController::class, 'store']);
-        Route::get('/export', [UserFeedbackController::class, 'export'])->name('feedback.export');
-        Route::get('/{feedback}', [UserFeedbackController::class, 'show'])->name('feedback.show');
-    });
+    // Route::prefix('feedback')->group(function(){
+    //     Route::get('/', [UserFeedbackController::class, 'index'])->name('feedback.index');
+    //     Route::get('/create', [UserFeedbackController::class, 'create'])->name('feedback.create');
+    //     Route::post('/create', [UserFeedbackController::class, 'store']);
+    //     Route::get('/export', [UserFeedbackController::class, 'export'])->name('feedback.export');
+    //     Route::get('/{feedback}', [UserFeedbackController::class, 'show'])->name('feedback.show');
+    // });
 
     Route::prefix('campaigns')->group(function(){
         Route::get('/', [CampaignController::class, 'index'])->name('campaign.index');
@@ -93,7 +93,6 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::get('{campaign}/edit', [CampaignController::class, 'edit'])->name('campaign.edit');
         Route::put('{campaign}/update', [CampaignController::class, 'update'])->name('campaign.update');
         Route::delete('{campaign}/delete', [CampaignController::class, 'destroy'])->name('campaign.destroy');
-        Route::post('{campaign}/notify', [CampaignController::class, 'notify'])->name('campaign.notify');
         Route::put('{campaign}/close', [CampaignController::class, 'close'])->name('campaign.close');
     });
 
@@ -139,13 +138,13 @@ Route::middleware(AuthMiddleware::class)->group(function() {
             Route::get('/risks/report/{type}/{format}', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
         });
 
-        Route::prefix('organizational-climate')->group(function(){
-            Route::get('/', [OrganizationalController::class, 'dashboard'])->name('dashboard.organizational-climate');
-            // Route::get('/', OrganizationalMainController::class)->name('dashboard.organizational-climate');
-            Route::post('/report', [OrganizationalMainController::class, 'createPDFReport'])->name('dashboard.organizational-climate.report');
-            Route::get('/answers', OrganizationalAnswersController::class)->name('dashboard.organizational-climate.answers');
-            Route::get('/answers/report', [OrganizationalAnswersController::class, 'createPDFReport'])->name('dashboard.organizational-climate.answers.report');
-        });
+        // Route::prefix('organizational-climate')->group(function(){
+        //     // Route::get('/', [OrganizationalController::class, 'dashboard'])->name('dashboard.organizational-climate');
+        //     Route::get('/', OrganizationalMainController::class)->name('dashboard.organizational-climate');
+        //     Route::post('/report', [OrganizationalMainController::class, 'createPDFReport'])->name('dashboard.organizational-climate.report');
+        //     Route::get('/answers', OrganizationalAnswersController::class)->name('dashboard.organizational-climate.answers');
+        //     Route::get('/answers/report', [OrganizationalAnswersController::class, 'createPDFReport'])->name('dashboard.organizational-climate.answers.report');
+        // });
 
         Route::get('/demographics', [DemographicsController::class, 'demographics'])->name('dashboard.demographics');
     });

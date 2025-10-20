@@ -141,7 +141,7 @@
                         </a>
                     </div>
 
-                    <div @if(!session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists()) data-tippy-content="Você ainda não realizou testes de Pesquisa de Clima" @endif>
+                    {{-- <div @if(!session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists()) data-tippy-content="Você ainda não realizou testes de Pesquisa de Clima" @endif>
                         <a href="{{ route('dashboard.organizational-climate') }}" class="w-full bg-gray-100 rounded-md shadow-md p-4 flex items-center gap-3 relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all {{ !session('auth:company')->latestOrganizationalCampaign() || !session('auth:company')->latestOrganizationalCampaign()->userCollections()->exists() ? 'pointer-events-none opacity-50' : '' }}">
                             <div class="w-10 aspect-square rounded-md border border-gray-300 flex items-center justify-center">
                                 <i class="fa-solid fa-cloud"></i>
@@ -153,7 +153,7 @@
                                 <i class="fa-solid fa-arrow-right text-sm"></i>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
 
                     <div @if(session('auth:company')->users->isEmpty()) data-tippy-content="Você deve cadastrar colaboradores antes de visualizar dados demográficos" @endif>
                         <a href="{{ route('dashboard.demographics') }}" class="w-full bg-gray-100 rounded-md shadow-md p-4 flex items-center gap-3 relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all {{ session('auth:company')->users->isEmpty()  ? 'pointer-events-none opacity-50' : '' }}">
@@ -183,7 +183,7 @@
                         </a>
                     </div>
 
-                    <div>
+                    {{-- <div>
                         <a href="{{ route('company.show', session('auth:company')) }}" class="w-full bg-gray-100 rounded-md shadow-md p-4 flex items-center gap-3 relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">
                             <div class="w-10 aspect-square rounded-md border border-gray-300 flex items-center justify-center">
                                 <i class="fa-solid fa-building"></i>
@@ -195,7 +195,7 @@
                                 <i class="fa-solid fa-arrow-right text-sm"></i>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
 
                     <div>
                         <a href="{{ route('user.index') }}" class="w-full bg-gray-100 rounded-md shadow-md p-4 flex items-center gap-3 relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all">

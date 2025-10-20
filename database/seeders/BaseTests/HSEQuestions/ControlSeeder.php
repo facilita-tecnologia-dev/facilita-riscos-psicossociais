@@ -13,37 +13,37 @@ class ControlSeeder extends Seeder
         BaseQuestion::insert([
             [
                 'base_collection_id' => 2,
-                'statement' => 'Posso decidir quando fazer uma pausa.',
+                'statement' => 'Posso decidir quando fazer uma pausa?',
                 'inverted' => false,
                 'group' => HSEGroup::CONTROL
             ],
             [
                 'base_collection_id' => 2,
-                'statement' => 'Posso decidir sobre meu ritmo de trabalho.',
+                'statement' => 'Posso decidir sobre meu ritmo de trabalho?',
                 'inverted' => false,
                 'group' => HSEGroup::CONTROL
             ],
             [
                 'base_collection_id' => 2,
-                'statement' => 'Posso escolher como fazer meu trabalho.',
+                'statement' => 'Posso escolher como fazer meu trabalho?',
                 'inverted' => false,
                 'group' => HSEGroup::CONTROL
             ],
             [
                 'base_collection_id' => 2,
-                'statement' => 'Posso escolher o que fazer no trabalho.',
+                'statement' => 'Posso escolher o que fazer no trabalho?',
                 'inverted' => false,
                 'group' => HSEGroup::CONTROL
             ],
             [
                 'base_collection_id' => 2,
-                'statement' => 'Tenho algum poder de decisão sobre a minha maneira de trabalhar.',
+                'statement' => 'Tenho algum poder de decisão sobre a minha maneira de trabalhar?',
                 'inverted' => false,
                 'group' => HSEGroup::CONTROL
             ],
             [
                 'base_collection_id' => 2,
-                'statement' => 'Meu horário de trabalho pode ser flexível.',
+                'statement' => 'Meu horário de trabalho pode ser flexível?',
                 'inverted' => false,
                 'group' => HSEGroup::CONTROL
             ],
