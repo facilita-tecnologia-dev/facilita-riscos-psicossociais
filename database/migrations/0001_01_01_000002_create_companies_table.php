@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('name');
             $table->string('cnpj');
-            $table->string('email', 100)->unique();
+            $table->string('email', 100);
             $table->string('password', 100);
             $table->enum('psychosocial_collection_type', BaseCollection::values())->default(BaseCollection::HSE->value);
             $table->timestamps();
