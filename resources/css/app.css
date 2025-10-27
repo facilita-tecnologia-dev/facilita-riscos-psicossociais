@@ -64,6 +64,7 @@
 
     /* --color-primary-solid: oklch(0.648 0.1782 259.6); */
     --color-primary-solid: oklch(0.7669 0.0998 185.46);
+    --color-report-channel-primary-solid: oklch(0.648 0.1782 259.6);
 
     --color-main-text: oklch(0.2393 0 0);
     --color-secondary-text: oklch(0.4979 0.0094 253.91);

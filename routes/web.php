@@ -27,6 +27,9 @@ Route::view('/', 'site.home.index')->name('site.home');
 Route::view('/privacy-policy', 'site.privacy-policy.index')->name('site.privacy-policy');
 Route::view('/terms-of-use', 'site.terms-of-use.index')->name('site.terms-of-use');
 
+Route::view('/cms', 'cms.auth.login')->name('cms.login');
+Route::view('/cms/psychosocial/dashboard', 'cms.private.psychosocial.dashboard')->name('cms.psychosocial.dashboard');
+
 Route::middleware(GuestMiddleware::class)->group(function() {
     Route::prefix('register')->group(function(){
         Route::get('/empresa', [RegisterController::class, 'showRegister'])->name('company.register');
