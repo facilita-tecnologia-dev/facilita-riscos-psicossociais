@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\CMS\CMSPsychosocialController;
 use App\Http\Controllers\ControlActionsController;
 use App\Http\Controllers\Private\CompanyController;
 use App\Http\Controllers\Private\MetricsController;
@@ -28,7 +29,7 @@ Route::view('/privacy-policy', 'site.privacy-policy.index')->name('site.privacy-
 Route::view('/terms-of-use', 'site.terms-of-use.index')->name('site.terms-of-use');
 
 Route::view('/cms', 'cms.auth.login')->name('cms.login');
-Route::view('/cms/psychosocial/dashboard', 'cms.private.psychosocial.dashboard')->name('cms.psychosocial.dashboard');
+Route::get('/cms/psychosocial/dashboard', [CMSPsychosocialController::class, 'dashboard'])->name('cms.psychosocial.dashboard');
 
 Route::middleware(GuestMiddleware::class)->group(function() {
     Route::prefix('register')->group(function(){
