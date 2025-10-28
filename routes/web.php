@@ -30,6 +30,7 @@ Route::view('/terms-of-use', 'site.terms-of-use.index')->name('site.terms-of-use
 
 Route::view('/cms', 'cms.auth.login')->name('cms.login');
 Route::get('/cms/psychosocial/dashboard', [CMSPsychosocialController::class, 'dashboard'])->name('cms.psychosocial.dashboard');
+Route::get('/cms/psychosocial/company', [CMSPsychosocialController::class, 'company'])->name('cms.psychosocial.company');
 
 Route::middleware(GuestMiddleware::class)->group(function() {
     Route::prefix('register')->group(function(){

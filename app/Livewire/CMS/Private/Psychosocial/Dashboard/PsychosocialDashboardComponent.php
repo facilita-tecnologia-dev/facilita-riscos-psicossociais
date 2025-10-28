@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CMS\Private\Psychosocial;
+namespace App\Livewire\CMS\Private\Psychosocial\Dashboard;
 
 use App\Enums\BaseCollection as EnumBaseCollection;
 use App\Enums\BaseCollectionType;
@@ -22,7 +22,7 @@ class PsychosocialDashboardComponent extends Component
 
     public function render()
     {
-        return view('livewire.cms.private.psychosocial.psychosocial-dashboard-component');
+        return view('livewire.cms.private.psychosocial.dashboard.psychosocial-dashboard-component');
     }
 
     public function mount()

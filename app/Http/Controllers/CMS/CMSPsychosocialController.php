@@ -10,4 +10,9 @@ class CMSPsychosocialController
     {
         return view('cms.private.psychosocial.dashboard.index');
     }
+
+    public function company()
+    {
+        return view('cms.private.psychosocial.company.index.index');
+    }
 }

@@ -17,6 +17,15 @@ enum CampaignStatus: string
         };
     }
 
+    public function icon(): string
+    {
+        return match ($this) {
+            self::SCHEDULED => 'calendar-check',
+            self::IN_PROGRESS => 'clock',
+            self::COMPLETED => 'check',
+        };
+    }
+
     public static function values(): array
     {
         return array_column(self::cases(), 'value');

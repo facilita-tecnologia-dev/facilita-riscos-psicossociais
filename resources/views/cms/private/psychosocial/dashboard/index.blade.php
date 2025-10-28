@@ -13,10 +13,10 @@
             />
         </div>
 
-        <x-new-components.actions.button href="">
+        <x-new-components.actions.button href="{{ route('cms.psychosocial.company') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de empresas</span>
         </x-new-components.actions.button>
 
-        <livewire:cms.private.psychosocial.psychosocial-dashboard-component/>
+        <livewire:cms.private.psychosocial.dashboard.psychosocial-dashboard-component/>
     </section>
 </x-layouts.cms>
