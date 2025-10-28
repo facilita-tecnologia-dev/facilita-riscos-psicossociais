@@ -3,7 +3,7 @@
         <div class="space-y-3">
             <div class="flex gap-2 items-center">
                 <x-icon icon="psychosocial" class="w-6 h-6 object-scale-down text-primary-solid" />
-                <h1 class="text-2xl text-main-text font-semibold text-left">Facilita Riscos Psicossociais</h1>
+                <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Riscos Psicossociais</h1>
             </div>
 
             <x-new-components.structure.breadcrumbs 

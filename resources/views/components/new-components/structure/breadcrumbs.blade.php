@@ -2,7 +2,7 @@
     'links' => [],
 ])
 
-<nav aria-label="breadcrumb" class="hidden w-full md:block">
+<nav aria-label="breadcrumb" class="w-full">
     <ul class="flex items-center gap-1">
         <x-icon icon="hash" class="w-4 h-4 object-scale-down text-secondary-text" />
         
