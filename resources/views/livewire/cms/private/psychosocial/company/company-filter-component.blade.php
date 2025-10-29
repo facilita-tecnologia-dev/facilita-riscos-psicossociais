@@ -1,4 +1,4 @@
-<form class="flex w-full flex-col items-start gap-4" id="create-report" wire:submit.prevent="submit">
+<form class="flex w-full flex-col items-start gap-4" id="filter-companies" wire:submit.prevent="submit">
     <x-new-components.form.input-text wireModel="name" name="name" label="Razão Social" placeholder="Digite a razão social..." tooltip="Digite a razão social da empresa" />
     <x-new-components.form.input-text wireModel="cnpj" name="cnpj" label="CNPJ" placeholder="Digite o cnpj..." tooltip="Digite o cnpj da empresa" />
 

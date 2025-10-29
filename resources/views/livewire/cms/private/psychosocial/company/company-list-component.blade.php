@@ -18,7 +18,7 @@
                 </x-new-components.table.thead>
                 <x-new-components.table.tbody>
                     @foreach ($companies as $company)
-                        <x-new-components.table.tr class="grid-cols-[minmax(0,1fr)_48px_48px] md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_72px_72px]" href="" last="{{ $loop->last ? true : false }}">
+                        <x-new-components.table.tr class="grid-cols-[minmax(0,1fr)_48px_48px] md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_72px_72px]" href="{{ route('cms.psychosocial.company.show', $company) }}" last="{{ $loop->last ? true : false }}">
                             <x-new-components.table.td>
                                 <span class="text-secondary-text font-text truncate text-sm font-normal md:text-base" title="{{ $company->name }}">{{ $company->name }}</span>
                             </x-new-components.table.td>

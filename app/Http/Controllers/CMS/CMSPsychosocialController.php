@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CMS;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class CMSPsychosocialController
@@ -11,8 +12,18 @@ class CMSPsychosocialController
         return view('cms.private.psychosocial.dashboard.index');
     }
 
-    public function company()
+    public function companyIndex()
     {
         return view('cms.private.psychosocial.company.index.index');
+    }
+
+    public function companyShow(Company $company)
+    {
+        return view('cms.private.psychosocial.company.show.index', compact('company'));
+    }
+
+    public function userIndex()
+    {
+        return view('cms.private.psychosocial.user.index.index');
     }
 }

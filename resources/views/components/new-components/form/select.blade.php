@@ -1,6 +1,6 @@
 @props([
     'name',
-    'label',
+    'label' => null,
     'placeholder' => null,
     'isRequired' => false,
     'tooltip' => null,
@@ -22,19 +22,21 @@
         @endforeach
     </select>
 
-    <header class="text-secondary-text peer-focus:text-main-text flex w-full items-center justify-between gap-3 pl-0.5 transition">
-        <label for="{{ $name }}" class="font-heading text-left text-sm font-semibold peer-focus:text-lg md:text-base">
-            {{ $label }}
-            @if ($isRequired)
-                <span class="text-danger">*</span>
-            @else
-                <span class="font-text text-secondary-text text-left text-xs font-normal">(opcional)</span>
+    @if($label)
+        <header class="text-secondary-text peer-focus:text-main-text flex w-full items-center justify-between gap-3 pl-0.5 transition">
+            <label for="{{ $name }}" class="font-heading text-left text-sm font-semibold peer-focus:text-lg md:text-base">
+                {{ $label }}
+                @if ($isRequired)
+                    <span class="text-danger">*</span>
+                @else
+                    <span class="font-text text-secondary-text text-left text-xs font-normal">(opcional)</span>
+                @endif
+            </label>
+            @if ($tooltip)
+                <div class="cursor-pointer transition hover:scale-105" data-tippy-content="{{ $tooltip }}">
+                    <x-icon icon="circle-question-mark" class="text-secondary-text h-4 w-4 object-contain" />
+                </div>
             @endif
-        </label>
-        @if ($tooltip)
-            <div class="cursor-pointer transition hover:scale-105" data-tippy-content="{{ $tooltip }}">
-                <x-icon icon="circle-question-mark" class="text-secondary-text h-4 w-4 object-contain" />
-            </div>
-        @endif
-    </header>
+        </header>
+    @endif
 </div>

@@ -12,14 +12,14 @@ enum BaseCollection: string
     case HSE = 'hse';
     case ORGANIZATIONAL = 'organizational-climate';
 
-    // public function label(): string
-    // {
-    //     return match ($this) {
-    //         self::PROART => 'Riscos Psicossociais',
-    //         self::HSE => 'Clima Organizacional',
-    //         self::ORGANIZATIONAL => 'Clima Organizacional',
-    //     };
-    // }
+    public function label(): string
+    {
+        return match ($this) {
+            self::PROART => 'PROART',
+            self::HSE => 'HSE',
+            self::ORGANIZATIONAL => 'Clima Organizacional',
+        };
+    }
 
     public static function values(): array
     {

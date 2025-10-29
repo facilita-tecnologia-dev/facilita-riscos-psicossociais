@@ -13,7 +13,7 @@
             />
         </div>
 
-        <x-new-components.actions.button href="{{ route('cms.psychosocial.company') }}">
+        <x-new-components.actions.button href="{{ route('cms.psychosocial.company.index') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de empresas</span>
         </x-new-components.actions.button>
 
