@@ -13,7 +13,7 @@
     </div>
 
     <div class="w-full flex lg:hidden gap-2 justify-end">
-        <x-new-components.actions.button href="" slim>
+        <x-new-components.actions.button href="{{ route('cms.psychosocial.company.create') }}" slim>
             <span class="text-main-background text-center text-sm font-semibold">Cadastrar nova empresa</span>
         </x-new-components.actions.button>
 
@@ -36,7 +36,7 @@
                 <h2 class="text-main-text text-center text-xl font-semibold">Ações</h2>
 
                 <div class="w-full flex flex-col gap-3">
-                    <x-new-components.actions.button href="">
+                    <x-new-components.actions.button href="{{ route('cms.psychosocial.company.create') }}">
                         <span class="text-main-background text-center text-sm font-semibold">Cadastrar nova empresa</span>
                     </x-new-components.actions.button>
                 </div>

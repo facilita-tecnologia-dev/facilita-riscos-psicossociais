@@ -31,6 +31,7 @@ Route::view('/terms-of-use', 'site.terms-of-use.index')->name('site.terms-of-use
 Route::view('/cms', 'cms.auth.login')->name('cms.login');
 Route::get('/cms/psychosocial/dashboard', [CMSPsychosocialController::class, 'dashboard'])->name('cms.psychosocial.dashboard');
 Route::get('/cms/psychosocial/company', [CMSPsychosocialController::class, 'companyIndex'])->name('cms.psychosocial.company.index');
+Route::get('/cms/psychosocial/company/create', [CMSPsychosocialController::class, 'companyCreate'])->name('cms.psychosocial.company.create');
 Route::get('/cms/psychosocial/company/{company}', [CMSPsychosocialController::class, 'companyShow'])->name('cms.psychosocial.company.show');
 
 Route::get('/cms/psychosocial/company/{company}/user', [CMSPsychosocialController::class, 'userIndex'])->name('cms.psychosocial.user.index');

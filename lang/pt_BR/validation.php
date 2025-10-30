@@ -207,6 +207,7 @@ return [
         'password' => 'senha',
         'current_password' => 'senha atual',
         'new_password' => 'nova senha',
+        'passwordConfirmation' => 'confirmação de senha',
         'age_range' => 'faixa etária',
         'admission_range' => 'tempo de empresa',
         'year' => 'ano de realização dos testes',
@@ -217,7 +218,8 @@ return [
         'start_date' => 'data de início',
         'description' => 'descrição',
         'control_action' => 'medida de controle',
-        'import_users' => 'arquivo de importação'
+        'import_users' => 'arquivo de importação',
+        'registerName' => 'razão social'
     ],
 
 ];

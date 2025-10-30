@@ -2,20 +2,19 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
-use App\Enums\CampaignStatus;
+use App\Enums\BaseCollection;
 use App\Models\Company;
-use App\Services\ReportChannelService;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
-class CompanyEditComponent extends Component
+class CompanyCreateComponent extends Component
 {
     use WithFileUploads;
-    
-    public Company $company;
 
     #[Validate('image|max:5120')] // 1MB Max
     public $logo;
@@ -23,30 +22,23 @@ class CompanyEditComponent extends Component
     public string $registerName = '';
     public string $cnpj = '';
     public string $email = '';
+    public string $psychosocialMetodology = BaseCollection::HSE->value;
+    public string $password = '';
+    public string $passwordConfirmation = '';
 
-    public int $usersCount;
-    public string $psychosocialCampaignStatus;
-    public bool $hasReportChannel;
+    public array $psychosocialMetodologies;
 
     public function render()
     {
-        return view('livewire.cms.private.psychosocial.company.company-edit-component');
+        return view('livewire.cms.private.psychosocial.company.company-create-component');
     }
 
-    public function mount(Company $company)
+    public function mount()
     {
-        $this->company = $company;
-        $this->logo = $this->company->logo;
-        $this->registerName = $this->company->name;
-        $this->cnpj = $this->company->cnpj;
-        $this->email = $this->company->email;
-
-        $this->usersCount = $company->users()->count();
-        $this->psychosocialCampaignStatus =   $company->latestPsychosocialCampaign()?->start_date->year == now()->year 
-                                            ? $company->latestPsychosocialCampaign()?->status->label()
-                                            : 'Sem previsão';
-
-        $this->hasReportChannel = ReportChannelService::hasReportChannel($company);
+        $this->psychosocialMetodologies = [
+            ['label' => BaseCollection::HSE->label(), 'value' => BaseCollection::HSE->value],
+            ['label' => BaseCollection::PROART->label(), 'value' => BaseCollection::PROART->value],
+        ];
     }
 
     public function submit()
@@ -56,18 +48,24 @@ class CompanyEditComponent extends Component
             'registerName' => ['required', 'string', 'max:255'],
             'cnpj' => ['required', 'max:18', 'cnpj'],
             'email' => ['required', 'email', 'max:100'],
+            'psychosocialMetodology' => ['required', new Enum(BaseCollection::class)],
+            'password' => ['required', 'string', 'max:100', Password::defaults()],
+            'passwordConfirmation' => ['required', 'string', 'same:password', 'max:100'],
         ]);
 
         $logoPath = $this->logo instanceof TemporaryUploadedFile ? $this->logo->store('images', 'public') : $this->logo;
 
-        $this->company->update([
+        $company = Company::create([
             'logo' => $logoPath,
             'name' => $this->registerName,
             'email' => $this->email,
             'cnpj' => $this->cnpj,
+            'psychosocial_collection_type' => $this->psychosocialMetodology,
+            'password' => $this->password,
         ]);
 
-        $this->dispatch('company:update', company: $this->company->fresh());
         $this->dispatch('alert:success', 'Perfil atualizado!');
+
+        return redirect()->to(route('cms.psychosocial.company.show', $company));
     }
 }

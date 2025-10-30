@@ -30,8 +30,8 @@
                             </x-new-components.table.td>
                             <x-new-components.table.td>
                                 <x-icon icon="{{ 
-                                        $company->latestPsychosocialCampaign()->start_date->year == now()->year 
-                                            ? $company->latestPsychosocialCampaign()->status->icon()
+                                        $company->latestPsychosocialCampaign()?->start_date->year == now()->year 
+                                            ? $company->latestPsychosocialCampaign()?->status->icon()
                                             : 'x-mark'
                                 }}" />
                             </x-new-components.table.td>

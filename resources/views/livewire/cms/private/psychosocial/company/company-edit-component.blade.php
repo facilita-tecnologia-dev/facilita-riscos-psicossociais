@@ -1,9 +1,9 @@
 <form class="bg-secondary-background border-borders flex flex-col gap-4 rounded-lg border p-4 shadow-sm md:p-6" wire:submit.prevent="submit">
     <x-new-components.form.input-photo wireModel="logo" name="logo" format="w-fit min-w-14 h-14 rounded-md" :value="$logo" tooltip="Clique para trocar a logomarca" />
 
-    <div class="grid grid-cols-3 gap-4">
-        <x-new-components.form.input-text wireModel="name" name="name" label="Razão social" placeholder="Digite a razão social..." value="{{ $company->name }}" isRequired />
-        <x-new-components.form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." value="{{ $company->email }}" isRequired />
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <x-new-components.form.input-text wireModel="registerName" name="registerName" label="Razão social" placeholder="Digite a razão social..." value="{{ $company->name }}" tooltip="Digite a razão social" isRequired />
+        <x-new-components.form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." value="{{ $company->email }}" tooltip="Digite o e-mail" isRequired />
         <x-new-components.form.input-text wireModel="cnpj" name="cnpj" label="CNPJ" placeholder="Digite o cnpj..." value="{{ $company->cnpj }}" disabled isRequired />
 
         <x-new-components.info-item label="Qtd. de funcionários ativos" :value="$usersCount . ' funcionários'" truncate />

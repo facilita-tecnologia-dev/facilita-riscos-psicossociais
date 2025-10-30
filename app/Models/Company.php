@@ -24,6 +24,15 @@ class Company extends Authenticatable
     protected BaseCollection $psychosocialCollection;
     protected BaseCollection $organizationalCollection;
 
+
+    // Get the attributes that should be cast.
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
+
     /* --- Relations --- */
 
     public function users(): BelongsToMany
