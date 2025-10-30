@@ -98,17 +98,13 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
             return null;
         }
 
-        // --- 1) Excel serial (ex.: 29500, 29500.0)
         if (is_numeric($value)) {
             try {
-                // use PhpOffice\PhpSpreadsheet\Shared\Date;
                 $dt = Date::excelToDateTimeObject((float) $value);
                 return $dt->format('Y-m-d');
             } catch (\Throwable $e) {}
         }
 
-        // --- 2) Se parece com dd/mm/yyyy ou dd-mm-yyyy (com ou sem hora) tente formatos explícitos
-        // preferimos d/m/Y por padrão (usuário no Brasil)
         $commonFormats = ['d/m/Y', 'd-m-Y', 'd.m.Y', 'd/m/Y H:i', 'd/m/Y H:i:s', 'Y-m-d', 'Y/m/d', 'Y-m-d H:i:s', 'm/d/Y'];
 
         foreach ($commonFormats as $fmt) {
