@@ -19,7 +19,7 @@
             <span class="hidden sm:block text-main-background text-center text-sm font-semibold">Importar arquivo de funcionários</span>
             <x-icon icon="upload" class="block sm:hidden text-main-background h-4 w-4 object-scale-down" />
         </x-new-components.actions.button>
-        <x-new-components.actions.button href="" slim fitSize>
+        <x-new-components.actions.button href="{{ route('cms.psychosocial.user.create', $company) }}" slim fitSize>
             <span class="hidden sm:block text-main-background text-center text-sm font-semibold">Cadastrar funcionário manualmente</span>
             <x-icon icon="plus" class="block sm:hidden text-main-background h-4 w-4 object-scale-down" />
         </x-new-components.actions.button>
@@ -45,7 +45,7 @@
                     <x-new-components.actions.button href="">
                         <span class="text-main-background text-center text-sm font-semibold">Importar arquivo de funcionários</span>
                     </x-new-components.actions.button>
-                    <x-new-components.actions.button href="">
+                    <x-new-components.actions.button href="{{ route('cms.psychosocial.user.create', $company) }}">
                         <span class="text-main-background text-center text-sm font-semibold">Cadastrar funcionário manualmente</span>
                     </x-new-components.actions.button>
                 </div>

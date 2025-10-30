@@ -35,6 +35,7 @@ Route::get('/cms/psychosocial/company/create', [CMSPsychosocialController::class
 Route::get('/cms/psychosocial/company/{company}', [CMSPsychosocialController::class, 'companyShow'])->name('cms.psychosocial.company.show');
 
 Route::get('/cms/psychosocial/company/{company}/user', [CMSPsychosocialController::class, 'userIndex'])->name('cms.psychosocial.user.index');
+Route::get('/cms/psychosocial/company/{company}/user/create', [CMSPsychosocialController::class, 'userCreate'])->name('cms.psychosocial.user.create');
 
 Route::middleware(GuestMiddleware::class)->group(function() {
     Route::prefix('register')->group(function(){

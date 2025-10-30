@@ -31,4 +31,9 @@ class CMSPsychosocialController
     {
         return view('cms.private.psychosocial.user.index.index', compact('company'));
     }
+    
+    public function userCreate(Company $company)
+    {
+        return view('cms.private.psychosocial.user.create.index', compact('company'));
+    }
 }

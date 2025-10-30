@@ -24,14 +24,14 @@ class UserRepository
             } else{
                 $role = RoleEnum::from($data['role']);
                 
-                $user = User::create($data->except('role'));
-
-                session('auth:company')->users()->attach($user, ['role_id' => $data['role']]);
-                
                 if($role === RoleEnum::MANAGER){
                     $data['password'] = $user->generateTemporaryPassword();
                     $data['is_temp_password'] = true;
-                }     
+                }
+                
+                $user = User::create($data->except('role'));
+
+                session('auth:company')->users()->attach($user, ['role_id' => $data['role']]);
             }
             
             session(['company' => session('auth:company')->load('users')]);
