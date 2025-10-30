@@ -43,14 +43,14 @@ class UserController
         $users = UserFilterService::sort(UserFilterService::apply(session('auth:company')->users()))->with('collections');
 
   
-        $filters = collect(request()->query())->except(['order_by', 'order_direction'])->filter();
+        $filters = collect(request()->query())->except(['order_by', 'order_direction', 'page'])->filter();
 
         return view('private.user.index', [
+            'filtered' => $users->count(),
             'users' => $users->paginate(15)->appends(request()->query()),
             'latestPsychosocialCampaign' => $latestPsychosocialCampaign,
             'latestOrganizationalCampaign' => $latestOrganizationalCampaign,
             'filters' => $filters,
-            'filtered' => $users->count()
         ]);
     }
 
