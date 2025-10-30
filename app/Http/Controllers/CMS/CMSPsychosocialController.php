@@ -22,8 +22,8 @@ class CMSPsychosocialController
         return view('cms.private.psychosocial.company.show.index', compact('company'));
     }
 
-    public function userIndex()
+    public function userIndex(Company $company)
     {
-        return view('cms.private.psychosocial.user.index.index');
+        return view('cms.private.psychosocial.user.index.index', compact('company'));
     }
 }

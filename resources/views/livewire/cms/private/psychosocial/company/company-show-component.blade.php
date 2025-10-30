@@ -21,7 +21,7 @@
                 <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Lista de funcionários</h2>
                 <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Gerencie a lista de funcionários da empresa: crie, importe e edite colaboradores conforme necessário.</span>
             </div>
-            <x-new-components.actions.button href="" fitSize>
+            <x-new-components.actions.button href="{{ route('cms.psychosocial.user.index', $company) }}" fitSize>
                 <span class="text-main-background font-heading text-center text-sm font-semibold">Lista de funcionários</span>
             </x-new-components.actions.button>
         </div>

@@ -1,3 +1,3 @@
 <x-layouts.cms>
-    {{-- <livewire:cms.private.psychosocial.company.company-index-component /> --}}
+    <livewire:cms.private.psychosocial.user.user-index-component :company="$company" />
 </x-layouts.cms>

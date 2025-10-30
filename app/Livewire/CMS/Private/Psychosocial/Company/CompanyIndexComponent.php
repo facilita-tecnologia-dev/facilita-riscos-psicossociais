@@ -71,6 +71,6 @@ class CompanyIndexComponent extends Component
             $query->orderBy($column, $direction);
         }
         
-        return $query->paginate(8);
+        return $query->paginate(8)->onEachSide(1);
     }
 }
