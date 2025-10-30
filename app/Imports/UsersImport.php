@@ -92,12 +92,30 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
 
     private function convertDate($value)
     {
+        // normaliza
+        $value = trim((string) $value);
+        if ($value === '') {
+            return null;
+        }
+
         if (is_numeric($value)) {
-            return Date::excelToDateTimeObject($value)->format('Y-m-d');
+            try {
+                $dt = Date::excelToDateTimeObject((float) $value);
+                return $dt->format('Y-m-d');
+            } catch (\Throwable $e) {}
+        }
+
+        $commonFormats = ['d/m/Y', 'd-m-Y', 'd.m.Y', 'd/m/Y H:i', 'd/m/Y H:i:s', 'Y-m-d', 'Y/m/d', 'Y-m-d H:i:s', 'm/d/Y'];
+
+        foreach ($commonFormats as $fmt) {
+            $dt = \DateTime::createFromFormat($fmt, $value);
+            if ($dt !== false) {
+                return $dt->format('Y-m-d');
+            }
         }
 
         try {
-            return Carbon::parse($value)->format('Y-m-d');
+            return \Carbon\Carbon::parse($value)->format('Y-m-d');
         } catch (\Exception $e) {
             return null;
         }
