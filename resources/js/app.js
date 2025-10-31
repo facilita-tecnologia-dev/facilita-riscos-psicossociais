@@ -86,6 +86,10 @@ function initializeToastr() {
         Livewire.on("alert:danger", (data) => {
             toastr.error(data);
         });
+
+        Livewire.on("alert:info", (data) => {
+            toastr.info(data);
+        });
     }
 }
 

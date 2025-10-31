@@ -64,7 +64,7 @@ class CompanyCreateComponent extends Component
             'password' => $this->password,
         ]);
 
-        $this->dispatch('alert:success', 'Perfil atualizado!');
+        $this->dispatch('alert:success', 'Empresa cadastrada!');
 
         return redirect()->to(route('cms.psychosocial.company.show', $company));
     }
