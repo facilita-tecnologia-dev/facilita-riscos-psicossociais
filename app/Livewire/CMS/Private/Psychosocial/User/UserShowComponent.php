@@ -1,0 +1,126 @@
+<?php
+
+namespace App\Livewire\CMS\Private\Psychosocial\User;
+
+use App\Enums\RoleEnum;
+use App\Enums\UserStatus;
+use App\Models\Company;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Livewire\Component;
+use Throwable;
+
+class UserShowComponent extends Component
+{
+    public Company $company;
+
+    public User $user;
+
+    public string $name;
+    public string $cpf;
+    public string $email;
+    public string $department;
+    public string $occupation;
+    public string $birth_date;
+    public string $gender;
+    public string $marital_status;
+    public string $education_level;
+    public string $work_shift;
+    public string $admission;
+
+    public string $status;
+    public string $role;
+
+    public array $roles;
+
+    public function render()
+    {
+        return view('livewire.cms.private.psychosocial.user.user-show-component');
+    }
+
+    public function mount()
+    {
+        $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], RoleEnum::cases());
+        $this->role = $this->user->role($this->company)->type;
+        $this->status = $this->user->status($this->company);
+
+        $this->name = $this->user->name;
+        $this->cpf = $this->user->cpf;
+        $this->email = $this->user->email;
+        $this->department = $this->user->department;
+        $this->occupation = $this->user->occupation;
+        $this->birth_date = $this->user->birth_date;
+        $this->gender = $this->user->gender;
+        $this->marital_status = $this->user->marital_status;
+        $this->education_level = $this->user->education_level;
+        $this->work_shift = $this->user->work_shift;
+        $this->admission = $this->user->admission;
+    }
+
+    public function submit()
+    {
+        $this->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'cpf' => ['required', 'max:18', 'cpf', Rule::unique('users', 'cpf')->ignore($this->user->id)],
+            'email' => ['nullable', 'email', 'max:100'],
+            'department' => ['required', 'string', 'max:255'],
+            'occupation' => ['required', 'string', 'max:255'],
+            'birth_date' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()->subYears(16)), Rule::date()->after(today()->subCenturies(1))],
+            'gender' => ['nullable', 'string', 'max:255'],
+            'marital_status' => ['nullable', 'string', 'max:255'],
+            'education_level' => ['nullable', 'string', 'max:255'],
+            'work_shift' => ['nullable', 'string', 'max:255'],
+            'admission' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()), Rule::date()->after(today()->subCenturies(1))],
+            'role' => ['required', 'string', Rule::enum(RoleEnum::class)],
+        ]);
+        
+        try {
+            DB::transaction(function () {
+                // dd((int) $this->role);
+                $this->user->update([
+                    'name' => $this->name,
+                    'cpf' => $this->cpf,
+                    'email' => $this->email,
+                    'birth_date' => $this->birth_date,
+                    'gender' => $this->gender,
+                    'marital_status' => $this->marital_status,
+                    'education_level' => $this->education_level,
+                    'department' => $this->department,
+                    'occupation' => $this->occupation,
+                    'work_shift' => $this->work_shift,
+                    'admission' => $this->admission,
+                ]);
+
+                $this->user->companies()->syncWithoutDetaching([$this->company->id => ['role_id' => (int) $this->role]]);
+
+                $role = RoleEnum::from($this->role);
+
+                if ($role === RoleEnum::MANAGER && !$this->user->password) {
+                    $this->user->password = $this->user->generateTemporaryPassword();
+                    $this->user->is_temp_password = true;
+                    $this->user->save();
+                }
+
+                $this->dispatch('alert:success', 'Funcionário atualizado com sucesso!');
+            });
+        } catch (Throwable $e) {
+            $this->dispatch('alert:danger', 'Ocorreu um erro ao atualizar o funcionário. Tente novamente mais tarde.');
+        }
+    }
+
+    public function activateUser()
+    {
+        $this->user->companies()->syncWithoutDetaching([$this->company->id => ['status' => UserStatus::ACTIVE->value]]);
+        $this->status = UserStatus::ACTIVE->value;
+        $this->dispatch('alert:success', 'Usuário ativado!');
+    }
+
+    public function inactivateUser()
+    {
+        $this->user->companies()->syncWithoutDetaching([$this->company->id => ['status' => UserStatus::INACTIVE->value]]);
+        $this->status = UserStatus::INACTIVE->value;
+        $this->dispatch('alert:success', 'Usuário inativado!');
+    }
+}

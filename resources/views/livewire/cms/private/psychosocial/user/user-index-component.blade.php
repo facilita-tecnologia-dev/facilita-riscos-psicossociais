@@ -29,7 +29,7 @@
 
     <main class="flex min-h-0 w-full flex-1 flex-col-reverse items-start justify-end gap-4 lg:flex-row lg:justify-start lg:overflow-hidden">
         <section class="flex min-h-0 w-full flex-1 flex-col gap-4 overflow-auto pb-4 lg:h-full lg:w-fit">
-            <livewire:cms.private.psychosocial.user.user-list-component :users="$users->items()" />
+            <livewire:cms.private.psychosocial.user.user-list-component :company="$company" :users="$users->items()" />
 
             @if (isset($users) && count($users) > 0)
                 <div class="py-2">

@@ -39,7 +39,6 @@ class UserCreateComponent extends Component
         return view('livewire.cms.private.psychosocial.user.user-create-component');
     }
 
-
     public function mount()
     {
         $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], RoleEnum::cases());
@@ -49,7 +48,7 @@ class UserCreateComponent extends Component
     {
         $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'cpf' => ['required', 'max:18', 'cpf'],
+            'cpf' => ['required', 'max:18', 'cpf', 'unique:users'],
             'email' => ['nullable', 'email', 'max:100'],
             'department' => ['required', 'string', 'max:255'],
             'occupation' => ['required', 'string', 'max:255'],

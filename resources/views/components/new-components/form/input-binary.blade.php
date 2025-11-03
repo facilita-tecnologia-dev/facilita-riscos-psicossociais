@@ -18,7 +18,7 @@
     <div class="flex w-full gap-1.5">
         @foreach ($options as $key => $option)
             <div class="flex-1">
-                <input type="radio" name="{{ $name }}" id="{{ $name . '_' . $key }}" wire:model.defer="{{ $wireModel }}" value="{{ $option['value'] }}" class="hidden peer">
+                <input type="radio" name="{{ $name }}" id="{{ $name . '_' . $key }}" wire:model.defer="{{ $wireModel }}" value="{{ $option['value'] }}" class="hidden peer" {{ old($name) == $option['value'] || $value == $option['value'] ? 'checked' : '' }}>
                 <label 
                     for="{{ $name . '_' . $key }}" 
                     class="w-full flex items-center justify-between bg-secondary-background border border-borders p-3 rounded-sm peer-checked:border-primary-solid cursor-pointer hover:brightness-95 transition">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CMS;
 
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CMSPsychosocialController
@@ -40,5 +41,10 @@ class CMSPsychosocialController
     public function userImport(Company $company)
     {
         return view('cms.private.psychosocial.user.import.index', compact('company'));
+    }
+
+    public function userShow(Company $company, User $user)
+    {
+        return view('cms.private.psychosocial.user.show.index', compact('company', 'user'));
     }
 }

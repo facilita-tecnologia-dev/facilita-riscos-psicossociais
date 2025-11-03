@@ -65,6 +65,7 @@ class UserRepository
             $role = RoleEnum::from($data['role']);
 
             $user->companies()->syncWithoutDetaching([session('auth:company')->id => ['status' => $data['status']]]);
+            
             if($role == RoleEnum::MANAGER && !$user->password){
                 $data['password'] = $user->generateTemporaryPassword();
                 $data['is_temp_password'] = true;

@@ -15,7 +15,7 @@
                 </x-new-components.table.thead>
                 <x-new-components.table.tbody>
                     @foreach ($users as $user)
-                        <x-new-components.table.tr class="grid-cols-2 sm:grid-cols-3" href="" last="{{ $loop->last ? true : false }}">
+                        <x-new-components.table.tr class="grid-cols-2 sm:grid-cols-3" href="{{ route('cms.psychosocial.user.show', ['company' => $company, 'user' => $user]) }}" last="{{ $loop->last ? true : false }}">
                             <x-new-components.table.td>
                                 <span class="text-secondary-text font-text truncate text-sm font-normal md:text-base" title="{{ $user->name }}">{{ $user->name }}</span>
                             </x-new-components.table.td>
