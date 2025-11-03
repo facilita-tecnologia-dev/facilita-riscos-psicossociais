@@ -78,7 +78,6 @@ class UserShowComponent extends Component
         
         try {
             DB::transaction(function () {
-                // dd((int) $this->role);
                 $this->user->update([
                     'name' => $this->name,
                     'cpf' => $this->cpf,

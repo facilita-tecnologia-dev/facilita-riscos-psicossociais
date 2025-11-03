@@ -8,7 +8,7 @@
 
 <a 
     href="{{ $href }}" 
-    class="flex items-center justify-center w-8 h-8 rounded-sm transition {{ $activeRoute && request()->routeIs($activeRoute) ? 'bg-primary-solid hover:brightness-95 text-main-background' : 'bg-transparent hover:bg-borders text-secondary-text border lg:border-0 border-borders' }}"
+    class="flex items-center justify-center w-8 h-8 rounded-sm transition {{ $activeRoute && request()->routeIs($activeRoute) ? (str_contains($activeRoute, 'report-channel') ? 'bg-report-channel-primary-solid' : 'bg-primary-solid') . ' hover:brightness-95 text-main-background' : 'bg-transparent hover:bg-borders text-secondary-text border lg:border-0 border-borders' }}"
     @if($tooltip) data-tippy-content="{{ $tooltip }}" @endif 
     data-tippy-placement="{{ $tooltipPosition ?? 'right' }}"
 >

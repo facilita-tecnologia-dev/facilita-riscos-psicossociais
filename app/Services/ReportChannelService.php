@@ -29,4 +29,10 @@ class ReportChannelService
 
         return $response->json();
     }
+
+    public static function allReports()
+    {
+        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/reports/all'); 
+        return $response->json();
+    }
 }
