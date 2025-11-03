@@ -22,16 +22,9 @@ use Illuminate\Validation\Rules\Password;
 
 class UserController
 {
-    protected UserRepository $userRepository;
-
     protected $companyCustomTests;
 
     protected $defaultTests;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
 
     public function index(Request $request)
     {
@@ -67,7 +60,7 @@ class UserController
     {
         Gate::authorize('user-create');
 
-        $user = $this->userRepository->store($request->safe());
+        $user = UserRepository::store($request->safe());
 
         if($user->hasRole(RoleEnum::MANAGER->value)){
             return to_route('user.department-scope', $user)->with('message', 'Perfil do colaborador criado com sucesso!');
@@ -108,7 +101,7 @@ class UserController
     {
         Gate::authorize('user-edit');
 
-        $this->userRepository->update($request->safe(), $user);
+        UserRepository::update($request->safe(), $user);
 
         return to_route('user.show', $user)->with('message', 'Perfil do colaborador atualizado com sucesso!');
     }
@@ -117,7 +110,7 @@ class UserController
     {
         Gate::authorize('user-delete');
 
-        $this->userRepository->destroy($user);
+        UserRepository::destroy($user);
 
         return to_route('user.index')->with('message', 'Perfil do colaborador excluído com sucesso!');
     }
@@ -133,7 +126,7 @@ class UserController
             'import_users' => 'required|file|mimes:xlsx|max:1024',
         ]);
 
-        $importUsers = $this->userRepository->import($request);
+        $importUsers = UserRepository::import(session('auth:company'), $request->file('import_users'));
 
         if($importUsers instanceof Collection){
             $importUsers = $importUsers->map(function($validationError){

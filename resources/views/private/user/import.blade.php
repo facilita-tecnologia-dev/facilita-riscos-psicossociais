@@ -41,15 +41,15 @@
                 </x-form>    
 
                 @if(isset($failures))
-                <div class="px-4 py-2 bg-red-100 rounded-md text-sm space-y-2">
-                    <h3 class="font-medium">Seu arquivo de importação contém erros. Por isso, os colaboradores das linhas com inconsistências não foram importados.</h3>
-                    <ul class="list-disc pl-4">
-                        @foreach ($failures as $failure)                        
-                        <li>{{ $failure }}</li>
-                        @endforeach
-                    </ul>
-                    <p class="font-medium">Por favor, corrija esses erros no arquivo de importação e tente novamente.</p>
-                </div>
+                    <div class="px-4 py-2 bg-red-100 rounded-md text-sm space-y-2">
+                        <h3 class="font-medium">Seu arquivo de importação contém erros. Por isso, os colaboradores das linhas com inconsistências não foram importados.</h3>
+                        <ul class="list-disc pl-4">
+                            @foreach ($failures as $failure)                        
+                                <li>{{ $failure }}</li>
+                            @endforeach
+                        </ul>
+                        <p class="font-medium">Por favor, corrija esses erros no arquivo de importação e tente novamente.</p>
+                    </div>
                 @endif
                 
                 <div class="w-full flex justify-end items-center gap-2">

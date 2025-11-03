@@ -15,7 +15,7 @@
     </div>
 
     <div class="w-full flex lg:hidden gap-2 justify-end">
-        <x-new-components.actions.button href="" slim fitSize>
+        <x-new-components.actions.button href="{{ route('cms.psychosocial.user.import', $company) }}" slim fitSize>
             <span class="hidden sm:block text-main-background text-center text-sm font-semibold">Importar arquivo de funcionários</span>
             <x-icon icon="upload" class="block sm:hidden text-main-background h-4 w-4 object-scale-down" />
         </x-new-components.actions.button>
@@ -42,7 +42,7 @@
             <div class="bg-secondary-background border-borders hidden w-full flex-col items-center gap-8 rounded-2xl border px-6 py-8 shadow-sm lg:flex">
                 <h2 class="text-main-text text-center text-xl font-semibold">Ações</h2>
                 <div class="w-full flex flex-col gap-3">
-                    <x-new-components.actions.button href="">
+                    <x-new-components.actions.button href="{{ route('cms.psychosocial.user.import', $company) }}">
                         <span class="text-main-background text-center text-sm font-semibold">Importar arquivo de funcionários</span>
                     </x-new-components.actions.button>
                     <x-new-components.actions.button href="{{ route('cms.psychosocial.user.create', $company) }}">

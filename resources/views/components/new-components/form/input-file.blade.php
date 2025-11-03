@@ -9,13 +9,11 @@
 ])
 
 <div class="flex w-full flex-col-reverse items-start justify-end gap-1" x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true" x-on:livewire-upload-finish="uploading = false" x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false" x-on:livewire-upload-progress="progress = $event.detail.progress">
-    @if (session('errors') && session('errors')->has($name))
-        <footer class="flex w-full items-center justify-between gap-3 pl-0.5">
-            @error($name)
-                <span class="text-danger font-text mr-auto text-left text-xs leading-4 font-normal">{{ $message }}</span>
-            @enderror
-        </footer>
-    @endif
+    <footer class="flex w-full items-center justify-between gap-3 pl-0.5">
+        @error($name)
+            <span class="text-danger font-text mr-auto text-left text-xs leading-4 font-normal">{{ $message }}</span>
+        @enderror
+    </footer>
 
     @if ($attachments)
         <ul class="flex max-h-[110px] w-full list-none flex-col gap-1 overflow-y-auto">
@@ -23,13 +21,13 @@
                 @foreach ($attachments as $file)
                     @if ($file instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
                         <li class="bg-borders flex w-full items-center gap-2 rounded-sm p-3">
-                            <x-file-icon type="{{ $file->getClientOriginalExtension() }}" />
+                            <x-new-components.file-icon type="{{ $file->getClientOriginalExtension() }}" />
                             <span class="font-text text-secondary-text flex-1 truncate text-sm font-normal md:text-base" title="{{ $file->getClientOriginalName() }}">{{ $file->getClientOriginalName() }}</span>
                             <span class="font-text text-secondary-text truncate text-xs font-normal">{{ round($file->getSize() / 1024 / 1024, 2) }}MB</span>
                         </li>
                     @else
                         <li class="bg-borders flex w-full items-center gap-2 rounded-sm p-3">
-                            <x-file-icon type="{{ $file['fileExtension'] }}" />
+                            <x-new-components.file-icon type="{{ $file['fileExtension'] }}" />
                             <span class="font-text text-secondary-text flex-1 truncate text-sm font-normal md:text-base" title="{{ $file['fileName'] }}">{{ $file['fileName'] }}</span>
                             <span class="font-text text-secondary-text truncate text-xs font-normal">{{ round($file['fileSize'] / 1024 / 1024, 2) }}MB</span>
                         </li>
@@ -38,13 +36,13 @@
             @else
                 @if ($attachments instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
                     <li class="bg-borders flex w-full items-center gap-2 rounded-sm p-3">
-                        <x-file-icon type="{{ $attachments->getClientOriginalExtension() }}" />
+                        <x-new-components.file-icon type="{{ $attachments->getClientOriginalExtension() }}" />
                         <span class="font-text text-secondary-text flex-1 truncate text-sm font-normal md:text-base" title="{{ $attachments->getClientOriginalName() }}">{{ $attachments->getClientOriginalName() }}</span>
                         <span class="font-text text-secondary-text truncate text-xs font-normal">{{ round($attachments->getSize() / 1024 / 1024, 2) }}MB</span>
                     </li>
                 @else
                     <li class="bg-borders flex w-full items-center gap-2 rounded-sm p-3">
-                        <x-file-icon type="{{ $attachments['fileExtension'] }}" />
+                        <x-new-components.file-icon type="{{ $attachments['fileExtension'] }}" />
                         <span class="font-text text-secondary-text flex-1 truncate text-sm font-normal md:text-base" title="{{ $attachments['fileName'] }}">{{ $attachments['fileName'] }}</span>
                         <span class="font-text text-secondary-text truncate text-xs font-normal">{{ round($attachments['fileSize'] / 1024 / 1024, 2) }}MB</span>
                     </li>

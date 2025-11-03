@@ -5,16 +5,18 @@ namespace App\Repositories;
 use App\Enums\InternalUserRoleEnum;
 use App\Enums\RoleEnum;
 use App\Imports\UsersImport;
+use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\AuthService;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ValidatedInput;
 
 class UserRepository
 {
-    public function store(ValidatedInput $data): User
+    public static function store(ValidatedInput $data): User
     {
         return DB::transaction(function () use ($data) {
             $user = User::firstWhere('cpf', $data['cpf']);
@@ -40,22 +42,24 @@ class UserRepository
         });
     }
 
-    public function import(Request $request): mixed
+    public static function import(Company $company, $file): mixed
     {
-        $import = new UsersImport;
+        $import = new UsersImport($company);
 
-        $import->import($request->file('import_users')->store('temp'));
-    
+        $import->import($file->store('temp'));
+
         if ($import->failures()->isNotEmpty()) {
             return $import->failures();
         }
-        
-        session(['company' => session('auth:company')->load('users')]);
-        
+
+        if (session()->has('auth:company')) {
+            session(['company' => session('auth:company')->load('users')]);
+        }
+
         return true;
     }
 
-    public function update(ValidatedInput $data, User $user): User
+    public static function update(ValidatedInput $data, User $user): User
     {
         return DB::transaction(function () use ($data, $user) {
             $role = RoleEnum::from($data['role']);
@@ -76,7 +80,7 @@ class UserRepository
         });
     }
 
-    public function destroy(User $user): void
+    public static function destroy(User $user): void
     {
         session('auth:company')->users()->detach($user->id);
 

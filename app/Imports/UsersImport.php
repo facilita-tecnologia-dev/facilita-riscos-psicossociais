@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Company;
 use App\Models\User;
 use App\Rules\validateCPF;
 use Carbon\Carbon;
@@ -20,6 +21,13 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure, SkipsOnError, SkipsEmptyRows
 {
     use Importable, SkipsFailures, SkipsErrors;
+
+    protected Company $company;
+
+    public function __construct(Company $company)
+    {
+        $this->company = $company;
+    }
 
     public function model(array $row)
     {
@@ -44,8 +52,8 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
                         'birth_date' => $birth_date,
                     ]);
                     
-                    $userAlreadyOnCompany = session('auth:company')->users()->where('users.id', $user->id)->exists();
-                    if(!$userAlreadyOnCompany) session('auth:company')->users()->syncWithoutDetaching([$user->id => ['role_id' => 2]]);
+                    $userAlreadyOnCompany = $this->company->users()->where('users.id', $user->id)->exists();
+                    if(!$userAlreadyOnCompany) $this->company->users()->syncWithoutDetaching([$user->id => ['role_id' => 2]]);
                     
                     return $user;
                 }
@@ -64,7 +72,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
                     'admission' => $admission,
                 ]);
 
-                session('auth:company')->users()->attach($user, ['role_id' => 2]);
+                $this->company->users()->attach($user, ['role_id' => 2]);
 
                 return $user;
             }
