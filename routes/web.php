@@ -42,6 +42,8 @@ Route::get('/cms/psychosocial/company/{company}/user/import', [CMSPsychosocialCo
 Route::get('/cms/psychosocial/company/{company}/user/{user}', [CMSPsychosocialController::class, 'userShow'])->name('cms.psychosocial.user.show');
 
 Route::get('/cms/report-channel/dashboard', [CMSReportChannelController::class, 'dashboard'])->name('cms.report-channel.dashboard');
+Route::get('/cms/report-channel/company', [CMSReportChannelController::class, 'companyIndex'])->name('cms.report-channel.company.index');
+Route::get('/cms/report-channel/company/create', [CMSReportChannelController::class, 'companyCreate'])->name('cms.report-channel.company.create');
 
 
 Route::middleware(GuestMiddleware::class)->group(function() {

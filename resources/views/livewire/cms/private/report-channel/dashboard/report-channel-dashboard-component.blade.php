@@ -13,10 +13,10 @@
     </div>
 
     <div class="w-full flex flex-col sm:flex-row gap-2 sm:gap-4">
-        <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.psychosocial.company.index') }}">
+        <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.company.index') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de empresas</span>
         </x-new-components.actions.button>
-        <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.psychosocial.company.index') }}">
+        <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.company.index') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de usuários</span>
         </x-new-components.actions.button>
     </div>

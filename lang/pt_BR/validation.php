@@ -220,7 +220,8 @@ return [
         'control_action' => 'medida de controle',
         'import_users' => 'arquivo de importação',
         'registerName' => 'razão social',
-        'importUsersFile' => 'arquivo de importação'
+        'importUsersFile' => 'arquivo de importação',
+        'contactPhone' => 'telefone'
     ],
 
 ];

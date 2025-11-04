@@ -10,4 +10,15 @@ class CMSReportChannelController
     {
         return view('cms.private.report-channel.dashboard.index');
     }
+
+    public function companyIndex()
+    {
+        return view('cms.private.report-channel.company.index.index');
+    }
+
+    public function companyCreate()
+    {
+        return view('cms.private.report-channel.company.create.index');
+    }
+
 }

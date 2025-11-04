@@ -19,12 +19,12 @@ class CompanyCreateComponent extends Component
     #[Validate('image|max:5120')] // 1MB Max
     public $logo;
 
-    public string $registerName = '';
-    public string $cnpj = '';
-    public string $email = '';
-    public string $psychosocialMetodology = BaseCollection::HSE->value;
-    public string $password = '';
-    public string $passwordConfirmation = '';
+    public ?string $registerName = null;
+    public ?string $cnpj = null;
+    public ?string $email = null;
+    public ?string $psychosocialMetodology = BaseCollection::HSE->value;
+    public ?string $password = null;
+    public ?string $passwordConfirmation = null;
 
     public array $psychosocialMetodologies;
 

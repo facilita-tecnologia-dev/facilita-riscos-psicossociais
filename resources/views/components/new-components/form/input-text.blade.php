@@ -30,7 +30,7 @@
         @endif
 
         @if ($isPassword)
-            <button type="button" class="bg-primary-solid flex h-10 w-10 cursor-pointer items-center justify-center rounded-md md:h-[45px] md:w-[45px]" @click="textVisible = !textVisible">
+            <button type="button" class="bg-secondary-text flex h-10 w-10 cursor-pointer items-center justify-center rounded-md md:h-[45px] md:w-[45px]" @click="textVisible = !textVisible">
                 <x-icon x-show="textVisible" icon="eye-open" class="text-main-background h-6 w-6 object-scale-down" />
                 <x-icon x-show="!textVisible" icon="eye-close" class="text-main-background h-6 w-6 object-scale-down" />
             </button>
