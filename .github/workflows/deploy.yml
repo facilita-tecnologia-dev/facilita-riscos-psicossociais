@@ -28,4 +28,7 @@ jobs:
             git pull origin master
             php artisan migrate --force
             php artisan route:cache
+            cd public
+            unlink storage
+            ln -s ../storage/app/public storage
           EOF
