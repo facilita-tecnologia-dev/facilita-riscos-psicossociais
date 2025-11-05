@@ -20,7 +20,7 @@
             
             <div class="w-full grid items-start grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 @foreach ($departments as $department => $results)
-                    <a href="{{ route('dashboard.psychosocial.list', ['hazard' => $hazard, 'department' => $department])}}" class="bg-white/25 rounded-md px-4 py-5 shadow-md">
+                    <a class="bg-white/25 rounded-md px-4 py-5 shadow-md">
                         <x-table>
                             <x-table.head class="flex items-center justify-between">
                                 <x-table.head.th class="truncate">{{ $department }}</x-table.head.th>

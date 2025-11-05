@@ -133,7 +133,7 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::prefix('psychosocial')->group(function(){
             Route::get('/', [PsychosocialController::class, 'dashboard'])->name('dashboard.psychosocial');
             Route::get('/{hazard}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
-            Route::get('/{hazard}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
+            // Route::get('/{hazard}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
             Route::get('/risks', [PsychosocialController::class, 'risks'])->name('dashboard.psychosocial.risks');
             Route::get('/risks/report/{type}/{format}', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
         });
