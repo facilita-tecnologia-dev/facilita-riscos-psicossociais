@@ -36,6 +36,12 @@ class ReportChannelService
         return $response->json();
     }
 
+    public static function companies()
+    {
+        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/company'); 
+        return $response->json();
+    }
+
     public static function companyCreate(array $formData)
     {
         $response = Http::withHeaders([

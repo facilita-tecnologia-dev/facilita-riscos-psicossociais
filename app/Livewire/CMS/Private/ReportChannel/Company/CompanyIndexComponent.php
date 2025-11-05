@@ -3,6 +3,7 @@
 namespace App\Livewire\CMS\Private\ReportChannel\Company;
 
 use App\Models\Company;
+use App\Services\ReportChannelService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -10,9 +11,8 @@ use Livewire\WithPagination;
 
 class CompanyIndexComponent extends Component
 {
-    use WithPagination;
+    // use WithPagination;
 
-    public $perPage = 8;
     public $filters = [];
 
     public function render()
@@ -26,7 +26,6 @@ class CompanyIndexComponent extends Component
     public function updateFilters($filters)
     {
         $this->filters = $filters;
-        $this->resetPage();
     }
 
     #[On('company-list:filter-clear')]
@@ -35,14 +34,9 @@ class CompanyIndexComponent extends Component
         $this->reset('filters');
     }
 
-    private function fetchCompanies(): LengthAwarePaginator
+    private function fetchCompanies(): mixed
     {
-        $query = Company::with('campaigns')->withCount([
-            'users as users_count' => function ($query) {
-                $query->where('company_user.status', 1);
-            },
-        ]);
-
+        $response = ReportChannelService::companies();
         // if (!empty($this->filters['name'])) {
         //     $query->where('name', 'like', '%' . $this->filters['name'] . '%');
         // }
@@ -69,7 +63,7 @@ class CompanyIndexComponent extends Component
         //     $query->orderBy($column, $direction);
         // }
         
-        return $query->paginate(8)->onEachSide(1);
+        return $response;
     }
 
 }

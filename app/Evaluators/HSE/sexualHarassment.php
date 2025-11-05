@@ -11,6 +11,7 @@ class sexualHarassment
      public static function evaluate(Hazard $hazard, float $score, HSEEvaluationType $evaluationType = HSEEvaluationType::DEFAULT, ?string $evaluationFactor = null)
     {
         $probability = self::determineProbability($hazard, $score, $evaluationType, $evaluationFactor);
+
         $gravity = $hazard->gravity;
         
         return [
@@ -26,6 +27,7 @@ class sexualHarassment
         $absences = session('auth:company')->CIDAbsences->filter(fn ($absence) => $cids->has($absence->cid_id));
         
         $initialProbability = HSERiskService::scoreToProbability($score);
+
         $baseline = $absences->isNotEmpty() ? $hazard->baseline : 0;
         $modifiers = HSERiskService::modifiers($absences, $evaluationType, $evaluationFactor); 
 
