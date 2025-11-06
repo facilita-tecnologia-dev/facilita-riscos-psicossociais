@@ -25,7 +25,7 @@ class longWorkingHours
         $cids = $hazard->cids->keyBy('id');
         $absences = session('auth:company')->CIDAbsences->filter(fn ($absence) => $cids->has($absence->cid_id));
         
-        $initialProbability = HSERiskService::scoreToProbability($score);
+        $initialProbability = HSERiskService::scoreToProbability($score, inverted: true);
         $baseline = $absences->isNotEmpty() ? $hazard->baseline : 0;
         $modifiers = HSERiskService::modifiers($absences, $evaluationType, $evaluationFactor); 
 

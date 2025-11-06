@@ -97,14 +97,26 @@ class HSERiskService
         return $sum;
     }
 
-    public static function scoreToProbability(float $score)
+    public static function scoreToProbability(float $score, ?bool $inverted = false)
     {
-        $score++; // Corrigir escala de 0 a 4 para 1 a 5
+        if($inverted) {
+            $score = 4 - $score;
+
+            return match(true) {
+                $score <= 1.5 => 1,
+                $score <= 2.0  => 2,
+                $score <= 3.0  => 3,
+                $score < 4  => 4,
+                default => 5,
+            };
+        }
+
+        // Normal
         return match(true) {
             $score <= 1.5 => 5,
             $score <= 2.0  => 4,
             $score <= 3.0  => 3,
-            $score <= 4  => 2,
+            $score < 4  => 2,
             default => 1,
         };
     }

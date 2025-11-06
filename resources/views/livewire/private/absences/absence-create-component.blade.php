@@ -1,5 +1,5 @@
 <div x-data="{ absenceCreateModalOpen: false }">
-    <x-action tag="button" @click="absenceCreateModalOpen = true" width="fit">
+    <x-action tag="button" @click="absenceCreateModalOpen = true" width="full">
         Registrar afastamento
     </x-action>
     {{-- Fundo do modal --}}
