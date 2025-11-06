@@ -2,7 +2,7 @@
 
 namespace App\Enums\Filters;
 
-enum CompanyOrder: string
+enum PsychosocialCompanyOrder: string
 {
     case NAME_ASC  = 'name_asc';      // Nome A-Z
     case NAME_DESC = 'name_desc';     // Nome Z-A

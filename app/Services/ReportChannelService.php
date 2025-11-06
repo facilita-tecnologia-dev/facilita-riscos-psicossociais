@@ -32,13 +32,13 @@ class ReportChannelService
 
     public static function allReports()
     {
-        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/reports/all'); 
+        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/report/all'); 
         return $response->json();
     }
 
-    public static function companies()
+    public static function companies(array $filters)
     {
-        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/company'); 
+        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/company', $filters); 
         return $response->json();
     }
 

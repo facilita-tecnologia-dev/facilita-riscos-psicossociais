@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
-use App\Enums\Filters\CompanyOrder;
+use App\Enums\Filters\PsychosocialCompanyOrder;
 use App\Enums\Filters\UsersCountRangeEnum;
 use App\Models\Company;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -64,7 +64,7 @@ class CompanyIndexComponent extends Component
             }
         }
 
-        $orderEnum = CompanyOrder::tryFrom($this->filters['orderBy'] ?? CompanyOrder::USERS_DESC->value);
+        $orderEnum = PsychosocialCompanyOrder::tryFrom($this->filters['orderBy'] ?? PsychosocialCompanyOrder::USERS_DESC->value);
 
         if ($orderEnum) {
             [$column, $direction] = $orderEnum->config();

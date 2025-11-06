@@ -2,28 +2,34 @@
 
 namespace App\Livewire\CMS\Private\ReportChannel\Company;
 
-use App\Enums\Filters\CompanyOrder;
+use App\Enums\Filters\ReportChannelCompanyOrder;
+use Illuminate\Validation\Rules\Enum;
 use Livewire\Component;
 
 class CompanyFilterComponent extends Component
 {
-    public $name = '';
+    public $register_name = '';
     public $cnpj = '';
-    public $userCountRange = '';
-    public $orderBy = CompanyOrder::USERS_DESC->value;
+    public $order_by = ReportChannelCompanyOrder::REGISTER_NAME_ASC->value;
+
+    public $companyOrderTypes = [];
 
     public function render()
     {
         return view('livewire.cms.private.report-channel.company.company-filter-component');
     }
 
+    public function mount()
+    {
+        $this->companyOrderTypes = array_map(fn ($companyOrderType) => ['label' => $companyOrderType->label(), 'value' => $companyOrderType->value], ReportChannelCompanyOrder::cases());
+    }
+
     public function submit()
     {
         $filters = $this->validate([
-            'name' => ['nullable', 'string', 'max:255'],
+            'register_name' => ['nullable', 'string', 'max:255'],
             'cnpj' => ['nullable', 'string', 'max:255'],
-            // 'userCountRange' => ['nullable', new Enum(UsersCountRangeEnum::class)],
-            // 'orderBy' => ['nullable', new Enum(CompanyOrder::class)],
+            'order_by' => ['nullable', new Enum(ReportChannelCompanyOrder::class)],
         ]);
 
         $this->dispatch('company-list:filter', $filters);
@@ -32,7 +38,7 @@ class CompanyFilterComponent extends Component
 
     public function clear()
     {
-        $this->reset(['name', 'cnpj']);
+        $this->reset(['register_name', 'cnpj']);
         $this->dispatch('company-list:filter-clear');
         $this->dispatch('alert:success', 'Filtros removidos!');
     }

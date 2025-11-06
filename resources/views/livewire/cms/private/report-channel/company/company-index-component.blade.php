@@ -17,7 +17,7 @@
             <span class="text-main-background text-center text-sm font-semibold">Cadastrar nova empresa</span>
         </x-new-components.actions.button>
 
-        {{-- @include('cms.private.psychosocial.company.index.side-actions.company-filter-mobile') --}}
+        @include('cms.private.report-channel.company.index.side-actions.company-filter-mobile')
     </div>
 
     <main class="flex min-h-0 w-full flex-1 flex-col-reverse items-start justify-end gap-4 lg:flex-row lg:justify-start lg:overflow-hidden">
