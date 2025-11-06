@@ -3,6 +3,7 @@
 namespace App\Livewire\Private\Absences;
 
 use App\Models\CID;
+use App\Models\Company;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -10,6 +11,8 @@ use Livewire\WithPagination;
 class AbsenceIndexComponent extends Component
 {
     use WithPagination;
+
+    public Company $company;
 
     protected $listeners = [
         'absence:created' => 'refresh',
@@ -25,6 +28,11 @@ class AbsenceIndexComponent extends Component
         ]);
     }
 
+    public function mount()
+    {
+        $this->company = session('auth:company');
+    }
+
     public function refresh()
     {
         $this->resetPage();
@@ -34,5 +42,15 @@ class AbsenceIndexComponent extends Component
     {
         $query = session('auth:company')->CIDabsences()->with('cid')->orderByDesc('created_at')->paginate(8);
         return $query;
+    }
+    
+    public function toggleAbsenceConfig()
+    {
+        $this->company->has_cids = !$this->company->has_cids;
+        $this->company->save();
+
+        session(['auth:company' => $this->company]);
+
+        $this->dispatch('alert:success', 'Configuração atualizada com sucesso!');
     }
 }

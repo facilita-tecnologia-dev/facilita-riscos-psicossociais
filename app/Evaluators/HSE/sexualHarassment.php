@@ -3,6 +3,7 @@
 namespace App\Evaluators\HSE;
 
 use App\Enums\HSE\HSEEvaluationType;
+use App\Enums\HSE\HSERisk;
 use App\Models\Hazard;
 use App\Services\HSERiskService;
 
@@ -14,8 +15,14 @@ class sexualHarassment
 
         $gravity = $hazard->gravity;
         
+        $risk = HSERiskService::riskMatrix($probability['probability'], $gravity);
+
+        if(session('auth:company')->has_cids && !$probability['hasCIDAbsences']){
+            $risk = HSERisk::from($risk->value - 1);
+        };
+        
         return [
-            'evaluated' => HSERiskService::riskMatrix($probability, $gravity),
+            'evaluated' => $risk,
             'probability' => $probability,
             'gravity' => $gravity
         ];
@@ -23,16 +30,27 @@ class sexualHarassment
 
     public static function determineProbability(Hazard $hazard, float $score, HSEEvaluationType $evaluationType = HSEEvaluationType::DEFAULT, ?string $evaluationFactor = null)
     {
-        $cids = $hazard->cids->keyBy('id');
-        $absences = session('auth:company')->CIDAbsences->filter(fn ($absence) => $cids->has($absence->cid_id));
-        
-        $initialProbability = HSERiskService::scoreToProbability($score);
+        $initialProbability = HSERiskService::scoreToProbability($score, inverted: true);
 
-        $baseline = $absences->isNotEmpty() ? $hazard->baseline : 0;
-        $modifiers = HSERiskService::modifiers($absences, $evaluationType, $evaluationFactor); 
+        $baseline = 0;
+        $modifiers = 0;
+        $hasCIDAbsences = false;
+
+        if(session('auth:company')->has_cids){
+            $cids = $hazard->cids->keyBy('id');
+            $absences = session('auth:company')->CIDAbsences->filter(fn ($absence) => $cids->has($absence->cid_id));
+            
+            $baseline = $absences->isNotEmpty() ? $hazard->baseline : 0;
+            $modifiers = HSERiskService::modifiers($absences, $evaluationType, $evaluationFactor); 
+
+            if($absences->isNotEmpty()) $hasCIDAbsences = true;
+        }
 
         $probability = min(5, $initialProbability + $baseline +  $modifiers);
 
-        return $probability;
+        return [
+            'probability' => $probability,
+            'hasCIDAbsences' => $hasCIDAbsences
+        ];
     }
 }
