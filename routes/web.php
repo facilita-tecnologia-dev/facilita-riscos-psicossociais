@@ -46,6 +46,8 @@ Route::get('/cms/report-channel/company', [CMSReportChannelController::class, 'c
 Route::get('/cms/report-channel/company/create', [CMSReportChannelController::class, 'companyCreate'])->name('cms.report-channel.company.create');
 Route::get('/cms/report-channel/company/{companyID}', [CMSReportChannelController::class, 'companyShow'])->name('cms.report-channel.company.show');
 
+Route::get('/cms/report-channel/user', [CMSReportChannelController::class, 'userIndex'])->name('cms.report-channel.user.index');
+
 
 Route::middleware(GuestMiddleware::class)->group(function() {
     Route::prefix('register')->group(function(){

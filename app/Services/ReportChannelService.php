@@ -137,4 +137,10 @@ class ReportChannelService
 
         return $response;
     }
+
+    public static function users(array $filters)
+    {
+        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/user', $filters); 
+        return $response->json();
+    }
 }

@@ -25,4 +25,9 @@ class CMSReportChannelController
     {
         return view('cms.private.report-channel.company.show.index', compact('companyID'));
     }
+
+    public function userIndex()
+    {
+        return view('cms.private.report-channel.user.index.index');
+    }
 }

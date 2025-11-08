@@ -16,7 +16,7 @@
         <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.company.index') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de empresas</span>
         </x-new-components.actions.button>
-        <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.company.index') }}">
+        <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.user.index') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de usuários</span>
         </x-new-components.actions.button>
     </div>

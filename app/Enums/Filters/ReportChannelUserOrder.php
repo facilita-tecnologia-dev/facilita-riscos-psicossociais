@@ -2,14 +2,14 @@
 
 namespace App\Enums\Filters;
 
-enum UserOrder: string
+enum ReportChannelUserOrder: string
 {
     case NAME_ASC  = 'name_asc';      // Nome A-Z
     case NAME_DESC = 'name_desc';     // Nome Z-A
     case CPF_ASC  = 'CPF_asc';      // CPF Crescente
     case CPF_DESC = 'CPF_desc';     // CPF Decrescente
-    case DEPARTMENT_DESC = 'department_desc';   // Mais funcionários
-    case DEPARTMENT_ASC = 'department_asc';     // Menos funcionários
+    case TYPE_DESC = 'type_desc';   // Mais funcionários
+    case TYPE_ASC = 'type_asc';     // Menos funcionários
 
     public function label(): string
     {
@@ -18,20 +18,20 @@ enum UserOrder: string
             self::NAME_DESC => 'Nome (Descendente)',
             self::CPF_ASC =>  'CPF (Ascendente)',
             self::CPF_DESC => 'CPF (Descendente)',
-            self::DEPARTMENT_DESC => 'Setor (Ascendente)',
-            self::DEPARTMENT_ASC => 'Setor (Descendente)',
+            self::TYPE_ASC => 'Tipo (Ascendente)',
+            self::TYPE_DESC => 'Tipo (Descendente)',
         };
     }
 
     public function config(): array
     {
         return match ($this) {
-            self::NAME_ASC => ['name', 'asc'],
-            self::NAME_DESC => ['name', 'desc'],
+            self::NAME_ASC => ['full_name', 'asc'],
+            self::NAME_DESC => ['full_name', 'desc'],
             self::CPF_ASC =>  ['cpf', 'asc'],
             self::CPF_DESC => ['cpf', 'desc'],
-            self::DEPARTMENT_DESC => ['department', 'asc'],
-            self::DEPARTMENT_ASC => ['department', 'desc'],
+            self::TYPE_DESC => ['type', 'asc'],
+            self::TYPE_ASC => ['type', 'desc'],
         };
     }
 }
