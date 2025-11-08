@@ -12,7 +12,7 @@
                 </x-new-components.table.thead>
                 <x-new-components.table.tbody>
                     @foreach ($companies as $company)
-                        <x-new-components.table.tr class="grid grid-cols-2" last="{{ $loop->last ? true : false }}">
+                        <x-new-components.table.tr class="grid grid-cols-2" href="{{ route('cms.report-channel.company.show', $company['id']) }}" last="{{ $loop->last ? true : false }}">
                             <x-new-components.table.td>
                                 <span class="text-secondary-text font-text truncate text-sm font-normal md:text-base" title="{{ $company['register_name'] }}">{{ $company['register_name'] }}</span>
                             </x-new-components.table.td>

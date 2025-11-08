@@ -221,7 +221,8 @@ return [
         'import_users' => 'arquivo de importação',
         'registerName' => 'razão social',
         'importUsersFile' => 'arquivo de importação',
-        'contactPhone' => 'telefone'
+        'contactPhone' => 'telefone',
+        'new_department' => 'novo setor',
     ],
 
 ];

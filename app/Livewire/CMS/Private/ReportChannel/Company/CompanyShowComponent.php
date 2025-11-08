@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Livewire\CMS\Private\ReportChannel\Company;
+
+use App\Services\ReportChannelService;
+use Livewire\Attributes\On;
+use Livewire\Component;
+
+class CompanyShowComponent extends Component
+{
+    public array $company;
+
+    public function render()
+    {
+        return view('livewire.cms.private.report-channel.company.company-show-component');
+    }
+
+    public function mount(string $companyID)
+    {
+        $this->company = ReportChannelService::company($companyID);
+    }
+
+    #[On('company:updated')]
+    public function updatedCompany(array $company)
+    {
+        $this->company = $company;
+    }
+}

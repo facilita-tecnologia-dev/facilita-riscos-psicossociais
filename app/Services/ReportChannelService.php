@@ -42,11 +42,98 @@ class ReportChannelService
         return $response->json();
     }
 
+    public static function company(string $companyID)
+    {
+        $response = Http::get("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID); 
+        return $response->json();
+    }
+
     public static function companyCreate(array $formData)
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
         ])->post('http://facilita-canal-de-denuncias.test/api/data/company/create', $formData); 
+
+        return $response;
+    }
+
+    public static function companyUpdate(string $companyID, array $formData)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/update', $formData); 
+
+        return $response;
+    }
+
+    public static function companyAccessConfig(string $companyID, array $formData)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/access', $formData); 
+
+        return $response;
+    }
+
+    public static function companyCommittee(string $companyID)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->get("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/committee'); 
+
+        return $response->json();
+    }
+
+    public static function companyCommitteeDetach(string $companyID, string $userID)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID .  "/committee/" . $userID . "/detach"); 
+
+        return $response;
+    }
+
+    public static function companyDepartments(string $companyID)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->get("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department'); 
+
+        return $response->json();
+    }
+
+    public static function companyDepartmentCreate(string $companyID, array $formData)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->post("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department/create', $formData); 
+
+        return $response;
+    }
+
+    public static function companyDepartmentSoftDelete(string $companyID, string $departmentID)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->delete("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department/' . $departmentID . '/soft-delete'); 
+
+        return $response;
+    }
+
+    public static function companyDepartmentForceDelete(string $companyID, string $departmentID)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->delete("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department/' . $departmentID . '/force-delete'); 
+
+        return $response;
+    }
+
+    public static function companyDepartmentRestore(string $companyID, string $departmentID)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department/' . $departmentID . '/restore'); 
 
         return $response;
     }
