@@ -223,6 +223,7 @@ return [
         'importUsersFile' => 'arquivo de importação',
         'contactPhone' => 'telefone',
         'new_department' => 'novo setor',
+        'full_name' => 'nome completo',
     ],
 
 ];

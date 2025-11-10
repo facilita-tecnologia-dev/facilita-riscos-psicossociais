@@ -30,4 +30,9 @@ class CMSReportChannelController
     {
         return view('cms.private.report-channel.user.index.index');
     }
+
+    public function userCreate()
+    {
+        return view('cms.private.report-channel.user.create.index');
+    }
 }

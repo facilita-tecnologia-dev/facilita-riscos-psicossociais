@@ -7,7 +7,7 @@
 
         <x-new-components.structure.breadcrumbs 
             :links="[
-                'Lista de funcionários' => null
+                'Lista de usuários' => null
             ]" 
         />
     </div>
@@ -31,7 +31,7 @@
                 <h2 class="text-main-text text-center text-xl font-semibold">Ações</h2>
 
                 <div class="w-full flex flex-col gap-3">
-                    <x-new-components.actions.button class="!bg-report-channel-primary-solid">
+                    <x-new-components.actions.button href="{{ route('cms.report-channel.user.create') }}" class="!bg-report-channel-primary-solid">
                         <span class="text-main-background text-center text-sm font-semibold">Cadastrar usuário</span>
                     </x-new-components.actions.button>
                 </div>

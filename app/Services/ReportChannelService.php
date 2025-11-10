@@ -36,7 +36,7 @@ class ReportChannelService
         return $response->json();
     }
 
-    public static function companies(array $filters)
+    public static function companies(?array $filters = null)
     {
         $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/company', $filters); 
         return $response->json();
@@ -142,5 +142,14 @@ class ReportChannelService
     {
         $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/user', $filters); 
         return $response->json();
+    }
+
+    public static function userCreate(array $formData)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->post('http://facilita-canal-de-denuncias.test/api/data/user/create', $formData); 
+
+        return $response;
     }
 }
