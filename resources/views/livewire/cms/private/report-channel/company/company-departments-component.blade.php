@@ -16,7 +16,7 @@
             <form wire:submit.prevent="createDepartment" class="flex gap-2 sm:max-w-[500px] sm:flex-1">
                 <x-new-components.form.input-text wireModel="new_department" name="new_department" placeholder="Digite o setor para adicionar..." isRequired />
     
-                <x-new-components.actions.button fitSize>
+                <x-new-components.actions.button class="!bg-report-channel-primary-solid" fitSize>
                     <div wire:loading wire:target="createDepartment">
                         <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                     </div>
@@ -50,12 +50,12 @@
     
                                     @if ($department['reports_count'] || $department['users_count'])
                                         @if (!empty($department['deleted_at']))
-                                            <x-new-components.actions.button wire:click="restoreDepartment({{ $department['id'] }})" slim fitSize class="!h-8 !w-8 !p-0">
+                                            <x-new-components.actions.button wire:click="restoreDepartment({{ $department['id'] }})" slim fitSize class="!bg-report-channel-primary-solid !h-8 !w-8 !p-0">
                                                 <x-icon wire:loading.remove wire:target="restoreDepartment({{ $department['id'] }})" icon="refresh" class="text-main-background h-4 w-4 object-scale-down" />
                                                 <x-icon wire:loading wire:target="restoreDepartment({{ $department['id'] }})" icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                                             </x-new-components.actions.button>
                                         @else
-                                            <x-new-components.actions.button wire:click="softDeleteDepartment({{ $department['id'] }})" slim fitSize class="!h-8 !w-8 !p-0" data-tippy-content="Clique para desativar o setor (não aparecerá para novas denúncias)">
+                                            <x-new-components.actions.button wire:click="softDeleteDepartment({{ $department['id'] }})" slim fitSize class="!bg-report-channel-primary-solid !h-8 !w-8 !p-0" data-tippy-content="Clique para desativar o setor (não aparecerá para novas denúncias)">
                                                 <x-icon wire:loading.remove wire:target="softDeleteDepartment({{ $department['id'] }})" icon="x-mark" class="text-main-background h-4 w-4 object-scale-down" />
                                                 <x-icon wire:loading wire:target="softDeleteDepartment({{ $department['id'] }})" icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                                             </x-new-components.actions.button>

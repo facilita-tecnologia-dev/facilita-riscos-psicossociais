@@ -37,6 +37,10 @@ class UserCreateComponent extends Component
     {
         $this->userTypes = array_map(fn ($userType) => ['label' => $userType->label(), 'value' => $userType], ReportChannelUserTypes::cases());
         $this->companies = array_merge([['label' => 'Nenhuma', 'value' => '']], array_map(fn ($company) => ['label' => $company['register_name'], 'value' => $company['id']], ReportChannelService::companies()));
+        
+        if(request()->filled('company')){
+            $this->company = request()->input('company');
+        }
     }
 
     public function submit()

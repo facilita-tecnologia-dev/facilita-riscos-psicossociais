@@ -15,7 +15,7 @@
                 </x-new-components.table.thead>
                 <x-new-components.table.tbody>
                     @foreach ($users as $user)
-                        <x-new-components.table.tr class="grid grid-cols-2 md:grid-cols-3" last="{{ $loop->last ? true : false }}">
+                        <x-new-components.table.tr href="{{ route('cms.report-channel.user.show', $user['id']) }}" class="grid grid-cols-2 md:grid-cols-3" last="{{ $loop->last ? true : false }}">
                             <x-new-components.table.td>
                                 <span class="text-secondary-text font-text truncate text-sm font-normal md:text-base" title="{{ $user['full_name'] }}">{{ $user['full_name'] }}</span>
                             </x-new-components.table.td>

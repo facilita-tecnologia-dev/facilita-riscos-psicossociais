@@ -51,6 +51,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'cms' => [
+            'driver' => 'session',
+            'provider' => 'cms_users',
+        ],
     ],
 
     /*
@@ -78,6 +82,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'cms_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\CMSUser::class, // novo model
         ],
     ],
 

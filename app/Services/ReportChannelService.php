@@ -84,6 +84,15 @@ class ReportChannelService
         return $response->json();
     }
 
+    public static function companyCommitteeAttach(string $companyID, string $userID, array $formData)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID .  "/committee/" . $userID . "/attach", $formData); 
+
+        return $response;
+    }
+
     public static function companyCommitteeDetach(string $companyID, string $userID)
     {
         $response = Http::withHeaders([
@@ -144,6 +153,12 @@ class ReportChannelService
         return $response->json();
     }
 
+    public static function user(string $userID)
+    {
+        $response = Http::get("http://facilita-canal-de-denuncias.test/api/data/user/" . $userID); 
+        return $response->json();
+    }
+
     public static function userCreate(array $formData)
     {
         $response = Http::withHeaders([
@@ -151,5 +166,29 @@ class ReportChannelService
         ])->post('http://facilita-canal-de-denuncias.test/api/data/user/create', $formData); 
 
         return $response;
+    }
+    
+    public static function userUpdate(string $userID, array $formData)
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->put("http://facilita-canal-de-denuncias.test/api/data/user/" . $userID . '/update', $formData); 
+
+        return $response;
+    }
+    
+    // public static function userCompanies(string $userID, array $formData)
+    // {
+    //     $response = Http::withHeaders([
+    //         'Accept' => 'application/json',
+    //     ])->put("http://facilita-canal-de-denuncias.test/api/data/user/" . $userID . '/companies', $formData); 
+
+    //     return $response;
+    // }
+
+    public static function userCompanies(string $userID)
+    {
+        $response = Http::get("http://facilita-canal-de-denuncias.test/api/data/user/" . $userID . "/companies"); 
+        return $response->json();
     }
 }

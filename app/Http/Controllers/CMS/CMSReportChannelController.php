@@ -35,4 +35,9 @@ class CMSReportChannelController
     {
         return view('cms.private.report-channel.user.create.index');
     }
+
+    public function userShow(string $userID)
+    {
+        return view('cms.private.report-channel.user.show.index', compact('userID'));
+    }
 }

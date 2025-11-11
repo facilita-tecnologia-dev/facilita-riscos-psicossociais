@@ -13,7 +13,7 @@
     </div>
 
     <div class="w-full flex lg:hidden gap-2 justify-end">
-        <x-new-components.actions.button class="!bg-report-channel-primary-solid" slim fitSize>
+        <x-new-components.actions.button href="{{ route('cms.report-channel.user.create') }}" class="!bg-report-channel-primary-solid" slim fitSize>
             <span class="hidden sm:block text-main-background text-center text-sm font-semibold">Cadastrar usuário</span>
             <x-icon icon="plus" class="block sm:hidden text-main-background h-4 w-4 object-scale-down" />
         </x-new-components.actions.button>

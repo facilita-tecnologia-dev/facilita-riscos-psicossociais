@@ -4,7 +4,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <x-new-components.form.input-text wireModel="register_name" name="register_name" label="Razão social" placeholder="Digite a razão social..." tooltip="Digite a razão social" isRequired />
         <x-new-components.form.input-text wireModel="trade_name" name="trade_name" label="Nome fantasia" placeholder="Digite o nome fantasia..." tooltip="Digite o nome fantasia" />
-        <x-new-components.form.input-text wireModel="cnpj" name="cnpj" label="CNPJ" placeholder="Digite o cnpj..." disabled isRequired />
+        <x-new-components.form.input-text wireModel="cnpj" name="cnpj" label="CNPJ" placeholder="Digite o cnpj..." tooltip="Você não pode alterar o CNPJ da empresa pois ele é um identificador único." disabled isRequired />
         <x-new-components.form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." tooltip="Digite o e-mail" isRequired />
         <x-new-components.form.input-text wireModel="contact_phone" name="contact_phone" label="Telefone" placeholder="Digite o telefone..." tooltip="Digite o telefone" isRequired />
         <x-new-components.form.input-text wireModel="site_url" name="site_url" label="URL do Site" placeholder="Digite a url do site..." tooltip="Digite a url do site" prefix="http://" />

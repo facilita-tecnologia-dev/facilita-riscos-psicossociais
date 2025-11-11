@@ -19,7 +19,9 @@ class CompanyCommitteeIndexComponent extends Component
     public function mount(array $company)
     {
         $this->company = $company;
-        $this->committee = ReportChannelService::companyCommittee($this->company['id']);
+
+        $committee = ReportChannelService::companyCommittee($this->company['id']);
+        if($committee) $this->committee = $committee;
     }
 
     #[On('committee:detached')]

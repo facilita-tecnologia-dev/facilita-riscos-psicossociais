@@ -1,7 +1,7 @@
 <div class="w-full space-y-6">
     <h2 class="text-xl text-left text-main-text font-semibold">Comitê</h2>
     
-    <x-new-components.actions.button class="!bg-report-channel-primary-solid" data-tippy-content="Essa opção redirecionará você para a página de criação de usuário, com a opção de vincular à essa empresa já selecionada.">
+    <x-new-components.actions.button href="{{ route('cms.report-channel.user.create', ['company' => $company['id']]) }}" class="!bg-report-channel-primary-solid" data-tippy-content="Essa opção redirecionará você para a página de criação de usuário, com a opção de vincular à essa empresa já selecionada.">
         <span class="font-heading text-main-background text-center text-sm font-semibold">Criar e Vincular</span>
     </x-new-components.actions.button>
 
