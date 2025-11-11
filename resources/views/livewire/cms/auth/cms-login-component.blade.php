@@ -1,5 +1,5 @@
 <form class="flex w-full flex-col items-start gap-4" wire:submit.prevent="submit">
-    <x-new-components.form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." tooltip="Digite o e-mail do usuário" isRequired />
+    <x-new-components.form.input-text wireModel="user" name="user" label="Usuário" placeholder="Digite o usuário..." tooltip="Digite o usuário" isRequired />
 
     <x-new-components.form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a senha..." tooltip="Digite a senha da empresa" isRequired isPassword />
 

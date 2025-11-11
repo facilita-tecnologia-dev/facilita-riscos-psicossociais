@@ -12,6 +12,6 @@ class CMSUserSeeder extends Seeder
      */
     public function run(): void
     {
-        CMSUser::create(['user' => 'CMS', 'password' => 'F@cilita3015']);
+        CMSUser::create(['user' => 'facilita.code', 'password' => 'F@cilita3015']);
     }
 }

@@ -2,12 +2,14 @@
 
 namespace App\Livewire\CMS\Auth;
 
+use App\Models\CMSUser;
+use App\Services\AuthService;
 use Livewire\Component;
 
 class CMSLoginComponent extends Component
 {
-    public $email = ''; 
-    public $password = ''; 
+    public ?string $user = null; 
+    public ?string $password = null; 
 
     public function render()
     {
@@ -17,26 +19,26 @@ class CMSLoginComponent extends Component
        public function submit()
     {
         $credentials = $this->validate([
-            'email' => ['required', 'email', 'max:100'],
+            'user' => ['required', 'string', 'max:100'],
             'password' => ['required', 'string', 'max:100'],
         ]);
         
-        // $company = Company::firstWhere('cnpj', $credentials['cnpj']);
+        $CMSUser = CMSUser::firstWhere('user', $credentials['user']);
 
-        // if($company){
-        //     $isInvalidSubscription = $company->subscription_type === CompanySubscriptionTypes::FREE_TRIAL_EXPIRED;
+        if($CMSUser){
+            // $isInvalidSubscription = $company->subscription_type === CompanySubscriptionTypes::FREE_TRIAL_EXPIRED;
             
-        //     if($isInvalidSubscription){
-        //         session()->flash('login:free-trial-expired', true);
-        //         return;
-        //     }
+            // if($isInvalidSubscription){
+            //     session()->flash('login:free-trial-expired', true);
+            //     return;
+            // }
 
-        //     if($redirectRoute = AuthenticationService::authenticate('company', $credentials)){
-        //         return redirect()->intended($redirectRoute);
-        //     }
-        // } else{
-        //     session()->flash('login:incorrect', 'Este CNPJ não está cadastrado no sistema');
-        // }
+            if($redirectRoute = AuthService::attempt('cms', $credentials)){
+                return redirect()->intended($redirectRoute);
+            }
+        } else{
+            session()->flash('login:incorrect', 'Este CNPJ não está cadastrado no sistema');
+        }
         
         // session()->flash('login:incorrect', 'Credenciais incorretas');
 

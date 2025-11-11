@@ -5,23 +5,22 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\CMS\CMSLogoutController;
 use App\Http\Controllers\CMS\CMSPsychosocialController;
 use App\Http\Controllers\CMS\CMSReportChannelController;
 use App\Http\Controllers\ControlActionsController;
 use App\Http\Controllers\Private\CompanyController;
 use App\Http\Controllers\Private\MetricsController;
-use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalAnswersController;
-use App\Http\Controllers\Private\Dashboard\Organizational\OrganizationalMainController;
 use App\Http\Controllers\Private\DemographicsController;
-use App\Http\Controllers\Private\OrganizationalController;
 use App\Http\Controllers\Private\PsychosocialController;
 use App\Http\Controllers\Private\TestController;
 use App\Http\Controllers\Private\UserController;
-use App\Http\Controllers\Private\UserFeedbackController;
 use App\Http\Controllers\Private\WelcomeController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ResetUserPasswordController;
 use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\CMSAuthMiddleware;
+use App\Http\Middleware\CMSGuestMiddleware;
 use App\Http\Middleware\GuestMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -29,27 +28,32 @@ Route::view('/', 'site.home.index')->name('site.home');
 Route::view('/privacy-policy', 'site.privacy-policy.index')->name('site.privacy-policy');
 Route::view('/terms-of-use', 'site.terms-of-use.index')->name('site.terms-of-use');
 
-Route::view('/cms', 'cms.auth.login')->name('cms.login');
+Route::middleware(CMSGuestMiddleware::class)->group(function(){
+    Route::view('/cms', 'cms.auth.login')->name('cms.login');
+});
 
-Route::get('/cms/psychosocial/dashboard', [CMSPsychosocialController::class, 'dashboard'])->name('cms.psychosocial.dashboard');
-Route::get('/cms/psychosocial/company', [CMSPsychosocialController::class, 'companyIndex'])->name('cms.psychosocial.company.index');
-Route::get('/cms/psychosocial/company/create', [CMSPsychosocialController::class, 'companyCreate'])->name('cms.psychosocial.company.create');
-Route::get('/cms/psychosocial/company/{company}', [CMSPsychosocialController::class, 'companyShow'])->name('cms.psychosocial.company.show');
+Route::middleware(CMSAuthMiddleware::class)->group(function(){
+    Route::get('/cms/psychosocial/dashboard', [CMSPsychosocialController::class, 'dashboard'])->name('cms.psychosocial.dashboard');
+    Route::get('/cms/psychosocial/company', [CMSPsychosocialController::class, 'companyIndex'])->name('cms.psychosocial.company.index');
+    Route::get('/cms/psychosocial/company/create', [CMSPsychosocialController::class, 'companyCreate'])->name('cms.psychosocial.company.create');
+    Route::get('/cms/psychosocial/company/{company}', [CMSPsychosocialController::class, 'companyShow'])->name('cms.psychosocial.company.show');
 
-Route::get('/cms/psychosocial/company/{company}/user', [CMSPsychosocialController::class, 'userIndex'])->name('cms.psychosocial.user.index');
-Route::get('/cms/psychosocial/company/{company}/user/create', [CMSPsychosocialController::class, 'userCreate'])->name('cms.psychosocial.user.create');
-Route::get('/cms/psychosocial/company/{company}/user/import', [CMSPsychosocialController::class, 'userImport'])->name('cms.psychosocial.user.import');
-Route::get('/cms/psychosocial/company/{company}/user/{user}', [CMSPsychosocialController::class, 'userShow'])->name('cms.psychosocial.user.show');
+    Route::get('/cms/psychosocial/company/{company}/user', [CMSPsychosocialController::class, 'userIndex'])->name('cms.psychosocial.user.index');
+    Route::get('/cms/psychosocial/company/{company}/user/create', [CMSPsychosocialController::class, 'userCreate'])->name('cms.psychosocial.user.create');
+    Route::get('/cms/psychosocial/company/{company}/user/import', [CMSPsychosocialController::class, 'userImport'])->name('cms.psychosocial.user.import');
+    Route::get('/cms/psychosocial/company/{company}/user/{user}', [CMSPsychosocialController::class, 'userShow'])->name('cms.psychosocial.user.show');
 
-Route::get('/cms/report-channel/dashboard', [CMSReportChannelController::class, 'dashboard'])->name('cms.report-channel.dashboard');
-Route::get('/cms/report-channel/company', [CMSReportChannelController::class, 'companyIndex'])->name('cms.report-channel.company.index');
-Route::get('/cms/report-channel/company/create', [CMSReportChannelController::class, 'companyCreate'])->name('cms.report-channel.company.create');
-Route::get('/cms/report-channel/company/{companyID}', [CMSReportChannelController::class, 'companyShow'])->name('cms.report-channel.company.show');
+    Route::get('/cms/report-channel/dashboard', [CMSReportChannelController::class, 'dashboard'])->name('cms.report-channel.dashboard');
+    Route::get('/cms/report-channel/company', [CMSReportChannelController::class, 'companyIndex'])->name('cms.report-channel.company.index');
+    Route::get('/cms/report-channel/company/create', [CMSReportChannelController::class, 'companyCreate'])->name('cms.report-channel.company.create');
+    Route::get('/cms/report-channel/company/{companyID}', [CMSReportChannelController::class, 'companyShow'])->name('cms.report-channel.company.show');
 
-Route::get('/cms/report-channel/user', [CMSReportChannelController::class, 'userIndex'])->name('cms.report-channel.user.index');
-Route::get('/cms/report-channel/user/create', [CMSReportChannelController::class, 'userCreate'])->name('cms.report-channel.user.create');
-Route::get('/cms/report-channel/user/{userID}', [CMSReportChannelController::class, 'userShow'])->name('cms.report-channel.user.show');
+    Route::get('/cms/report-channel/user', [CMSReportChannelController::class, 'userIndex'])->name('cms.report-channel.user.index');
+    Route::get('/cms/report-channel/user/create', [CMSReportChannelController::class, 'userCreate'])->name('cms.report-channel.user.create');
+    Route::get('/cms/report-channel/user/{userID}', [CMSReportChannelController::class, 'userShow'])->name('cms.report-channel.user.show');
 
+    Route::get('/cms/logout', [CMSLogoutController::class, 'logout'])->name('cms.logout');
+});
 
 Route::middleware(GuestMiddleware::class)->group(function() {
     Route::prefix('register')->group(function(){

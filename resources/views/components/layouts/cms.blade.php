@@ -18,7 +18,7 @@
         <main class="flex-1 h-full flex flex-col overflow-hidden">
             <header class="w-full bg-secondary-background px-4 py-3 lg:px-6 lg:py-4 border-b border-borders shadow-sm flex justify-between items-center">
                 <span class="text-md lg:text-lg text-main-text font-semibold">Facilita Tecnologia - CMS</span>
-                <x-new-components.actions.nav-item icon="logout" tooltip="Sair" tooltipPosition="left" />
+                <x-new-components.actions.nav-item href="{{ route('cms.logout') }}" icon="logout" tooltip="Sair do CMS" tooltipPosition="left" />
             </header>
 
             <section class="flex-1 overflow-auto">

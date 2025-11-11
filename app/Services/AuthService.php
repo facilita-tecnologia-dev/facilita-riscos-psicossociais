@@ -42,6 +42,15 @@ class AuthService {
                 return false;
             }
         }
+
+        if($guard === 'cms'){
+            if(Auth::guard($guard)->attempt($credentials)){
+                self::putGuardOnSession('cms');
+            } else {
+                SessionErrorHelper::flash('user', 'Credenciais incorretas.');
+                return false;
+            }
+        }
        
         return self::redirectLoginRoute($guard); 
     }
@@ -120,7 +129,6 @@ class AuthService {
         }
     }
 
-
     public static function checkUserHasMultipleCompanies(User $user)
     {
         return $user->companies->count() > 1;
@@ -136,6 +144,7 @@ class AuthService {
         return match ($guard) {
             'company' => route('welcome.company'),
             'user'    => route('welcome.user'),
+            'cms'    => route('cms.psychosocial.dashboard'),
             default   => route('site.home'),
         };
     }
@@ -145,6 +154,7 @@ class AuthService {
         return match ($guard) {
             'company' => route('company.login'),
             'user'    => route('user.login'),
+            'cms'    => route('cms.login'),
             default   => route('site.home'),
         };
     } 
