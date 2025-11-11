@@ -22,7 +22,7 @@ class moralHarassment
         
         return [
             'evaluated' => $risk,
-            'probability' => $probability,
+            'probability' => $probability['probability'],
             'gravity' => $gravity
         ];
     }
