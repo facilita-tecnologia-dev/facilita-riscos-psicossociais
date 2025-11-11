@@ -22,7 +22,7 @@ class sexualHarassment
         
         return [
             'evaluated' => $risk,
-            'probability' => $probability,
+            'probability' => $probability['probability'],
             'gravity' => $gravity
         ];
     }

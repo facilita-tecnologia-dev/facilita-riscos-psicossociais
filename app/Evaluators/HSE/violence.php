@@ -22,7 +22,7 @@ class violence
         
         return [
             'evaluated' => $risk,
-            'probability' => $probability,
+            'probability' => $probability['probability'],
             'gravity' => $gravity
         ];
     }
