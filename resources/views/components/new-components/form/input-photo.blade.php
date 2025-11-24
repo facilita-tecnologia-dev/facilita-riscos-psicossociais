@@ -10,15 +10,19 @@
 <div class="relative w-fit">
     <div class="flex items-center gap-4">
         <label for="{{ $name }}" class="{{ $format ?? 'h-16 w-16 rounded-full' }} group relative flex cursor-pointer items-center justify-center overflow-hidden" data-tippy-content="{{ $tooltip }}">
-            @if ($value)
-                @if ($value instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
-                    <img src="{{ $value->temporaryUrl() }}" alt="Foto de perfil" class="h-full w-full object-cover" />
-                @else
-                    <img src="{{ Storage::url($value) }}" alt="Foto de perfil" class="h-full w-full object-cover" />
-                @endif
+            @if ($value instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
+                <img src="{{ $value->temporaryUrl() }}"
+                    alt="Foto"
+                    class="h-full w-full object-cover" />
+            @elseif ($value)
+                    <img src="{{ $value }}"
+                    alt="Foto"
+                    class="h-full w-full object-cover" />
             @else
-                <div class="bg-borders {{ $format ?? 'h-16 w-16 rounded-full' }} flex items-center justify-center">
-                    <x-icon icon="camera" class="text-secondary-text h-7 w-7 object-scale-down" />
+                <div
+                    class="bg-borders {{ $format ?? 'h-16 w-16 rounded-full' }} flex items-center justify-center">
+                    <x-icon icon="camera"
+                        class="text-secondary-text h-7 w-7 object-scale-down" />
                 </div>
             @endif
 

@@ -18,6 +18,17 @@
     <div class="w-full space-y-4 lg:col-span-3">
         <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
             <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
+                <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Facilita Riscos Psicossociais</h2>
+                <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Esse card indica se essa empresa usa o sistema de Riscos Psicossociais da Facilita.</span>
+            </div>
+            
+            <div class="{{ $hasPsychosocial ? 'bg-report-channel-primary-solid/70 border-report-channel-primary-solid' : 'bg-danger/70 border-danger' }} border py-1 px-4 rounded">
+                <span class="text-sm sm:text-base text-center font-normal text-main-background">{{ $hasPsychosocial ? 'Sim' : 'Não' }}</span>
+            </div> 
+        </div>
+
+        <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
+            <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
                 <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Portal de Denúncias</h2>
                 <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Visite o portal de denúncias da empresa.</span>
             </div>

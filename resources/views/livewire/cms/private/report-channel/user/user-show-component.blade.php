@@ -8,7 +8,7 @@
         <x-new-components.structure.breadcrumbs 
             :links="[
                 'Lista de usuários' => route('cms.report-channel.user.index'),
-                'Cadastrar usuário' => null
+                'Perfil do usuário' => null
             ]" 
         />
     </div>

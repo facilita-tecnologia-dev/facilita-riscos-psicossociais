@@ -4,6 +4,7 @@ namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
 use App\Enums\BaseCollection;
 use App\Models\Company;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
@@ -53,16 +54,26 @@ class CompanyCreateComponent extends Component
             'passwordConfirmation' => ['required', 'string', 'same:password', 'max:100'],
         ]);
 
-        $logoPath = $this->logo instanceof TemporaryUploadedFile ? $this->logo->store('images', 'public') : $this->logo;
+        if($this->logo){
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+            $s3 = Storage::disk('s3');
+            $path = $s3->putFileAs(
+                env('AWS_COMPANY_LOGO_PATH'),
+                $this->logo,
+                uniqid() . '.' . $this->logo->getClientOriginalExtension()
+            );
+        }
 
         $company = Company::create([
-            'logo' => $logoPath,
+            'logo' => $this->logo ? $path : null,
             'name' => $this->registerName,
             'email' => $this->email,
             'cnpj' => $this->cnpj,
             'psychosocial_collection_type' => $this->psychosocialMetodology,
             'password' => $this->password,
         ]);
+
+        $this->logo = $s3->temporaryUrl($path, now()->addMinutes(5));
 
         $this->dispatch('alert:success', 'Empresa cadastrada!');
 

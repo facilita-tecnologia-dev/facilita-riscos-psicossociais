@@ -9,7 +9,6 @@
     'wireModelType' => 'defer',
 ])
 
-
 <div class="flex w-full flex-col-reverse items-start gap-1">
     @error($name)
         <footer class="flex w-full items-center justify-between gap-3 pl-0.5">
@@ -24,8 +23,7 @@
         @if($wireModelType === 'live') wire:model.live="{{ $wireModel }}" @endif 
         class="peer bg-secondary-background border-borders text-main-text font-text placeholder:text-secondary-text focus:shadow-primary-solid/50 h-10 w-full appearance-none rounded-sm border px-3 text-sm font-normal transition focus:shadow-sm focus:outline-none md:h-[45px] md:text-base"
     >
-
-        <option value="" {{ empty($wireModel) ? 'selected' : '' }} disabled hidden>{{ $placeholder }}</option>
+        <option value="" disabled>{{ $placeholder }}</option>
         @foreach ($options as $option)
             <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
         @endforeach

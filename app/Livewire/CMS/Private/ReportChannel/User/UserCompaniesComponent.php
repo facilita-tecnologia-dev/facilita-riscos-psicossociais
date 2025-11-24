@@ -45,7 +45,7 @@ class UserCompaniesComponent extends Component
             'company' => $this->company,
             'department' => $this->department,
         ];
-
+        
         $response = ReportChannelService::companyCommitteeAttach($this->company, $this->user['id'], $formData);
 
         if ($response->status() === 422) {

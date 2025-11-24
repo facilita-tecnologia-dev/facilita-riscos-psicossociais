@@ -45,6 +45,13 @@
             </div>
         </header>
 
+        @if($user['is_temp_password'] && ($user->role($company)['type'] == App\Enums\RoleEnum::MANAGER->value))
+            <button type="button" onclick="navigator.clipboard.writeText('{{ $user['password'] }}')" wire:click='copyTempPasswordToClipboard' class="px-4 py-2 bg-primary-solid/20 border border-primary-solid rounded-md cursor-pointer flex items-start flex-col gap-1" data-tippy-content="Clique para copiar a senha temporária">
+                <p class="text-sm text-left text-main-text font-normal">Este usuário possui perfil de gestor e ainda não definiu uma senha. Uma senha temporária foi criada e deverá ser redefinida no próximo acesso ao sistema.</p>
+                <span class="text-sm text-left text-main-text font-normal">Senha temporária: {{ $user['password'] }}</span>
+            </button>
+        @endif
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
             <x-new-components.form.input-text wireModel="name" name="name" label="Nome" placeholder="Digite o nome..." tooltip="Digite o nome" isRequired />
             <x-new-components.form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf" isRequired />

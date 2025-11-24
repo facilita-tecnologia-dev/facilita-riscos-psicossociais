@@ -3,11 +3,15 @@
 namespace App\Livewire\CMS\Private\ReportChannel\Company;
 
 use App\Services\ReportChannelService;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CompanyEditComponent extends Component
 {
+    use WithFileUploads;
+
     public array $company;
 
     #[Validate('image|max:5120')] // 1MB Max
@@ -29,6 +33,10 @@ class CompanyEditComponent extends Component
     {
         $this->company = $company;
 
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+        $s3 = Storage::disk('s3');
+        $this->logo = $company['logo'] ? $s3->temporaryUrl($company['logo'], now()->addMinutes(5)) : null;
+
         $this->register_name = $company['register_name'];
         $this->trade_name = $company['trade_name'];
         $this->cnpj = $company['cnpj'];
@@ -39,7 +47,19 @@ class CompanyEditComponent extends Component
 
     public function submit()
     {
+        
+        if($this->logo){
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+            $s3 = Storage::disk('s3');
+            $path = $s3->putFileAs(
+                env('AWS_COMPANY_LOGO_PATH'),
+                $this->logo,
+                uniqid() . '.' . $this->logo->getClientOriginalExtension()
+            );
+        }
+
         $formData = [
+            'logo' => $this->logo ? $path : null,
             'register_name' => $this->register_name,
             'trade_name' => $this->trade_name,
             'cnpj' => $this->cnpj,
@@ -63,6 +83,7 @@ class CompanyEditComponent extends Component
         }
 
         $this->company = $response['data'];
+        $this->logo = $this->company['logo'] ? $s3->temporaryUrl($this->company['logo'], now()->addMinutes(5)) : null;
 
         $this->dispatch('company:updated', $this->company);
         $this->dispatch('alert:success', 'Empresa atualizada!');

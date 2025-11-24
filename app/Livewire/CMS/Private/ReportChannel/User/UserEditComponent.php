@@ -4,6 +4,7 @@ namespace App\Livewire\CMS\Private\ReportChannel\User;
 
 use App\Enums\ReportChannel\ReportChannelUserTypes;
 use App\Services\ReportChannelService;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -15,21 +16,12 @@ class UserEditComponent extends Component
     public array $user;    
 
     #[Validate('image|max:5120')] // 1MB Max
-    public $logo;
+    public $profile_photo;
 
     public ?string $full_name = null;
     public ?string $cpf = null;
     public ?string $email = null;
     public ?string $type = null;
-    // public ?string $type = ReportChannelUserTypes::CONSULTANT->value;
-    // public ?string $password = null;
-    // public ?string $password_confirmation = null;
-    // public ?string $company = null;
-    // public ?string $department = null;
-
-    // public array $userTypes = [];
-    // public array $companies = [];
-    // public array $selectedCompanyDepartments = [];
 
     public function render()
     {
@@ -40,6 +32,11 @@ class UserEditComponent extends Component
     {
         $this->user = $user;
 
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+        $s3 = Storage::disk('s3');
+        $this->profile_photo = $user['profile_photo'] ? $s3->temporaryUrl($user['profile_photo'], now()->addMinutes(5)) : null;
+        
+
         $this->full_name = $user['full_name'];
         $this->cpf = $user['cpf'];
         $this->email = $user['email'];
@@ -48,7 +45,18 @@ class UserEditComponent extends Component
 
     public function submit()
     {
+        if($this->profile_photo){
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+            $s3 = Storage::disk('s3');
+            $path = $s3->putFileAs(
+                env('AWS_USER_PROFILE_PHOTO_PATH'),
+                $this->profile_photo,
+                uniqid() . '.' . $this->profile_photo->getClientOriginalExtension()
+            );
+        }
+
         $formData = [
+            'profile_photo' => $this->profile_photo ? $path : null,
             'full_name' => $this->full_name,
             'cpf' => $this->cpf,
             'email' => $this->email,
@@ -68,11 +76,9 @@ class UserEditComponent extends Component
             return;
         }
 
-        // $logoPath = $this->logo instanceof TemporaryUploadedFile ? $this->logo->store('images', 'public') : $this->logo;
+        $this->user = $response['data'];
+        $this->profile_photo = $this->user['profile_photo'] ? $s3->temporaryUrl($this->user['profile_photo'], now()->addMinutes(5)) : null;
 
         $this->dispatch('alert:success', 'Usuário atualizado!');
-
-        // return redirect()->to(route('cms.report-channel.user.show', $user));
-        // return redirect()->to(route('cms.report-channel.user.index'));
     }
 }

@@ -14,7 +14,7 @@
     </div>
 
     <form class="bg-secondary-background border-borders flex flex-col gap-4 rounded-lg border p-4 shadow-sm md:p-6" wire:submit.prevent="submit">
-        <x-new-components.form.input-photo wireModel="logo" name="logo" format="w-fit min-w-14 h-14 rounded-md" :value="$logo" tooltip="Clique para adicionar uma logomarca" />
+        <x-new-components.form.input-photo wireModel="profile_photo" name="profile_photo" format="w-fit min-w-14 h-14 rounded-md" :value="$profile_photo" tooltip="Clique para adicionar uma foto de perfil" />
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
             <x-new-components.form.input-text wireModel="full_name" name="full_name" label="Nome completo" placeholder="Digite o nome completo..." tooltip="Digite o nome completo" isRequired />

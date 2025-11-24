@@ -18,17 +18,17 @@ class UserShowComponent extends Component
 
     public User $user;
 
-    public string $name;
-    public string $cpf;
-    public string $email;
-    public string $department;
-    public string $occupation;
-    public string $birth_date;
-    public string $gender;
-    public string $marital_status;
-    public string $education_level;
-    public string $work_shift;
-    public string $admission;
+    public ?string $name = null;
+    public ?string $cpf = null;
+    public ?string $email = null;
+    public ?string $department = null;
+    public ?string $occupation = null;
+    public ?string $birth_date = null;
+    public ?string $gender = null;
+    public ?string $marital_status = null;
+    public ?string $education_level = null;
+    public ?string $work_shift = null;
+    public ?string $admission = null;
 
     public string $status;
     public string $role;
@@ -121,5 +121,10 @@ class UserShowComponent extends Component
         $this->user->companies()->syncWithoutDetaching([$this->company->id => ['status' => UserStatus::INACTIVE->value]]);
         $this->status = UserStatus::INACTIVE->value;
         $this->dispatch('alert:success', 'Usuário inativado!');
+    }
+
+    public function copyTempPasswordToClipboard()
+    {
+        $this->dispatch('alert:success', 'Senha temporária copiada!');
     }
 }

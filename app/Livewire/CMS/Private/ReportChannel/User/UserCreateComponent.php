@@ -4,6 +4,7 @@ namespace App\Livewire\CMS\Private\ReportChannel\User;
 
 use App\Enums\ReportChannel\ReportChannelUserTypes;
 use App\Services\ReportChannelService;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -13,7 +14,7 @@ class UserCreateComponent extends Component
     use WithFileUploads;
 
     #[Validate('image|max:5120')] // 1MB Max
-    public $logo;
+    public $profile_photo;
 
     public ?string $full_name = null;
     public ?string $cpf = null;
@@ -40,12 +41,24 @@ class UserCreateComponent extends Component
         
         if(request()->filled('company')){
             $this->company = request()->input('company');
+            $this->selectedCompanyDepartments = array_map(fn ($department) => ['label' => $department['department'], 'value' => $department['id']], ReportChannelService::companyDepartments($this->company));
         }
     }
 
     public function submit()
     {
+        if($this->profile_photo){
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+            $s3 = Storage::disk('s3');
+            $path = $s3->putFileAs(
+                env('AWS_USER_PROFILE_PHOTO_PATH'),
+                $this->profile_photo,
+                uniqid() . '.' . $this->profile_photo->getClientOriginalExtension()
+            );
+        }
+
         $formData = [
+            'profile_photo' => $this->profile_photo ? $path : null,
             'full_name' => $this->full_name,
             'cpf' => $this->cpf,
             'email' => $this->email,
@@ -55,7 +68,7 @@ class UserCreateComponent extends Component
             'company' => $this->company,
             'department' => $this->department,
         ];
-
+        
         $response = ReportChannelService::userCreate($formData);
 
         if ($response->status() === 422) {
@@ -70,12 +83,9 @@ class UserCreateComponent extends Component
             return;
         }
 
-        // $logoPath = $this->logo instanceof TemporaryUploadedFile ? $this->logo->store('images', 'public') : $this->logo;
-
         $this->dispatch('alert:success', 'Usuário cadastrado!');
-
-        // return redirect()->to(route('cms.report-channel.user.show', $user));
-        return redirect()->to(route('cms.report-channel.user.index'));
+        
+        return redirect()->to(route('cms.report-channel.user.show', $response->json()['data']['id']));
     }
 
     public function updatedCompany()

@@ -1,5 +1,5 @@
 <a 
-    {{-- @if($href) href="{{ $href }}" @endif  --}}
+    href="{{ route('cms.report-channel.user.show', $user['id']) }}"
     class="hover:bg-borders border-borders opacity-100 bg-secondary-background flex flex-col gap-4 rounded-2xl border p-6 transition">
     <div class="space-y-2">
         <x-new-components.info-item label="Nome" value="{!! $user['full_name'] !!}" truncate />

@@ -5,6 +5,7 @@ namespace App\Livewire\CMS\Private\Psychosocial\Company;
 use App\Enums\CampaignStatus;
 use App\Models\Company;
 use App\Services\ReportChannelService;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -36,7 +37,11 @@ class CompanyEditComponent extends Component
     public function mount(Company $company)
     {
         $this->company = $company;
-        $this->logo = $this->company->logo;
+
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+        $s3 = Storage::disk('s3');
+        $this->logo = $this->company->logo ? $s3->temporaryUrl($this->company->logo, now()->addMinutes(5)) : null;
+        
         $this->registerName = $this->company->name;
         $this->cnpj = $this->company->cnpj;
         $this->email = $this->company->email;
@@ -58,14 +63,25 @@ class CompanyEditComponent extends Component
             'email' => ['required', 'email', 'max:100'],
         ]);
 
-        $logoPath = $this->logo instanceof TemporaryUploadedFile ? $this->logo->store('images', 'public') : $this->logo;
+        if($this->logo){
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+            $s3 = Storage::disk('s3');
+            $path = $s3->putFileAs(
+                env('AWS_COMPANY_LOGO_PATH'),
+                $this->logo,
+                uniqid() . '.' . $this->logo->getClientOriginalExtension()
+            );
+        }
+
 
         $this->company->update([
-            'logo' => $logoPath,
+            'logo' => $this->logo ? $path : null,
             'name' => $this->registerName,
             'email' => $this->email,
             'cnpj' => $this->cnpj,
         ]);
+
+        $this->logo = $s3->temporaryUrl($path, now()->addMinutes(5));
 
         $this->dispatch('company:update', company: $this->company->fresh());
         $this->dispatch('alert:success', 'Perfil atualizado!');

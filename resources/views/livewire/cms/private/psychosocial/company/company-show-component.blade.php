@@ -26,17 +26,5 @@
                 <span class="text-main-background font-heading text-center text-sm font-semibold">Lista de funcionários</span>
             </x-new-components.actions.button>
         </div>
-
-        {{-- <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
-            <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
-                <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Metodologia de avaliação</h2>
-                <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Selecione a metodologia que será adotada para a avaliação dos riscos psicossociais na empresa.</span>
-            </div>
-
-            <form class="w-fit" id="change-metodology" wire:submit.prevent="submit">
-                <x-new-components.form.select wireModel="psychosocialMetodology" name="psychosocialMetodology" placeholder="Selecione a metodologia" :options="$psychosocialMetodologies" />
-            </form>
-        </div> --}}
     </div>
-
 </section>
