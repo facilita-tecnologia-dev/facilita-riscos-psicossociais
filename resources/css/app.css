@@ -21,7 +21,7 @@
         font-size: 1rem;
         font-weight: normal;
         -webkit-font-smoothing: antialiased;
-        font-family: "Roboto", sans-serif;
+        font-family: "DM Sans", sans-serif;
     }
 
     ::-webkit-scrollbar {
@@ -96,13 +96,5 @@
         max-width: var(--container-max-width);
         margin-left: var(--container-margin);
         margin-right: var(--container-margin);
-    }
-
-    .background-gradient {
-        background: radial-gradient(
-            circle,
-            rgba(238, 174, 202, 0.35) 0%,
-            rgba(148, 187, 233, 0.25) 100%
-        );
     }
 }

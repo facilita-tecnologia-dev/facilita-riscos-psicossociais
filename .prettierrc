@@ -1,0 +1,10 @@
+{
+    "plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-blade"],
+    "tabWidth": 4,
+    "singleQuote": true,
+    "printWidth": 9999,
+    "proseWrap": "preserve",
+    "htmlWhitespaceSensitivity": "ignore",
+    "endOfLine": "lf",
+    "bladeIndent": 4
+}

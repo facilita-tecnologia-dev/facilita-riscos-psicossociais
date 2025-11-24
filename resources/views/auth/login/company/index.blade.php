@@ -1,4 +1,4 @@
-<x-layouts.app>
+<x-layouts.auth>
 
         <div class="flex h-full justify-center">
             <div class="w-full max-w-[600px] bg-gray-100 flex justify-center items-center px-4">
@@ -27,5 +27,5 @@
             </div>
         </div>
 
-</x-layouts.app>
+</x-layouts.auth>
 
