@@ -17,6 +17,11 @@ use Illuminate\Support\Str;
 
 class CompanyController
 {
+    public function home()
+    {
+        return view('private.home.company');
+    }
+
     public function create()
     {
         return view('auth.register.company');

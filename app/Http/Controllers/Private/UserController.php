@@ -25,6 +25,12 @@ class UserController
     protected $companyCustomTests;
 
     protected $defaultTests;
+    
+    public function home()
+    {
+        return view('private.home.user');
+    }
+
 
     public function index(Request $request)
     {

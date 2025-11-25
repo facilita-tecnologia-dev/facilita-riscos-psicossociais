@@ -67,9 +67,9 @@ Route::middleware(GuestMiddleware::class)->group(function() {
 });
 
 Route::middleware(AuthMiddleware::class)->group(function() {
-    Route::prefix('welcome')->group(function(){
-        Route::get('/company', [WelcomeController::class, 'welcomeCompany'])->name('welcome.company');
-        Route::get('/user', [WelcomeController::class, 'welcomeUser'])->name('welcome.user');
+    Route::prefix('home')->group(function(){
+        Route::get('/company', [CompanyController::class, 'home'])->name('welcome.company');
+        Route::get('/user', [UserController::class, 'home'])->name('welcome.user');
     });
 
     Route::prefix('campaign')->group(function(){

@@ -165,6 +165,11 @@ class Company extends Authenticatable
         return $this->campaigns->where('status', CampaignStatus::IN_PROGRESS);
     }
 
+    public function scheduledCampaigns() : Collection
+    {
+        return $this->campaigns->where('status', CampaignStatus::SCHEDULED);
+    }
+
     public function latestPsychosocialCampaign(): Campaign | null
     {
         return $this->campaigns->where('collection_id', $this->psychosocialCollection()?->id)->sortByDesc('start_date')->first();

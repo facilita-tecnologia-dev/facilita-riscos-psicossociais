@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class CampaignRepository
 {
-    public function store(array $data): Campaign
+    public static function store(array $data): Campaign
     {
         return DB::transaction(function () use ($data) {
             $campaign = session('auth:company')->campaigns()->create([

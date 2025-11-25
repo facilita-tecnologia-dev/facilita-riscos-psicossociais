@@ -16,20 +16,14 @@
         </footer>
     @enderror
 
-    <select 
-        name="{{ $name }}" 
-        id="{{ $name }}" 
-        @if($wireModelType === 'defer') wire:model.defer="{{ $wireModel }}" @endif 
-        @if($wireModelType === 'live') wire:model.live="{{ $wireModel }}" @endif 
-        class="peer bg-secondary-background border-borders text-main-text font-text placeholder:text-secondary-text focus:shadow-primary-solid/50 h-10 w-full appearance-none rounded-sm border px-3 text-sm font-normal transition focus:shadow-sm focus:outline-none md:h-[45px] md:text-base"
-    >
+    <select name="{{ $name }}" id="{{ $name }}" @if($wireModelType === 'defer') wire:model.defer="{{ $wireModel }}" @endif @if($wireModelType === 'live') wire:model.live="{{ $wireModel }}" @endif class="peer bg-secondary-background border-borders text-main-text font-text placeholder:text-secondary-text focus:shadow-primary-solid/50 h-10 w-full appearance-none rounded-sm border px-3 text-sm font-normal transition focus:shadow-sm focus:outline-none md:h-[45px] md:text-base">
         <option value="" disabled>{{ $placeholder }}</option>
         @foreach ($options as $option)
             <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
         @endforeach
     </select>
 
-    @if($label)
+    @if ($label)
         <header class="text-secondary-text peer-focus:text-main-text flex w-full items-center justify-between gap-3 pl-0.5 transition">
             <label for="{{ $name }}" class="font-heading text-left text-sm font-semibold peer-focus:text-lg md:text-base">
                 {{ $label }}
