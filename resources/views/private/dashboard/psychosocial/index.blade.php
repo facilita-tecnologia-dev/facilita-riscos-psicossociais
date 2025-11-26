@@ -1,97 +1,71 @@
 <x-layouts.app>
-    <x-structure.page-container>
-        
-        <x-structure.sidebar />
-        
-        <x-structure.main-content-container>        
-            <x-structure.page-title 
-                title="Riscos Psicossociais" 
-                :breadcrumbs="[
-                    'Riscos Psicossociais' => ''
-                ]"
-            />
+    <div class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:col-span-2 sm:p-6 lg:col-span-1">
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Oops! Parece que você ainda
+                <span class="font-semibold">não agendou uma campanha</span>
+                de Avaliação de Riscos Psicossociais — por isso
+                <span class="font-semibold">o dashboard ainda não está disponível</span>
+                .
+            </p>
 
-            <div class="w-full flex flex-col gap-4">
-                <div class="w-full flex flex-col md:flex-row gap-2">
-                    <x-structure.message>
-                        @if($participation['Geral']['percentage'] >= 75)
-                            <i class="fa-solid fa-check"></i>
-                            A adesão é superior à 75%, portanto os resultados devem ser considerados válidos.
-                        @else
-                            <i class="fa-solid fa-xmark"></i>
-                            A adesão é inferior à 75%, portanto os resultados não devem ser considerados válidos.
-                        @endif
-                    </x-structure.message>
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Enquanto isso, você pode aproveitar para configurar outros itens importantes:
+                <span class="font-semibold">atualizar os indicadores epidemiológicos</span>
+                (que tornam a avaliação mais precisa e direcionada) e
+                <span class="font-semibold">revisar as medidas de controle e prevenção de riscos</span>
+                .
+            </p>
 
-                    <div class="w-full md:w-fit">
-                        <x-action href="{{ route('dashboard.psychosocial.risks') }}" width="full">
-                            Visualizar Riscos
-                        </x-action>
-                    </div> 
-                </div>
-                
-                <div class="w-full flex flex-col-reverse md:flex-row gap-4 items-start">
-                    <div class="flex items-center gap-2 w-full flex-wrap">
-                        <x-numbers-of-records :value="$participation['Geral']['count']" />
-                        
-                        <x-applied-filters :filters="$filters"/>
-                    </div>
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Para acessar essas configurações,
+                <span class="font-semibold">utilize os cards disponíveis à direita</span>
+                .
+            </p>
+        </div>
 
-                    <x-filter-actions
-                        :filters="$filters"
-                        :modalFilters="['gender', 'department', 'occupation', 'work_shift', 'marital_status', 'education_level', 'age_range', 'admission_range']" 
-                    />
-                </div>
-            </div>
+        <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
+            <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Editar Indicadores Epidemiológicos</h2>
 
-            @if(session('auth:company')->usesHSE())
-                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                    @foreach ($dashboard as $group => $hazards)
-                        <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60">
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Os indicadores epidemiológicos auxiliam na avaliação dos riscos psicossociais, tornando-a mais
+                <span class="font-semibold">precisa e direcionada</span>
+                .
+            </p>
 
-                            <p class="text-center font-semibold truncate">{{ App\Enums\HSE\HSEGroup::from($group)->label() }}</p>
-                            
-                            @if(isset($hazards) && $hazards->isNotEmpty())
-                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 px-2 md:px-4">
-                                    @foreach ($hazards as $hazard => $risk)
-                                        <x-charts.risk-bar hazard="{{ $hazard }}" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['hazard' => $hazard ])}}" />
-                                    @endforeach
-                                </div>             
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                    @foreach ($dashboard as $group => $hazards)
-                        <div class="w-full px-2 py-6 flex flex-col justify-start gap-5 items-center shadow-md rounded-md bg-gray-100/60 {{ $loop->last ? 'md:col-span-2' : '' }}">
-                            <p class="text-center font-semibold truncate">{{ App\Enums\PROART\PROARTGroup::from($group)->label() }}</p>
-                            
-                            @if(isset($hazards) && $hazards->isNotEmpty())
-                                <div class="w-full grid {{ $loop->last ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2' }} gap-2 px-2 md:px-4">
-                                    @foreach ($hazards as $hazard => $risk)
-                                        <x-charts.risk-bar hazard="{{ $hazard }}" :risk="$risk" href="{{ route('dashboard.psychosocial.department', ['hazard' => $hazard ])}}" />
-                                    @endforeach
-                                </div>             
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Eles contribuem tanto para
+                <span class="font-semibold">identificar perigos psicossociais específicos</span>
+                quanto para
+                <span class="font-semibold">direcionar a análise</span>
+                desses riscos nos diferentes setores e funções da empresa.
+            </p>
 
-            @if($filters->isEmpty())
-                <x-charts.bar-vertical id="psychosocial-participation" title="Participação no teste de Riscos Psicossociais" />
-            @endif
-            
-        </x-structure.main-content-container>
-    </x-structure.page-container>
+            {{-- TODO: Link para página de indicadores --}}
+            <x-new-components.actions.button href="">
+                <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
+            </x-new-components.actions.button>
+        </div>
+
+        <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
+            <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Editar Medidas de Controle</h2>
+
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                As medidas de controle e prevenção ajudam a
+                <span class="font-semibold">reduzir ou eliminar os riscos psicossociais</span>
+                identificados na empresa.
+            </p>
+
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Elas
+                <span class="font-semibold">orientam ações práticas e direcionadas para cada perigo mapeado</span>
+                , garantindo um ambiente de trabalho mais seguro e saudável.
+            </p>
+
+            {{-- TODO: Link para página de medidas de controle --}}
+            <x-new-components.actions.button href="">
+                <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
+            </x-new-components.actions.button>
+        </div>
+    </div>
 </x-layouts.app>
-
-<script>
-     const participation = @json($participation);
-     const dashboard = @json($dashboard);
-     const usesHSE = @json(session('auth:company')->usesHSE());
-</script>
-
-<script src="{{ asset('js/dashboard/charts.js') }}"></script>
-<script src="{{ asset('js/dashboard/psychosocial/index.js') }}"></script>

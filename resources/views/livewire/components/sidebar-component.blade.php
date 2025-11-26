@@ -7,8 +7,8 @@
             <div class="bg-borders h-0.5 w-8"></div>
             {{-- Divider --}}
 
-            <x-new-components.actions.nav-item href="" icon="brain" activeRoute="" tooltip="Riscos Psicossociais" />
-            <x-new-components.actions.nav-item href="" icon="cloud" activeRoute="" tooltip="Pesquisa de Clima Organizacional" />
+            <x-new-components.actions.nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" tooltip="Riscos Psicossociais" />
+            <x-new-components.actions.nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" tooltip="Pesquisa de Clima Organizacional" />
             <x-new-components.actions.nav-item href="" icon="calendar-clock" activeRoute="" tooltip="Campanhas" />
 
             <div class="bg-borders h-0.5 w-8"></div>
@@ -26,8 +26,8 @@
 
             <div class="bg-borders h-0.5 w-8"></div>
 
-            <x-new-components.actions.mobile-nav-item href="" icon="brain" activeRoute="" label="Riscos Psicossociais" />
-            <x-new-components.actions.mobile-nav-item href="" icon="cloud" activeRoute="" label="Clima Organizacional" />
+            <x-new-components.actions.mobile-nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" label="Riscos Psicossociais" />
+            <x-new-components.actions.mobile-nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" label="Clima Organizacional" />
             <x-new-components.actions.mobile-nav-item href="" icon="calendar-clock" activeRoute="" label="Campanhas" />
 
             <div class="bg-borders h-0.5 w-8"></div>

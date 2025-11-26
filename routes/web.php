@@ -12,6 +12,7 @@ use App\Http\Controllers\ControlActionsController;
 use App\Http\Controllers\Private\CompanyController;
 use App\Http\Controllers\Private\MetricsController;
 use App\Http\Controllers\Private\DemographicsController;
+use App\Http\Controllers\Private\OrganizationalController;
 use App\Http\Controllers\Private\PsychosocialController;
 use App\Http\Controllers\Private\TestController;
 use App\Http\Controllers\Private\UserController;
@@ -40,17 +41,13 @@ Route::middleware(GuestMiddleware::class)->group(function() {
     });
 
     Route::prefix('forgot-password')->group(function(){
-        Route::get('/company', [CompanyController::class, 'forgotPassword'])->name('company.password-request');
-        
+        Route::get('/company', [CompanyController::class, 'forgotPassword'])->name('company.password-request'); 
         Route::get('/user', [UserController::class, 'forgotPassword'])->name('user.password-request');
-        // Route::post('/user', [ResetUserPasswordController::class, 'send'])->name('user.password.email');
     });
 
     Route::prefix('reset-password')->group(function(){
         Route::get('/company/{token}', [CompanyController::class, 'resetPassword'])->name('company.password-reset');
-
         Route::get('/user/{token}', [UserController::class, 'resetPassword'])->name('user.password.reset');
-        // Route::post('/user', [ResetUserPasswordController::class, 'reset'])->name('user.password.update');
     });
 });
 
@@ -60,8 +57,31 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::get('/user', [UserController::class, 'home'])->name('user.home');
     });
 
+    Route::prefix('psychosocial')->group(function () {
+        Route::get('/dashboard', [PsychosocialController::class, 'dashboard'])->name('psychosocial.dashboard');
+    });
 
+    Route::prefix('organizational')->group(function () {
+        Route::get('/dashboard', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
+    });
 
+    // Route::prefix('psychosocial')->group(function(){
+    //     Route::get('/', [PsychosocialController::class, 'dashboard'])->name('dashboard.psychosocial');
+    //     Route::get('/{hazard}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
+    //     // Route::get('/{hazard}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
+    //     Route::get('/risks', [PsychosocialController::class, 'risks'])->name('dashboard.psychosocial.risks');
+    //     Route::get('/risks/report/{type}/{format}', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
+    // });
+
+    // Route::prefix('organizational-climate')->group(function(){
+    //     // Route::get('/', [OrganizationalController::class, 'dashboard'])->name('dashboard.organizational-climate');
+    //     Route::get('/', OrganizationalMainController::class)->name('dashboard.organizational-climate');
+    //     Route::post('/report', [OrganizationalMainController::class, 'createPDFReport'])->name('dashboard.organizational-climate.report');
+    //     Route::get('/answers', OrganizationalAnswersController::class)->name('dashboard.organizational-climate.answers');
+    //     Route::get('/answers/report', [OrganizationalAnswersController::class, 'createPDFReport'])->name('dashboard.organizational-climate.answers.report');
+    // });
+
+    //     Route::get('/demographics', [DemographicsController::class, 'demographics'])->name('dashboard.demographics');
 
     Route::prefix('campaign')->group(function(){
         Route::get('/{campaign}/test', [TestController::class, 'show'])->name('answer-test');
@@ -122,25 +142,7 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::post('/', [ReportsController::class, 'update'])->name('company-reports.update');
     });
 
-    Route::prefix('dashboard')->group(function () {
-        Route::prefix('psychosocial')->group(function(){
-            Route::get('/', [PsychosocialController::class, 'dashboard'])->name('dashboard.psychosocial');
-            Route::get('/{hazard}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
-            // Route::get('/{hazard}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
-            Route::get('/risks', [PsychosocialController::class, 'risks'])->name('dashboard.psychosocial.risks');
-            Route::get('/risks/report/{type}/{format}', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
-        });
-
-        // Route::prefix('organizational-climate')->group(function(){
-        //     // Route::get('/', [OrganizationalController::class, 'dashboard'])->name('dashboard.organizational-climate');
-        //     Route::get('/', OrganizationalMainController::class)->name('dashboard.organizational-climate');
-        //     Route::post('/report', [OrganizationalMainController::class, 'createPDFReport'])->name('dashboard.organizational-climate.report');
-        //     Route::get('/answers', OrganizationalAnswersController::class)->name('dashboard.organizational-climate.answers');
-        //     Route::get('/answers/report', [OrganizationalAnswersController::class, 'createPDFReport'])->name('dashboard.organizational-climate.answers.report');
-        // });
-
-        Route::get('/demographics', [DemographicsController::class, 'demographics'])->name('dashboard.demographics');
-    });
+    
 
     Route::prefix('company')->group(function(){
         Route::get('/{company}', [CompanyController::class, 'show'])->name('company.show');   

@@ -1,92 +1,39 @@
 <x-layouts.app>
-    <x-structure.page-container>
-        
-        <x-structure.sidebar />
-        
-        <x-structure.main-content-container>
-            <x-structure.page-title 
-                title="Clima Organizacional" 
-                :breadcrumbs="[
-                    'Clima Organizacional' => '',
-                ]"
-            />
+    <div class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="bg-secondary-background border-borders flex flex-col items-center gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Oops! Parece que você ainda
+                <span class="font-semibold">não agendou uma campanha</span>
+                de Pesquisa de Clima Organizacional — por isso
+                <span class="font-semibold">o dashboard ainda não está disponível</span>
+                .
+            </p>
 
-            @if($organizationalClimateResults['main'])
-                <div class="w-full flex flex-row gap-4">
-                    <div class="w-full flex flex-col-reverse md:flex-row gap-4 items-start">
-                        <div class="flex items-center gap-2 w-full flex-wrap">
-                            <x-numbers-of-records :value="$filteredUserCount" />
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Lembre-se: se você quiser
+                <span class="font-semibold">customizar o formulário da pesquisa de clima</span>
+                faça-o obrigatoriamente
+                <span class="font-semibold">antes do agendamento da campanha</span>
+                . Uma vez agendada,
+                <span class="font-semibold">qualquer alteração posterior no formulário não será considerada.</span>
+            </p>
 
-                            <x-applied-filters
-                                :filtersApplied="$filtersApplied"
-                            />
-                        </div>
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                Você pode criar ou editar o formulário a qualquer momento
+                <span class="font-semibold">através do card à direita</span>
+                .
+            </p>
+        </div>
 
-                        <x-filter-actions
-                            :filtersApplied="$filtersApplied"
-                            :modalFilters="[
-                                'gender', 
-                                'department', 
-                                'occupation', 
-                                'work_shift', 
-                                'marital_status', 
-                                'education_level', 
-                                'age_range', 
-                                'admission_range', 
-                            ]" 
-                        />
-                    </div>
-                    <div class="w-fit">
-                        <x-form action="{!! route('dashboard.organizational-climate.report', request()->query()) !!}" post>
-                            <input type="hidden" name="Geral-to-base-64">
-                            @foreach ($organizationalClimateResults['main'] as $testName => $testData)
-                                <input type="hidden" name="{{ $testName }}-to-base-64">
-                            @endforeach
-                            <x-action tag="button" id="create-report-button" disabled style="opacity: 50%">Visualizar relatório</x-action>
-                        </x-form>
-                    </div>
-                </div>
+        <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6 lg:col-span-2">
+            <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Customizar formulários de Pesquisa de Clima</h2>
 
-                <div class="w-full grid grid-cols-1 gap-4 ">
-                    <x-charts.bar-vertical tag="a" :href="route('dashboard.organizational-climate.answers')" id="Geral" title="Índice Geral de Satisfação por Teste" class="" />
-                
-                    @foreach ($organizationalClimateResults['main'] as $testName => $testData)
-                        <x-charts.bar-vertical tag="a" :href="route('dashboard.organizational-climate.answers', ['test' => $testName])" :id="$testName" :title="$testName" />
-                    @endforeach
-                </div>
+            <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">Personalize os formulários para que se encaixem no contexto da sua organização. Além de modificar questões, você pode criar novos grupos de questões e até mesmo criar novos formulários completos.</p>
 
-                @if(!$filtersApplied)
-                    <x-charts.bar-vertical id="organizational-participation" title="Participação no teste de Clima Organizacional" />
-                @endif
-            @else
-                @if($companyHasTests)
-                    <div class="w-full flex flex-col items-center gap-2 justify-center flex-1">
-                        <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
-                        <p class="text-base text-center">Nenhum resultado encontrado, tente novamente.</p>
-                    </div>
-                @else
-                    <div class="w-full flex flex-col items-center gap-2 justify-center flex-1">
-                        <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
-                        <p class="text-base text-center">Você ainda não realizou nenhuma Pesquisa de Clima Organizacional.</p>
-                    </div>
-                @endif
-            @endif
-        
-        </x-structure.main-content-container>
-    </x-structure.page-container>
-
+            {{-- TODO: Link para página de formulários --}}
+            <x-new-components.actions.button href="">
+                <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar página de formulários</span>
+            </x-new-components.actions.button>
+        </div>
+    </div>
 </x-layouts.app>
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-
-<script>
-    const organizationalTestsParticipation = @json($organizationalTestsParticipation);
-    const organizationalClimateResults = @json($organizationalClimateResults);
-    const filtersApplied = @json($filtersApplied);
-</script>
-
-<script src="{{ asset('js/dashboard/charts.js') }}"></script>
-<script src="{{ asset('js/dashboard/organizational/index.js') }}"></script>

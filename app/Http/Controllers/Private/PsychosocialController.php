@@ -12,17 +12,22 @@ class PsychosocialController
 {
     public function dashboard()
     {
-        Gate::authorize('psychosocial-dashboard-view');
-        if(!session('auth:company')->latestPsychosocialCampaign()  || !session('auth:company')->latestPsychosocialCampaign()->userCollections()->exists()) return back();
-        
-        return view('private.dashboard.psychosocial.index', [
-            'dashboard' => session('auth:company')->latestPsychosocialCampaign() ? 
-                        (session('auth:company')->usesHSE() ? HSEService::dashboard() : PROARTService::dashboard()) :
-                         false,
-            'participation' => session('auth:company')->latestPsychosocialCampaign() ? HSEService::participation() : false,
-            'filters' => collect(request()->query())->filter()
-        ]);
+        return view('private.dashboard.psychosocial.index');
     }
+
+    // public function dashboard()
+    // {
+    //     Gate::authorize('psychosocial-dashboard-view');
+    //     if(!session('auth:company')->latestPsychosocialCampaign()  || !session('auth:company')->latestPsychosocialCampaign()->userCollections()->exists()) return back();
+        
+    //     return view('private.dashboard.psychosocial.index', [
+    //         'dashboard' => session('auth:company')->latestPsychosocialCampaign() ? 
+    //                     (session('auth:company')->usesHSE() ? HSEService::dashboard() : PROARTService::dashboard()) :
+    //                      false,
+    //         'participation' => session('auth:company')->latestPsychosocialCampaign() ? HSEService::participation() : false,
+    //         'filters' => collect(request()->query())->filter()
+    //     ]);
+    // }
 
     public function departments(Hazard $hazard)
     {

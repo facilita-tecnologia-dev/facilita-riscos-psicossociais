@@ -13,7 +13,7 @@
 
     <div class="flex gap-3">
         <div class="block md:hidden" wire:click="openSidebar">
-            <x-new-components.actions.nav-item icon="hamburguer" tooltip="Abrir barra lateral" tooltipPosition="left" />
+            <x-new-components.actions.nav-item icon="hamburguer" />
         </div>
 
         <div wire:click="logout">
