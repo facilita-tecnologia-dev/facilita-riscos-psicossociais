@@ -29,7 +29,7 @@ class ResetPassword extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $route = $this->guard == 'company' 
-                            ? 'company.password.reset' 
+                            ? 'company.password-reset' 
                             : 'user.password.reset';
         
         $url = url(route($route, [

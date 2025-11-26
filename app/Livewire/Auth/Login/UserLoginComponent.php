@@ -50,16 +50,18 @@ class UserLoginComponent extends Component
         if($user) {
             AuthenticationService::putGuardOnSession('user');
             $this->user = $user;
+            $this->companies = $user->companies->toArray();
 
             if(AuthenticationService::checkUserHasMultipleCompanies($user)) {
-                $this->companies = $user->companies->toArray();
                 $this->step = self::STEPS['SELECT_COMPANY'];
-
                 return;
             } else {
                 $this->selected_company_id = $this->companies[0]['id'];
+
+                $company = Company::find($this->selected_company_id );
+                AuthenticationService::putCompanyOnSession($company);
+                
                 return $this->checkManager();
-                return;
             }
         } else{
             $this->dispatch('alert:danger', 'Este usuário não está cadastrado no sistema');

@@ -24,7 +24,7 @@ class CompanyController
 
     public function login()
     {
-        return view('auth.login.company.index.index');
+        return view('auth.login.company.index');
     }
 
     public function home()
@@ -94,61 +94,17 @@ class CompanyController
         return redirect()->to(route('logout'));
     }
 
-    public function showForgotPassword()
+    public function forgotPassword()
     {
-        return view('auth.login.company.forgot-password');
+        return view('auth.forgot-password.company.index');
     }
 
-    public function sendResetEmail(Request $request)
+    public function resetPassword(Request $request, string $token)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
-
-        $status = FacadePassword::broker('companies')->sendResetLink(
-            $request->only('email'),
-            function ($company, $token) {
-                $company->sendPasswordResetNotification($token, 'company');
-            }
-        );
-
-        return $status === FacadePassword::ResetLinkSent
-        ? back()->with(['message' => __($status)])
-        : back()->withErrors(['email' => __($status)]);
-    }
-
-    public function showResetPassword(Request $request, string $token)
-    {
-        return view('auth.login.company.reset-password', [
+        return view('auth.reset-password.company.index', [
             'token' => $token,
             'email' => request('email')
         ]);
-    }
-
-    
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'token' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-        ]);
-        
-        $status = FacadePassword::broker('companies')->reset( // 👈 usa o broker certo
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (Company $company, string $password) {
-                $company->forceFill([
-                    'password' => Hash::make($password)]);
-
-                $company->save();
-    
-                event(new PasswordReset($company));
-            }
-        );
-
-        return $status === FacadePassword::PasswordReset
-        ? to_route('company.login')->with('message', __($status))
-        : back()->withErrors(['password' => [__($status)]]);
     }
 
     public function resetPasswordModal(Request $request, Company $company)

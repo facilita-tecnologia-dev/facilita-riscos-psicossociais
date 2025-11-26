@@ -33,7 +33,7 @@ class UserController
 
     public function login()
     {
-        return view('auth.login.user.index.index');
+        return view('auth.login.user.index');
     }
 
 
@@ -286,25 +286,18 @@ class UserController
         return to_route('user.permissions', $user)->with('message', 'Visão de Setores atualizada com sucesso!');
     }
 
+    public function forgotPassword()
+    {
+        return view('auth.forgot-password.user.index');
+    }
 
-    // public function showResetPassword(Request $request, User $user)
-    // {
-    //     return view('private.user.reset-password', compact('user'));
-    // }
-
-    // public function resetPassword(Request $request, User $user)
-    // {   
-    //     $credentials = $request->validate([
-    //         "current_password" => ['required'],
-    //         'new_password' => ['required', 'confirmed', Password::defaults()],
-    //     ]);
-        
-    //     if(AuthenticationService::resetPassword('user', $user, $credentials)){  
-    //         return redirect()->to(AuthenticationService::redirectLoginRoute('user'));
-    //     };
-        
-    //     return back()->with('message', 'Não foi possível redefinir sua senha.');
-    // }
+    public function resetPassword(Request $request, string $token)
+    {
+        return view('auth.reset-password.user.index', [
+            'token' => $token,
+            'email' => request('email')
+        ]);
+    }
 
     public function resetPasswordModal(Request $request, User $user)
     {   

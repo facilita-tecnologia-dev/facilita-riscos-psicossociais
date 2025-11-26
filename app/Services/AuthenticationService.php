@@ -13,25 +13,6 @@ use Illuminate\Support\Facades\Hash;
 class AuthenticationService {
     public static function attempt($guard, $credentials)
     {
-        if($guard === 'user'){
-            $user = User::firstWhere('cpf', $credentials['cpf']);
-            
-            if (! $user) {
-                SessionErrorHelper::flash('cpf', 'Usuário não cadastrado.');
-                return false;
-            }
-
-            self::putGuardOnSession('user');
-
-            if(self::checkUserHasMultipleCompanies($user)) return route('user.login.choose-company', $user);
-
-            self::putCompanyOnSession($user->companies->first());
-
-            if(self::checkUserIsManager($user)) return route('user.login.password', $user);
-
-            self::authenticate('user', $user);
-        }
-
         if($guard === 'company'){
             if(Auth::guard($guard)->attempt($credentials)){
                 self::putGuardOnSession('company');

@@ -40,19 +40,17 @@ Route::middleware(GuestMiddleware::class)->group(function() {
     });
 
     Route::prefix('forgot-password')->group(function(){
-        Route::get('/company', [CompanyController::class, 'showForgotPassword'])->name('company.password.request');
-        Route::post('/company', [CompanyController::class, 'sendResetEmail'])->name('company.password.email');
+        Route::get('/company', [CompanyController::class, 'forgotPassword'])->name('company.password-request');
         
-        Route::get('/user', [ResetUserPasswordController::class, 'forgot'])->name('user.password.request');
-        Route::post('/user', [ResetUserPasswordController::class, 'send'])->name('user.password.email');
+        Route::get('/user', [UserController::class, 'forgotPassword'])->name('user.password-request');
+        // Route::post('/user', [ResetUserPasswordController::class, 'send'])->name('user.password.email');
     });
 
     Route::prefix('reset-password')->group(function(){
-        Route::get('/user/{token}', [ResetUserPasswordController::class, 'showReset'])->name('user.password.reset');
-        Route::post('/user', [ResetUserPasswordController::class, 'reset'])->name('user.password.update');
+        Route::get('/company/{token}', [CompanyController::class, 'resetPassword'])->name('company.password-reset');
 
-        Route::get('/company/{token}', [CompanyController::class, 'showResetPassword'])->name('company.password.reset');
-        Route::post('/company', [CompanyController::class, 'resetPassword'])->name('company.password.update');
+        Route::get('/user/{token}', [UserController::class, 'resetPassword'])->name('user.password.reset');
+        // Route::post('/user', [ResetUserPasswordController::class, 'reset'])->name('user.password.update');
     });
 });
 
@@ -61,6 +59,9 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::get('/company', [CompanyController::class, 'home'])->name('company.home');
         Route::get('/user', [UserController::class, 'home'])->name('user.home');
     });
+
+
+
 
     Route::prefix('campaign')->group(function(){
         Route::get('/{campaign}/test', [TestController::class, 'show'])->name('answer-test');
@@ -166,13 +167,12 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::get('/{user}/department-scope', [UserController::class, 'showDepartmentScope'])->name('user.department-scope');
         Route::post('/{user}/department-scope', [UserController::class, 'updateDepartmentScopes']);
 
-        Route::post('/switch-company', [LoginController::class, 'switchCompany'])->name('user.switch-company');
+        // Route::post('/switch-company', [LoginController::class, 'switchCompany'])->name('user.switch-company');
 
         Route::put('/{user}/reset-password-modal', [UserController::class, 'resetPasswordModal'])->name('user.reset-password-modal');
     });
     
     Route::view('/politica-de-privacidade', 'private.lgpd.privacy-policy')->name('privacy-policy');
-    Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 });
 
 Route::middleware(CMSGuestMiddleware::class)->group(function(){
