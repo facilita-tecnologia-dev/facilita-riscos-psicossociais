@@ -3,7 +3,7 @@
 namespace App\Livewire\CMS\Auth;
 
 use App\Models\CMSUser;
-use App\Services\AuthService;
+use App\Services\AuthenticationService;
 use Livewire\Component;
 
 class CMSLoginComponent extends Component
@@ -33,7 +33,7 @@ class CMSLoginComponent extends Component
             //     return;
             // }
 
-            if($redirectRoute = AuthService::attempt('cms', $credentials)){
+            if($redirectRoute = AuthenticationService::attempt('cms', $credentials)){
                 return redirect()->intended($redirectRoute);
             }
         } else{

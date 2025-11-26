@@ -61,6 +61,7 @@ class CompanyHomeScheduleCampaignComponent extends Component
             session()->flash('message', 'Você concluiu todo o passo a passo inicial. Agora, pode continuar utilizando todas as demais funcionalidades do sistema.');
             $this->nextStep();
         } catch (\Throwable $th) {
+            report($th);
             $this->dispatch('alert:danger', 'Não foi possível realizar o agendamento da campanha.');
         }
     }

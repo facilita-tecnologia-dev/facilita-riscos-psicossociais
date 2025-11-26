@@ -132,11 +132,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function hasTemporaryPassword(): bool
-    {
-        return str_starts_with($this->password, 'temp_') && strlen($this->password) == 15;
-    }
-
     /* ---- End Aux/Verifiers/Conditionals ---- */
 
     

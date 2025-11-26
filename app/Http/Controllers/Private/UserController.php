@@ -13,7 +13,7 @@ use App\Models\User;
 use App\Models\UserCustomPermission;
 use App\Models\UserDepartmentPermission;
 use App\Repositories\UserRepository;
-use App\Services\AuthService;
+use App\Services\AuthenticationService;
 use App\Services\User\UserFilterService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -30,6 +30,12 @@ class UserController
     {
         return view('private.home.user.index');
     }
+
+    public function login()
+    {
+        return view('auth.login.user.index.index');
+    }
+
 
     public function index(Request $request)
     {
@@ -281,24 +287,24 @@ class UserController
     }
 
 
-    public function showResetPassword(Request $request, User $user)
-    {
-        return view('private.user.reset-password', compact('user'));
-    }
+    // public function showResetPassword(Request $request, User $user)
+    // {
+    //     return view('private.user.reset-password', compact('user'));
+    // }
 
-    public function resetPassword(Request $request, User $user)
-    {   
-        $credentials = $request->validate([
-            "current_password" => ['required'],
-            'new_password' => ['required', 'confirmed', Password::defaults()],
-        ]);
+    // public function resetPassword(Request $request, User $user)
+    // {   
+    //     $credentials = $request->validate([
+    //         "current_password" => ['required'],
+    //         'new_password' => ['required', 'confirmed', Password::defaults()],
+    //     ]);
         
-        if(AuthService::resetPassword('user', $user, $credentials)){  
-            return redirect()->to(AuthService::redirectLoginRoute('user'));
-        };
+    //     if(AuthenticationService::resetPassword('user', $user, $credentials)){  
+    //         return redirect()->to(AuthenticationService::redirectLoginRoute('user'));
+    //     };
         
-        return back()->with('message', 'Não foi possível redefinir sua senha.');
-    }
+    //     return back()->with('message', 'Não foi possível redefinir sua senha.');
+    // }
 
     public function resetPasswordModal(Request $request, User $user)
     {   
@@ -307,7 +313,7 @@ class UserController
             'new_password' => ['required', 'confirmed', Password::defaults()],
         ]);
         
-        if(AuthService::resetPassword('user', $user, $credentials)){  
+        if(AuthenticationService::resetPassword('user', $user, $credentials)){  
             return back()->with('message', 'Senha redefinida com sucesso!');
         };
 

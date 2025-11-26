@@ -5,10 +5,10 @@ namespace App\Providers;
 use App\Enums\CampaignStatus;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthenticationServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
-class AuthServiceProvider extends ServiceProvider
+class AuthenticationServiceProvider extends ServiceProvider
 {
 
     public function register(): void {}

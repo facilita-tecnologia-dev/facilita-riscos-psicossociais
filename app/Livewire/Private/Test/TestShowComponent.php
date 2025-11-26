@@ -46,6 +46,7 @@ class TestShowComponent extends Component
                 $this->answers[$question['id']] = $tempAnswer->value;
             }
         } catch (\Throwable $th) {
+            report($th);
             $this->dispatch('alert:danger', "Não foi possível buscar suas respostas.");
         }
     }
@@ -83,6 +84,7 @@ class TestShowComponent extends Component
             $this->dispatch('alert:success', "Questão respondida!");
             $this->next();
         } catch (\Throwable $th) {
+            report($th);
             $this->dispatch('alert:danger', "Não foi possível armazenar sua resposta.");
         }
     }
@@ -170,6 +172,7 @@ class TestShowComponent extends Component
             $this->dispatch('alert:success', "Teste finalizado!");
             return redirect()->to(route('test.thanks'));
         } catch (\Throwable $th) {
+            report($th);
             $this->dispatch('alert:danger', "Não foi possível armazenar as respostas do seu teste.");
         }
     }

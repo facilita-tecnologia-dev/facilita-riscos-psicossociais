@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\RoleEnum;
 use App\Models\Company;
 use App\Models\User;
-use App\Rules\validateCNPJ;
-use App\Services\AuthService;
+use App\Services\AuthenticationService;
 use Illuminate\Http\Request;
 
 class LoginController
@@ -17,26 +16,26 @@ class LoginController
             'cpf' => ['required', 'string', 'cpf'],
         ]);
 
-        if($redirectRoute = AuthService::attempt('user', $credentials)){
+        if($redirectRoute = AuthenticationService::attempt('user', $credentials)){
             return redirect()->to($redirectRoute);
         };
   
         return back();
     }
 
-    public function authenticateCompany(Request $request)
-    {
-        $credentials = $request->validate([
-            'cnpj' => ['required', 'string', new validateCNPJ],
-            'password' => ['required'],
-        ]);
+    // public function authenticateCompany(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'cnpj' => ['required', 'string', new validateCNPJ],
+    //         'password' => ['required'],
+    //     ]);
 
-        if($redirectRoute = AuthService::attempt('company', $credentials)){
-            return redirect()->to($redirectRoute);
-        }
+    //     if($redirectRoute = AuthenticationService::attempt('company', $credentials)){
+    //         return redirect()->to($redirectRoute);
+    //     }
 
-        return back();
-    }
+    //     return back();
+    // }
 
     public function showChooseCompany(User $user)
     {
@@ -45,13 +44,13 @@ class LoginController
 
     public function chooseCompany(User $user, Company $company)
     {
-        AuthService::putCompanyOnSession($company);
+        AuthenticationService::putCompanyOnSession($company);
 
-        if(AuthService::checkUserIsManager($user)) return redirect()->to(route('user.login.password', $user));
+        if(AuthenticationService::checkUserIsManager($user)) return redirect()->to(route('user.login.password', $user));
 
-        AuthService::authenticate('user', $user);
+        AuthenticationService::authenticate('user', $user);
 
-        return redirect()->to(AuthService::redirectLoginRoute('user'));
+        return redirect()->to(AuthenticationService::redirectLoginRoute('user'));
     }
 
     public function showCheckPassword(User $user){
@@ -65,18 +64,18 @@ class LoginController
         ]);
 
         if($user->is_temp_password){
-            if(!AuthService::checkTempPassword($credentials['password'], $user->password)) return back();
+            if(!AuthenticationService::checkTempPassword($credentials['password'], $user->password)) return back();
         } else{
-            if(!AuthService::checkPassword($credentials['password'], $user->password)) return back();
+            if(!AuthenticationService::checkPassword($credentials['password'], $user->password)) return back();
         }
 
-        AuthService::authenticate('user', $user);
+        AuthenticationService::authenticate('user', $user);
         
         if($user->is_temp_password){
             return redirect()->to(route('user.reset-password', $user));
         }
 
-        return redirect()->to(AuthService::redirectLoginRoute('user'));
+        return redirect()->to(AuthenticationService::redirectLoginRoute('user'));
     }
 
     public function switchCompany(Request $request){
@@ -92,15 +91,15 @@ class LoginController
         $roleOnAuthCompany = $user->role(session('auth:company'));
         $roleInRequestCompany = $user->role($company);
 
-        AuthService::logout($request);
+        AuthenticationService::logout($request);
         
-        AuthService::putCompanyOnSession($company);
-        AuthService::putGuardOnSession('user');
+        AuthenticationService::putCompanyOnSession($company);
+        AuthenticationService::putGuardOnSession('user');
         
         if($roleOnAuthCompany->type === RoleEnum::EMPLOYEE->value && $roleInRequestCompany->type === RoleEnum::MANAGER->value) return redirect()->to(route('user.login.password', $user));
 
-        AuthService::authenticate('user', $user);
+        AuthenticationService::authenticate('user', $user);
 
-        return redirect()->to(AuthService::redirectLoginRoute('user'));
+        return redirect()->to(AuthenticationService::redirectLoginRoute('user'));
     }
 }

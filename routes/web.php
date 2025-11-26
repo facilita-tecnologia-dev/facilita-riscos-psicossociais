@@ -31,22 +31,12 @@ Route::view('/terms-of-use', 'site.terms-of-use.index')->name('site.terms-of-use
 
 Route::middleware(GuestMiddleware::class)->group(function() {
     Route::prefix('register')->group(function(){
-        Route::get('/empresa', [RegisterController::class, 'showRegister'])->name('company.register');
-        Route::post('/empresa', [RegisterController::class, 'register']);
+        Route::get('/company', [CompanyController::class, 'register'])->name('company.register');
     });
 
     Route::prefix('login')->group(function(){
-        Route::view('/company', 'auth.login.company.index')->name('company.login');
-        Route::post('/company', [LoginController::class, 'authenticateCompany']);
-
-        Route::view('/user', 'auth.login.user.index')->name('user.login');
-        Route::post('/user', [LoginController::class, 'authenticateUser']);
-
-        Route::get('/user/{user}/senha', [LoginController::class, 'showCheckPassword'])->name('user.login.password');
-        Route::post('/user/{user}/senha', [LoginController::class, 'checkPassword']);
-
-        Route::get('/user/{user}/choose-company', [LoginController::class, 'showChooseCompany'])->name('user.login.choose-company');
-        Route::post('/user/{user}/choose-company/{company?}', [LoginController::class, 'chooseCompany'])->name('user.login.login-with-company');
+        Route::get('/company', [CompanyController::class, 'login'])->name('company.login');
+        Route::get('/user', [UserController::class, 'login'])->name('user.login');
     });
 
     Route::prefix('forgot-password')->group(function(){
@@ -178,17 +168,12 @@ Route::middleware(AuthMiddleware::class)->group(function() {
 
         Route::post('/switch-company', [LoginController::class, 'switchCompany'])->name('user.switch-company');
 
-        Route::get('/{user}/reset-password', [UserController::class, 'showResetPassword'])->name('user.reset-password');
-        Route::put('/{user}/reset-password', [UserController::class, 'resetPassword']);
-        
         Route::put('/{user}/reset-password-modal', [UserController::class, 'resetPasswordModal'])->name('user.reset-password-modal');
     });
     
     Route::view('/politica-de-privacidade', 'private.lgpd.privacy-policy')->name('privacy-policy');
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 });
-
-
 
 Route::middleware(CMSGuestMiddleware::class)->group(function(){
     Route::view('/cms', 'cms.auth.login')->name('cms.login');

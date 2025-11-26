@@ -47,6 +47,7 @@ class CompanyHomeUploadLogoComponent extends Component
             $this->dispatch('alert:success', 'Logomarca atualizada!');
             $this->nextStep();
         } catch (\Throwable $th) {
+            report($th);
             $this->dispatch('alert:danger', 'Erro ao atualizar a logomarca!');
         }
     }

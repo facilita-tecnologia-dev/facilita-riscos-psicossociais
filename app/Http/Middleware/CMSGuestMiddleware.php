@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\AuthService;
+use App\Services\AuthenticationService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +18,7 @@ class CMSGuestMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::guard('cms')->check()) {
-            return redirect()->to(AuthService::redirectLoginRoute('cms'));
+            return redirect()->to(AuthenticationService::redirectLoginRoute('cms'));
         }
 
         return $next($request);

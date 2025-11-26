@@ -8,7 +8,7 @@ use App\Imports\UsersImport;
 use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;
-use App\Services\AuthService;
+use App\Services\AuthenticationService;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

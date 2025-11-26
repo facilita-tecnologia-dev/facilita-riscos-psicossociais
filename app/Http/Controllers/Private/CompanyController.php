@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Private;
 use App\Helpers\SessionErrorHelper;
 use App\Models\Company;
 use App\Models\User;
-use App\Services\AuthService;
+use App\Services\AuthenticationService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -17,6 +17,16 @@ use Illuminate\Support\Str;
 
 class CompanyController
 {
+    public function register()
+    {
+        return view('auth.register.company.index');
+    }
+
+    public function login()
+    {
+        return view('auth.login.company.index.index');
+    }
+
     public function home()
     {
         return view('private.home.company.index');
@@ -148,7 +158,7 @@ class CompanyController
             'new_password' => ['required', 'confirmed', Password::defaults()],
         ]);
         
-        if(AuthService::resetPassword('company', $company, $credentials)){  
+        if(AuthenticationService::resetPassword('company', $company, $credentials)){  
             return back()->with('message', 'Senha redefinida com sucesso!');
         };
 

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthService {
+class AuthenticationService {
     public static function attempt($guard, $credentials)
     {
         if($guard === 'user'){

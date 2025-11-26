@@ -2,18 +2,18 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\AuthService;
+use App\Services\AuthenticationService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class GuestMiddleware
 {
-    protected $authService;
+    protected $AuthenticationService;
 
-    public function __construct(AuthService $authService)
+    public function __construct(AuthenticationService $AuthenticationService)
     {
-        $this->authService = $authService;
+        $this->AuthenticationService = $AuthenticationService;
     }
 
     /**
@@ -24,7 +24,7 @@ class GuestMiddleware
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
         if (session('auth:user')) {
-            $redirect = AuthService::redirectLoginRoute(session('auth:guard'));
+            $redirect = AuthenticationService::redirectLoginRoute(session('auth:guard'));
 
             return redirect()->to($redirect);
         }
