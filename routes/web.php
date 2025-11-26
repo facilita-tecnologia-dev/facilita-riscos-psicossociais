@@ -68,15 +68,15 @@ Route::middleware(GuestMiddleware::class)->group(function() {
 
 Route::middleware(AuthMiddleware::class)->group(function() {
     Route::prefix('home')->group(function(){
-        Route::get('/company', [CompanyController::class, 'home'])->name('welcome.company');
-        Route::get('/user', [UserController::class, 'home'])->name('welcome.user');
+        Route::get('/company', [CompanyController::class, 'home'])->name('company.home');
+        Route::get('/user', [UserController::class, 'home'])->name('user.home');
     });
 
     Route::prefix('campaign')->group(function(){
-        Route::get('/{campaign}/test', [TestController::class, 'show'])->name('test');
+        Route::get('/{campaign}/test', [TestController::class, 'show'])->name('answer-test');
         Route::post('/{campaign}/test', [TestController::class, 'store']);
 
-        Route::view('/thanks', 'private.tests.thanks')->name('complete-tests.thanks');
+        Route::view('/thanks', 'private.test.thanks')->name('test.thanks');
     });
 
     // Route::prefix('feedback')->group(function(){

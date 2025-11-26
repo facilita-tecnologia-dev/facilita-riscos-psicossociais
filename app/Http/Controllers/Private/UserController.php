@@ -28,9 +28,8 @@ class UserController
     
     public function home()
     {
-        return view('private.home.user');
+        return view('private.home.user.index');
     }
-
 
     public function index(Request $request)
     {

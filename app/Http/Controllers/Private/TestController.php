@@ -15,7 +15,7 @@ class TestController
         if($campaign->collection()->type === BaseCollectionType::PSYCHOSOCIAL) Gate::authorize('answer-psychosocial-test');
         if($campaign->collection()->type === BaseCollectionType::ORGANIZATIONAL) Gate::authorize('answer-organizational-test');
 
-        return view('private.tests.index', compact('campaign'));
+        return view('private.test.index.index', compact('campaign'));
     }
 
     public function store(Request $request, Campaign $campaign)
@@ -30,7 +30,7 @@ class TestController
 
             if($campaign->collection()->type === BaseCollectionType::ORGANIZATIONAL) return to_route('feedback.create');
 
-            return to_route('complete-tests.thanks');
+            return to_route('test.thanks');
         }
 
         return back();

@@ -9,7 +9,7 @@
         {{-- Desktop --}}
         <aside class="bg-secondary-background border-borders hidden h-full w-fit flex-col items-center justify-center border-r p-3 px-3 py-0 shadow-sm md:flex">
             <nav class="flex flex-col gap-4">
-                <x-new-components.actions.nav-item href="" icon="home" activeRoute="welcome.*" tooltip="Início" />
+                <x-new-components.actions.nav-item :href="session('auth:guard') === 'user' ? route('user.home') : route('company.home')" icon="home" activeRoute="welcome.*" tooltip="Início" />
 
                 <div class="bg-borders h-0.5 w-8"></div>
                 {{-- Divider --}}

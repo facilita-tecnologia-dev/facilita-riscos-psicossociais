@@ -35,7 +35,7 @@ it('should be able to send a filled feedback', function () {
         'feedback' => 'Meu feedback',
     ]);
 
-    $response->assertRedirectToRoute('complete-tests.thanks');
+    $response->assertRedirectToRoute('test.thanks');
 });
 
 it('should be able to send a empty / not send a feedback', function () {
@@ -43,5 +43,5 @@ it('should be able to send a empty / not send a feedback', function () {
         'feedback' => '',
     ]);
 
-    $response->assertRedirectToRoute('complete-tests.thanks');
+    $response->assertRedirectToRoute('test.thanks');
 });

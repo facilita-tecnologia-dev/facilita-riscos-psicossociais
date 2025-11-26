@@ -19,7 +19,7 @@ class CompanyController
 {
     public function home()
     {
-        return view('private.home.company');
+        return view('private.home.company.index');
     }
 
     public function create()

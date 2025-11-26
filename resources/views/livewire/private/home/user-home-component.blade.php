@@ -12,8 +12,7 @@
                             <x-icon icon="brain" class="text-primary-solid h-7 w-7 object-scale-down" />
                             <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activePsychosocialCampaign->name }}</span>
                         </div>
-                        <x-new-components.actions.button :href="route('test', $activePsychosocialCampaign)" fitSize>
-                            {{-- TODO: Link para o teste --}}
+                        <x-new-components.actions.button :href="route('answer-test', $activePsychosocialCampaign)" fitSize>
                             <span class="text-main-background text-center text-sm font-semibold">Responder</span>
                         </x-new-components.actions.button>
                     </li>
@@ -25,8 +24,7 @@
                             <x-icon icon="cloud" class="text-primary-solid h-7 w-7 object-scale-down" />
                             <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activeOrganizationalCampaign->name }}</span>
                         </div>
-                        <x-new-components.actions.button :href="route('test', $activeOrganizationalCampaign)" fitSize>
-                            {{-- TODO: Link para o teste --}}
+                        <x-new-components.actions.button :href="route('answer-test', $activeOrganizationalCampaign)" fitSize>
                             <span class="text-main-background text-center text-sm font-semibold">Responder</span>
                         </x-new-components.actions.button>
                     </li>

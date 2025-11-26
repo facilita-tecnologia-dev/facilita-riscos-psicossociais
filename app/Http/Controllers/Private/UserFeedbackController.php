@@ -72,7 +72,7 @@ class UserFeedbackController
         ]);
 
         if ($validatedData['feedback'] == null) {
-            return to_route('complete-tests.thanks');
+            return to_route('test.thanks');
         }
 
         UserFeedback::create([

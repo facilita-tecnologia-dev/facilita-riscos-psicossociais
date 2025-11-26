@@ -142,8 +142,8 @@ class AuthService {
     public static function redirectLoginRoute($guard)
     {
         return match ($guard) {
-            'company' => route('welcome.company'),
-            'user'    => route('welcome.user'),
+            'company' => route('company.home'),
+            'user'    => route('user.home'),
             'cms'    => route('cms.psychosocial.dashboard'),
             default   => route('site.home'),
         };
