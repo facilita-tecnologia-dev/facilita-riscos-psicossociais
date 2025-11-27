@@ -57,6 +57,11 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::get('/user', [UserController::class, 'home'])->name('user.home');
     });
 
+    Route::prefix('test')->group(function(){
+        Route::get('/{campaign}/answer', [TestController::class, 'show'])->name('answer-test');
+        Route::view('/thanks', 'private.test.thanks')->name('test.thanks');
+    });
+
     Route::prefix('psychosocial')->group(function () {
         Route::get('/dashboard', [PsychosocialController::class, 'dashboard'])->name('psychosocial.dashboard');
     });
@@ -83,12 +88,6 @@ Route::middleware(AuthMiddleware::class)->group(function() {
 
     //     Route::get('/demographics', [DemographicsController::class, 'demographics'])->name('dashboard.demographics');
 
-    Route::prefix('campaign')->group(function(){
-        Route::get('/{campaign}/test', [TestController::class, 'show'])->name('answer-test');
-        Route::post('/{campaign}/test', [TestController::class, 'store']);
-
-        Route::view('/thanks', 'private.test.thanks')->name('test.thanks');
-    });
 
     // Route::prefix('feedback')->group(function(){
     //     Route::get('/', [UserFeedbackController::class, 'index'])->name('feedback.index');

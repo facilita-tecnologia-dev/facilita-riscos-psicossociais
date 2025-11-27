@@ -1,16 +1,14 @@
 <section class="flex flex-col gap-6 p-4">
     <div class="space-y-3">
-        <div class="flex gap-2 items-center">
-            <x-icon icon="psychosocial" class="w-6 h-6 object-scale-down text-primary-solid" />
-            <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Riscos Psicossociais</h1>
+        <div class="flex items-center gap-2">
+            <x-icon icon="psychosocial" class="text-primary-solid h-6 w-6 object-scale-down" />
+            <h1 class="text-main-text text-left text-xl font-semibold md:text-2xl">Facilita Riscos Psicossociais</h1>
         </div>
 
-        <x-new-components.structure.breadcrumbs 
-            :links="[
-                'Lista de empresas' => route('cms.psychosocial.company.index'),
-                $company->name => null
-            ]" 
-        />
+        <x-new-components.structure.breadcrumbs :links="[
+            'Lista de empresas' => route('cms.psychosocial.company.index'),
+            $company->name => null
+        ]" />
     </div>
 
     <livewire:cms.private.psychosocial.company.company-edit-component :company="$company" />
@@ -21,10 +19,84 @@
                 <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Lista de funcionários</h2>
                 <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Gerencie a lista de funcionários da empresa: crie, importe e edite colaboradores conforme necessário.</span>
             </div>
-            
+
             <x-new-components.actions.button href="{{ route('cms.psychosocial.user.index', $company) }}" fitSize>
                 <span class="text-main-background font-heading text-center text-sm font-semibold">Lista de funcionários</span>
             </x-new-components.actions.button>
+        </div>
+    </div>
+
+    {{-- Editar Video --}}
+    <div class="contents" x-data="{ editVideoModalOpen: false }" x-on:open-helper-video-modal.window="editVideoModalOpen = true" x-on:close-helper-video-modal.window="editVideoModalOpen = false">
+        <div class="w-full space-y-4 lg:col-span-3">
+            <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
+                <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
+                    <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Vídeo de Demonstração dos Testes</h2>
+                    <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Faça upload de um vídeo de demonstração que será exibido aos funcionários desta empresa antes de eles realizarem o teste.</span>
+                </div>
+
+                <x-new-components.actions.button wire:click="openHelperVideoModal" fitSize>
+                    <span class="text-main-background font-heading text-center text-sm font-semibold">Editar vídeo</span>
+                </x-new-components.actions.button>
+            </div>
+        </div>
+
+        {{-- Editar Video Modal --}}
+        <div x-show="editVideoModalOpen" x-transition.opacity x-cloak class="fixed inset-0 z-30 flex items-center justify-center bg-black/60 px-4">
+            <div x-on:click.away="$wire.closeHelperVideoModal()" class="bg-secondary-background border-borders grid w-full max-w-5xl grid-cols-2 gap-6 rounded-lg border p-6 shadow-sm">
+                <div class="flex flex-col gap-4">
+                    <header class="flex w-full items-center justify-between">
+                        <h2 class="font-heading text-main-text text-left text-lg font-semibold">Ver video de demonstração</h2>
+                        <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de demonstração para entender como responder ao teste da forma correta.">
+                            <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
+                        </div>
+                    </header>
+
+                    <div class="flex w-full flex-1 items-center justify-center">
+                        @if ($company->test_helper_video)
+                            @if ($helper_video)
+                                <video src="{{ $helper_video }}" controls autoplay muted class="w-full rounded-sm object-contain"></video>
+                            @else
+                                <x-icon icon="loading" class="text-secondary-text h-4 w-4 animate-spin object-scale-down" />
+                            @endif
+                        @else
+                            <p class="text-secondary-text font-heading text-left text-sm font-normal sm:text-base">Nenhum video cadastrado.</p>
+                        @endif
+                    </div>
+
+                    @if ($company->test_helper_video)
+                        <x-new-components.actions.button wire:click="deleteHelperVideo" class="!bg-danger">
+                            <div wire:loading wire:target="deleteHelperVideo">
+                                <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
+                            </div>
+                            <span wire:loading.remove wire:target="deleteHelperVideo" class="font-heading text-main-background text-center text-sm font-semibold">Excluir vídeo</span>
+                        </x-new-components.actions.button>
+                    @endif
+                </div>
+                <div class="flex flex-col gap-4">
+                    <header class="flex w-full items-center justify-between">
+                        <h2 class="font-heading text-main-text text-left text-lg font-semibold">Editar video de demonstração</h2>
+                        <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de demonstração para entender como responder ao teste da forma correta.">
+                            <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
+                        </div>
+                    </header>
+
+                    <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                        Use o campo de upload abaixo para enviar um novo vídeo de demonstração.
+                        <span class="font-semibold">Atenção: se já existir um vídeo cadastrado, ele será substituído pelo novo arquivo.</span>
+                    </p>
+
+                    <form class="flex flex-col gap-2" wire:submit.prevent="updateHelperVideo">
+                        <x-new-components.form.input-file wireModel="new_helper_video" name="new_helper_video" label="Vídeo de demonstração" placeholder="Faça upload do vídeo de demonstração..." tooltip="Faça upload do vídeo de demonstração" :attachments="$new_helper_video" isRequired />
+                        <x-new-components.actions.button>
+                            <div wire:loading wire:target="updateHelperVideo">
+                                <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
+                            </div>
+                            <span wire:loading.remove wire:target="updateHelperVideo" class="font-heading text-main-background text-center text-sm font-semibold">Salvar</span>
+                        </x-new-components.actions.button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </section>

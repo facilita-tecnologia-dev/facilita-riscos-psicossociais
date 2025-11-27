@@ -61,7 +61,7 @@ class TestShowComponent extends Component
     {
         /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
         $s3 = Storage::disk('s3');
-        $this->videoUrl = $s3->temporaryUrl('videos-de-ajuda/video-template.mp4', now()->addMinutes(5));
+        $this->videoUrl = $s3->temporaryUrl(session('auth:company')->test_helper_video, now()->addMinutes(5));
     }
 
     public function closeVideoModal()

@@ -95,6 +95,7 @@ class AuthenticationServiceProvider extends ServiceProvider
             if (session('auth:guard') === 'user') {
                 /** @var User $user */
                 $user = session('auth:user');
+                
                 return $user->hasPermission('answer_tests') &&
                         session('auth:company')->hasCampaignThisYear(session('auth:company')->psychosocialCollection()->id, CampaignStatus::IN_PROGRESS->value) &&
                         !$user->hasAnsweredCampaign(session('auth:company')->latestPsychosocialCampaign()->id);

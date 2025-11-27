@@ -12,8 +12,8 @@ class TestController
 {
     public function show(Campaign $campaign)
     {        
-        if($campaign->collection()->type === BaseCollectionType::PSYCHOSOCIAL) Gate::authorize('answer-psychosocial-test');
-        if($campaign->collection()->type === BaseCollectionType::ORGANIZATIONAL) Gate::authorize('answer-organizational-test');
+        // if($campaign->collection()->type === BaseCollectionType::PSYCHOSOCIAL) Gate::authorize('answer-psychosocial-test');
+        // if($campaign->collection()->type === BaseCollectionType::ORGANIZATIONAL) Gate::authorize('answer-organizational-test');
 
         return view('private.test.index.index', compact('campaign'));
     }
