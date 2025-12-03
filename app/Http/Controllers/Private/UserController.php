@@ -21,11 +21,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rules\Password;
 
 class UserController
-{
-    protected $companyCustomTests;
-
-    protected $defaultTests;
-    
+{   
     public function home()
     {
         return view('private.home.user.index');
@@ -36,49 +32,32 @@ class UserController
         return view('auth.login.user.index');
     }
 
-
-    public function index(Request $request)
+    public function index()
     {
-        Gate::authorize('user-index');
-
-        $latestPsychosocialCampaign = session('auth:company')->latestPsychosocialCampaign();
-        $latestOrganizationalCampaign = session('auth:company')->latestOrganizationalCampaign();
-
-        $users = UserFilterService::sort(UserFilterService::apply(session('auth:company')->users()))->with('collections');
-
-  
-        $filters = collect(request()->query())->except(['order_by', 'order_direction', 'page'])->filter();
-
-        return view('private.user.index', [
-            'filtered' => $users->count(),
-            'users' => $users->paginate(15)->appends(request()->query()),
-            'latestPsychosocialCampaign' => $latestPsychosocialCampaign,
-            'latestOrganizationalCampaign' => $latestOrganizationalCampaign,
-            'filters' => $filters,
-        ]);
+        return view('private.user.index.index');
     }
 
-    public function create()
-    {
-        Gate::authorize('user-create');
+    // public function create()
+    // {
+    //     Gate::authorize('user-create');
 
-        $roles = array_map(fn($role) => ['option' => $role->label(), 'value' => $role->value], RoleEnum::cases());
+    //     $roles = array_map(fn($role) => ['option' => $role->label(), 'value' => $role->value], RoleEnum::cases());
 
-        return view('private.user.create', compact('roles'));
-    }
+    //     return view('private.user.create', compact('roles'));
+    // }
 
-    public function store(UserStoreRequest $request)
-    {
-        Gate::authorize('user-create');
+    // public function store(UserStoreRequest $request)
+    // {
+    //     Gate::authorize('user-create');
 
-        $user = UserRepository::store($request->safe());
+    //     $user = UserRepository::store($request->safe());
 
-        if($user->hasRole(RoleEnum::MANAGER->value)){
-            return to_route('user.department-scope', $user)->with('message', 'Perfil do colaborador criado com sucesso!');
-        }
+    //     if($user->hasRole(RoleEnum::MANAGER->value)){
+    //         return to_route('user.department-scope', $user)->with('message', 'Perfil do colaborador criado com sucesso!');
+    //     }
 
-        return to_route('user.show', $user)->with('message', 'Perfil do colaborador criado com sucesso!');
-    }
+    //     return to_route('user.show', $user)->with('message', 'Perfil do colaborador criado com sucesso!');
+    // }
 
     public function show(User $user)
     {

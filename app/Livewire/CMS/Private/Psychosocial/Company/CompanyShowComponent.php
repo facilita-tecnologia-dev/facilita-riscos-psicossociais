@@ -46,7 +46,6 @@ class CompanyShowComponent extends Component
         $this->company = $company;
     }
 
-
     public function updateHelperVideo()
     {
         $this->validate([

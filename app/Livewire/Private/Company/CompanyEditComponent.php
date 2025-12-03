@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Livewire\CMS\Private\Psychosocial\Company;
+namespace App\Livewire\Private\Company;
 
-use App\Enums\CampaignStatus;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
-use App\Services\ReportChannelService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -27,13 +25,9 @@ class CompanyEditComponent extends Component
     public string $cnpj = '';
     public string $email = '';
 
-    public int $usersCount;
-    public string $psychosocialCampaignStatus;
-    public bool $hasReportChannel;
-
     public function render()
     {
-        return view('livewire.cms.private.psychosocial.company.company-edit-component');
+        return view('livewire.private.company.company-edit-component');
     }
 
     public function mount(Company $company)
@@ -47,13 +41,6 @@ class CompanyEditComponent extends Component
         $this->registerName = $this->company->name;
         $this->cnpj = $this->company->cnpj;
         $this->email = $this->company->email;
-
-        $this->usersCount = $company->users()->count();
-        $this->psychosocialCampaignStatus =   $company->latestPsychosocialCampaign()?->start_date->year == now()->year 
-                                            ? $company->latestPsychosocialCampaign()?->status->label()
-                                            : 'Sem previsão';
-
-        $this->hasReportChannel = ReportChannelService::hasReportChannel($company);
     }
 
     public function submit()
@@ -72,9 +59,7 @@ class CompanyEditComponent extends Component
             $s3 = Storage::disk('s3');
             $this->logo = $this->company->logo ? $s3->temporaryUrl($this->company->logo, now()->addMinutes(5)) : null;
 
-
-            $this->dispatch('company:update', company: $this->company->fresh());
-            $this->dispatch('alert:success', 'Perfil atualizado!');
+            $this->dispatch('alert:success', 'Perfil da empresa atualizado!');
         } catch (\Throwable $th) {
             Log::error('Erro ao atualizar o perfil da empresa', [
                 'company_id' => $this->company->id,
@@ -84,6 +69,5 @@ class CompanyEditComponent extends Component
 
             $this->dispatch('alert:danger', 'Erro ao atualizar o perfil.');
         }
-
     }
 }

@@ -15,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\BaseCollection;
 use App\Enums\BaseCollection as EnumBaseCollection;
 use App\Enums\CollectionType;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class Company extends Authenticatable
 {

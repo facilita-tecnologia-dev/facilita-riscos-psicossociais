@@ -77,12 +77,32 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     });
 
     Route::prefix('company')->group(function(){
-        // Route::get('/{company}', [CompanyController::class, 'show'])->name('company.show');   
-        Route::get('/{company}/edit', [CompanyController::class, 'edit'])->name('company.edit');
-        // Route::put('/{company}', [CompanyController::class, 'update'])->name('company.update');   
-        // Route::delete('/{company}', [CompanyController::class, 'destroy'])->name('company.destroy');   
-        // Route::put('/{company}/reset-password', [CompanyController::class, 'resetPasswordModal'])->name('company.reset-password-modal');
+        Route::get('/{company}/show', [CompanyController::class, 'show'])->name('company.show');
+
+        Route::prefix('user')->group(function(){
+            Route::get('/', [UserController::class, 'index'])->name('user.index');
+            // Route::get('/create', [UserController::class, 'create'])->name('user.create');
+            // Route::post('/', [UserController::class, 'store'])->name('user.store');
+            // Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
+            // Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+            // Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
+            // Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+            // Route::get('/user/import', [UserController::class, 'showImport'])->name('user.import');
+            // Route::post('/user/import', [UserController::class, 'import']);
+            
+            // Route::post('/verify-cpf', [UserController::class, 'verifyCPF'])->name('user.create.verify-cpf');
+            // Route::get('/{user}/permission', [UserController::class, 'showPermissions'])->name('user.permissions');
+            // Route::post('/{user}/permission', [UserController::class, 'updatePermissions']);
+            // Route::get('/{user}/department-scope', [UserController::class, 'showDepartmentScope'])->name('user.department-scope');
+            // Route::post('/{user}/department-scope', [UserController::class, 'updateDepartmentScopes']);
+
+            // Route::post('/switch-company', [LoginController::class, 'switchCompany'])->name('user.switch-company');
+
+            // Route::put('/{user}/reset-password-modal', [UserController::class, 'resetPasswordModal'])->name('user.reset-password-modal');
+        });
     });
+
+   
 
 
     // Route::prefix('organizational-climate')->group(function(){
@@ -139,37 +159,7 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::post('/', [ReportsController::class, 'update'])->name('company-reports.update');
     });
 
-    
 
-    Route::prefix('company')->group(function(){
-        Route::get('/{company}', [CompanyController::class, 'show'])->name('company.show');   
-        Route::get('/{company}/edit', [CompanyController::class, 'edit'])->name('company.edit');
-        Route::put('/{company}', [CompanyController::class, 'update'])->name('company.update');   
-        Route::delete('/{company}', [CompanyController::class, 'destroy'])->name('company.destroy');   
-        Route::put('/{company}/reset-password', [CompanyController::class, 'resetPasswordModal'])->name('company.reset-password-modal');
-    });
-
-    Route::prefix('user')->group(function(){
-        Route::get('/', [UserController::class, 'index'])->name('user.index');
-        Route::get('/create', [UserController::class, 'create'])->name('user.create');
-        Route::post('/', [UserController::class, 'store'])->name('user.store');
-        Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
-        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
-        Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
-        Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-        Route::get('/user/import', [UserController::class, 'showImport'])->name('user.import');
-        Route::post('/user/import', [UserController::class, 'import']);
-        
-        Route::post('/verify-cpf', [UserController::class, 'verifyCPF'])->name('user.create.verify-cpf');
-        Route::get('/{user}/permission', [UserController::class, 'showPermissions'])->name('user.permissions');
-        Route::post('/{user}/permission', [UserController::class, 'updatePermissions']);
-        Route::get('/{user}/department-scope', [UserController::class, 'showDepartmentScope'])->name('user.department-scope');
-        Route::post('/{user}/department-scope', [UserController::class, 'updateDepartmentScopes']);
-
-        // Route::post('/switch-company', [LoginController::class, 'switchCompany'])->name('user.switch-company');
-
-        Route::put('/{user}/reset-password-modal', [UserController::class, 'resetPasswordModal'])->name('user.reset-password-modal');
-    });
     
     Route::view('/politica-de-privacidade', 'private.lgpd.privacy-policy')->name('privacy-policy');
 });

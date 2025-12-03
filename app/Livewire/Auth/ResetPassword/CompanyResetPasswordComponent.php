@@ -49,6 +49,7 @@ class CompanyResetPasswordComponent extends Component
         if(!$status === FacadePassword::PasswordReset) return $this->dispatch('alert:danger', 'Não foi possível redefinir a senha. Tente novamente mais tarde.');
 
         $this->dispatch('alert:success', 'Senha redefinida com sucesso');
+        
         return redirect()->to(route('company.login'));
     }
 }

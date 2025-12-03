@@ -14,7 +14,7 @@
             <div class="bg-borders h-0.5 w-8"></div>
             {{-- Divider --}}
 
-            <x-new-components.actions.nav-item href="" icon="company" activeRoute="" tooltip="Empresa" />
+            <x-new-components.actions.nav-item :href="route('company.show', session('auth:company'))" icon="company" activeRoute="company.*" tooltip="Empresa" />
             <x-new-components.actions.nav-item href="" icon="books" activeRoute="" tooltip="Documentação" />
         </nav>
     </aside>
@@ -32,7 +32,7 @@
 
             <div class="bg-borders h-0.5 w-8"></div>
 
-            <x-new-components.actions.mobile-nav-item href="" icon="company" activeRoute="" label="Empresa" />
+            <x-new-components.actions.mobile-nav-item :href="route('company.show', session('auth:company'))" icon="company" activeRoute="company.*" label="Empresa" />
             <x-new-components.actions.mobile-nav-item href="" icon="books" activeRoute="" label="Documentação" />
         </nav>
     </aside>

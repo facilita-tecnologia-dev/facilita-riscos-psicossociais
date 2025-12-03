@@ -1,5 +1,5 @@
 <div x-data="{ reportModalOpen: false }" x-on:open-report-modal.window="reportModalOpen = true" x-on:close-report-modal.window="reportModalOpen = false" class="contents">
-    <x-new-components.actions.button  wire:click="openReportModal" href="" class="w-full">
+    <x-new-components.actions.button  wire:click="openReportModal" class="w-full">
         <span class="font-heading text-main-background text-center text-sm font-semibold">Exportar Inventário de Riscos</span>
     </x-new-components.actions.button>
 
