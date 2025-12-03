@@ -26,6 +26,15 @@ enum CampaignStatus: string
         };
     }
 
+    public function color(): string
+    {
+        return match ($this) {
+            self::SCHEDULED => '#FFD60A',
+            self::IN_PROGRESS => '#5EC8BC',
+            self::COMPLETED => '#5EC8BC',
+        };
+    }
+
     public static function values(): array
     {
         return array_column(self::cases(), 'value');

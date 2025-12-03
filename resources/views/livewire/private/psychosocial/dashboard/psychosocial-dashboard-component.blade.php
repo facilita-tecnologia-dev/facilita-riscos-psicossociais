@@ -1,12 +1,85 @@
 <div class="contents">
-    @if ($activePsychosocialCampaign)
-        <div id="relevant-infos" class="grid grid-cols-3 gap-4">
-            <livewire:private.psychosocial.dashboard.psychosocial-campaign-engagement-component />
+    @if ($psychosocialCampaign)
+        <section class="flex flex-col gap-4">
+            <div id="relevant-infos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-start gap-4">
+                <livewire:private.psychosocial.dashboard.psychosocial-campaign-engagement-component :engagement="$engagement" />
 
-            <livewire:private.psychosocial.dashboard.control-panel-component />
+                <livewire:private.psychosocial.dashboard.control-panel-component />
 
-            <livewire:private.psychosocial.dashboard.actions-component />
-        </div>
+                <livewire:private.psychosocial.dashboard.actions-component :campaign="$psychosocialCampaign" />
+            </div>
+
+            <div id="caption-n-filters" class="flex flex-col-reverse xl:grid xl:grid-cols-2 xl:items-start gap-4">
+                <div class="border-borders bg-main-background flex flex-col gap-6 rounded-lg border p-4">
+                    <header class="flex items-center justify-between">
+                        <h2 class="text-main-text font-heading text-left text-lg font-semibold">Legenda</h2>
+
+                        <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Essa legenda ajuda você a ler os riscos psicosociais identificados.">
+                            <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
+                        </div>
+                    </header>
+
+                    <div class="flex items-center gap-4 md:gap-6 flex-wrap">
+                        @php
+                            $caption = session('auth:company')->usesHSE() ? App\Enums\HSE\HSERisk::cases() : App\Enums\PROART\PROARTRisk::cases();
+                        @endphp
+
+                        @foreach ($caption as $risk)
+                            <div class="flex items-center gap-2">
+                                <div style="border-color: {{ $risk->color() }}" class="h-4 w-4 rounded-full border-3 bg-transparent"></div>
+                                <span class="text-main-text text-left text-sm leading-relaxed font-normal">{{ $risk->label() }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <livewire:private.psychosocial.dashboard.filter-component />
+            </div>
+
+            @if ($psychosocialResults)
+                <div wire:loading class="w-full">
+                    <div class="flex w-full items-center justify-center gap-2 py-6">
+                        <x-icon icon="loading" class="text-primary-solid h-5 w-5 animate-spin object-scale-down" />
+                        <span class="text-secondary-text text-left text-sm font-normal">Carregando dashboard...</span>
+                    </div>
+                </div>
+
+                <div wire:loading.remove id="results" class="flex flex-col gap-4">
+                    <header class="flex items-center justify-between">
+                        <h2 class="text-main-text font-heading text-left text-2xl font-semibold">Riscos Identificados</h2>
+                    </header>
+
+                    <div class="flex flex-col gap-6">
+                        @foreach ($psychosocialResults as $divisionFactor => $groups)
+                            <div class="border-borders bg-main-background flex flex-col gap-4 rounded-lg border px-4 py-4 md:py-6">
+                                <header class="bg-secondary-background border-borders flex items-center justify-center rounded-md border p-3">
+                                    <h3 class="text-main-text text-center text-lg md:text-xl font-semibold">{{ $divisionFactor }}</h3>
+                                </header>
+
+                                @foreach ($groups as $group => $hazards)
+                                    <div class="bg-main-background flex flex-col gap-4 rounded-md">
+                                        <header class="flex">
+                                            @php
+                                                $groupName = session('auth:company')->usesHSE() ? App\Enums\HSE\HSEGroup::from($group)->label() : App\Enums\PROART\PROARTGroup::from($group)->label();
+                                            @endphp
+
+                                            <h3 class="text-main-text text-left text-base font-semibold">{{ $groupName }}</h3>
+                                        </header>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 items-start gap-4">
+                                            @foreach ($hazards as $hazardName => $evaluation)
+                                                <livewire:private.psychosocial.dashboard.risk-item wire:key="{{ uniqid() }}" hazardName="{{ $hazardName }}" :evaluation="$evaluation['risk']['evaluated']" :controlActions="$evaluation['control_actions']"/>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @else
+                não tem bagui
+            @endif
+        </section>
     @else
         <div class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:col-span-2 sm:p-6 lg:col-span-1">

@@ -59,6 +59,7 @@ class CompanyHomeScheduleCampaignComponent extends Component
 
             $this->dispatch('alert:success', 'Campanha agendada com sucesso!');
             session()->flash('message', 'Você concluiu todo o passo a passo inicial. Agora, pode continuar utilizando todas as demais funcionalidades do sistema.');
+            
             $this->nextStep();
         } catch (\Throwable $th) {
             report($th);

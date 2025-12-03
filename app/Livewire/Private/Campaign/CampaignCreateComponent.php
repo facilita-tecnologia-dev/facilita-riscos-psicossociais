@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Livewire\Private\Campaign;
+
+use App\Models\CustomCollection;
+use App\Repositories\CampaignRepository;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+use Livewire\Component;
+
+class CampaignCreateComponent extends Component
+{
+    public ?string $name = null;
+    public ?string $collection_id = null;
+    public ?string $start_date = null;
+    public ?string $end_date = null;
+    public ?string $description = null;
+
+    public array $collections = [];
+
+    public function render()
+    {
+        return view('livewire.private.campaign.campaign-create-component');
+    }
+
+    public function mount()
+    {
+        $customCollections = session('auth:company')->customCollections()->get();
+        $baseCollections = session('auth:company')->baseCollections();
+  
+        $this->collections = $baseCollections
+                        ->concat($customCollections)
+                        ->map(fn($collection) => [
+                                'label' => $collection->name, 
+                                'value' => ($collection instanceof CustomCollection ? 'custom_' : 'base_') . $collection->id
+                            ]
+                        )
+                        ->values()
+                        ->toArray();
+    }
+
+    public function submit()
+    {
+        $validatedData = $this->validate([
+            'name' => ['required', 'string', 'min:8', 'max:255'],
+            'collection_id' => ['required'],
+            'start_date' => ['required', 'date', Rule::date()->afterOrEqual(now())],
+            'end_date' => ['required', 'date', 'after:start_date'],
+            'description' => ['nullable', 'string', 'max:512'],
+        ]);
+
+        try {
+            [$collection_type, $collection_id] = explode('_', $this->collection_id);
+
+            if(session('auth:company')->hasCampaignThisYear($collection_id, $collection_type)) {
+                $this->dispatch('alert:danger', 'Você já agendou uma campanha do mesmo tipo no ano atual.');
+                return;
+            }
+
+            CampaignRepository::store($validatedData);
+
+            $this->dispatch('alert:success', 'Campanha agendada com sucesso!');
+            
+            return redirect()->to(route('campaign.index'));
+        } catch (\Throwable $th) {
+            Log::error('Erro ao criar campanha', [
+                'name' => $this->name,
+                'description' => $this->description,
+                'start_date' => $this->start_date,
+                'end_date' => $this->end_date,
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
+            $this->dispatch('alert:danger', 'Erro ao agendar campanha.');
+        }
+    }
+}

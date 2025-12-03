@@ -5,6 +5,7 @@
     'isRequired' => false,
     'tooltip' => null,
     'wireModel',
+    'readonly' => null,
 ])
 
 <div class="flex w-full flex-col-reverse items-start gap-1">
@@ -14,7 +15,7 @@
         </footer>
     @enderror
 
-    <input type="datetime-local" name="{{ $name }}" id="{{ $name }}" wire:model.defer="{{ $wireModel }}" placeholder="{{ $placeholder }}" {{ $attributes->merge(['class' => 'peer bg-secondary-background border-borders text-main-text font-text placeholder:text-secondary-text focus:shadow-primary-solid/50 h-10 md:h-[45px] w-full rounded-sm border px-3 text-sm md:text-base font-normal transition focus:shadow-sm focus:outline-none']) }} />
+    <input type="datetime-local" name="{{ $name }}" id="{{ $name }}" wire:model.defer="{{ $wireModel }}" placeholder="{{ $placeholder }}" @if($readonly) readonly @endif {{ $attributes->merge(['class' => 'peer bg-secondary-background border-borders text-main-text font-text placeholder:text-secondary-text focus:shadow-primary-solid/50 h-10 md:h-[45px] w-full rounded-sm border px-3 text-sm md:text-base font-normal transition focus:shadow-sm focus:outline-none']) }} />
 
     <header class="text-secondary-text peer-focus:text-main-text flex w-full items-center justify-between gap-3 pl-0.5 transition">
         <label for="{{ $name }}" class="font-heading text-left text-sm font-semibold peer-focus:text-lg md:text-base">

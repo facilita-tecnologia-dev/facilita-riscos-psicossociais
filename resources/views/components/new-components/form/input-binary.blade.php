@@ -2,6 +2,7 @@
     'name',
     'label',
     'wireModel',
+    'wireModelType' => 'defer',
     'value' => null,
     'tooltip' => null,
     'options' => [],
@@ -18,11 +19,9 @@
     <div class="flex w-full gap-1.5">
         @foreach ($options as $key => $option)
             <div class="flex-1">
-                <input type="radio" name="{{ $name }}" id="{{ $name . '_' . $key }}" wire:model.defer="{{ $wireModel }}" value="{{ $option['value'] }}" class="hidden peer" {{ old($name) == $option['value'] || $value == $option['value'] ? 'checked' : '' }}>
-                <label 
-                    for="{{ $name . '_' . $key }}" 
-                    class="w-full flex items-center justify-between bg-secondary-background border border-borders p-3 rounded-sm peer-checked:border-primary-solid cursor-pointer hover:brightness-95 transition">
-                    <span class="text-sm text-left text-main-text font-normal">{{ $option['label'] }}</span>
+                <input type="radio" name="{{ $name }}" id="{{ $name . '_' . $key }}" @if($wireModelType === 'defer') wire:model.defer="{{ $wireModel }}" @endif @if($wireModelType === 'live') wire:model.live="{{ $wireModel }}" @endif value="{{ $option['value'] }}" class="peer hidden" {{ old($name) == $option['value'] || $value == $option['value'] ? 'checked' : '' }} />
+                <label for="{{ $name . '_' . $key }}" class="bg-secondary-background border-borders peer-checked:border-primary-solid flex w-full cursor-pointer items-center justify-between rounded-sm border p-3 transition hover:brightness-95">
+                    <span class="text-main-text text-left text-sm font-normal">{{ $option['label'] }}</span>
                 </label>
             </div>
         @endforeach

@@ -2,14 +2,14 @@
 
 namespace App\Evaluators\HSE;
 
-use App\Enums\HSE\HSEEvaluationType;
+use App\Enums\Psychosocial\EvaluationTypes;
 use App\Enums\HSE\HSERisk;
 use App\Models\Hazard;
-use App\Services\HSERiskService;
+use App\Services\Psychosocial\HSERiskService;
 
 class sexualHarassment
 {
-     public static function evaluate(Hazard $hazard, float $score, HSEEvaluationType $evaluationType = HSEEvaluationType::DEFAULT, ?string $evaluationFactor = null)
+     public static function evaluate(Hazard $hazard, float $score, EvaluationTypes $evaluationType = EvaluationTypes::DEPARTMENT, ?string $evaluationFactor = null)
     {
         $probability = self::determineProbability($hazard, $score, $evaluationType, $evaluationFactor);
 
@@ -28,7 +28,7 @@ class sexualHarassment
         ];
     }
 
-    public static function determineProbability(Hazard $hazard, float $score, HSEEvaluationType $evaluationType = HSEEvaluationType::DEFAULT, ?string $evaluationFactor = null)
+    public static function determineProbability(Hazard $hazard, float $score, EvaluationTypes $evaluationType = EvaluationTypes::DEPARTMENT, ?string $evaluationFactor = null)
     {
         $initialProbability = HSERiskService::scoreToProbability($score, inverted: true);
 

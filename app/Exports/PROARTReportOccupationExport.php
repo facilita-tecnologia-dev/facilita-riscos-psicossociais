@@ -6,6 +6,7 @@ use App\Enums\PROART\PROARTControlActionTypes;
 use App\Enums\PROART\PROARTGravity;
 use App\Enums\PROART\PROARTProbability;
 use App\Enums\PROART\PROARTHazard;
+use App\Models\Company;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -14,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class PROARTReportOccupationExport implements FromCollection, WithEvents
 {
+    protected Company $company;
 
     protected Collection $risks;
 
@@ -29,8 +31,9 @@ class PROARTReportOccupationExport implements FromCollection, WithEvents
 
     protected array $emptyRows;
 
-    public function __construct(Collection $risks)
+    public function __construct(Company $company, Collection $risks)
     {
+        $this->company = $company;
         $this->risks = $risks;
     }
 
@@ -52,7 +55,7 @@ class PROARTReportOccupationExport implements FromCollection, WithEvents
 
         $currentRow = 1;
 
-        $rows->push([session('auth:company')->name . ' - Inventário de Riscos Psicossociais (Função)']);
+        $rows->push([$this->company->name . ' - Inventário de Riscos Psicossociais (Função)']);
         $this->documentTitleRows[] = $currentRow;
         $currentRow++;
         
@@ -73,53 +76,55 @@ class PROARTReportOccupationExport implements FromCollection, WithEvents
             $this->emptyRows[] = $currentRow;
             $currentRow++;
 
-            foreach ($occupationRisks as $type => $risk) {
-                $rows->push([
-                    'Perigo Psicossocial: ' . PROARTHazard::from($type)->label(),
-                    '',
-                    'Severidade: ' . PROARTGravity::from($risk['risk']['gravity'])->label(),
-                    'Probabilidade: ' . PROARTProbability::from($risk['risk']['probability'])->label(),
-                    'Risco Identificado: ' . $risk['risk']['evaluated']->label()
-                ]);
+            foreach ($occupationRisks as $groups) {
+                foreach ($groups as $hazard => $risk) {
+                    $rows->push([
+                        'Perigo Psicossocial: ' . PROARTHazard::from($hazard)->label(),
+                        '',
+                        'Severidade: ' . PROARTGravity::from($risk['risk']['gravity'])->label(),
+                        'Probabilidade: ' . PROARTProbability::from($risk['risk']['probability'])->label(),
+                        'Risco Identificado: ' . $risk['risk']['evaluated']->label()
+                    ]);
 
-                $this->riskRows[] = [
-                    'currentRow' => $currentRow,
-                    'risk' => $risk['risk']['evaluated']->value
-                ];
+                    $this->riskRows[] = [
+                        'currentRow' => $currentRow,
+                        'risk' => $risk['risk']['evaluated']->value
+                    ];
 
-                $currentRow++;
+                    $currentRow++;
 
-                $rows->push([
-                    'Medida de Controle',
-                    'Tipo',
-                    'Prazo',
-                    'Responsável',
-                    'Situação',
-                ]);
+                    $rows->push([
+                        'Medida de Controle',
+                        'Tipo',
+                        'Prazo',
+                        'Responsável',
+                        'Situação',
+                    ]);
 
-                $this->controlActionHeadingRows[] = $currentRow;
-                $currentRow++;
+                    $this->controlActionHeadingRows[] = $currentRow;
+                    $currentRow++;
 
-                foreach ($risk['control_actions'] as $actionType => $actions)
-                {
-                    foreach ($actions as $action)
+                    foreach ($risk['control_actions'] as $actionType => $actions)
                     {
-                        $rows->push([
-                            $action->content,
-                            PROARTControlActionTypes::from($actionType)->label(),
-                            $action->deadline ?? 'Indefinido',
-                            $action->assignee ?? 'Indefinido',
-                            $action->status ?? 'Indefinido',
-                        ]);
+                        foreach ($actions as $action)
+                        {
+                            $rows->push([
+                                $action['content'],
+                                PROARTControlActionTypes::from($actionType)->label(),
+                                $action['deadline'] ?? 'Indefinido',
+                                $action['assignee'] ?? 'Indefinido',
+                                $action['status'] ?? 'Indefinido',
+                            ]);
 
-                        $this->controlActionRows[] = $currentRow;
-                        $currentRow++;
-                    } 
+                            $this->controlActionRows[] = $currentRow;
+                            $currentRow++;
+                        } 
+                    }
+
+                    $rows->push(['']);
+                    $this->emptyRows[] = $currentRow;
+                    $currentRow++;
                 }
-
-                $rows->push(['']);
-                $this->emptyRows[] = $currentRow;
-                $currentRow++;
             }
 
             $rows->push(['']);

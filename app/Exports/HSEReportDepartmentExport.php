@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Enums\HSE\HSEGravity;
 use App\Enums\HSE\HSEHazard;
 use App\Enums\HSE\HSEProbability;
+use App\Models\Company;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -13,6 +14,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class HSEReportDepartmentExport implements FromCollection, WithEvents
 {
+
+    protected Company $company;
 
     protected Collection $risks;
     protected Collection $absences;
@@ -32,8 +35,9 @@ class HSEReportDepartmentExport implements FromCollection, WithEvents
 
     protected array $emptyRows;
 
-    public function __construct(Collection $risks, Collection $absences)
+    public function __construct(Company $company, Collection $risks, Collection $absences)
     {
+        $this->company = $company;
         $this->risks = $risks;
         $this->absences = $absences;
     }
@@ -59,7 +63,7 @@ class HSEReportDepartmentExport implements FromCollection, WithEvents
 
         $currentRow = 1;
 
-        $rows->push([session('auth:company')->name . ' - Inventário de Riscos Psicossociais (Setor)']);
+        $rows->push([$this->company->name . ' - Inventário de Riscos Psicossociais (Setor)']);
         $this->documentTitleRows[] = $currentRow;
         $currentRow++;
         
@@ -80,50 +84,52 @@ class HSEReportDepartmentExport implements FromCollection, WithEvents
             $this->emptyRows[] = $currentRow;
             $currentRow++;
 
-            foreach ($departmentRisks as $hazard => $risk) {
-                $rows->push([
-                    'Perigo Psicossocial: ' . HSEHazard::from($hazard)->label(),
-                    '',
-                    'Severidade: ' . HSEGravity::from($risk['risk']['gravity'])->label(),
-                    'Probabilidade: ' . HSEProbability::from($risk['risk']['probability'])->label(),
-                    'Risco Identificado: ' . $risk['risk']['evaluated']->label()
-                ]);
-
-                $this->riskRows[] = [
-                    'currentRow' => $currentRow,
-                    'risk' => $risk['risk']['evaluated']->value
-                ];
-
-                $currentRow++;
-
-                $rows->push([
-                    'Medida de Controle',
-                    '',
-                    'Prazo',
-                    'Responsável',
-                    'Situação',
-                ]);
-
-                $this->controlActionHeadingRows[] = $currentRow;
-                $currentRow++;
-
-                foreach ($risk['control_actions'] as $action)
-                {
+            foreach ($departmentRisks as $groups) {
+                foreach ($groups as $hazard => $risk) {
                     $rows->push([
-                        $action->content,
+                        'Perigo Psicossocial: ' . HSEHazard::from($hazard)->label(),
                         '',
-                        $action->deadline ?? 'Indefinido',
-                        $action->assignee ?? 'Indefinido',
-                        $action->status ?? 'Indefinido',
+                        'Severidade: ' . HSEGravity::from($risk['risk']['gravity'])->label(),
+                        'Probabilidade: ' . HSEProbability::from($risk['risk']['probability'])->label(),
+                        'Risco Identificado: ' . $risk['risk']['evaluated']->label()
                     ]);
 
-                    $this->controlActionRows[] = $currentRow;
+                    $this->riskRows[] = [
+                        'currentRow' => $currentRow,
+                        'risk' => $risk['risk']['evaluated']->value
+                    ];
+
+                    $currentRow++;
+
+                    $rows->push([
+                        'Medida de Controle',
+                        '',
+                        'Prazo',
+                        'Responsável',
+                        'Situação',
+                    ]);
+
+                    $this->controlActionHeadingRows[] = $currentRow;
+                    $currentRow++;
+
+                    foreach ($risk['control_actions'] as $action)
+                    {
+                        $rows->push([
+                            $action['content'],
+                            '',
+                            $action['deadline'] ?? 'Indefinido',
+                            $action['assignee'] ?? 'Indefinido',
+                            $action['status'] ?? 'Indefinido',
+                        ]);
+
+                        $this->controlActionRows[] = $currentRow;
+                        $currentRow++;
+                    }
+
+                    $rows->push(['']);
+                    $this->emptyRows[] = $currentRow;
                     $currentRow++;
                 }
-
-                $rows->push(['']);
-                $this->emptyRows[] = $currentRow;
-                $currentRow++;
             }
 
             $rows->push(['']);
@@ -134,7 +140,7 @@ class HSEReportDepartmentExport implements FromCollection, WithEvents
             $currentRow++;
         }
 
-        $rows->push([session('auth:company')->name . ' - Relatório de Afastamentos (Setor)']);
+        $rows->push([$this->company->name . ' - Relatório de Afastamentos (Setor)']);
         $this->documentTitleRows[] = $currentRow;
         $currentRow++;
         

@@ -2,13 +2,13 @@
 
 namespace App\Evaluators\HSE;
 
-use App\Enums\HSE\HSEEvaluationType;
+use App\Enums\Psychosocial\EvaluationTypes;
 use App\Models\Hazard;
-use App\Services\HSERiskService;
+use App\Services\Psychosocial\HSERiskService;
 
 class longWorkingHours
 {
-     public static function evaluate(Hazard $hazard, float $score, HSEEvaluationType $evaluationType = HSEEvaluationType::DEFAULT, ?string $evaluationFactor = null)
+     public static function evaluate(Hazard $hazard, float $score, EvaluationTypes $evaluationType = EvaluationTypes::DEPARTMENT, ?string $evaluationFactor = null)
     {
         $probability = self::determineProbability($hazard, $score, $evaluationType, $evaluationFactor);
         $gravity = $hazard->gravity;
@@ -20,7 +20,7 @@ class longWorkingHours
         ];
     }
 
-    public static function determineProbability(Hazard $hazard, float $score, HSEEvaluationType $evaluationType = HSEEvaluationType::DEFAULT, ?string $evaluationFactor = null)
+    public static function determineProbability(Hazard $hazard, float $score, EvaluationTypes $evaluationType = EvaluationTypes::DEPARTMENT, ?string $evaluationFactor = null)
     {
         $cids = $hazard->cids->keyBy('id');
         $absences = session('auth:company')->CIDAbsences->filter(fn ($absence) => $cids->has($absence->cid_id));

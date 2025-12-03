@@ -8,7 +8,6 @@ enum PROARTGroup: string
     case MANAGEMENT_STYLE = 'management-style';
     case INTERPERSONAL_RELATIONS = 'interpersonal-relations';
     case WORK_CONTENT = 'work-content';
-    case EMPLOYMENT_CONDITIONS = 'employment-conditions';
     case WORK_RELATED_DISORDERS = 'work-related-disorders';
 
     public function label(): string
@@ -18,7 +17,6 @@ enum PROARTGroup: string
             self::MANAGEMENT_STYLE => 'Estilos de Gestão',
             self::INTERPERSONAL_RELATIONS => 'Relações Interpessoais e Sofrimento',
             self::WORK_CONTENT => 'Conteúdo e Significado do Trabalho',
-            self::EMPLOYMENT_CONDITIONS => 'Condições de Emprego',
             self::WORK_RELATED_DISORDERS => 'Distúrbios Relacionados ao Trabalho',
         };
     }
@@ -27,5 +25,4 @@ enum PROARTGroup: string
     {
         return array_column(self::cases(), 'value');
     }
-
 }

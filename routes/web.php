@@ -70,13 +70,20 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::get('/dashboard', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
     });
 
-    // Route::prefix('psychosocial')->group(function(){
-    //     Route::get('/', [PsychosocialController::class, 'dashboard'])->name('dashboard.psychosocial');
-    //     Route::get('/{hazard}/departments', [PsychosocialController::class, 'departments'])->name('dashboard.psychosocial.department');
-    //     // Route::get('/{hazard}/{department}/list', [PsychosocialController::class, 'list'])->name('dashboard.psychosocial.list');
-    //     Route::get('/risks', [PsychosocialController::class, 'risks'])->name('dashboard.psychosocial.risks');
-    //     Route::get('/risks/report/{type}/{format}', [PsychosocialController::class, 'report'])->name('dashboard.psychosocial.risks.report');
-    // });
+    Route::prefix('campaign')->group(function(){
+        Route::get('/', [CampaignController::class, 'index'])->name('campaign.index');
+        Route::get('create', [CampaignController::class, 'create'])->name('campaign.create');
+        Route::get('{campaign}/edit', [CampaignController::class, 'edit'])->name('campaign.edit');
+    });
+
+    Route::prefix('company')->group(function(){
+        // Route::get('/{company}', [CompanyController::class, 'show'])->name('company.show');   
+        Route::get('/{company}/edit', [CompanyController::class, 'edit'])->name('company.edit');
+        // Route::put('/{company}', [CompanyController::class, 'update'])->name('company.update');   
+        // Route::delete('/{company}', [CompanyController::class, 'destroy'])->name('company.destroy');   
+        // Route::put('/{company}/reset-password', [CompanyController::class, 'resetPasswordModal'])->name('company.reset-password-modal');
+    });
+
 
     // Route::prefix('organizational-climate')->group(function(){
     //     // Route::get('/', [OrganizationalController::class, 'dashboard'])->name('dashboard.organizational-climate');
@@ -97,16 +104,7 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     //     Route::get('/{feedback}', [UserFeedbackController::class, 'show'])->name('feedback.show');
     // });
 
-    Route::prefix('campaigns')->group(function(){
-        Route::get('/', [CampaignController::class, 'index'])->name('campaign.index');
-        Route::get('create', [CampaignController::class, 'create'])->name('campaign.create');
-        Route::post('store', [CampaignController::class, 'store'])->name('campaign.store');
-        Route::get('{campaign}', [CampaignController::class, 'show'])->name('campaign.show');
-        Route::get('{campaign}/edit', [CampaignController::class, 'edit'])->name('campaign.edit');
-        Route::put('{campaign}/update', [CampaignController::class, 'update'])->name('campaign.update');
-        Route::delete('{campaign}/delete', [CampaignController::class, 'destroy'])->name('campaign.destroy');
-        Route::put('{campaign}/close', [CampaignController::class, 'close'])->name('campaign.close');
-    });
+
 
     Route::prefix('control-actions')->group(function() {
         Route::get('/', [ControlActionsController::class, 'edit'])->name('control-actions.update');
@@ -175,6 +173,8 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     
     Route::view('/politica-de-privacidade', 'private.lgpd.privacy-policy')->name('privacy-policy');
 });
+
+/*------------------------- CMS -------------------------------*/ 
 
 Route::middleware(CMSGuestMiddleware::class)->group(function(){
     Route::view('/cms', 'cms.auth.login')->name('cms.login');

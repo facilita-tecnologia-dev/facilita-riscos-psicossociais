@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Enums\RiskInventory;
+namespace App\Enums\Psychosocial;
 
-enum RiskInventoryType: string
+enum EvaluationTypes: string
 {
     case DEPARTMENT = 'department';
     case OCCUPATION = 'occupation';
@@ -13,10 +13,5 @@ enum RiskInventoryType: string
             self::DEPARTMENT => 'Setor',
             self::OCCUPATION => 'Função',
         };
-    }
-
-    public static function values(): array
-    {
-        return array_column(self::cases(), 'value');
     }
 }

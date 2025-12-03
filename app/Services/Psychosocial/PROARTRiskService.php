@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Psychosocial;
 
 use App\Enums\PROART\PROARTHazard;
+use App\Enums\Psychosocial\EvaluationTypes;
 use App\Evaluators\PROART\anxietyOrStress;
 use App\Evaluators\PROART\deteriorationOfPersonalLife;
 use App\Evaluators\PROART\difficultyConcentrating;
@@ -66,13 +67,13 @@ class PROARTRiskService
         PROARTHazard::OTHER_FORMS_OF_VIOLENCE->value => otherFormsOfViolence::class
     ];
 
-    public static function evaluate(Hazard $risk, float $average) 
+    public static function evaluate(Hazard $hazard, float $average) 
     {
-        if(!isset(self::$evaluators[$risk->type])) return false;
+        if(!isset(self::$evaluators[$hazard->type])) return false;
 
-        $class = self::$evaluators[$risk->type];
-
-        return $class::evaluate($risk, $average);
+        $class = self::$evaluators[$hazard->type];                                        
+        
+        return $class::evaluate($hazard, $average);
     }
 
     public static function metricToProbabilityScale(float $percentage, int $scale)

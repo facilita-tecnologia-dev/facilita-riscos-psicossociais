@@ -24,11 +24,11 @@ enum HSERisk: string
     public function color(): string
     {
         return match ($this) {
-            self::INTOLERABLE => '#F4433675',
-            self::SUBSTANTIAL => '#FF980075',
-            self::MODERATE => '#FFC10775',
-            self::TOLERABLE => '#CDDC3975',
-            self::TRIVIAL => '#4CAF5075',
+            self::INTOLERABLE => '#F44336',
+            self::SUBSTANTIAL => '#FF9800',
+            self::MODERATE => '#FFC107',
+            self::TOLERABLE => '#CDDC39',
+            self::TRIVIAL => '#4CAF50',
         };
     }
 }

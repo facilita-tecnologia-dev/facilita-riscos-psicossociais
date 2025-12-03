@@ -9,7 +9,7 @@
 
             <x-new-components.actions.nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" tooltip="Riscos Psicossociais" />
             <x-new-components.actions.nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" tooltip="Pesquisa de Clima Organizacional" />
-            <x-new-components.actions.nav-item href="" icon="calendar-clock" activeRoute="" tooltip="Campanhas" />
+            <x-new-components.actions.nav-item :href="route('campaign.index')" icon="calendar-clock" activeRoute="campaign.*" tooltip="Campanhas" />
 
             <div class="bg-borders h-0.5 w-8"></div>
             {{-- Divider --}}
@@ -28,7 +28,7 @@
 
             <x-new-components.actions.mobile-nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" label="Riscos Psicossociais" />
             <x-new-components.actions.mobile-nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" label="Clima Organizacional" />
-            <x-new-components.actions.mobile-nav-item href="" icon="calendar-clock" activeRoute="" label="Campanhas" />
+            <x-new-components.actions.mobile-nav-item :href="route('campaign.index')" icon="calendar-clock" activeRoute="campaign.*" label="Campanhas" />
 
             <div class="bg-borders h-0.5 w-8"></div>
 

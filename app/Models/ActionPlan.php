@@ -15,4 +15,8 @@ class ActionPlan extends Model
     {
         return $this->hasMany(CustomControlAction::class);
     }
+
+    protected $casts = [
+        'file_date' => 'datetime',
+    ];
 }

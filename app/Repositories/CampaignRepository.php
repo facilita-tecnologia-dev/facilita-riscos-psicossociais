@@ -7,17 +7,18 @@ use App\Enums\CollectionType;
 use App\Jobs\UpdateCampaignStatusJob;
 use App\Models\Campaign;
 use Carbon\Carbon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 
 class CampaignRepository
 {
-    public static function store(array $data): Campaign
+    public static function store(array $data): mixed
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function() use($data) {
+            [$collection_type, $collection_id] = explode('_', $data['collection_id']);
+
             $campaign = session('auth:company')->campaigns()->create([
-                'collection_id' => $data['collection_id'],
-                'type' => CollectionType::BASE->value,
+                'collection_id' => $collection_id,
+                'type' => CollectionType::from($collection_type)->value,
                 'name' => $data['name'],
                 'description' => $data['description'],
                 'start_date' => $data['start_date'],
@@ -27,19 +28,13 @@ class CampaignRepository
 
             UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
             UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::COMPLETED)->delay(Carbon::parse($data['end_date']));
-
-            session(['company' => session('auth:company')->load('campaigns')]);
-
-            return $campaign;
         });
     }
 
-    public function update(Campaign $campaign, array $data): Campaign
+    public static function update(Campaign $campaign, array $data): mixed
     {
         return DB::transaction(function () use ($campaign, $data) {
             $campaign->update([
-                'collection_id' => $data['collection_id'],
-                'type' => CollectionType::BASE->value,
                 'name' => $data['name'],
                 'description' => $data['description'],
                 'start_date' => $data['start_date'],
@@ -48,15 +43,13 @@ class CampaignRepository
 
             UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
             UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::COMPLETED)->delay(Carbon::parse($data['end_date']));
-
-            session(['company' => session('auth:company')->load('campaigns')]);
-            
-            return $campaign;
         });
     }
 
-    public function destroy(Campaign $campaign): mixed
+    public static function delete(Campaign $campaign): mixed
     {
-        return $campaign->delete();
+        return DB::transaction(function () use ($campaign) {
+            $campaign->delete();
+        });
     }
 }

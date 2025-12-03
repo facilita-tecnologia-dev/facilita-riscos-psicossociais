@@ -23,10 +23,10 @@ enum PROARTRisk: string
     public function color(): string
     {
         return match ($this) {
-            self::LOW => "#A8E6CFCC",
-            self::MEDIUM => "#DDE26F75",
-            self::HIGH => "#F6B26B75",
-            self::CRITICAL => "#F26C6C75",
+            self::LOW => "#A8E6CF",
+            self::MEDIUM => "#DDE26F",
+            self::HIGH => "#F6B26B",
+            self::CRITICAL => "#F26C6C",
         };
     }
 }

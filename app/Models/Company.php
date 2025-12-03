@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\BaseCollection;
 use App\Enums\BaseCollection as EnumBaseCollection;
+use App\Enums\CollectionType;
 
 class Company extends Authenticatable
 {
@@ -102,7 +103,7 @@ class Company extends Authenticatable
         return $this->organizationalCollection;
     }
 
-    public function collections()
+    public function baseCollections()
     {
         return collect([
             $this->psychosocialCollection(),
@@ -137,11 +138,11 @@ class Company extends Authenticatable
     
     public function getReports()
     {
-        return ReportChannelService::hasReportChannel($this) ? 
-                        ReportChannelService::reports($this) :
-                        $this->reports->mapWithKeys(
-                            fn($report) => [$report->type => $report->value]
-                        );
+        return ReportChannelService::hasReportChannel($this)
+            ? ReportChannelService::reports($this)
+            : $this->reports
+                ->filter() // remove nulos
+                ->mapWithKeys(fn($report) => [$report->type => $report->value]);
     }
 
     public function usesHSE(): bool
@@ -149,15 +150,21 @@ class Company extends Authenticatable
         return $this->psychosocial_collection_type === EnumBaseCollection::HSE->value;
     }
 
-    public function hasCampaignThisYear(string $collectionID, ?string $status = null): bool
+    public function hasCampaignThisYear(string $collection_id, string $collection_type, ?string $status = null): bool
     {
-        return $this->campaigns()
-                    ->whereYear('start_date', now()->year)
-                    ->where('collection_id', $collectionID)
-                    ->when($status, function($q) use($status) {
-                        $q->where('status', $status);
-                    })
-                    ->exists();
+        $collection = $collection_type === CollectionType::BASE->value 
+                        ? BaseCollection::find($collection_id) 
+                        : CustomCollection::find($collection_id);
+
+        return session('auth:company')
+                        ->campaigns()
+                        ->when($status, function($q) use($status) {
+                            $q->where('status', $status);
+                        })
+                        ->whereYear('start_date', now()->year)
+                        ->get()
+                        ->filter(fn($campaign) => $campaign->collection()->type === $collection->type)
+                        ->isNotEmpty();
     }
 
     public function activeCampaigns() : Collection

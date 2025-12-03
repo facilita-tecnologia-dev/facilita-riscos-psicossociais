@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\RiskInventory;
+namespace App\Enums\Psychosocial;
 
 enum RiskInventoryFormat: string
 {

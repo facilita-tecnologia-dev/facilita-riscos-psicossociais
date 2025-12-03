@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Psychosocial;
 
-use App\Enums\HSE\HSEEvaluationType;
 use App\Enums\HSE\HSEHazard;
 use App\Enums\HSE\HSERisk;
+use App\Enums\Psychosocial\EvaluationTypes;
 use App\Evaluators\HSE\chronicTeamConflicts;
 use App\Evaluators\HSE\constantInterruptions;
 use App\Evaluators\HSE\deadlinePressure;
@@ -71,7 +71,7 @@ class HSERiskService
         HSEHazard::LOSS_OF_BENEFITS->value => lossOfBenefits::class
     ];
 
-    public static function evaluate(Hazard $hazard, float $average, HSEEvaluationType $evaluationType = HSEEvaluationType::DEFAULT, ?string $evaluationFactor = null) 
+    public static function evaluate(Hazard $hazard, float $average, EvaluationTypes $evaluationType = EvaluationTypes::DEPARTMENT, ?string $evaluationFactor = null) 
     {
         if(!isset(self::$evaluators[$hazard->type])) return false;
 
@@ -80,13 +80,11 @@ class HSERiskService
         return $class::evaluate($hazard, $average, $evaluationType, $evaluationFactor);
     }
 
-    public static function modifiers(Collection $absences, HSEEvaluationType $evaluationType = HSEEvaluationType::DEFAULT, ?string $evaluationFactor = null)
+    public static function modifiers(Collection $absences, EvaluationTypes $evaluationType = EvaluationTypes::DEPARTMENT, ?string $evaluationFactor = null)
     {
         $twoLeaves = $absences->count() >= 2;
         $fifteenDaysLeave = $absences->where('duration', '>=', 15)->isNotEmpty();
-        $multiLeaves = $evaluationType === HSEEvaluationType::DEFAULT 
-                        ? false
-                        : $absences->where($evaluationType->value, $evaluationFactor)->isNotEmpty();
+        $multiLeaves = $absences->where($evaluationType->value, $evaluationFactor)->isNotEmpty();
         
         $sum = 0;
 
