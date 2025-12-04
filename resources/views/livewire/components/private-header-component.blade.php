@@ -6,7 +6,7 @@
             $logo = $s3->temporaryUrl(session('auth:company')->logo, now()->addMinutes(5));
         @endphp
 
-        <img src="{{ $logo }}" class="h-8 object-scale-down transition hover:scale-105 md:h-10" alt="Logomarca" />
+        <img src="{{ $logo }}" title="{{ session('auth:company')->name }}" class="h-8 object-scale-down transition hover:scale-105 md:h-10" alt="Logomarca" />
     @else
         <h1 class="text-main-text font-heading text-left text-base font-semibold">{{ session('auth:company')->name }}</h1>
     @endif

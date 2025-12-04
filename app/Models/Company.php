@@ -115,27 +115,27 @@ class Company extends Authenticatable
 
     public function absences(): float | null
     {
-        return $this->proartIndicators->where('metric.type', 'absences')->first()->value;
+        return $this->proartIndicators->where('indicator.type', 'absences')->first()->value;
     }
 
     public function absenteeism(): float | null
     {
-        return $this->proartIndicators->where('metric.type', 'absenteeism')->first()->value;
+        return $this->proartIndicators->where('indicator.type', 'absenteeism')->first()->value;
     }
 
     public function accidents(): float | null
     {
-        return $this->proartIndicators->where('metric.type', 'accidents')->first()->value;
+        return $this->proartIndicators->where('indicator.type', 'accidents')->first()->value;
     }
 
     public function extraHours(): float | null
     {
-        return $this->proartIndicators->where('metric.type', 'extra-hours')->first()->value;
+        return $this->proartIndicators->where('indicator.type', 'extra-hours')->first()->value;
     }
 
     public function turnover(): float | null
     {
-        return $this->proartIndicators->where('metric.type', 'turnover')->first()->value;
+        return $this->proartIndicators->where('indicator.type', 'turnover')->first()->value;
     }
     
     public function getReports()
@@ -187,7 +187,6 @@ class Company extends Authenticatable
                     ->filter(fn($campaign) => $campaign->collection()->type === BaseCollectionType::PSYCHOSOCIAL)
                     ->sortByDesc('start_date')
                     ->first();
-        // return $this->campaigns->where('collection_id', $this->psychosocialCollection()?->id)->sortByDesc('start_date')->first();
     }
 
     public function latestOrganizationalCampaign(): Campaign | null

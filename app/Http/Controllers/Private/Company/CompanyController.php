@@ -1,19 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Private;
+namespace App\Http\Controllers\Private\Company;
 
-use App\Helpers\SessionErrorHelper;
 use App\Models\Company;
-use App\Models\User;
-use App\Services\AuthenticationService;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Support\Facades\Password as FacadePassword;
-use Illuminate\Support\Str;
 
 class CompanyController
 {

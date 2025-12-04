@@ -14,7 +14,7 @@
         <div x-on:click.away="$wire.closeResetPasswordModal()" class="bg-secondary-background border-borders flex flex-col gap-4 w-full max-w-xl rounded-lg border p-6 shadow-sm">
             <header class="flex w-full items-center justify-between">
                 <h2 class="font-heading text-main-text text-left text-base sm:text-lg font-semibold">Redefinir Senha</h2>
-                <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Nesta seção, você pode exportar um Inventário de Riscos Psicossociais já gerado. Caso deseje criar um novo inventário com as medidas de controle atualizadas, utilize a seção à direita.">
+                <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Neste modal, você pode redefinir a senha da conta da empresa.">
                     <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
                 </div>
             </header>

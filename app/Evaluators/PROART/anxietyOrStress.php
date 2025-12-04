@@ -5,7 +5,7 @@ namespace App\Evaluators\PROART;
 use App\Enums\PROART\PROARTRisk;
 use App\Enums\PROART\PROARTHazard;
 use App\Models\Hazard;
-use App\Services\PROARTRiskService;
+use App\Services\Psychosocial\PROARTRiskService;
 
 class anxietyOrStress
 {

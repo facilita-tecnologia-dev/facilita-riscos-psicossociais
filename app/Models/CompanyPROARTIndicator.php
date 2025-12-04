@@ -15,7 +15,7 @@ class CompanyPROARTIndicator extends Model
         return $this->belongsTo(Company::class, 'company_id');
     }
 
-    public function metric(): BelongsTo
+    public function indicator(): BelongsTo
     {
         return $this->belongsTo(PROARTIndicator::class, 'indicator_id');
     }

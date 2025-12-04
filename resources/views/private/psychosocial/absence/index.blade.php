@@ -1,4 +1,8 @@
 <x-layouts.app>
+    <livewire:private.psychosocial.absence.absence-index-component>
+</x-layouts.app>
+
+{{-- <x-layouts.app>
     <x-structure.page-container>
         <x-structure.sidebar />
         
@@ -10,8 +14,8 @@
                 ]"
             />
 
-            <livewire:private.absences.absence-index-component>
+            
 
         </x-structure.main-content-container>   
     </x-structure.page-container>
-</x-layouts.app>
+</x-layouts.app> --}}

@@ -1,24 +1,15 @@
 <?php
 
-use App\Http\Controllers\AbsencesController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CMS\CMSLogoutController;
 use App\Http\Controllers\CMS\CMSPsychosocialController;
 use App\Http\Controllers\CMS\CMSReportChannelController;
 use App\Http\Controllers\ControlActionsController;
-use App\Http\Controllers\Private\CompanyController;
-use App\Http\Controllers\Private\MetricsController;
-use App\Http\Controllers\Private\DemographicsController;
+use App\Http\Controllers\Private\Campaign\CampaignController;
+use App\Http\Controllers\Private\Company\CompanyController;
 use App\Http\Controllers\Private\OrganizationalController;
-use App\Http\Controllers\Private\PsychosocialController;
-use App\Http\Controllers\Private\TestController;
-use App\Http\Controllers\Private\UserController;
-use App\Http\Controllers\Private\WelcomeController;
-use App\Http\Controllers\ReportsController;
-use App\Http\Controllers\ResetUserPasswordController;
+use App\Http\Controllers\Private\Psychosocial\PsychosocialController;
+use App\Http\Controllers\Private\Test\TestController;
+use App\Http\Controllers\Private\User\UserController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\CMSAuthMiddleware;
 use App\Http\Middleware\CMSGuestMiddleware;
@@ -64,7 +55,23 @@ Route::middleware(AuthMiddleware::class)->group(function() {
 
     Route::prefix('psychosocial')->group(function () {
         Route::get('/dashboard', [PsychosocialController::class, 'dashboard'])->name('psychosocial.dashboard');
+        Route::get('/indicators', [PsychosocialController::class, 'indicators'])->name('psychosocial.indicators');
+        Route::get('/absences', [PsychosocialController::class, 'absences'])->name('psychosocial.absences');
     });
+
+    
+    // Route::prefix('company-metrics')->group(function() {
+    //     Route::get('/', [MetricsController::class, 'edit'])->name('company-metrics.edit');
+    //     Route::post('/', [MetricsController::class, 'update'])->name('company-metrics.update');
+    // });
+
+    // Route::prefix('company-absence')->group(function() {
+    //     Route::get('/', [AbsencesController::class, 'index'])->name('company-absence.index');
+    // });
+
+    // Route::prefix('company-reports')->group(function() {
+    //     Route::post('/', [ReportsController::class, 'update'])->name('company-reports.update');
+    // });
 
     Route::prefix('organizational')->group(function () {
         Route::get('/dashboard', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
@@ -84,24 +91,10 @@ Route::middleware(AuthMiddleware::class)->group(function() {
             Route::get('/create', [UserController::class, 'create'])->name('user.create');
             Route::get('/import', [UserController::class, 'import'])->name('user.import');
             Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
-            // Route::post('/', [UserController::class, 'store'])->name('user.store');
-            // Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
-            // Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
-            // Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
-            // Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-            // Route::post('/user/import', [UserController::class, 'import']);
-            
-            // Route::post('/verify-cpf', [UserController::class, 'verifyCPF'])->name('user.create.verify-cpf');
-            // Route::get('/{user}/permission', [UserController::class, 'showPermissions'])->name('user.permissions');
-            // Route::post('/{user}/permission', [UserController::class, 'updatePermissions']);
-            // Route::get('/{user}/department-scope', [UserController::class, 'showDepartmentScope'])->name('user.department-scope');
-            // Route::post('/{user}/department-scope', [UserController::class, 'updateDepartmentScopes']);
-
-            // Route::post('/switch-company', [LoginController::class, 'switchCompany'])->name('user.switch-company');
-
-            // Route::put('/{user}/reset-password-modal', [UserController::class, 'resetPasswordModal'])->name('user.reset-password-modal');
         });
     });
+
+
 
    
 
@@ -146,19 +139,6 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     //     Route::post('{customCollection}/questions/store', [CustomQuestionController::class, 'store'])->name('custom-collections.tests.questions.store');
     //     Route::get('{customCollection}/questions/{customQuestion}/delete', [CustomQuestionController::class, 'destroy'])->name('custom-collections.tests.questions.destroy');
     // });
-
-    Route::prefix('company-metrics')->group(function() {
-        Route::get('/', [MetricsController::class, 'edit'])->name('company-metrics.edit');
-        Route::post('/', [MetricsController::class, 'update'])->name('company-metrics.update');
-    });
-
-    Route::prefix('company-absence')->group(function() {
-        Route::get('/', [AbsencesController::class, 'index'])->name('company-absence.index');
-    });
-
-    Route::prefix('company-reports')->group(function() {
-        Route::post('/', [ReportsController::class, 'update'])->name('company-reports.update');
-    });
 
 
     

@@ -6,17 +6,17 @@ use Carbon\Carbon;
 
 class DemographicsService
 {
-    public static function metrics()
-    {
-        $metrics = session('auth:company')->proartIndicators()
-                                        ->with('metric')
-                                        ->get()
-                                        ->mapWithKeys(fn($companyMetric) => 
-                                            [$companyMetric->metric->display_name => $companyMetric->value ?? 0]
-                                        );
+    // public static function metrics()
+    // {
+    //     $metrics = session('auth:company')->proartIndicators()
+    //                                     ->with('metric')
+    //                                     ->get()
+    //                                     ->mapWithKeys(fn($companyMetric) => 
+    //                                         [$companyMetric->metric->display_name => $companyMetric->value ?? 0]
+    //                                     );
 
-        return $metrics;
-    }
+    //     return $metrics;
+    // }
 
     public static function demographics()
     {

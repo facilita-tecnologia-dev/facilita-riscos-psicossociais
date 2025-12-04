@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Private\Campaign;
 
 use App\Models\Campaign;
 
