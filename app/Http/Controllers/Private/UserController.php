@@ -37,173 +37,93 @@ class UserController
         return view('private.user.index.index');
     }
 
-    // public function create()
-    // {
-    //     Gate::authorize('user-create');
-
-    //     $roles = array_map(fn($role) => ['option' => $role->label(), 'value' => $role->value], RoleEnum::cases());
-
-    //     return view('private.user.create', compact('roles'));
-    // }
-
-    // public function store(UserStoreRequest $request)
-    // {
-    //     Gate::authorize('user-create');
-
-    //     $user = UserRepository::store($request->safe());
-
-    //     if($user->hasRole(RoleEnum::MANAGER->value)){
-    //         return to_route('user.department-scope', $user)->with('message', 'Perfil do colaborador criado com sucesso!');
-    //     }
-
-    //     return to_route('user.show', $user)->with('message', 'Perfil do colaborador criado com sucesso!');
-    // }
+    public function create()
+    {
+        return view('private.user.create.index');
+    }
+    
+    public function import()
+    {
+        return view('private.user.import.index');
+    }
 
     public function show(User $user)
     {
-        Gate::authorize('user-show');
-
-        $latestOrganizationalClimateCollectionDate = $user['latestPsychosocialCollection']?->created_at->diffForHumans() ?? 'Nunca';
-        $latestPsychosocialCollectionDate = $user['latestPsychosocialCollection']?->created_at->diffForHumans() ?? 'Nunca';
-
-        return view('private.user.show', compact(
-            'user', 
-            'latestPsychosocialCollectionDate', 
-            'latestOrganizationalClimateCollectionDate', 
-        ));
+        return view('private.user.show.index', compact('user'));
     }
 
-    public function edit(User $user)
-    {
-        Gate::authorize('user-edit');
 
-        $status = array_map(fn (UserStatus $status) => ['option' => UserStatus::labelFromValue($status->value), 'value' => $status->value], UserStatus::cases());
-        $roles = array_map(fn($role) => ['option' => $role->label(), 'value' => $role->value], RoleEnum::cases());
+    // public function showPermissions(User $user)
+    // {
+    //     Gate::authorize('user-permission-edit');
 
-        return view('private.user.update', compact(
-            'user',
-            'roles',
-            'status',
-        ));
-    }
+    //     $defaultPermissions = RolePermission::where('role_id', $user->roles[0]->id)
+    //         ->with('permission')
+    //         ->orderBy('allowed', 'desc')
+    //         ->get();
 
-    public function update(UserUpdateRequest $request, User $user)
-    {
-        Gate::authorize('user-edit');
+    //     $customizedPermissions = UserCustomPermission::where('user_id', $user->id)
+    //         ->with('permission')
+    //         ->where('company_id', session('auth:company')->id)
+    //         ->get();
 
-        UserRepository::update($request->safe(), $user);
+    //     $compiledPermissions = [];
 
-        return to_route('user.show', $user)->with('message', 'Perfil do colaborador atualizado com sucesso!');
-    }
+    //     foreach ($defaultPermissions as $defaultPermission) {
+    //         $customizedPermissionWithSameId = $customizedPermissions->firstWhere('permission_id', $defaultPermission->permission_id);
+    //         if ($customizedPermissionWithSameId) {
+    //             $compiledPermissions[$customizedPermissionWithSameId->permission->key_name] = $customizedPermissionWithSameId;
+    //         } else {
+    //             $compiledPermissions[$defaultPermission->permission->key_name] = $defaultPermission;
+    //         }
+    //     }
 
-    public function destroy(User $user)
-    {
-        Gate::authorize('user-delete');
+    //     usort($compiledPermissions, function ($a, $b) {
+    //         return $b->allowed <=> $a->allowed;
+    //     });
 
-        UserRepository::destroy($user);
+    //     return view('private.user.permissions', compact('user', 'compiledPermissions'));
+    // }
 
-        return to_route('user.index')->with('message', 'Perfil do colaborador excluído com sucesso!');
-    }
+    // public function updatePermissions(Request $request, User $user)
+    // {
+    //     Gate::authorize('user-permission-edit');
 
-    public function showImport()
-    {
-        return view('private.user.import');
-    }
+    //     $defaultRolePermissions = RolePermission::where('role_id', $user->roles[0]->id)->with('permission')->get();
+    //     $currentUserPermissions = UserCustomPermission::where('user_id', $user->id)->with('permission')->get();
 
-    public function import(Request $request)
-    {
-        $request->validate([
-            'import_users' => 'required|file|mimes:xlsx|max:1024',
-        ]);
+    //     $newPermissions = $request->except(['_token', '_method']);
 
-        $importUsers = UserRepository::import(session('auth:company'), $request->file('import_users'));
+    //     foreach ($newPermissions as $permissionKeyName => $permissionValue) {
+    //         $hasDefaultPermissionWithSameValue = $defaultRolePermissions
+    //             ->where('permission.key_name', $permissionKeyName)
+    //             ->where('allowed', $permissionValue)
+    //             ->first();
 
-        if($importUsers instanceof Collection){
-            $importUsers = $importUsers->map(function($validationError){
-                $username = $validationError->values()['nome_completo'] ?? 'Nome do colaborador ausente';
-                $nameBagFormatted = str_replace('_', ' ', $validationError->errors()[0]);
-                return "Linha " . $validationError->row() . " - " . $username . ' - ' . $nameBagFormatted;
-            });
+    //         $hasCustomizedPermissionWithSameValue = $currentUserPermissions
+    //             ->where('permission.key_name', $permissionKeyName)
+    //             ->first();
 
-            return view('private.user.import', [
-                'failures' => $importUsers,
-            ]);
-        }
+    //         if ($hasDefaultPermissionWithSameValue) {
+    //             if ($hasCustomizedPermissionWithSameValue) {
+    //                 $hasCustomizedPermissionWithSameValue->delete();
+    //             }
+    //         } else {
+    //             if (! $hasCustomizedPermissionWithSameValue) {
+    //                 $permissionId = Permission::where('key_name', '=', $permissionKeyName)->value('id');
 
-        return back()->with('message', 'Usuários importados com sucesso');
-    }
+    //                 UserCustomPermission::create([
+    //                     'company_id' => session('auth:company')->id,
+    //                     'user_id' => $user->id,
+    //                     'permission_id' => $permissionId,
+    //                     'allowed' => $permissionValue,
+    //                 ]);
+    //             }
+    //         }
+    //     }
 
-    public function showPermissions(User $user)
-    {
-        Gate::authorize('user-permission-edit');
-
-        $defaultPermissions = RolePermission::where('role_id', $user->roles[0]->id)
-            ->with('permission')
-            ->orderBy('allowed', 'desc')
-            ->get();
-
-        $customizedPermissions = UserCustomPermission::where('user_id', $user->id)
-            ->with('permission')
-            ->where('company_id', session('auth:company')->id)
-            ->get();
-
-        $compiledPermissions = [];
-
-        foreach ($defaultPermissions as $defaultPermission) {
-            $customizedPermissionWithSameId = $customizedPermissions->firstWhere('permission_id', $defaultPermission->permission_id);
-            if ($customizedPermissionWithSameId) {
-                $compiledPermissions[$customizedPermissionWithSameId->permission->key_name] = $customizedPermissionWithSameId;
-            } else {
-                $compiledPermissions[$defaultPermission->permission->key_name] = $defaultPermission;
-            }
-        }
-
-        usort($compiledPermissions, function ($a, $b) {
-            return $b->allowed <=> $a->allowed;
-        });
-
-        return view('private.user.permissions', compact('user', 'compiledPermissions'));
-    }
-
-    public function updatePermissions(Request $request, User $user)
-    {
-        Gate::authorize('user-permission-edit');
-
-        $defaultRolePermissions = RolePermission::where('role_id', $user->roles[0]->id)->with('permission')->get();
-        $currentUserPermissions = UserCustomPermission::where('user_id', $user->id)->with('permission')->get();
-
-        $newPermissions = $request->except(['_token', '_method']);
-
-        foreach ($newPermissions as $permissionKeyName => $permissionValue) {
-            $hasDefaultPermissionWithSameValue = $defaultRolePermissions
-                ->where('permission.key_name', $permissionKeyName)
-                ->where('allowed', $permissionValue)
-                ->first();
-
-            $hasCustomizedPermissionWithSameValue = $currentUserPermissions
-                ->where('permission.key_name', $permissionKeyName)
-                ->first();
-
-            if ($hasDefaultPermissionWithSameValue) {
-                if ($hasCustomizedPermissionWithSameValue) {
-                    $hasCustomizedPermissionWithSameValue->delete();
-                }
-            } else {
-                if (! $hasCustomizedPermissionWithSameValue) {
-                    $permissionId = Permission::where('key_name', '=', $permissionKeyName)->value('id');
-
-                    UserCustomPermission::create([
-                        'company_id' => session('auth:company')->id,
-                        'user_id' => $user->id,
-                        'permission_id' => $permissionId,
-                        'allowed' => $permissionValue,
-                    ]);
-                }
-            }
-        }
-
-        return to_route('user.show', $user)->with('message', 'Permissões atualizadas com sucesso!');
-    }
+    //     return to_route('user.show', $user)->with('message', 'Permissões atualizadas com sucesso!');
+    // }
 
     public function showDepartmentScope(User $user)
     {

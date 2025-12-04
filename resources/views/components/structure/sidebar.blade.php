@@ -13,7 +13,7 @@
 
     <div class="flex flex-1 flex-col gap-6 px-4 py-8">
         <x-sidebar.menu title="Home">
-            <x-sidebar.item href="{{ session('auth:guard') === 'user' ? route('user.home') : route('company.home') }}" class="">
+            <x-sidebar.item href="{{ session('auth:guard') === 'user' ? route('home.user') : route('home.company') }}" class="">
                 <div class="flex w-5 items-center justify-center">
                     <i class="fa-solid fa-house"></i>
                 </div>

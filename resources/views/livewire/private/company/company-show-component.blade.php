@@ -1,4 +1,6 @@
 <div class="contents">
+    <x-new-components.structure.page-header icon="company" label="Página da Empresa" :breadcrumbs="['Página da Empresa' => null]" />
+
     <livewire:private.company.company-edit-component :company="$company" />
 
     <div class="w-full flex flex-col gap-4">

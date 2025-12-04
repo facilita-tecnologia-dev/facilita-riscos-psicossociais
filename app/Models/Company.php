@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\BaseCollection;
 use App\Enums\BaseCollection as EnumBaseCollection;
+use App\Enums\BaseCollectionType;
 use App\Enums\CollectionType;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 
@@ -180,12 +181,23 @@ class Company extends Authenticatable
 
     public function latestPsychosocialCampaign(): Campaign | null
     {
-        return $this->campaigns->where('collection_id', $this->psychosocialCollection()?->id)->sortByDesc('start_date')->first();
+        return $this->campaigns()
+                    ->whereYear('start_date', now()->year)
+                    ->get()
+                    ->filter(fn($campaign) => $campaign->collection()->type === BaseCollectionType::PSYCHOSOCIAL)
+                    ->sortByDesc('start_date')
+                    ->first();
+        // return $this->campaigns->where('collection_id', $this->psychosocialCollection()?->id)->sortByDesc('start_date')->first();
     }
 
     public function latestOrganizationalCampaign(): Campaign | null
     {
-        return $this->campaigns->where('collection_id', $this->organizationalCollection()?->id)->sortByDesc('start_date')->first();
+        return $this->campaigns()
+                    ->whereYear('start_date', now()->year)
+                    ->get()
+                    ->filter(fn($campaign) => $campaign->collection()->type === BaseCollectionType::ORGANIZATIONAL)
+                    ->sortByDesc('start_date')
+                    ->first();
     }
 
     public function sendPasswordResetNotification($token)

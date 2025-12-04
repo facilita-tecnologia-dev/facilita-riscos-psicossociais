@@ -123,8 +123,8 @@ class AuthenticationService {
     public static function redirectLoginRoute($guard)
     {
         return match ($guard) {
-            'company' => route('company.home'),
-            'user'    => route('user.home'),
+            'company' => route('home.company'),
+            'user'    => route('home.user'),
             'cms'    => route('cms.psychosocial.dashboard'),
             default   => route('site.home'),
         };

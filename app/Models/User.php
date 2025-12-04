@@ -57,9 +57,9 @@ class User extends Authenticatable
     /* ---- End Relations ---- */
 
     /* ---- Aux/Verifiers/Conditionals ---- */
-    public function hasAnsweredCampaign($campaignID): bool
+    public function hasAnsweredCampaign(string $campaign_id): bool
     {
-        return $this->collections->where('campaign_id', $campaignID)->isNotEmpty();
+        return $this->collections->where('campaign_id', $campaign_id)->isNotEmpty();
     }
 
     public function status(?Company $company = null)

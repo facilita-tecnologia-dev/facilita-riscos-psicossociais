@@ -1,4 +1,8 @@
 <x-layouts.app>
+    <livewire:private.user.user-show-component :user="$user" />
+</x-layouts.app>
+
+{{-- <x-layouts.app>
     <x-structure.page-container>
         <x-structure.sidebar />
 
@@ -77,12 +81,12 @@
                         <p class="text-left text-base font-semibold sm:text-lg">Último teste de Riscos Psicossociais realizado:</p>
                         <p class="text-left text-sm sm:text-base">{{ $latestPsychosocialCollectionDate ?? 'Nunca' }}</p>
                     </div>
-                    {{--
+                    
                         <div class="">
                         <p class="font-semibold text-base sm:text-lg text-left">Último teste de Clima Organizacional realizado:</p>
                         <p class="text-sm sm:text-base text-left">{{ $latestOrganizationalClimateCollectionDate ?? 'Nunca' }}</p>
                         </div>
-                    --}}
+                   
                 </div>
 
                 @if ($user->is_temp_password)
@@ -176,5 +180,4 @@
     </x-structure.page-container>
 
     <script src="{{ asset('js/user/show.js') }}"></script>
-    <script src="{{ asset('js/') }}"></script>
-</x-layouts.app>
+</x-layouts.app> --}}

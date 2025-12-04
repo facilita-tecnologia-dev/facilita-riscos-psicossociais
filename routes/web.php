@@ -53,8 +53,8 @@ Route::middleware(GuestMiddleware::class)->group(function() {
 
 Route::middleware(AuthMiddleware::class)->group(function() {
     Route::prefix('home')->group(function(){
-        Route::get('/company', [CompanyController::class, 'home'])->name('company.home');
-        Route::get('/user', [UserController::class, 'home'])->name('user.home');
+        Route::get('/company', [CompanyController::class, 'home'])->name('home.company');
+        Route::get('/user', [UserController::class, 'home'])->name('home.user');
     });
 
     Route::prefix('test')->group(function(){
@@ -81,13 +81,14 @@ Route::middleware(AuthMiddleware::class)->group(function() {
 
         Route::prefix('user')->group(function(){
             Route::get('/', [UserController::class, 'index'])->name('user.index');
-            // Route::get('/create', [UserController::class, 'create'])->name('user.create');
+            Route::get('/create', [UserController::class, 'create'])->name('user.create');
+            Route::get('/import', [UserController::class, 'import'])->name('user.import');
+            Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
             // Route::post('/', [UserController::class, 'store'])->name('user.store');
             // Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
             // Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
             // Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
             // Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-            // Route::get('/user/import', [UserController::class, 'showImport'])->name('user.import');
             // Route::post('/user/import', [UserController::class, 'import']);
             
             // Route::post('/verify-cpf', [UserController::class, 'verifyCPF'])->name('user.create.verify-cpf');

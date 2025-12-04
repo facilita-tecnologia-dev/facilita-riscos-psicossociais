@@ -1,23 +1,18 @@
 <?php
 
-namespace App\Livewire\CMS\Private\Psychosocial\User;
+namespace App\Livewire\Private\User;
 
 use App\Enums\RoleEnum;
-use App\Models\Company;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use Error;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Throwable;
 
 class UserCreateComponent extends Component
 {
-    public Company $company;
     public ?User $user = null;
 
     public ?string $name = null;
@@ -38,7 +33,7 @@ class UserCreateComponent extends Component
 
     public function render()
     {
-        return view('livewire.cms.private.psychosocial.user.user-create-component');
+        return view('livewire.private.user.user-create-component');
     }
 
     public function mount()
@@ -64,13 +59,13 @@ class UserCreateComponent extends Component
         ]);
         
         try {
-            UserRepository::store($this->company, $validatedData);
+            UserRepository::store(session('auth:company'), $validatedData);
             $this->dispatch('alert:success', 'Funcionário criado com sucesso!');
 
             return redirect()->to(route('user.index'));
         } catch (Throwable $th) {
             Log::error('Erro ao criar funcionário', [
-                'company' => $this->company->id,
+                'company' => session('auth:company')->id,
                 'error' => $th->getMessage(),
                 'trace' => $th->getTraceAsString(),
             ]);
@@ -88,7 +83,7 @@ class UserCreateComponent extends Component
         $user = User::firstWhere('cpf', $this->cpf);
 
         if ($user) {
-            if($this->company->users->find($user)){
+            if(session('auth:company')->users()->find($user)){
                 $this->dispatch('alert:info', 'Este usuário já está vinculado à sua empresa!');
             } else {
                 $this->user = $user;
@@ -108,10 +103,10 @@ class UserCreateComponent extends Component
         ]);
 
         try {
-            UserRepository::attach($this->company, $this->user, $this->role);
+            UserRepository::attach(session('auth:company'), $this->user, $this->role);
             $this->dispatch('alert:success', 'Usuário vinculado com sucesso!');
 
-            return redirect()->to(route('cms.psychosocial.user.index', $this->company));
+            return redirect()->to(route('user.index'));
         } catch (\Throwable $th) {
             Log::error('Erro ao vincular usuário', [
                 'company' => session('auth:company')->id,

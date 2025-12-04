@@ -10,8 +10,8 @@ enum RoleEnum: string
     public function label(): string
     {
         return match ($this) {
-            self::MANAGER => 'Gestor Interno',
-            self::EMPLOYEE => 'Colaborador',
+            self::MANAGER => 'Gestor',
+            self::EMPLOYEE => 'Funcionário',
         };
     }
 
