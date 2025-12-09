@@ -8,7 +8,7 @@
     </header>
 
     <div class="flex flex-col md:flex-row xl:flex-col gap-3">
-        <x-new-components.actions.button href="" class="w-full">
+        <x-new-components.actions.button :href="route('psychosocial.control-action')" class="w-full">
             <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
         </x-new-components.actions.button>
 

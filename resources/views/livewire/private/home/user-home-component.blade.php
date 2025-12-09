@@ -15,7 +15,7 @@
                         @if(session('auth:user')->hasAnsweredCampaign($this->activePsychosocialCampaign->id))
                             <span class="text-sm text-secondary-text text-left font-normal">Respondido</span>
                         @else
-                            <x-new-components.actions.button :href="route('test.answer', $activePsychosocialCampaign)" fitSize>
+                            <x-new-components.actions.button :href="route('campaign.answer', $activePsychosocialCampaign)" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Responder</span>
                             </x-new-components.actions.button>
                         @endif
@@ -32,7 +32,7 @@
                         @if(session('auth:user')->hasAnsweredCampaign($this->activeOrganizationalCampaign->id))
                             <span class="text-sm text-secondary-text text-left font-normal">Respondido</span>
                         @else
-                            <x-new-components.actions.button :href="route('test.answer', $activeOrganizationalCampaign)" fitSize>
+                            <x-new-components.actions.button :href="route('campaign.answer', $activeOrganizationalCampaign)" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Responder</span>
                             </x-new-components.actions.button>
                         @endif

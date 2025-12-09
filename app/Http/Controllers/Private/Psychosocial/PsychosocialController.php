@@ -18,4 +18,9 @@ class PsychosocialController
     {
         return view('private.psychosocial.absence.index');
     }
+
+    public function controlActions()
+    {
+        return view('private.psychosocial.control-action.index');
+    }
 }

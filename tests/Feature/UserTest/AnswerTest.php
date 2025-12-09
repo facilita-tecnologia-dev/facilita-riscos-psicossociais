@@ -13,7 +13,7 @@ beforeEach(function () {
 it('test form should be rendered', function () {
     $collection = Collection::where('key_name', 'psychosocial-risks')->first();
 
-    $response = $this->get(route('test.answer', $collection));
+    $response = $this->get(route('campaign.answer', $collection));
 
     $response->assertOk();
     $response->assertViewHas('test', function (Test $test) use ($collection) {
@@ -45,7 +45,7 @@ it('psychosocial tests should be answerable', function () {
             expect($resultsOnSession)->toBeEmpty();
         } else {
             $response->assertSessionHas("$collection->key_name|$test->key_name|result");
-            $response->assertRedirectToRoute('test.answer', ['collection' => $collection, 'test' => $nextTest['order']]);
+            $response->assertRedirectToRoute('campaign.answer', ['collection' => $collection, 'test' => $nextTest['order']]);
         }
     }
 });
@@ -73,7 +73,7 @@ it('organizational tests should be answerable', function () {
             expect($resultsOnSession)->toBeEmpty();
         } else {
             $response->assertSessionHas("$collection->key_name|$test->key_name|result");
-            $response->assertRedirectToRoute('test.answer', ['collection' => $collection, 'test' => $nextTest['order']]);
+            $response->assertRedirectToRoute('campaign.answer', ['collection' => $collection, 'test' => $nextTest['order']]);
         }
     }
 });
