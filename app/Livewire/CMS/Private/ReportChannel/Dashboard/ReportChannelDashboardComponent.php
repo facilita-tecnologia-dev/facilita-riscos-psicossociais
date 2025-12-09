@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\ReportChannel\Dashboard;
 
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Carbon\Carbon;
 use Livewire\Component;
 

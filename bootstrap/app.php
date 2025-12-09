@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Middleware\CanAccessOrganizationalMiddleware;
-use App\Http\Middleware\CanAccessPsychosocialMiddleware;
-use App\Http\Middleware\InternalManagerMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;

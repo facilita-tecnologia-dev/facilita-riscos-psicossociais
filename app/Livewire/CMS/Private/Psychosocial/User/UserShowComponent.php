@@ -2,8 +2,8 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\User;
 
-use App\Enums\RoleEnum;
-use App\Enums\UserStatus;
+use App\Enums\User\UserRole;
+use App\Enums\User\UserStatus;
 use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;
@@ -42,7 +42,7 @@ class UserShowComponent extends Component
 
     public function mount()
     {
-        $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], RoleEnum::cases());
+        $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], UserRole::cases());
         $this->role = $this->user->role($this->company)->type;
         $this->status = $this->user->status($this->company);
 
@@ -73,7 +73,7 @@ class UserShowComponent extends Component
             'education_level' => ['nullable', 'string', 'max:255'],
             'work_shift' => ['nullable', 'string', 'max:255'],
             'admission' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()), Rule::date()->after(today()->subCenturies(1))],
-            'role' => ['required', 'string', Rule::enum(RoleEnum::class)],
+            'role' => ['required', 'string', Rule::enum(UserRole::class)],
         ]);
         
         try {
@@ -94,9 +94,9 @@ class UserShowComponent extends Component
 
                 $this->user->companies()->syncWithoutDetaching([$this->company->id => ['role_id' => (int) $this->role]]);
 
-                $role = RoleEnum::from($this->role);
+                $role = UserRole::from($this->role);
 
-                if ($role === RoleEnum::MANAGER && !$this->user->password) {
+                if ($role === UserRole::MANAGER && !$this->user->password) {
                     $this->user->password = $this->user->generateTemporaryPassword();
                     $this->user->is_temp_password = true;
                     $this->user->save();

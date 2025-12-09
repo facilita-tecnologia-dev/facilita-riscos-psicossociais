@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Private\Psychosocial\Dashboard;
 
-use App\Enums\Psychosocial\EvaluationTypes;
+use App\Enums\Campaign\EvaluationTypes;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 

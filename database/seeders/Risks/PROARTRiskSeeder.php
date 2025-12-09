@@ -2,9 +2,9 @@
 
 namespace Database\Seeders\Risks;
 
-use App\Enums\PROART\PROARTGravity;
-use App\Enums\PROART\PROARTGroup;
-use App\Enums\PROART\PROARTHazard;
+use App\Enums\Psychosocial\PROART\PROARTGravity;
+use App\Enums\Psychosocial\PROART\PROARTGroup;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Models\Hazard;
 use Illuminate\Database\Seeder;
 

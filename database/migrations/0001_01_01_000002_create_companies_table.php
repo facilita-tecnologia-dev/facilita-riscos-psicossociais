@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\BaseCollection;
+use App\Enums\Campaign\MetodologyType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('cnpj');
             $table->string('email', 100);
             $table->string('password', 100);
-            $table->enum('psychosocial_collection_type', BaseCollection::values())->default(BaseCollection::HSE->value);
+            $table->enum('psychosocial_collection_type', MetodologyType::values())->default(MetodologyType::HSE->value);
             $table->timestamps();
         });
     }

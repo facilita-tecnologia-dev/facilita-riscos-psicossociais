@@ -2,8 +2,8 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
-use App\Enums\Filters\PsychosocialCompanyOrder;
-use App\Enums\Filters\UsersCountRangeEnum;
+use App\Enums\Psychosocial\CompanyOrder;
+use App\Enums\Filters\UserCountRange;
 use App\Models\Company;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
@@ -54,7 +54,7 @@ class CompanyIndexComponent extends Component
         }
         
         if (!empty($this->filters['userCountRange'])) {
-            $range = UsersCountRangeEnum::from($this->filters['userCountRange'])->value;
+            $range = UserCountRange::from($this->filters['userCountRange'])->value;
 
             if ($range === '200+') {
                 $query->having('users_count', '>=', 200);
@@ -64,7 +64,7 @@ class CompanyIndexComponent extends Component
             }
         }
 
-        $orderEnum = PsychosocialCompanyOrder::tryFrom($this->filters['orderBy'] ?? PsychosocialCompanyOrder::USERS_DESC->value);
+        $orderEnum = CompanyOrder::tryFrom($this->filters['orderBy'] ?? CompanyOrder::USERS_DESC->value);
 
         if ($orderEnum) {
             [$column, $direction] = $orderEnum->config();

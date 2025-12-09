@@ -2,9 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Enums\CampaignStatus;
+use App\Enums\Campaign\CampaignStatus;
 use App\Models\Campaign;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 

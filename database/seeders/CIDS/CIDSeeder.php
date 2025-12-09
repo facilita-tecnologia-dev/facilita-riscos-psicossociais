@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\CIDS;
 
-use App\Enums\HSE\HSECID;
+use App\Enums\Psychosocial\HSE\HSECID;
 use App\Models\CID;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

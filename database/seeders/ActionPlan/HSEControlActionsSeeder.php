@@ -2,8 +2,8 @@
 
 namespace Database\Seeders\ActionPlan;
 
-use App\Enums\BaseCollection;
-use App\Enums\HSE\HSEHazard;
+use App\Enums\Campaign\MetodologyType;
+use App\Enums\Psychosocial\HSE\HSEHazard;
 use App\Models\BaseControlAction;
 use App\Models\Hazard;
 use Illuminate\Database\Seeder;
@@ -12,7 +12,7 @@ class HSEControlActionsSeeder extends Seeder
 {
     public function run(): void
     {
-        $risks = Hazard::whereHas('collection', fn($collection) => $collection->where('key', BaseCollection::HSE->value))->get();
+        $risks = Hazard::whereHas('collection', fn($collection) => $collection->where('key', MetodologyType::HSE->value))->get();
 
         // work-overload
         BaseControlAction::insert([

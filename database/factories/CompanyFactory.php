@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\BaseCollection;
+use App\Enums\Campaign\MetodologyType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,7 +22,7 @@ class CompanyFactory extends Factory
             'cnpj' => $faker->cnpj(),
             'email' => $faker->unique()->companyEmail(),
             'password' => static::$password ??= Hash::make('password'),
-            'psychosocial_collection_type' => BaseCollection::HSE->value,
+            'psychosocial_collection_type' => MetodologyType::HSE->value,
         ];
     }
 }

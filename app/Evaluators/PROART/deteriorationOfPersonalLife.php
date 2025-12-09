@@ -2,8 +2,8 @@
 
 namespace App\Evaluators\PROART;
 
-use App\Enums\PROART\PROARTRisk;
-use App\Enums\PROART\PROARTHazard;
+use App\Enums\Psychosocial\PROART\PROARTRisk;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Models\Hazard;
 use App\Services\Psychosocial\PROARTRiskService;
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\UserStatus;
+use App\Enums\User\UserStatus;
 use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;

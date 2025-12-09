@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Auth\Register;
 
-use App\Enums\BaseCollection;
-use App\Enums\PROART\PROARTHazard;
+use App\Enums\Campaign\MetodologyType;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Models\BaseControlAction;
 use App\Models\Company;
 use App\Models\CompanyReport;
 use App\Models\PROARTIndicator;
-use App\Services\AuthenticationService;
+use App\Services\Auth\AuthenticationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -44,7 +44,7 @@ class CompanyRegisterComponent extends Component
                     'cnpj' => $this->cnpj,
                     'email' => $this->email,
                     'password' => Hash::make($this->password),
-                    'psychosocial_collection_type' => BaseCollection::HSE->value,
+                    'psychosocial_collection_type' => MetodologyType::HSE->value,
                 ]);
 
                 $this->createMetrics($company);

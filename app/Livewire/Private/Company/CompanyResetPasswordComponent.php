@@ -56,11 +56,11 @@ class CompanyResetPasswordComponent extends Component
 
     public function openResetPasswordModal()
     {
-        $this->dispatch('open-report-modal');
+        $this->dispatch('open-reset-password-modal');
     }
     
     public function closeResetPasswordModal()
     {
-        $this->dispatch('close-report-modal');
+        $this->dispatch('close-reset-password-modal');
     }
 }

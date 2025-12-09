@@ -16,9 +16,9 @@
         </footer>
     @enderror
 
-    <div class="flex w-full gap-1.5">
+    <div class="w-full grid grid-cols-2 gap-1.5">
         @foreach ($options as $key => $option)
-            <div class="flex-1">
+            <div class="w-full">
                 <input type="radio" name="{{ $name }}" id="{{ $name . '_' . $key }}" @if($wireModelType === 'defer') wire:model.defer="{{ $wireModel }}" @endif @if($wireModelType === 'live') wire:model.live="{{ $wireModel }}" @endif value="{{ $option['value'] }}" class="peer hidden" {{ old($name) == $option['value'] || $value == $option['value'] ? 'checked' : '' }} />
                 <label for="{{ $name . '_' . $key }}" class="bg-secondary-background border-borders peer-checked:border-primary-solid flex w-full cursor-pointer items-center justify-between rounded-sm border p-3 transition hover:brightness-95">
                     <span class="text-main-text text-left text-sm font-normal">{{ $option['label'] }}</span>

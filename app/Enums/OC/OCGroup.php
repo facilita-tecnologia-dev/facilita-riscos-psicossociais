@@ -23,6 +23,18 @@ enum OCGroup: string
         };
     }
 
+    public function color(): string
+    {
+        return match ($this) {
+            self::WORK_CONDITIONS => '#FFB080',
+            self::WORK_SOCIAL_RELATIONS => '#CC80FF',
+            self::MOTIVATION_VALUES_AND_PURPOSES => '#80A4FF',
+            self::DEVELOPMENT_CARREER_RECOGNITION => '#9DD466',
+            self::COMMUNICATION_AND_INFORMATION => '#FF8080',
+            self::ENGAGEMENT_AND_PRIDE => '#FF80E8',
+        };
+    }
+
     public static function values(): array
     {
         return array_column(self::cases(), 'value');

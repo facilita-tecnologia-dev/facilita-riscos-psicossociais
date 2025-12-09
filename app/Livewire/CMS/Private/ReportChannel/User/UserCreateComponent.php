@@ -3,7 +3,7 @@
 namespace App\Livewire\CMS\Private\ReportChannel\User;
 
 use App\Enums\ReportChannel\ReportChannelUserTypes;
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Validate;
 use Livewire\Component;

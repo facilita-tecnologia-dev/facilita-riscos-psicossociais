@@ -2,8 +2,8 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
-use App\Enums\Filters\PsychosocialCompanyOrder;
-use App\Enums\Filters\UsersCountRangeEnum;
+use App\Enums\Psychosocial\CompanyOrder;
+use App\Enums\Filters\UserCountRange;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Component;
 
@@ -12,7 +12,7 @@ class CompanyFilterComponent extends Component
     public $name = '';
     public $cnpj = '';
     public $userCountRange = '';
-    public $orderBy = PsychosocialCompanyOrder::USERS_DESC->value;
+    public $orderBy = CompanyOrder::USERS_DESC->value;
 
     public $userCountRanges = [];
     public $companyOrderTypes = [];
@@ -25,8 +25,8 @@ class CompanyFilterComponent extends Component
 
     public function mount()
     {
-        $this->userCountRanges = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($userCountRange) => ['label' => $userCountRange->value . ' funcionários', 'value' => $userCountRange->value], UsersCountRangeEnum::cases()));
-        $this->companyOrderTypes = array_map(fn ($companyOrderType) => ['label' => $companyOrderType->label(), 'value' => $companyOrderType->value], PsychosocialCompanyOrder::cases());
+        $this->userCountRanges = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($userCountRange) => ['label' => $userCountRange->value . ' funcionários', 'value' => $userCountRange->value], UserCountRange::cases()));
+        $this->companyOrderTypes = array_map(fn ($companyOrderType) => ['label' => $companyOrderType->label(), 'value' => $companyOrderType->value], CompanyOrder::cases());
     }
 
     public function submit()
@@ -34,8 +34,8 @@ class CompanyFilterComponent extends Component
         $filters = $this->validate([
             'name' => ['nullable', 'string', 'max:255'],
             'cnpj' => ['nullable', 'string', 'max:255'],
-            'userCountRange' => ['nullable', new Enum(UsersCountRangeEnum::class)],
-            'orderBy' => ['nullable', new Enum(PsychosocialCompanyOrder::class)],
+            'userCountRange' => ['nullable', new Enum(UserCountRange::class)],
+            'orderBy' => ['nullable', new Enum(CompanyOrder::class)],
         ]);
 
         $this->dispatch('company-list:filter', $filters);

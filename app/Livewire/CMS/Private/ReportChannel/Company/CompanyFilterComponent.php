@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\ReportChannel\Company;
 
-use App\Enums\Filters\ReportChannelCompanyOrder;
+use App\Enums\ReportChannel\CompanyOrder;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Component;
 
@@ -10,7 +10,7 @@ class CompanyFilterComponent extends Component
 {
     public $register_name = '';
     public $cnpj = '';
-    public $order_by = ReportChannelCompanyOrder::REGISTER_NAME_ASC->value;
+    public $order_by = CompanyOrder::REGISTER_NAME_ASC->value;
 
     public $companyOrderTypes = [];
 
@@ -21,7 +21,7 @@ class CompanyFilterComponent extends Component
 
     public function mount()
     {
-        $this->companyOrderTypes = array_map(fn ($companyOrderType) => ['label' => $companyOrderType->label(), 'value' => $companyOrderType->value], ReportChannelCompanyOrder::cases());
+        $this->companyOrderTypes = array_map(fn ($companyOrderType) => ['label' => $companyOrderType->label(), 'value' => $companyOrderType->value], CompanyOrder::cases());
     }
 
     public function submit()
@@ -29,7 +29,7 @@ class CompanyFilterComponent extends Component
         $filters = $this->validate([
             'register_name' => ['nullable', 'string', 'max:255'],
             'cnpj' => ['nullable', 'string', 'max:255'],
-            'order_by' => ['nullable', new Enum(ReportChannelCompanyOrder::class)],
+            'order_by' => ['nullable', new Enum(CompanyOrder::class)],
         ]);
 
         $this->dispatch('company-list:filter', $filters);

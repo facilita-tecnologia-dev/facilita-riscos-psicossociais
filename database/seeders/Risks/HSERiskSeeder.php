@@ -2,10 +2,10 @@
 
 namespace Database\Seeders\Risks;
 
-use App\Enums\HSE\HSEBaseline;
-use App\Enums\HSE\HSEHazard;
-use App\Enums\HSE\HSEGroup;
-use App\Enums\HSE\HSEGravity;
+use App\Enums\Psychosocial\HSE\HSEBaseline;
+use App\Enums\Psychosocial\HSE\HSEHazard;
+use App\Enums\Psychosocial\HSE\HSEGroup;
+use App\Enums\Psychosocial\HSE\HSEGravity;
 use App\Models\Hazard;
 use Illuminate\Database\Seeder;
 

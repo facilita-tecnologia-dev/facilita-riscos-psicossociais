@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Private\ActionPlan;
 
-use App\Enums\BaseCollection;
+use App\Enums\Campaign\MetodologyType;
 use App\Models\ControlActionType;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -17,14 +17,14 @@ class ControlActionEditComponent extends Component
                                     ->controlActions()
                                     ->with(['hazard', 'type'])
                                     ->whereHas('hazard', fn($hazard) => 
-                                        $hazard->whereHas('collection', fn($collection) => $collection->where('key', BaseCollection::HSE->value))
+                                        $hazard->whereHas('collection', fn($collection) => $collection->where('key', MetodologyType::HSE->value))
                                     )
                                     ->get()->groupBy(['hazard.type', 'gravity'])
             : session('auth:company')->actionPlan
                                     ->controlActions()
                                     ->with(['hazard', 'type'])
                                     ->whereHas('hazard', fn($hazard) => 
-                                        $hazard->whereHas('collection', fn($collection) => $collection->where('key', BaseCollection::PROART->value))
+                                        $hazard->whereHas('collection', fn($collection) => $collection->where('key', MetodologyType::PROART->value))
                                     )
                                     ->get()->groupBy(['hazard.type', 'gravity', 'type.type']);
     }

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\ReportChannel\Company;
 
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 

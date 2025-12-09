@@ -5,21 +5,21 @@
         </h2>
 
         <div class="flex items-center gap-2.5">
-            @if($status == App\Enums\UserStatus::ACTIVE->value)
+            @if($status == App\Enums\User\UserStatus::ACTIVE->value)
                 <div class="flex items-center gap-1.5">
                     <span class="hidden sm:block text-sm text-secondary-text font-normal text-right">Ativado</span>
                     <div class="w-3 h-3 bg-primary-solid rounded-full animate-pulse"></div>
                 </div>
             @endif
             
-            @if($status == App\Enums\UserStatus::INACTIVE->value)
+            @if($status == App\Enums\User\UserStatus::INACTIVE->value)
                 <div class="flex items-center gap-1.5">
                     <span class="hidden sm:block text-sm text-secondary-text font-normal text-right">Inativado</span>
                     <div class="w-3 h-3 bg-danger rounded-full animate-pulse"></div>
                 </div>
             @endif
 
-            @if($role == App\Enums\RoleEnum::MANAGER->value)
+            @if($role == App\Enums\User\UserRole::MANAGER->value)
                 <div class="flex items-center gap-1.5">
                     <span class="hidden sm:block text-sm text-secondary-text font-normal text-right">Gestor</span>
                     <x-icon icon="work" class="w-5 h-5 object-scale-downt text-secondary-text" />
@@ -28,7 +28,7 @@
         </div>
     </header>
 
-    @if($user['is_temp_password'] && ($user->role(session('auth:company'))['type'] == App\Enums\RoleEnum::MANAGER->value))
+    @if($user['is_temp_password'] && ($user->role(session('auth:company'))['type'] == App\Enums\User\UserRole::MANAGER->value))
         <button type="button" onclick="navigator.clipboard.writeText('{{ $user['password'] }}')" wire:click='copyTempPasswordToClipboard' class="px-4 py-2 bg-primary-solid/20 border border-primary-solid rounded-md cursor-pointer flex items-start flex-col gap-1" data-tippy-content="Clique para copiar a senha temporária">
             <p class="text-sm text-left text-main-text font-normal">Este usuário possui perfil de gestor e ainda não definiu uma senha. Uma senha temporária foi criada e deverá ser redefinida no próximo acesso ao sistema.</p>
             <span class="text-sm text-left text-main-text font-normal">Senha temporária: {{ $user['password'] }}</span>
@@ -59,7 +59,7 @@
             <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Salvar</span>
         </x-new-components.actions.button>
 
-        @if($status == App\Enums\UserStatus::ACTIVE->value)
+        @if($status == App\Enums\User\UserStatus::ACTIVE->value)
             <x-new-components.actions.button class="!bg-danger" type="button" wire:click='inactivateUser'>
                 <div wire:loading wire:target="inactivateUser">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
@@ -69,7 +69,7 @@
             </x-new-components.actions.button>
         @endif
 
-        @if($status == App\Enums\UserStatus::INACTIVE->value)
+        @if($status == App\Enums\User\UserStatus::INACTIVE->value)
             <x-new-components.actions.button type="button" wire:click='activateUser'>
                 <div wire:loading wire:target="activateUser">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />

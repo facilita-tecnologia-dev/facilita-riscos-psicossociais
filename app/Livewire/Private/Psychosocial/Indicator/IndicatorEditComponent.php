@@ -2,12 +2,12 @@
 
 namespace App\Livewire\Private\Psychosocial\Indicator;
 
-use App\Enums\BaseCollection as EnumsBaseCollection;
-use App\Enums\PROART\PROARTHazard;
-use App\Enums\PROART\PROARTIndicator;
+use App\Enums\Campaign\MetodologyType;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
+use App\Enums\Psychosocial\PROART\PROARTIndicator;
 use App\Models\BaseCollection;
 use App\Models\Hazard;
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +52,7 @@ class IndicatorEditComponent extends Component
         $this->hasReportChannel = ReportChannelService::hasReportChannel(session('auth:company'));
 
         if($this->hasReportChannel){
-            $baseCollection = BaseCollection::firstWhere('key', EnumsBaseCollection::PROART);
+            $baseCollection = BaseCollection::firstWhere('key', MetodologyType::PROART);
             $hazards = Hazard::where('base_collection_id', $baseCollection->id)->get();
 
             $reportChannelReports = ReportChannelService::reports(session('auth:company'));

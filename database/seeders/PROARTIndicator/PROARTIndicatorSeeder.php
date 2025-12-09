@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\PROARTIndicator;
 
-use App\Enums\PROART\PROARTIndicator as EnumPROARTIndicator;
+use App\Enums\Psychosocial\PROART\PROARTIndicator as EnumPROARTIndicator;
 use App\Models\PROARTIndicator;
 use Illuminate\Database\Seeder;
 

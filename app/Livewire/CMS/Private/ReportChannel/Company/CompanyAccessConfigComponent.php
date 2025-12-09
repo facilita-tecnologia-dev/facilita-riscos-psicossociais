@@ -3,7 +3,7 @@
 namespace App\Livewire\CMS\Private\ReportChannel\Company;
 
 use App\Enums\ReportChannel\ReportChannelCompanySubscriptionTypes;
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Livewire\Component;
 
 class CompanyAccessConfigComponent extends Component

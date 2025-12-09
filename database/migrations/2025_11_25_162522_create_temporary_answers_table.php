@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\CollectionType;
+use App\Enums\Campaign\CollectionCategory;
 use App\Models\Campaign;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Campaign::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('question_id');
-            $table->enum('question_type', CollectionType::values());
+            $table->enum('question_type', CollectionCategory::values());
             $table->integer('value')->nullable();
             $table->timestamps();
         });

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
-use App\Enums\BaseCollection;
+use App\Enums\Campaign\MetodologyType;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
@@ -35,8 +35,8 @@ class CompanyShowComponent extends Component
 
         $this->psychosocialMetodology = $company->psychosocial_collection_type;
         $this->psychosocialMetodologies = [
-            ['label' => BaseCollection::HSE->label(), 'value' => BaseCollection::HSE->value],
-            ['label' => BaseCollection::PROART->label(), 'value' => BaseCollection::PROART->value],
+            ['label' => MetodologyType::HSE->label(), 'value' => MetodologyType::HSE->value],
+            ['label' => MetodologyType::PROART->label(), 'value' => MetodologyType::PROART->value],
         ];
     }
 

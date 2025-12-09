@@ -17,7 +17,7 @@
                         <div class="p-6 rounded-2xl bg-secondary-background border border-borders shadow-sm flex flex-col gap-4">
                             <header class="flex justify-between items-start">
                                 <div class="w-14 h-14 bg-primary-solid rounded-full flex items-center justify-center">
-                                    @if($campaign->collection()->type === App\Enums\BaseCollectionType::PSYCHOSOCIAL)
+                                    @if($campaign->collection()->type === App\Enums\Campaign\CollectionType::PSYCHOSOCIAL)
                                         <x-icon icon="brain" class="text-main-background h-6 w-6 object-scale-down" />
                                     @else
                                         <x-icon icon="cloud" class="text-main-background h-6 w-6 object-scale-down" />
@@ -36,7 +36,7 @@
                                 <x-new-components.info-item label="Descrição" :value="$campaign->description ?? 'Sem descrição'" truncate />
                             </div>
 
-                            @if($campaign->status !== App\Enums\CampaignStatus::COMPLETED || !$campaign->end_date->lt(now()))
+                            @if($campaign->status !== App\Enums\Campaign\CampaignStatus::COMPLETED || !$campaign->end_date->lt(now()))
                                 <x-new-components.actions.button :href="route('campaign.edit', $campaign)">
                                     <span class="text-main-background text-center text-sm font-semibold">Editar</span>
                                 </x-new-components.actions.button>
@@ -60,7 +60,7 @@
                         <div class="p-6 rounded-2xl bg-secondary-background border border-borders shadow-sm flex flex-col gap-4">
                             <header class="flex justify-between items-start">
                                 <div class="w-14 h-14 bg-primary-solid rounded-full flex items-center justify-center">
-                                    @if($campaign->collection()->type === App\Enums\BaseCollectionType::PSYCHOSOCIAL)
+                                    @if($campaign->collection()->type === App\Enums\Campaign\CollectionType::PSYCHOSOCIAL)
                                         <x-icon icon="brain" class="text-main-background h-6 w-6 object-scale-down" />
                                     @else
                                         <x-icon icon="cloud" class="text-main-background h-6 w-6 object-scale-down" />

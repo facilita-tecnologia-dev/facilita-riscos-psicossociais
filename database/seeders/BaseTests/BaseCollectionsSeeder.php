@@ -2,9 +2,9 @@
 
 namespace Database\Seeders\BaseTests;
 
-use App\Enums\BaseCollectionType;
+use App\Enums\Campaign\CollectionType;
 use App\Models\BaseCollection;
-use App\Enums\BaseCollection as EnumBaseCollection;
+use App\Enums\Campaign\MetodologyType;
 use Database\Seeders\BaseTests\HSEQuestions\ChangeSeeder;
 use Database\Seeders\BaseTests\HSEQuestions\ControlSeeder;
 use Database\Seeders\BaseTests\HSEQuestions\DemandsSeeder;
@@ -32,18 +32,18 @@ class BaseCollectionsSeeder extends Seeder
         BaseCollection::insert([
             [
                 'name' => 'Riscos Psicossociais',
-                'key' => EnumBaseCollection::PROART->value,
-                'type' => BaseCollectionType::PSYCHOSOCIAL->value
+                'key' => MetodologyType::PROART->value,
+                'type' => CollectionType::PSYCHOSOCIAL->value
             ],
             [
                 'name' => 'Riscos Psicossociais',
-                'key' => EnumBaseCollection::HSE->value,
-                'type' => BaseCollectionType::PSYCHOSOCIAL->value
+                'key' => MetodologyType::HSE->value,
+                'type' => CollectionType::PSYCHOSOCIAL->value
             ],
             [
                 'name' => 'Clima Organizacional',
-                'key' => EnumBaseCollection::ORGANIZATIONAL->value,
-                'type' => BaseCollectionType::ORGANIZATIONAL->value
+                'key' => MetodologyType::ORGANIZATIONAL->value,
+                'type' => CollectionType::ORGANIZATIONAL->value
             ],
         ]);
 

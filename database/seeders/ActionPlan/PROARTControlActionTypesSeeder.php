@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\ActionPlan;
 
-use App\Enums\PROART\PROARTControlActionTypes;
+use App\Enums\Psychosocial\PROART\PROARTControlActionTypes;
 use App\Models\ControlActionType;
 use Illuminate\Database\Seeder;
 

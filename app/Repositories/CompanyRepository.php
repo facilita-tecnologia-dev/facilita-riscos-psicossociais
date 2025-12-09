@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Enums\CampaignStatus;
-use App\Enums\CollectionType;
+use App\Enums\Campaign\CampaignStatus;
+use App\Enums\Campaign\CollectionCategory;
 use App\Jobs\UpdateCampaignStatusJob;
 use App\Models\Campaign;
 use App\Models\Company;

@@ -1,8 +1,4 @@
 <div class="contents">
-    {{-- @php
-        $latestPsychosocialCampaign = session("auth:company")->latestPsychosocialCampaign();
-        $latestOrganizationalCampaign = session("auth:company")->latestOrganizationalCampaign();
-    @endphp --}}
     @if (isset($users) && count($users) > 0)
         <div class="w-full flex-1">
             <x-new-components.table>

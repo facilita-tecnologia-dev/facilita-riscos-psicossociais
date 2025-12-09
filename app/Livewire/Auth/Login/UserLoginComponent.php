@@ -4,7 +4,7 @@ namespace App\Livewire\Auth\Login;
 
 use App\Models\Company;
 use App\Models\User;
-use App\Services\AuthenticationService;
+use App\Services\Auth\AuthenticationService;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 

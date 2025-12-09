@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Private\Psychosocial\Dashboard;
 
-use App\Enums\HSE\HSERisk;
-use App\Enums\PROART\PROARTRisk;
+use App\Enums\Psychosocial\HSE\HSERisk;
+use App\Enums\Psychosocial\PROART\PROARTRisk;
 use Livewire\Component;
 
 class RiskItem extends Component

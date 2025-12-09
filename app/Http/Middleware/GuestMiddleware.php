@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\AuthenticationService;
+use App\Services\Auth\AuthenticationService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

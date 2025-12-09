@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Enums\BaseCollection;
-use App\Enums\PROART\PROARTHazard;
+use App\Enums\Campaign\MetodologyType;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Models\BaseControlAction;
 use App\Models\CID;
 use App\Models\Company;
@@ -18,7 +18,7 @@ class CompanySeeder extends Seeder
 {
     public function run(): void
     {
-        Company::factory(3)->create(['password' => Hash::make('facilita3015'), 'psychosocial_collection_type' => BaseCollection::PROART->value])->each(function($company){
+        Company::factory(3)->create(['password' => Hash::make('facilita3015'), 'psychosocial_collection_type' => MetodologyType::PROART->value])->each(function($company){
             // Users
             User::factory(rand(8, 100))->create(['password' => null])->each(function($user) use($company) {
                 $company->users()->attach($user, ['role_id' => rand(1, 2)]);
@@ -63,7 +63,7 @@ class CompanySeeder extends Seeder
             });
         });
 
-        Company::factory(3)->create(['password' => Hash::make('facilita3015'), 'psychosocial_collection_type' => BaseCollection::HSE->value])->each(function($company){
+        Company::factory(3)->create(['password' => Hash::make('facilita3015'), 'psychosocial_collection_type' => MetodologyType::HSE->value])->each(function($company){
             // Users
             User::factory(rand(8, 100))->create(['password' => null])->each(function($user) use($company) {
                 $company->users()->attach($user, ['role_id' => rand(1, 2)]);

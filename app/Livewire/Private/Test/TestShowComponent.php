@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Private\Test;
 
+use App\Enums\Campaign\CollectionType;
 use App\Models\Campaign;
 use App\Models\TemporaryAnswer;
 use App\Models\UserAnswer;
+use App\Models\UserFeedback;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -20,6 +22,9 @@ class TestShowComponent extends Component
     public array $questions;
     public array $answers;
     public int $current = 0;
+    
+    public bool $is_organizational = false;
+    public ?string $feedback = null;
 
     public function render()
     {
@@ -29,6 +34,7 @@ class TestShowComponent extends Component
     public function mount(Campaign $campaign)
     {
         $this->campaign = $campaign;
+        $this->is_organizational = $this->campaign->collection()->type == CollectionType::ORGANIZATIONAL;
 
         $this->questions = $campaign->collection()->questions->shuffle()->values()->toArray();
 
@@ -169,8 +175,16 @@ class TestShowComponent extends Component
                     ->delete();
             });
 
+            if($this->is_organizational && $this->feedback){
+                UserFeedback::create([
+                    'company_id' => session('auth:company')->id,
+                    'user_id' => session('auth:user')->id,
+                    'content' => $this->feedback,
+                ]);
+            }
+            
             $this->dispatch('alert:success', "Teste finalizado!");
-            return redirect()->to(route('test.thanks'));
+            return redirect()->to(route('home.user'));
         } catch (\Throwable $th) {
             report($th);
             $this->dispatch('alert:danger', "Não foi possível armazenar as respostas do seu teste.");

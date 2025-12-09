@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Private\Psychosocial\Dashboard;
 
-use App\Enums\HSE\HSEGroup;
-use App\Enums\HSE\HSERisk;
-use App\Enums\PROART\PROARTGroup;
-use App\Enums\PROART\PROARTRisk;
+use App\Enums\Psychosocial\HSE\HSEGroup;
+use App\Enums\Psychosocial\HSE\HSERisk;
+use App\Enums\Psychosocial\PROART\PROARTGroup;
+use App\Enums\Psychosocial\PROART\PROARTRisk;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 

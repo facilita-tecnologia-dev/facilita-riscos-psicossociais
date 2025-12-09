@@ -3,7 +3,7 @@
 namespace App\Livewire\CMS\Auth;
 
 use App\Models\CMSUser;
-use App\Services\AuthenticationService;
+use App\Services\Auth\AuthenticationService;
 use Livewire\Component;
 
 class CMSLoginComponent extends Component

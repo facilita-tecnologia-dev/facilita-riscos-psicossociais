@@ -31,11 +31,18 @@ class UserImportComponent extends Component
 
     public function downloadTemplate()
     {
-        $filePath = 'files/template-importacao-de-funcionarios-facilita.xlsx';
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+        $s3 = Storage::disk('s3');
+        
+        $file_path = 'modelos-importacao-funcionarios/modelo-importacao-funcionarios.xlsx';
 
-         if (!Storage::exists($filePath)) return $this->dispatch('alert:danger', 'Arquivo não encontrado, tente novamente mais tarde.');
+        if (! $s3->exists($file_path)) {
+            $this->dispatch('alert:danger', 'Arquivo não encontrado, tente novamente mais tarde.');
+            return;
+        }
 
-        return Storage::download($filePath, 'facilita-arquivo-modelo-importacao-funcionarios.xlsx');
+        $this->dispatch('alert:success', 'Download feito com sucesso!');
+        return $s3->download($file_path);
     }
 
     public function uploadUsersFile()

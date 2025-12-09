@@ -2,8 +2,8 @@
 
 namespace Database\Seeders\CIDS;
 
-use App\Enums\HSE\HSECID;
-use App\Enums\HSE\HSEHazard;
+use App\Enums\Psychosocial\HSE\HSECID;
+use App\Enums\Psychosocial\HSE\HSEHazard;
 use App\Models\CID;
 use App\Models\Hazard;
 use App\Models\HazardCID;

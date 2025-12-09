@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Enums\InternalUserRoleEnum;
-use App\Enums\RoleEnum;
-use App\Enums\UserStatus;
+use App\Enums\InternalUserUserRole;
+use App\Enums\User\UserRole;
+use App\Enums\User\UserStatus;
 use App\Imports\UsersImport;
 use App\Models\Company;
 use App\Models\Permission;
@@ -13,7 +13,7 @@ use App\Models\RolePermission;
 use App\Models\User;
 use App\Models\UserCustomPermission;
 use App\Models\UserDepartmentPermission;
-use App\Services\AuthenticationService;
+use App\Services\Auth\AuthenticationService;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -41,9 +41,9 @@ class UserRepository
 
             $company->users()->attach($user, ['role_id' => $data['role']]);
 
-            $role = RoleEnum::from($data['role']);
+            $role = UserRole::from($data['role']);
 
-            if ($role === RoleEnum::MANAGER) {
+            if ($role === UserRole::MANAGER) {
                 $user->password = $user->generateTemporaryPassword();
                 $user->is_temp_password = true;
                 $user->save();
@@ -63,7 +63,7 @@ class UserRepository
         return DB::transaction(function() use($company, $user, $role) {
             $company->users()->attach($user, ['role_id' => $role]);
 
-            if ($role === RoleEnum::MANAGER) {
+            if ($role === UserRole::MANAGER) {
                 if(!$user->password){
                     $user->password = $user->generateTemporaryPassword();
                     $user->is_temp_password = true;
@@ -112,9 +112,9 @@ class UserRepository
 
             $user->companies()->syncWithoutDetaching([$company->id => ['role_id' => (int) $data['role']]]);
 
-            $role = RoleEnum::from($data['role']);
+            $role = UserRole::from($data['role']);
 
-            if ($role === RoleEnum::MANAGER) {
+            if ($role === UserRole::MANAGER) {
                 if(!$user->password){
                     $user->password = $user->generateTemporaryPassword();
                     $user->is_temp_password = true;

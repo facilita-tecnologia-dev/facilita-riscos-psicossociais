@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Private\Home;
 
-use App\Enums\BaseCollectionType;
+use App\Enums\Campaign\CollectionType;
 use App\Models\Campaign;
 use Livewire\Component;
 
@@ -20,7 +20,7 @@ class UserHomeComponent extends Component
     {
         $activeCampaigns = session('auth:company')->load('campaigns')->activeCampaigns();
         
-        $this->activePsychosocialCampaign = $activeCampaigns->filter(fn($campaign) => $campaign->collection()->type == BaseCollectionType::PSYCHOSOCIAL)?->first();
-        $this->activeOrganizationalCampaign = $activeCampaigns->filter(fn($campaign) => $campaign->collection()->type == BaseCollectionType::ORGANIZATIONAL)?->first();
+        $this->activePsychosocialCampaign = $activeCampaigns->filter(fn($campaign) => $campaign->collection()->type == CollectionType::PSYCHOSOCIAL)?->first();
+        $this->activeOrganizationalCampaign = $activeCampaigns->filter(fn($campaign) => $campaign->collection()->type == CollectionType::ORGANIZATIONAL)?->first();
     }
 }

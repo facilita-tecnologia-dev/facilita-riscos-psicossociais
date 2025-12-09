@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Private\User;
 
-use App\Enums\RoleEnum;
-use App\Enums\UserStatus;
+use App\Enums\User\UserRole;
+use App\Enums\User\UserStatus;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +42,7 @@ class UserEditComponent extends Component
     {
         $this->user = $user;
         
-        $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], RoleEnum::cases());
+        $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], UserRole::cases());
         $this->role = $this->user->role(session('auth:company'))->type;
         $this->status = $this->user->status(session('auth:company'));
 
@@ -73,7 +73,7 @@ class UserEditComponent extends Component
             'education_level' => ['nullable', 'string', 'max:255'],
             'work_shift' => ['nullable', 'string', 'max:255'],
             'admission' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()), Rule::date()->after(today()->subCenturies(1))],
-            'role' => ['required', 'string', Rule::enum(RoleEnum::class)],
+            'role' => ['required', 'string', Rule::enum(UserRole::class)],
         ]);
 
         try {

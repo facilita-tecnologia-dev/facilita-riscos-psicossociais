@@ -13,9 +13,12 @@
 
             <div class="bg-borders h-0.5 w-8"></div>
             {{-- Divider --}}
+            @if(session('auth:guard') === 'user')
+                <x-new-components.actions.nav-item :href="route('user.show', session('auth:user'))" icon="profile" activeRoute="['user.show']" label="Meu perfil" />
+            @endif
 
             <x-new-components.actions.nav-item :href="route('company.show', session('auth:company'))" icon="company" :activeRoute="['company.*', 'user.*']" tooltip="Empresa" />
-            <x-new-components.actions.nav-item href="" icon="books" activeRoute="" tooltip="Documentação" />
+            <x-new-components.actions.nav-item wire:click='downloadDocumentation' icon="books" activeRoute="" tooltip="Documentação" />
         </nav>
     </aside>
 
@@ -32,8 +35,12 @@
 
             <div class="bg-borders h-0.5 w-8"></div>
 
+            @if(session('auth:guard') === 'user')
+                <x-new-components.actions.mobile-nav-item :href="route('user.show', session('auth:user'))" icon="profile" activeRoute="['user.show']" label="Meu perfil" />
+            @endif
+
             <x-new-components.actions.mobile-nav-item :href="route('company.show', session('auth:company'))" icon="company" activeRoute="['company.*', 'user.*']"  label="Empresa" />
-            <x-new-components.actions.mobile-nav-item href="" icon="books" activeRoute="" label="Documentação" />
+            <x-new-components.actions.mobile-nav-item wire:click='downloadDocumentation' icon="books" activeRoute="" label="Documentação" />
         </nav>
     </aside>
 </div>

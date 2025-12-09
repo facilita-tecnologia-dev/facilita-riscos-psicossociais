@@ -1,6 +1,6 @@
 <div x-data="{ dropdownOpen: false }" style="border-color: {{ $evaluation->color() }}" class="bg-main-background rounded-md border-1 p-3">
     @php
-        $hazardName = session('auth:company')->usesHSE() ? App\Enums\HSE\HSEHazard::from($hazardName)->label() : App\Enums\PROART\PROARTHazard::from($hazardName)->label();
+        $hazardName = session('auth:company')->usesHSE() ? App\Enums\Psychosocial\HSE\HSEHazard::from($hazardName)->label() : App\Enums\Psychosocial\PROART\PROARTHazard::from($hazardName)->label();
     @endphp
 
     <button class="flex w-full items-center justify-between cursor-pointer" @click="dropdownOpen = !dropdownOpen" data-tippy-content="Clique para alternar a visão das medidas de controle desse perigo psicossocial.">
@@ -28,7 +28,7 @@
                 @endforeach
             @else
                 @foreach ($controlActions as $type => $actions)       
-                    <span class="block text-sm font-semibold text-main-text text-left">{{ App\Enums\PROART\PROARTControlActionTypes::from($type)->label() }}</span>     
+                    <span class="block text-sm font-semibold text-main-text text-left">{{ App\Enums\Psychosocial\PROART\PROARTControlActionTypes::from($type)->label() }}</span>     
                     @foreach ($actions as $action)            
                         <li class="flex items-start gap-2">
                             <div class="h-2 w-2 shrink-0 mt-1.5" style="background: {{ $evaluation->color() }}"></div>

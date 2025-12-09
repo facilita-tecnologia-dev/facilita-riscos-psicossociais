@@ -2,14 +2,12 @@
 
 namespace Database\Seeders\Campaigns;
 
-use App\Enums\BaseCollection;
-use App\Enums\CampaignStatus;
-use App\Enums\CollectionType;
+use App\Enums\Campaign\MetodologyType;
+use App\Enums\Campaign\CampaignStatus;
+use App\Enums\Campaign\CollectionCategory;
 use App\Models\Company;
-use App\Services\PsychosocialService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CampaignSeeder extends Seeder
 {
@@ -17,8 +15,8 @@ class CampaignSeeder extends Seeder
     {
         Company::all()->each(function($company){
             $campaign = $company->campaigns()->create([
-                'collection_id' => $company->psychosocial_collection_type === BaseCollection::HSE->value ? '2' : '1',
-                'type' => CollectionType::BASE,
+                'collection_id' => $company->psychosocial_collection_type === MetodologyType::HSE->value ? '2' : '1',
+                'type' => CollectionCategory::BASE,
                 'name' => 'Campanha de Riscos Psicossociais',
                 'start_date' => Carbon::createFromTimestamp(
                     rand(
@@ -43,7 +41,7 @@ class CampaignSeeder extends Seeder
                         'user_id' => $user->id,
                         'company_id' => $company->id,
                         'collection_id' => $campaign->collection_id,
-                        'type' => CollectionType::BASE,
+                        'type' => CollectionCategory::BASE,
                         'created_at' => Carbon::createFromTimestamp(
                             rand(
                                 Carbon::create(now()->year, 6, 31)->timestamp,
@@ -58,7 +56,7 @@ class CampaignSeeder extends Seeder
                             'company_id' => $company->id,
                             'campaign_id' => $campaign->id,
                             'question_id' => $question->id,
-                            'question_type' => CollectionType::BASE,
+                            'question_type' => CollectionCategory::BASE,
                             'value' => rand(1, 5)
                         ]);
                     });

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Components;
 
-use App\Services\AuthenticationService;
+use App\Services\Auth\AuthenticationService;
 use Livewire\Component;
 
 class PrivateHeaderComponent extends Component

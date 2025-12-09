@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Enums\CampaignStatus;
-use App\Enums\CollectionType;
+use App\Enums\Campaign\CampaignStatus;
+use App\Enums\Campaign\CollectionCategory;
 use App\Jobs\UpdateCampaignStatusJob;
 use App\Models\Campaign;
 use Carbon\Carbon;
@@ -18,7 +18,7 @@ class CampaignRepository
 
             $campaign = session('auth:company')->campaigns()->create([
                 'collection_id' => $collection_id,
-                'type' => CollectionType::from($collection_type)->value,
+                'type' => CollectionCategory::from($collection_type)->value,
                 'name' => $data['name'],
                 'description' => $data['description'],
                 'start_date' => $data['start_date'],

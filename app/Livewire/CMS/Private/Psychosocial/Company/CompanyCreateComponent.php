@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
-use App\Enums\BaseCollection;
+use App\Enums\Campaign\MetodologyType;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -23,7 +23,7 @@ class CompanyCreateComponent extends Component
     public ?string $registerName = null;
     public ?string $cnpj = null;
     public ?string $email = null;
-    public ?string $psychosocialMetodology = BaseCollection::HSE->value;
+    public ?string $psychosocialMetodology = MetodologyType::HSE->value;
     public ?string $password = null;
     public ?string $passwordConfirmation = null;
 
@@ -37,8 +37,8 @@ class CompanyCreateComponent extends Component
     public function mount()
     {
         $this->psychosocialMetodologies = [
-            ['label' => BaseCollection::HSE->label(), 'value' => BaseCollection::HSE->value],
-            ['label' => BaseCollection::PROART->label(), 'value' => BaseCollection::PROART->value],
+            ['label' => MetodologyType::HSE->label(), 'value' => MetodologyType::HSE->value],
+            ['label' => MetodologyType::PROART->label(), 'value' => MetodologyType::PROART->value],
         ];
     }
 
@@ -49,7 +49,7 @@ class CompanyCreateComponent extends Component
             'registerName' => ['required', 'string', 'max:255'],
             'cnpj' => ['required', 'max:18', 'cnpj'],
             'email' => ['required', 'email', 'max:100'],
-            'psychosocialMetodology' => ['required', new Enum(BaseCollection::class)],
+            'psychosocialMetodology' => ['required', new Enum(MetodologyType::class)],
             'password' => ['required', 'string', 'max:100', Password::defaults()],
             'passwordConfirmation' => ['required', 'string', 'same:password', 'max:100'],
         ]);

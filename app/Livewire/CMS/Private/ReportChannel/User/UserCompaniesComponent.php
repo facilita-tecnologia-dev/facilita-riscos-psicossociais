@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\ReportChannel\User;
 
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Livewire\Component;
 
 class UserCompaniesComponent extends Component

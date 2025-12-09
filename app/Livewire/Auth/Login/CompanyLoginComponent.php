@@ -3,7 +3,7 @@
 namespace App\Livewire\Auth\Login;
 
 use App\Models\Company;
-use App\Services\AuthenticationService;
+use App\Services\Auth\AuthenticationService;
 use Livewire\Component;
 
 class CompanyLoginComponent extends Component

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders\ActionPlan;
 
-use App\Enums\BaseCollection;
-use App\Enums\PROART\PROARTControlActionTypes;
-use App\Enums\PROART\PROARTHazard;
+use App\Enums\Campaign\MetodologyType;
+use App\Enums\Psychosocial\PROART\PROARTControlActionTypes;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Models\BaseControlAction;
 use App\Models\ControlActionType;
 use App\Models\Hazard;
@@ -14,7 +14,7 @@ class PROARTControlActionsSeeder extends Seeder
 {
     public function run(): void
     {
-        $risks = Hazard::whereHas('collection', fn($collection) => $collection->where('key', BaseCollection::PROART->value))->get();
+        $risks = Hazard::whereHas('collection', fn($collection) => $collection->where('key', MetodologyType::PROART->value))->get();
         $controlActionTypes = ControlActionType::all();
 
         // organizational-rigidity

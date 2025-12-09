@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\ReportChannel\User;
 
-use App\Enums\Filters\ReportChannelUserOrder;
+use App\Enums\ReportChannel\UserOrder;
 use App\Enums\ReportChannel\ReportChannelUserTypes;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Component;
@@ -12,7 +12,7 @@ class UserFilterComponent extends Component
     public $full_name = '';
     public $cpf = '';
     public $type = '';
-    public $order_by = ReportChannelUserOrder::NAME_ASC->value;
+    public $order_by = UserOrder::NAME_ASC->value;
 
     public $userTypes = [];
     public $userOrderTypes = [];
@@ -24,7 +24,7 @@ class UserFilterComponent extends Component
 
     public function mount()
     {
-        $this->userOrderTypes = array_map(fn ($userOrderType) => ['label' => $userOrderType->label(), 'value' => $userOrderType->value], ReportChannelUserOrder::cases());
+        $this->userOrderTypes = array_map(fn ($userOrderType) => ['label' => $userOrderType->label(), 'value' => $userOrderType->value], UserOrder::cases());
         $this->userTypes = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($userType) => ['label' => $userType->label(), 'value' => $userType], ReportChannelUserTypes::cases()));
     }
 
@@ -34,7 +34,7 @@ class UserFilterComponent extends Component
             'full_name' => ['nullable', 'string', 'max:255'],
             'cpf' => ['nullable', 'string', 'max:255'],
             'type' => ['nullable', 'string', 'max:255'],
-            'order_by' => ['nullable', new Enum(ReportChannelUserOrder::class)],
+            'order_by' => ['nullable', new Enum(UserOrder::class)],
         ]);
 
         $this->dispatch('user-list:filter', $filters);

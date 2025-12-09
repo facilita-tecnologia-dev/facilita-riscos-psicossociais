@@ -12,9 +12,13 @@
                             <x-icon icon="brain" class="text-primary-solid h-7 w-7 object-scale-down" />
                             <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activePsychosocialCampaign->name }}</span>
                         </div>
-                        <x-new-components.actions.button :href="route('answer-test', $activePsychosocialCampaign)" fitSize>
-                            <span class="text-main-background text-center text-sm font-semibold">Responder</span>
-                        </x-new-components.actions.button>
+                        @if(session('auth:user')->hasAnsweredCampaign($this->activePsychosocialCampaign->id))
+                            <span class="text-sm text-secondary-text text-left font-normal">Respondido</span>
+                        @else
+                            <x-new-components.actions.button :href="route('test.answer', $activePsychosocialCampaign)" fitSize>
+                                <span class="text-main-background text-center text-sm font-semibold">Responder</span>
+                            </x-new-components.actions.button>
+                        @endif
                     </li>
                 @endif
 
@@ -24,9 +28,14 @@
                             <x-icon icon="cloud" class="text-primary-solid h-7 w-7 object-scale-down" />
                             <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activeOrganizationalCampaign->name }}</span>
                         </div>
-                        <x-new-components.actions.button :href="route('answer-test', $activeOrganizationalCampaign)" fitSize>
-                            <span class="text-main-background text-center text-sm font-semibold">Responder</span>
-                        </x-new-components.actions.button>
+           
+                        @if(session('auth:user')->hasAnsweredCampaign($this->activeOrganizationalCampaign->id))
+                            <span class="text-sm text-secondary-text text-left font-normal">Respondido</span>
+                        @else
+                            <x-new-components.actions.button :href="route('test.answer', $activeOrganizationalCampaign)" fitSize>
+                                <span class="text-main-background text-center text-sm font-semibold">Responder</span>
+                            </x-new-components.actions.button>
+                        @endif
                     </li>
                 @endif
             </ul>

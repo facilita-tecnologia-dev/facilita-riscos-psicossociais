@@ -21,7 +21,7 @@
 
                     <div class="flex items-center gap-4 md:gap-6 flex-wrap">
                         @php
-                            $caption = session('auth:company')->usesHSE() ? App\Enums\HSE\HSERisk::cases() : App\Enums\PROART\PROARTRisk::cases();
+                            $caption = session('auth:company')->usesHSE() ? App\Enums\Psychosocial\HSE\HSERisk::cases() : App\Enums\Psychosocial\PROART\PROARTRisk::cases();
                         @endphp
 
                         @foreach ($caption as $risk)
@@ -60,7 +60,7 @@
                                     <div class="bg-main-background flex flex-col gap-4 rounded-md">
                                         <header class="flex">
                                             @php
-                                                $groupName = session('auth:company')->usesHSE() ? App\Enums\HSE\HSEGroup::from($group)->label() : App\Enums\PROART\PROARTGroup::from($group)->label();
+                                                $groupName = session('auth:company')->usesHSE() ? App\Enums\Psychosocial\HSE\HSEGroup::from($group)->label() : App\Enums\Psychosocial\PROART\PROARTGroup::from($group)->label();
                                             @endphp
 
                                             <h3 class="text-main-text text-left text-base font-semibold">{{ $groupName }}</h3>
@@ -77,7 +77,9 @@
                     </div>
                 </div>
             @else
-                não tem bagui
+                <div class="w-full flex-1 flex items-start justify-center pt-6">
+                    <p class="text-secondary-text font-text text-center text-sm font-normal md:text-base">Nenhum resultado foi encontrado.</p>
+                </div>
             @endif
         </section>
     @else

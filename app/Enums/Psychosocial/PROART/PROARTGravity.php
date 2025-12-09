@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Enums\Psychosocial\PROART;
+
+enum PROARTGravity: string
+{
+    case LOW = '1';
+    case MEDIUM = '2';
+    case HIGH = '3';
+    case CRITICAL = '4';
+
+    
+    public function label(): string
+    {
+        return match ($this) {
+            self::LOW => 'Baixa',
+            self::MEDIUM => 'Média',
+            self::HIGH => 'Alta',
+            self::CRITICAL => 'Crítica',
+        };
+    }
+
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
+}

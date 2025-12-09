@@ -3,7 +3,7 @@
 namespace App\Livewire\CMS\Private\ReportChannel\Company;
 
 use App\Models\Company;
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Livewire\Attributes\On;
 use Livewire\Component;
 

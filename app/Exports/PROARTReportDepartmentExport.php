@@ -2,10 +2,10 @@
 
 namespace App\Exports;
 
-use App\Enums\PROART\PROARTControlActionTypes;
-use App\Enums\PROART\PROARTGravity;
-use App\Enums\PROART\PROARTProbability;
-use App\Enums\PROART\PROARTHazard;
+use App\Enums\Psychosocial\PROART\PROARTControlActionTypes;
+use App\Enums\Psychosocial\PROART\PROARTGravity;
+use App\Enums\Psychosocial\PROART\PROARTProbability;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Models\Company;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;

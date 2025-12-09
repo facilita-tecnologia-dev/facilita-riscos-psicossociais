@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\BaseTests\HSEQuestions;
 
-use App\Enums\HSE\HSEGroup;
+use App\Enums\Psychosocial\HSE\HSEGroup;
 use App\Models\BaseQuestion;
 use Illuminate\Database\Seeder;
 

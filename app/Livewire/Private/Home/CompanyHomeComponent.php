@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Private\Home;
 
-use App\Enums\BaseCollectionType;
+use App\Enums\Campaign\CollectionType;
 use App\Models\Campaign;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -19,7 +20,7 @@ class CompanyHomeComponent extends Component
     public string | null $currentStep;
 
     public function render()
-    {
+    {        
         return view('livewire.private.home.company-home-component');
     }
 
@@ -54,8 +55,8 @@ class CompanyHomeComponent extends Component
         $this->scheduledCampaigns = session('auth:company')->load('campaigns')->scheduledCampaigns();
         $activeCampaigns = session('auth:company')->activeCampaigns();
 
-        $this->activePsychosocialCampaign = $activeCampaigns->filter(fn($campaign) => $campaign->collection()->type == BaseCollectionType::PSYCHOSOCIAL)?->first();
-        $this->activeOrganizationalCampaign = $activeCampaigns->filter(fn($campaign) => $campaign->collection()->type == BaseCollectionType::ORGANIZATIONAL)?->first();
+        $this->activePsychosocialCampaign = $activeCampaigns->filter(fn($campaign) => $campaign->collection()->type == CollectionType::PSYCHOSOCIAL)?->first();
+        $this->activeOrganizationalCampaign = $activeCampaigns->filter(fn($campaign) => $campaign->collection()->type == CollectionType::ORGANIZATIONAL)?->first();
     }
 
     #[On('step-by-step:next')]

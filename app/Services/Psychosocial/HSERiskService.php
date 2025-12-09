@@ -2,9 +2,9 @@
 
 namespace App\Services\Psychosocial;
 
-use App\Enums\HSE\HSEHazard;
-use App\Enums\HSE\HSERisk;
-use App\Enums\Psychosocial\EvaluationTypes;
+use App\Enums\Psychosocial\HSE\HSEHazard;
+use App\Enums\Psychosocial\HSE\HSERisk;
+use App\Enums\Campaign\EvaluationTypes;
 use App\Evaluators\HSE\chronicTeamConflicts;
 use App\Evaluators\HSE\constantInterruptions;
 use App\Evaluators\HSE\deadlinePressure;

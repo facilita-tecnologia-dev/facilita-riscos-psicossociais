@@ -90,15 +90,15 @@
                                     <td style="width: 40%">
                                         <span style="font-size: 8px; display: block; margin: 0 2px 0 2px">Setor: {{ $occupation }}</span>
                                         <p>Perigo Psicossocial:</p>
-                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\HSE\HSEHazard::from($hazard)->label() }}</span>
+                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\Psychosocial\HSE\HSEHazard::from($hazard)->label() }}</span>
                                     </td>
                                     <td style="width: 20%">
                                         <p>Severidade:</p>
-                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\HSE\HSEGravity::from($risk['risk']['gravity'])->label() }}</span>
+                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\Psychosocial\HSE\HSEGravity::from($risk['risk']['gravity'])->label() }}</span>
                                     </td>
                                     <td style="width: 20%">
                                         <p>Probabilidade:</p>
-                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\HSE\HSEProbability::from($risk['risk']['probability'])->label() }}</span>
+                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\Psychosocial\HSE\HSEProbability::from($risk['risk']['probability'])->label() }}</span>
                                     </td>
                                     <td style="width: 20%; background-color: {{ $risk['risk']['evaluated']->color() }}">
                                         <p>Risco Identificado:</p>
@@ -137,17 +137,17 @@
                                     <td style="width: 40%">
                                         <span style="font-size: 8px; display: block; margin-bottom: 4px">Função: {{ $occupation }}</span>
                                         <p>Perigo Psicossocial:</p>
-                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\PROART\PROARTHazard::from($hazard)->label() }}</span>
+                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\Psychosocial\PROART\PROARTHazard::from($hazard)->label() }}</span>
                                     </td>
                                     <td style="width: 20%">
                                         <p>Severidade:</p>
-                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\PROART\PROARTGravity::from($risk['risk']['gravity'])->label() }}</span>
+                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\Psychosocial\PROART\PROARTGravity::from($risk['risk']['gravity'])->label() }}</span>
                                     </td>
                                     <td style="width: 20%">
                                         <p>Probabilidade:</p>
-                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\PROART\PROARTProbability::from($risk['risk']['probability'])->label() }}</span>
+                                        <span style="font-weight: bold; margin: 2px">{{ App\Enums\Psychosocial\PROART\PROARTProbability::from($risk['risk']['probability'])->label() }}</span>
                                     </td>
-                                    <td style="width: 20%; background-color: {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::CRITICAL ? '#fc6f6f50' : '' }} {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::HIGH ? '#dc933250' : '' }} {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::MEDIUM ? '#faed5d50' : '' }} {{ $risk['risk']['evaluated'] == App\Enums\PROART\PROARTRisk::LOW ? '#76fc7150' : '' }}">
+                                    <td style="width: 20%; background-color: {{ $risk['risk']['evaluated'] == App\Enums\Psychosocial\PROART\PROARTRisk::CRITICAL ? '#fc6f6f50' : '' }} {{ $risk['risk']['evaluated'] == App\Enums\Psychosocial\PROART\PROARTRisk::HIGH ? '#dc933250' : '' }} {{ $risk['risk']['evaluated'] == App\Enums\Psychosocial\PROART\PROARTRisk::MEDIUM ? '#faed5d50' : '' }} {{ $risk['risk']['evaluated'] == App\Enums\Psychosocial\PROART\PROARTRisk::LOW ? '#76fc7150' : '' }}">
                                         <p>Risco Identificado:</p>
                                         <span style="font-weight: bold; margin: 2px">{{ $risk['risk']['evaluated']->label() }}</span>
                                     </td>
@@ -168,7 +168,7 @@
                                     @foreach ($actions as $action)
                                         <tr>
                                             <td style="width: 40%; font-size: 10px">{{ $action['content'] }}</td>
-                                            <td style="width: 15%; font-size: 10px">{{ App\Enums\PROART\PROARTControlActionTypes::from($actionType)->label() }}</td>
+                                            <td style="width: 15%; font-size: 10px">{{ App\Enums\Psychosocial\PROART\PROARTControlActionTypes::from($actionType)->label() }}</td>
                                             <td style="width: 15%; font-size: 10px">{{ $action['deadline'] ?? 'Indefinido' }}</td>
                                             <td style="width: 15%; font-size: 10px">{{ $action['assignee'] ?? 'Indefinido' }}</td>
                                             <td style="width: 15%; font-size: 10px">{{ $action['status'] ?? 'Indefinido' }}</td>

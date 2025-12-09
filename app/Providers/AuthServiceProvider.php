@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Enums\CampaignStatus;
+use App\Enums\Campaign\CampaignStatus;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Support\Providers\AuthenticationServiceProvider as ServiceProvider;

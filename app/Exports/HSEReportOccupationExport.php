@@ -2,9 +2,9 @@
 
 namespace App\Exports;
 
-use App\Enums\HSE\HSEGravity;
-use App\Enums\HSE\HSEHazard;
-use App\Enums\HSE\HSEProbability;
+use App\Enums\Psychosocial\HSE\HSEGravity;
+use App\Enums\Psychosocial\HSE\HSEHazard;
+use App\Enums\Psychosocial\HSE\HSEProbability;
 use App\Models\Company;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;

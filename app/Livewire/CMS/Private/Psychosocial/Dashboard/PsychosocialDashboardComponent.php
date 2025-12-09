@@ -2,12 +2,11 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\Dashboard;
 
-use App\Enums\BaseCollection as EnumBaseCollection;
-use App\Enums\BaseCollectionType;
-use App\Enums\CollectionType;
+use App\Enums\Campaign\MetodologyType;
+use App\Enums\Campaign\CollectionType;
+use App\Enums\Campaign\CollectionCategory;
 use App\Models\BaseCollection;
 use App\Models\Campaign;
-use App\Models\UserCollection;
 use Livewire\Component;
 
 class PsychosocialDashboardComponent extends Component
@@ -30,19 +29,19 @@ class PsychosocialDashboardComponent extends Component
         $years = collect([now()->year, now()->year - 1, now()->year - 2]);
 
         // 0º Pegar todas as campanhas de psicossociais
-        $basePsychosocialCollections = BaseCollection::where('type', BaseCollectionType::PSYCHOSOCIAL)->get();
-        $psychosocialCampaigns = Campaign::where('type', CollectionType::BASE)
+        $basePsychosocialCollections = BaseCollection::where('type', CollectionType::PSYCHOSOCIAL)->get();
+        $psychosocialCampaigns = Campaign::where('type', CollectionCategory::BASE)
                                         ->whereIn('collection_id', $basePsychosocialCollections->pluck('id'))
                                         ->with('userCollections')
                                         ->get();
 
         // 1° pegar campanhas do HSE dividido por ano
-        $HSEBaseCollection = $basePsychosocialCollections->where('key', EnumBaseCollection::HSE)?->first();
+        $HSEBaseCollection = $basePsychosocialCollections->where('key', MetodologyType::HSE)?->first();
         $HSECampaigns = $psychosocialCampaigns->where('collection_id', $HSEBaseCollection->id)->groupBy(fn($campaign) => $campaign->start_date->format('Y'));
         $HSECampaignsByYear = $years->mapWithKeys(fn($year) => [$year => $HSECampaigns->get($year, collect())]);
 
         // 2° pegar campanhas do PROART dividido por ano
-        $PROARTBaseCollection = $basePsychosocialCollections->where('key', EnumBaseCollection::PROART)?->first();
+        $PROARTBaseCollection = $basePsychosocialCollections->where('key', MetodologyType::PROART)?->first();
         $PROARTCampaigns = $psychosocialCampaigns->where('collection_id', $PROARTBaseCollection->id)->groupBy(fn($campaign) => $campaign->start_date->format('Y'));
         $PROARTCampaignsByYear = $years->mapWithKeys(fn($year) => [$year => $PROARTCampaigns->get($year, collect())]);
 

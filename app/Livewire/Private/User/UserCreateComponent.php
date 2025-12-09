@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Private\User;
 
-use App\Enums\RoleEnum;
+use App\Enums\User\UserRole;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +26,7 @@ class UserCreateComponent extends Component
     public ?string $education_level = null;
     public ?string $work_shift = null;
     public ?string $admission = null;
-    public string $role = RoleEnum::EMPLOYEE->value;
+    public string $role = UserRole::EMPLOYEE->value;
 
     public array $roles;
     public bool $userExists;
@@ -38,7 +38,7 @@ class UserCreateComponent extends Component
 
     public function mount()
     {
-        $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], RoleEnum::cases());
+        $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], UserRole::cases());
     }
 
     public function submit()
@@ -55,7 +55,7 @@ class UserCreateComponent extends Component
             'education_level' => ['nullable', 'string', 'max:255'],
             'work_shift' => ['nullable', 'string', 'max:255'],
             'admission' => ['nullable', 'date', Rule::date()->beforeOrEqual(today()), Rule::date()->after(today()->subCenturies(1))],
-            'role' => ['required', 'string', Rule::enum(RoleEnum::class)],
+            'role' => ['required', 'string', Rule::enum(UserRole::class)],
         ]);
         
         try {
@@ -84,7 +84,7 @@ class UserCreateComponent extends Component
 
         if ($user) {
             if(session('auth:company')->users()->find($user)){
-                $this->dispatch('alert:info', 'Este usuário já está vinculado à sua empresa!');
+                $this->dispatch('alert:info', 'Este usuário já está vinculado �� sua empresa!');
             } else {
                 $this->user = $user;
                 $this->userExists = true;
@@ -99,7 +99,7 @@ class UserCreateComponent extends Component
     public function attachExistingUser()
     {
         $this->validate([
-            'role' => ['required', 'string', Rule::enum(RoleEnum::class)],
+            'role' => ['required', 'string', Rule::enum(UserRole::class)],
         ]);
 
         try {

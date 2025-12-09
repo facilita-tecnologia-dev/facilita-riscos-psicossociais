@@ -12,6 +12,10 @@
     @endif
 
     <div class="flex gap-3">
+        @if(session('auth:guard') === 'user')
+            <livewire:private.user.switch-company-component />
+        @endif
+
         <div class="block md:hidden" wire:click="openSidebar">
             <x-new-components.actions.nav-item icon="hamburguer" />
         </div>

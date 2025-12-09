@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\CampaignStatus;
+use App\Enums\Campaign\CampaignStatus;
 use App\Notifications\ResetPassword;
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,10 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\BaseCollection;
-use App\Enums\BaseCollection as EnumBaseCollection;
-use App\Enums\BaseCollectionType;
-use App\Enums\CollectionType;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Campaign\MetodologyType;
+use App\Enums\Campaign\CollectionType;
+use App\Enums\Campaign\CollectionCategory;
 
 class Company extends Authenticatable
 {
@@ -149,12 +148,12 @@ class Company extends Authenticatable
 
     public function usesHSE(): bool
     {
-        return $this->psychosocial_collection_type === EnumBaseCollection::HSE->value;
+        return $this->psychosocial_collection_type === MetodologyType::HSE->value;
     }
 
     public function hasCampaignThisYear(string $collection_id, string $collection_type, ?string $status = null): bool
     {
-        $collection = $collection_type === CollectionType::BASE->value 
+        $collection = $collection_type === CollectionCategory::BASE->value 
                         ? BaseCollection::find($collection_id) 
                         : CustomCollection::find($collection_id);
 
@@ -184,7 +183,7 @@ class Company extends Authenticatable
         return $this->campaigns()
                     ->whereYear('start_date', now()->year)
                     ->get()
-                    ->filter(fn($campaign) => $campaign->collection()->type === BaseCollectionType::PSYCHOSOCIAL)
+                    ->filter(fn($campaign) => $campaign->collection()->type === CollectionType::PSYCHOSOCIAL)
                     ->sortByDesc('start_date')
                     ->first();
     }
@@ -194,7 +193,7 @@ class Company extends Authenticatable
         return $this->campaigns()
                     ->whereYear('start_date', now()->year)
                     ->get()
-                    ->filter(fn($campaign) => $campaign->collection()->type === BaseCollectionType::ORGANIZATIONAL)
+                    ->filter(fn($campaign) => $campaign->collection()->type === CollectionType::ORGANIZATIONAL)
                     ->sortByDesc('start_date')
                     ->first();
     }

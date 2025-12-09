@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\RolePermissions;
 
-use App\Enums\RoleEnum;
+use App\Enums\User\UserRole;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 
@@ -12,12 +12,12 @@ class RoleSeeder extends Seeder
     {
         Role::insert([
             [
-                'type' => RoleEnum::MANAGER->value,
-                'display_name' => RoleEnum::MANAGER->label(),
+                'type' => UserRole::MANAGER->value,
+                'display_name' => UserRole::MANAGER->label(),
             ],
             [
-                'type' => RoleEnum::EMPLOYEE->value,
-                'display_name' => RoleEnum::EMPLOYEE->label(),
+                'type' => UserRole::EMPLOYEE->value,
+                'display_name' => UserRole::EMPLOYEE->label(),
             ],
         ]);
     }

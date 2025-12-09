@@ -2,10 +2,10 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
-use App\Enums\CampaignStatus;
+use App\Enums\Campaign\CampaignStatus;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
-use App\Services\ReportChannelService;
+use App\Services\ReportChannel\ReportChannelService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;

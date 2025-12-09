@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\BaseTests\PROARTQuestions;
 
-use App\Enums\PROART\PROARTGroup;
+use App\Enums\Psychosocial\PROART\PROARTGroup;
 use App\Models\BaseQuestion;
 use Illuminate\Database\Seeder;
 

@@ -2,7 +2,7 @@
 
 namespace App\Services\Psychosocial;
 
-use App\Enums\Psychosocial\EvaluationTypes;
+use App\Enums\Campaign\EvaluationTypes;
 use App\Jobs\GeneratePsychosocialReportJob;
 use App\Models\Campaign;
 use Illuminate\Support\Facades\Cache;
@@ -60,9 +60,7 @@ class PsychosocialService
 
         $risks = $campaign->collection()
                         ->questions()
-                        ->with(['answers' => fn($q) => 
-                            $q->where('campaign_id', $campaign->id)->with('user')
-                        ])
+                        ->with(['answers.user'])
                         ->get()
                         ->groupBy('group')
                         ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
@@ -151,9 +149,7 @@ class PsychosocialService
 
         $risks = $campaign->collection()
                         ->questions()
-                        ->with(['answers' => fn($q) => 
-                            $q->where('campaign_id', $campaign->id)->with('user')
-                        ])
+                        ->with(['answers.user'])
                         ->get()
                         ->groupBy('group')
                         ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
@@ -247,9 +243,7 @@ class PsychosocialService
 
         $risks = $campaign->collection()
                         ->questions()
-                        ->with(['answers' => fn($q) => 
-                            $q->where('campaign_id', $campaign->id)->with('user')
-                        ])
+                        ->with(['answers.user'])
                         ->get()
                         ->groupBy('group')
                         ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
@@ -339,9 +333,7 @@ class PsychosocialService
 
         $risks = $campaign->collection()
                         ->questions()
-                        ->with(['answers' => fn($q) => 
-                            $q->where('campaign_id', $campaign->id)->with('user')
-                        ])
+                        ->with(['answers.user'])
                         ->get()
                         ->groupBy('group')
                         ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {

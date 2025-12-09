@@ -1,0 +1,333 @@
+<?php
+
+namespace App\Services\Organizational;
+
+use App\Enums\Filters\AdmissionRange;
+use App\Enums\OC\OCEvaluation;
+use App\Enums\OC\OCVisualization;
+use App\Models\Campaign;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+
+class OrganizationalService
+{
+    public static function dashboard(Campaign $campaign, string $evaluation_type, string $visualization_type, array $filters = [])
+   {    
+        $dashboard = $visualization_type === OCVisualization::GENERAL->value 
+                        ? self::OrganizationalGeneral($campaign, $evaluation_type, $filters)
+                        : self::OrganizationalAnswers($campaign, $evaluation_type, $filters);
+
+        return $dashboard;
+   }
+
+   public static function OrganizationalGeneral(Campaign $campaign, string $evaluation_type, ?array $filters = null)
+   {
+        $allowedDepartments = [];
+
+        if (session('auth:guard') === 'user') {
+            $allowedDepartments = session('auth:user')->departmentScopes
+                ->where('allowed', 1)
+                ->pluck('department')
+                ->toArray();
+        }
+
+        $results = $campaign->collection()
+                    ->questions()
+                    ->when(
+                        session('auth:guard') === 'user',
+                        // SE for user → filtra pelo department permitido
+                        function ($q) use ($allowedDepartments) {
+                            return $q->with([
+                                    'answers.user' => function ($u) use ($allowedDepartments) {
+                                        $u->whereIn('department', $allowedDepartments);
+                                    }
+                            ])->whereHas('answers.user', function ($u) use ($allowedDepartments) {
+                                $u->whereIn('department', $allowedDepartments);
+                            });
+                        },
+                        // SE NÃO for user → apenas carrega normalmente
+                        fn($q) => $q->with(['answers.user'])
+                    )
+                    ->get()
+                    ->groupBy('group')
+                    ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
+                        return $groups->filter(fn($_, $group) => $group === $filters['group']);
+                    })
+                    ->map(fn($questions) =>
+                        $questions->each(fn($question) =>
+                            tap($question, function ($question) use($evaluation_type) {
+                                $transformedAnswers = $question->answers->transform(function ($answer) {
+                                    $answer->value = self::multiplyAnswer($answer->value);
+                                    return $answer;
+                                });
+
+           
+                                $groupedAnswers = $transformedAnswers
+                                                ->groupBy(function ($answer) use ($evaluation_type) {
+                                                    if ($evaluation_type === OCEvaluation::ADMISSION_RANGE->value) {
+                                                        return $answer->user->admission ? self::getAdmissionRange($answer->user->admission)->value . ' anos' : "Sem informação";
+                                                    }
+                                                    return data_get($answer, "user.$evaluation_type");
+                                                })
+                                                ->mapWithKeys(fn($answers, $divisionFactor) => 
+                                                    [$divisionFactor => $answers->sum('value') / $answers->count()]
+                                                )
+                                                ->sortKeys();
+
+                                $question->setRelation('answers', $groupedAnswers);
+
+                                $question->average = $question->answers->sum() / $question->answers->count();
+                            })
+                        )
+                    );
+
+        $generalSatisfactionByGroup = $results->mapWithKeys(function($groupQuestions, $group){
+            $groupScoreSum = $groupQuestions->reduce(fn($acc, $question) => $acc + $question->average);
+            $groupSatisfaction = round($groupScoreSum / $groupQuestions->count());
+
+            return [$group => $groupSatisfaction];
+        });
+
+        $divisionFactorSatisfactionByGroup = $results->mapWithKeys(function($groupQuestions, $group){
+            $groupDivisionFactorsScoreByQuestion = $groupQuestions->mapWithKeys(fn($question) => [$question->id => $question->answers]);
+
+            $groupSatisfaction = $groupDivisionFactorsScoreByQuestion->reduce(function($acc, $question){
+                $acc = $acc instanceof Collection ? $acc : collect($acc);
+
+                foreach ($question as $divisionFactor => $satisfaction) {
+                    $generalSatisfactionInThisGroup = $acc->get('Geral', ['sum' => 0, 'count' => 0]);
+
+                    $generalSatisfactionInThisGroup['sum']   += $satisfaction;
+                    $generalSatisfactionInThisGroup['count'] += 1;
+
+                    $divisionFactorSatisfaction = $acc->get($divisionFactor, ['sum' => 0, 'count' => 0]);
+
+                    $divisionFactorSatisfaction['sum']   += $satisfaction;
+                    $divisionFactorSatisfaction['count'] += 1;
+
+                    $acc->put($divisionFactor, $divisionFactorSatisfaction);
+                    $acc->put('Geral', $generalSatisfactionInThisGroup);
+                }
+
+                return $acc;
+            }, collect())
+            ->mapWithKeys(fn ($data, $divisionFactor) => [$divisionFactor => round($data['sum'] / $data['count'])]);
+
+            return [$group => $groupSatisfaction];
+        });
+
+        return [
+            'general-satisfaction-by-group' => $generalSatisfactionByGroup,
+            'division-factor-satisfaction-by-group' => $divisionFactorSatisfactionByGroup
+        ];
+   }
+
+   public static function OrganizationalAnswers(Campaign $campaign, string $evaluation_type, ?array $filters = null)
+   {
+        $allowedDepartments = [];
+
+        if (session('auth:guard') === 'user') {
+            $allowedDepartments = session('auth:user')->departmentScopes
+                ->where('allowed', 1)
+                ->pluck('department')
+                ->toArray();
+        }
+
+
+        $results = $campaign->collection()
+                    ->questions()
+                    ->when(
+                        session('auth:guard') === 'user',
+                        // SE for user → filtra pelo department permitido
+                        function ($q) use ($allowedDepartments) {
+                            return $q->with([
+                                    'answers.user' => function ($u) use ($allowedDepartments) {
+                                        $u->whereIn('department', $allowedDepartments);
+                                    }
+                            ])->whereHas('answers.user', function ($u) use ($allowedDepartments) {
+                                $u->whereIn('department', $allowedDepartments);
+                            });
+                        },
+                        // SE NÃO for user → apenas carrega normalmente
+                        fn($q) => $q->with(['answers.user'])
+                    )
+                    ->get()
+                    ->groupBy('group')
+                    ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
+                        return $groups->filter(fn($_, $group) => $group === $filters['group']);
+                    })
+                    ->map(fn($questions) =>
+                        $questions->each(fn($question) =>
+                            tap($question, function ($question) use($evaluation_type) {
+                                $transformedAnswers = $question->answers->transform(function ($answer) {
+                                    $answer->value = self::multiplyAnswer($answer->value);
+                                    return $answer;
+                                });
+
+                                $groupedAnswers = $transformedAnswers
+                                                ->groupBy(function ($answer) use ($evaluation_type) {
+                                                    if ($evaluation_type === OCEvaluation::ADMISSION_RANGE->value) {
+                                                        return $answer->user->admission ? self::getAdmissionRange($answer->user->admission)->value . ' anos' : "Sem informação";
+                                                    }
+                                                    return data_get($answer, "user.$evaluation_type");
+                                                })
+                                                ->mapWithKeys(fn($answers, $divisionFactor) => 
+                                                    [$divisionFactor => $answers->sum('value') / $answers->count()]
+                                                )
+                                                ->sortKeys();
+
+                                $question->setRelation('answers', $groupedAnswers);
+
+                                $question->average = $question->answers->sum() / $question->answers->count();
+                            })
+                        )
+                    );
+
+        $generalSatisfactionByGroup = $results->mapWithKeys(function($groupQuestions, $group){
+            $groupScoreSum = $groupQuestions->reduce(fn($acc, $question) => $acc + $question->average);
+            $groupSatisfaction = round($groupScoreSum / $groupQuestions->count());
+
+            return [$group => $groupSatisfaction];
+        });
+
+        $divisionFactorSatisfactionByGroup = $results->mapWithKeys(function($groupQuestions, $group) use($results) {
+            $groupQuestionsSatisfaction = $groupQuestions->map(function($question){
+                $questionGeneralSum = $question->answers->reduce(fn($acc, $answer) => $acc + $answer);
+                $questionGeneralSatisfaction = round($questionGeneralSum / $question->answers->count());
+
+                return [
+                    'statement' => $question->statement,
+                    'satisfaction' => collect([
+                        'Geral' => $questionGeneralSatisfaction,
+                        ...$question->answers
+                    ])
+                ];
+            });
+
+            return [$group => $groupQuestionsSatisfaction];
+        });
+
+        return [
+            'general-satisfaction-by-group' => $generalSatisfactionByGroup,
+            'division-factor-satisfaction-by-group' => $divisionFactorSatisfactionByGroup
+        ];
+   }
+
+
+    // public function createPDFReport(Request $request)
+    // {
+    //     Gate::authorize('organizational-dashboard-view');
+
+    //     $filtersApplied = [];
+
+    //     $userDepartmentScopes = session('auth:guard') === 'user' ? session('auth:user')->departmentScopes->where('allowed', 1) : false;
+
+    //     foreach ($request->query() as $filterKeyName => $filter) {
+    //         $filtersApplied[$this->filterService->getFilterDisplayName($filterKeyName)] = $filter;
+    //     }
+
+    //     $charts = [];
+
+    //     foreach ($request->all() as $chartName => $chartToBase64) {
+    //         if (str_contains($chartName, '-to-base-64')) {
+    //             $chartName = str_replace('_', ' ', str_replace('-to-base-64', '', $chartName));
+    //             $charts[$chartName] = $chartToBase64;
+    //         }
+    //     }
+
+    //     $company = session('auth:company');
+
+    //     $companyLogo = $company->logo;
+    //     $companyName = $company->name;
+
+    //     $pdf = Pdf::loadView('pdf.organizational-climate-index', [
+    //         'companyLogo' => $companyLogo,
+    //         'companyName' => $companyName,
+    //         'charts' => $charts,
+    //         'filtersApplied' => $filtersApplied,
+    //         'userDepartmentScopes' => $userDepartmentScopes,
+    //     ])->setPaper('a4', 'landscape');
+
+    //     return $pdf->download('graficos_clima_organizacional.pdf');
+    // }
+
+    public static function getAdmissionRange(string $admissionDate): AdmissionRange
+    {
+        $years = Carbon::parse($admissionDate)->age;
+
+        return match (true) {
+            $years <= 1  => AdmissionRange::NEW_EMPLOYEE,
+            $years <= 4  => AdmissionRange::EARLY_EMPLOYEE,
+            $years <= 10 => AdmissionRange::ESTABLISHED_EMPLOYEE,
+            default      => AdmissionRange::VETERAN_EMPLOYEE,
+        };
+    }
+   
+    public static function engagement(Campaign $campaign, string $evaluation_type)
+    {
+        $companyUsers = session('auth:company')->users()->select('users.id', 'users.department', 'users.occupation', 'users.gender', 'users.work_shift', 'users.admission')->get();
+        $userCollections = $campaign->userCollections()->with('user:id,department,occupation,gender,work_shift,admission')->get();
+        
+        if($evaluation_type === OCEvaluation::DEPARTMENT->value){
+            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->department ?? "Sem informação");;
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->department ?? "Sem informação");;
+        }
+
+        if($evaluation_type === OCEvaluation::OCCUPATION->value){
+            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->occupation ?? "Sem informação");;
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->occupation ?? "Sem informação");;
+        }
+
+        if($evaluation_type === OCEvaluation::GENDER->value){
+            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->gender ?? "Sem informação");;
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->gender ?? "Sem informação");;
+        }
+
+        if($evaluation_type === OCEvaluation::WORK_SHIFT->value){
+            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->work_shift ?? "Sem informação");
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->work_shift ?? "Sem informação");
+        }
+
+        if($evaluation_type === OCEvaluation::ADMISSION_RANGE->value){
+            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->admission ? self::getAdmissionRange($userCollection->user->admission)->value . ' anos' : "Sem informação");
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->admission ? self::getAdmissionRange($user->admission)->value . ' anos' : "Sem informação");
+        }
+
+        $engagementDivided = [];
+
+        foreach($companyUsersDivided as $divisionFactor => $users){
+            $totalDividedUsers = $users->count();
+            $respondents = $campaignRespondentsDivided[$divisionFactor] ?? collect();
+            $totalRespondents = $respondents->count();
+
+            $percent = $totalDividedUsers > 0 ? round(($totalRespondents / $totalDividedUsers) * 100) : 0;
+
+            $engagementDivided[$divisionFactor] = [
+                'total_users' => $totalDividedUsers,
+                'respondents' => $totalRespondents,
+                'engagement' => $percent,
+            ];
+        }
+
+        $totalCompanyUsers = array_sum(array_column($engagementDivided, 'total_users'));
+        $totalCompanyRespondents = array_sum(array_column($engagementDivided, 'respondents'));
+
+        $generalEngagement =  $totalCompanyUsers > 0 ? round(($totalCompanyRespondents / $totalCompanyUsers) * 100) : 0;
+        
+        return collect([
+            'general' => $generalEngagement,
+            'divided' => collect($engagementDivided)->sortByDesc('engagement')->toArray()
+        ]);
+    }
+
+   private static function multiplyAnswer(int $answer)
+   {
+        return match($answer){
+            1 => 0,
+            2 => 25,
+            3 => 50,
+            4 => 75,
+            5 => 100,
+        };
+   }
+}

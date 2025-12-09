@@ -7,7 +7,7 @@
 
 <a href="{{ $href }}" class="block px-1.5 py-2 border border-transparent hover:border-gray-200 w-full space-y-1 relative left-0 top-0 hover:left-0.5 hover:-top-0.5 transition-all hover:shadow-md">
     @php
-        $hazard = session('auth:company')->usesHSE() ? App\Enums\HSE\HSEHazard::from($hazard)->label() : App\Enums\PROART\PROARTHazard::from($hazard)->label();
+        $hazard = session('auth:company')->usesHSE() ? App\Enums\Psychosocial\HSE\HSEHazard::from($hazard)->label() : App\Enums\Psychosocial\PROART\PROARTHazard::from($hazard)->label();
     @endphp
 
     <p class="text-xs">{{ $hazard }}</p>

@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\PROART\PROARTIndicator;
+use App\Enums\Psychosocial\PROART\PROARTIndicator;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

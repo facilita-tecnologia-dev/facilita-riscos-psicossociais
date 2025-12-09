@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Enums\Psychosocial\EvaluationTypes;
+use App\Enums\Campaign\EvaluationTypes;
 use App\Enums\Psychosocial\RiskInventoryFormat;
 use App\Exports\HSEReportDepartmentExport;
 use App\Exports\HSEReportOccupationExport;
@@ -44,33 +44,6 @@ class GeneratePsychosocialReportJob implements ShouldQueue
         $this->format = $format;
         $this->cache_key = $cache_key;
     }
-
-    /**
-     * Execute the job.
-     */
-    // public function handle(): void
-    // {        
-    //     ini_set('memory_limit', '1024M');
-    //     ini_set('max_execution_time', 900);
-
-    //     $company = Company::find($this->company_id);
-    //     $report = ActionPlan::find($this->report_id);
-
-    //     $risks = Cache::get("{$this->cache_key}:risks", collect());
-    //     $absences = Cache::get("{$this->cache_key}:absences", collect());
-
-    //     $this->updateProgress(15);
-
-    //     if ($this->format === RiskInventoryFormat::PDF->value) {
-    //         $this->generatePdf($company, $report, $risks, $absences);
-    //         return;
-    //     }
-
-    //     if ($this->format === RiskInventoryFormat::EXCEL->value) {
-    //         $this->generateExcel($company, $report, $risks, $absences);
-    //          return;
-    //     }
-    // }
 
     public function handle(): void
     {

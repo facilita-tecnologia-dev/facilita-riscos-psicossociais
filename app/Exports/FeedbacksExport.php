@@ -4,101 +4,106 @@ namespace App\Exports;
 
 use App\Models\Company;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
-class FeedbacksExport implements FromCollection, WithHeadings, WithStyles, WithEvents, WithColumnWidths
+class FeedbacksExport implements FromCollection, WithEvents
 {
+    protected array $headerRows = [];
+    protected array $dataRows = [];
+
     public function collection()
     {
-        $feedbacks = Company::firstWhere('id', session('auth:company')->id)->feedbacks()->whereYear('created_at', now()->year)->with('parentUser')->get();
-        $formatted = $feedbacks->map(function($feedback){
-            return [
-                $feedback->parentUser->department,
-                $feedback->parentUser->work_shift,
+        $rows = collect();
+        $currentRow = 1;
+
+        $feedbacks = Company::firstWhere('id', session('auth:company')->id)
+            ->feedbacks()
+            ->with(['user:id,department'])
+            ->get();
+
+        // Cabeçalho
+        $rows->push(['Conteúdo', 'Setor', 'Data do Feedback']);
+        $this->headerRows[] = $currentRow;
+        $currentRow++;
+
+        // Dados
+        foreach ($feedbacks as $feedback) {
+            $rows->push([
                 $feedback->content,
-            ];
-        });
+                $feedback->user->department,
+                $feedback->created_at->format('d/m/Y'),
+            ]);
 
-        return $formatted;
-    }
+            $this->dataRows[] = $currentRow;
+            $currentRow++;
+        }
 
-    public function headings(): array
-    {
-        return ['Setor', 'Turno', 'Comentário'];
-    }
-
-    public function styles(Worksheet $sheet)
-    {
-        // Estilização do cabeçalho
-        $sheet->getStyle('A1:C1')->applyFromArray([
-            'font' => [
-                'bold' => true,
-                'color' => ['argb' => Color::COLOR_WHITE],
-            ],
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['argb' => '333333'],
-            ],
-        ]);
-
-        // Estilo das células abaixo do cabeçalho (linhas de dados)
-        $highestRow = $sheet->getHighestRow();
-        $sheet->getStyle("A2:C$highestRow")->applyFromArray([
-            'font' => [
-                'color' => ['argb' => '333333'],
-            ],
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FFFFFF'],
-            ],
-        ]);
-    }
-
-    public function columnWidths(): array
-    {
-        return [
-            'A' => 25,
-            'B' => 25,
-            'C' => 50,
-        ];
+        return $rows;
     }
 
     public function registerEvents(): array
     {
         return [
-            \Maatwebsite\Excel\Events\AfterSheet::class => function (\Maatwebsite\Excel\Events\AfterSheet $event) {
+            AfterSheet::class => function(AfterSheet $event) {
+
                 $sheet = $event->sheet->getDelegate();
-                $highestRow = $sheet->getHighestRow();
 
-                $sheet->getStyle("A1:C$highestRow")
-                    ->getAlignment()
-                    ->setVertical(Alignment::VERTICAL_CENTER);
-
-                // Aplica somente bordas verticais nas linhas de dados (não no cabeçalho)
-                for ($row = 2; $row <= $highestRow; $row++) {
-                    foreach (range('A', 'C') as $col) {
-                        $styleArray = [
-                            'borders' => [
-                                'left' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                                'right' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                                'top' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                                'bottom' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                            ],
-                        ];
-    
-                        $sheet->getStyle("{$col}{$row}")->applyFromArray($styleArray);
-                    }
+                /* -----------------------------
+                 *  Cabeçalho
+                 * -----------------------------*/
+                foreach ($this->headerRows as $row) {
+                    $sheet->getStyle("A{$row}:C{$row}")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'color' => ['rgb' => 'FFFFFF'],
+                        ],
+                        'fill' => [
+                            'fillType' => Fill::FILL_SOLID,
+                            'startColor' => ['rgb' => '333333'],
+                        ],
+                        'alignment' => [
+                            'horizontal' => Alignment::HORIZONTAL_CENTER,
+                            'vertical' => Alignment::VERTICAL_CENTER,
+                        ],
+                    ]);
                 }
 
-                $sheet->getStyle("C2:C$highestRow")->getAlignment()->setWrapText(true);
+                /* -----------------------------
+                 *  Linhas de dados
+                 * -----------------------------*/
+                foreach ($this->dataRows as $row) {
+                    $sheet->getStyle("A{$row}:C{$row}")->applyFromArray([
+                        'font' => ['color' => ['rgb' => '333333']],
+                        'fill' => [
+                            'fillType' => Fill::FILL_SOLID,
+                            'startColor' => ['rgb' => 'FFFFFF'],
+                        ],
+                        'alignment' => [
+                            'vertical' => Alignment::VERTICAL_CENTER,
+                        ],
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => Border::BORDER_THIN,
+                                'color' => ['rgb' => '666666']
+                            ]
+                        ]
+                    ]);
+                }
+
+                /* -----------------------------
+                 *  Ajustes de coluna + wrap
+                 * -----------------------------*/
+                $sheet->getStyle('A2:A' . (count($this->dataRows) + 1))
+                      ->getAlignment()
+                      ->setWrapText(true);
+
+                $sheet->getColumnDimension('A')->setWidth(75);
+                $sheet->getColumnDimension('B')->setWidth(30);
+                $sheet->getColumnDimension('C')->setWidth(30);
             },
         ];
     }

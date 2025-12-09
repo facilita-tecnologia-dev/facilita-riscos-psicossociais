@@ -2,7 +2,7 @@
 
 namespace App\Evaluators\HSE;
 
-use App\Enums\Psychosocial\EvaluationTypes;
+use App\Enums\Campaign\EvaluationTypes;
 use App\Models\Hazard;
 use App\Services\Psychosocial\HSERiskService;
 

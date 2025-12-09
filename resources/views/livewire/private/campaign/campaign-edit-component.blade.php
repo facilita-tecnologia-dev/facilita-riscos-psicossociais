@@ -23,7 +23,7 @@
                 <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Salvar</span>
             </x-new-components.actions.button>
 
-            <x-new-components.actions.button wire:click='deleteCampaign' type="button" class="!bg-danger" :disabled="$campaign->status != App\Enums\CampaignStatus::SCHEDULED">
+            <x-new-components.actions.button wire:click='deleteCampaign' type="button" class="!bg-danger" :disabled="$campaign->status != App\Enums\Campaign\CampaignStatus::SCHEDULED">
                 <div wire:loading wire:target="deleteCampaign">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>

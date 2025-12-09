@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Private\User;
 
-use App\Enums\RoleEnum;
+use App\Enums\User\UserRole;
 use App\Models\Role;
 use App\Models\User;
 use Livewire\Attributes\On;
@@ -11,7 +11,7 @@ use Livewire\Component;
 class UserShowComponent extends Component
 {
     public User $user;
-    public string $role;
+    public bool $isManager;
 
     public function render()
     {
@@ -21,13 +21,13 @@ class UserShowComponent extends Component
     public function mount(User $user)
     {
         $this->user = $user;
-        $this->role = $this->user->role(session('auth:company'))->type;
+        $this->isManager = $this->user->roles()->where('type', UserRole::MANAGER->value)->exists();
     }
 
     #[On('user:updated')]
     public function updateUser(User $user)
     {
         $this->user = $user;
-        $this->role = $this->user->role(session('auth:company'))->type;
+        $this->isManager = $this->user->roles()->where('type', UserRole::MANAGER->value)->exists();
     }
 }

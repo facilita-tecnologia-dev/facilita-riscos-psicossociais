@@ -6,7 +6,7 @@ use App\Http\Controllers\CMS\CMSReportChannelController;
 use App\Http\Controllers\ControlActionsController;
 use App\Http\Controllers\Private\Campaign\CampaignController;
 use App\Http\Controllers\Private\Company\CompanyController;
-use App\Http\Controllers\Private\OrganizationalController;
+use App\Http\Controllers\Private\Organizational\OrganizationalController;
 use App\Http\Controllers\Private\Psychosocial\PsychosocialController;
 use App\Http\Controllers\Private\Test\TestController;
 use App\Http\Controllers\Private\User\UserController;
@@ -49,8 +49,7 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     });
 
     Route::prefix('test')->group(function(){
-        Route::get('/{campaign}/answer', [TestController::class, 'show'])->name('answer-test');
-        Route::view('/thanks', 'private.test.thanks')->name('test.thanks');
+        Route::get('/{campaign}/answer', [TestController::class, 'show'])->name('test.answer');
     });
 
     Route::prefix('psychosocial')->group(function () {
@@ -59,22 +58,9 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::get('/absences', [PsychosocialController::class, 'absences'])->name('psychosocial.absences');
     });
 
-    
-    // Route::prefix('company-metrics')->group(function() {
-    //     Route::get('/', [MetricsController::class, 'edit'])->name('company-metrics.edit');
-    //     Route::post('/', [MetricsController::class, 'update'])->name('company-metrics.update');
-    // });
-
-    // Route::prefix('company-absence')->group(function() {
-    //     Route::get('/', [AbsencesController::class, 'index'])->name('company-absence.index');
-    // });
-
-    // Route::prefix('company-reports')->group(function() {
-    //     Route::post('/', [ReportsController::class, 'update'])->name('company-reports.update');
-    // });
-
     Route::prefix('organizational')->group(function () {
         Route::get('/dashboard', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
+        Route::get('/feedback', [OrganizationalController::class, 'feedback'])->name('organizational.feedback');
     });
 
     Route::prefix('campaign')->group(function(){
@@ -95,35 +81,10 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     });
 
 
-
-   
-
-
-    // Route::prefix('organizational-climate')->group(function(){
-    //     // Route::get('/', [OrganizationalController::class, 'dashboard'])->name('dashboard.organizational-climate');
-    //     Route::get('/', OrganizationalMainController::class)->name('dashboard.organizational-climate');
-    //     Route::post('/report', [OrganizationalMainController::class, 'createPDFReport'])->name('dashboard.organizational-climate.report');
-    //     Route::get('/answers', OrganizationalAnswersController::class)->name('dashboard.organizational-climate.answers');
-    //     Route::get('/answers/report', [OrganizationalAnswersController::class, 'createPDFReport'])->name('dashboard.organizational-climate.answers.report');
+    // Route::prefix('control-actions')->group(function() {
+    //     Route::get('/', [ControlActionsController::class, 'edit'])->name('control-actions.update');
+    //     Route::put('/', [ControlActionsController::class, 'update']);
     // });
-
-    //     Route::get('/demographics', [DemographicsController::class, 'demographics'])->name('dashboard.demographics');
-
-
-    // Route::prefix('feedback')->group(function(){
-    //     Route::get('/', [UserFeedbackController::class, 'index'])->name('feedback.index');
-    //     Route::get('/create', [UserFeedbackController::class, 'create'])->name('feedback.create');
-    //     Route::post('/create', [UserFeedbackController::class, 'store']);
-    //     Route::get('/export', [UserFeedbackController::class, 'export'])->name('feedback.export');
-    //     Route::get('/{feedback}', [UserFeedbackController::class, 'show'])->name('feedback.show');
-    // });
-
-
-
-    Route::prefix('control-actions')->group(function() {
-        Route::get('/', [ControlActionsController::class, 'edit'])->name('control-actions.update');
-        Route::put('/', [ControlActionsController::class, 'update']);
-    });
 
     // Route::prefix('custom-collections')->group(function(){
     //     Route::get('/', [CustomCollectionController::class, 'index'])->name('custom-collections.index');

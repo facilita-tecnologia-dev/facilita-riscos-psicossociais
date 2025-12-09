@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\CMS;
 
-use App\Services\AuthenticationService;
+use App\Services\Auth\AuthenticationService;
 use Illuminate\Http\Request;
 
 class CMSLogoutController

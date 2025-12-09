@@ -2,8 +2,8 @@
 
 namespace App\Services\Psychosocial;
 
-use App\Enums\PROART\PROARTHazard;
-use App\Enums\Psychosocial\EvaluationTypes;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
+use App\Enums\Campaign\EvaluationTypes;
 use App\Evaluators\PROART\anxietyOrStress;
 use App\Evaluators\PROART\deteriorationOfPersonalLife;
 use App\Evaluators\PROART\difficultyConcentrating;
