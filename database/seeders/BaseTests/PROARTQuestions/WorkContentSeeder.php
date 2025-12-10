@@ -53,6 +53,18 @@ class WorkContentSeeder extends Seeder
                 'inverted' => true,
                 'group' => PROARTGroup::WORK_CONTENT
             ],
+            [
+                'base_collection_id' => 1,
+                'statement' => 'Permaneço neste emprego por falta de oportunidade no mercado de trabalho?',
+                'inverted' => false,
+                'group' => PROARTGroup::WORK_CONTENT
+            ],
+            [
+                'base_collection_id' => 1,
+                'statement' => 'As pessoas são compromissadas com a organização mesmo quando não há retorno adequado?',
+                'inverted' => false,
+                'group' => PROARTGroup::WORK_CONTENT
+            ],
         ]);
     }
 }

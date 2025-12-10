@@ -28,5 +28,7 @@
                 <span class="text-primary-solid underline">Fazer login</span>
             </a>
         </footer>
+
+        <a href="{{ route('site.home') }}" class="text-secondary-text font-text text-left text-sm font-normal underline transition hover:scale-105">Voltar para a Home</a>
     </div>
 </div>

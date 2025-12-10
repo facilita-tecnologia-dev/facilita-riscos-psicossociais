@@ -4,9 +4,12 @@ namespace App\Models;
 
 use App\Enums\Campaign\CampaignStatus;
 use App\Enums\Campaign\CollectionCategory;
+use App\Policies\CampaignPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 
+#[UsePolicy(CampaignPolicy::class)]
 class Campaign extends Model
 {
     protected $table = 'campaigns';

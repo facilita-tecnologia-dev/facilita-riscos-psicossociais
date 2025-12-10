@@ -15,9 +15,11 @@
                         @if(session('auth:user')->hasAnsweredCampaign($this->activePsychosocialCampaign->id))
                             <span class="text-sm text-secondary-text text-left font-normal">Respondido</span>
                         @else
-                            <x-new-components.actions.button :href="route('campaign.answer', $activePsychosocialCampaign)" fitSize>
-                                <span class="text-main-background text-center text-sm font-semibold">Responder</span>
-                            </x-new-components.actions.button>
+                            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('answer', [\App\Models\Campaign::class]))
+                                <x-new-components.actions.button :href="route('campaign.answer', $activePsychosocialCampaign)" fitSize>
+                                    <span class="text-main-background text-center text-sm font-semibold">Responder</span>
+                                </x-new-components.actions.button>
+                            @endif
                         @endif
                     </li>
                 @endif

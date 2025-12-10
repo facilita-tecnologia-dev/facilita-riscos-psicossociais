@@ -8,18 +8,22 @@
     </header>
 
     <div class="flex flex-col md:flex-row xl:flex-col gap-3">
-        <x-new-components.actions.button :href="route('psychosocial.control-action')" class="w-full">
-            <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
-        </x-new-components.actions.button>
+        @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialControlActions', [\App\Models\User::class]))
+            <x-new-components.actions.button :href="route('psychosocial.control-action')" class="w-full">
+                <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
+            </x-new-components.actions.button>
+        @endif
 
-        @if(session('auth:company')->usesHSE())
-            <x-new-components.actions.button :href="route('psychosocial.absences')" class="w-full">
-                <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
-            </x-new-components.actions.button>
-        @else
-            <x-new-components.actions.button :href="route('psychosocial.indicators')" class="w-full">
-                <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Dados de Desempenho Organizacional</span>
-            </x-new-components.actions.button>
+        @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialIndicators', [\App\Models\User::class]))
+            @if(session('auth:company')->usesHSE())
+                <x-new-components.actions.button :href="route('psychosocial.absences')" class="w-full">
+                    <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
+                </x-new-components.actions.button>
+            @else
+                <x-new-components.actions.button :href="route('psychosocial.indicators')" class="w-full">
+                    <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Dados de Desempenho Organizacional</span>
+                </x-new-components.actions.button>
+            @endif
         @endif
 
         <livewire:private.psychosocial.report.generate-report-component :campaign="$psychosocialCampaign">

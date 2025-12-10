@@ -48,12 +48,11 @@ class BaseCollectionsSeeder extends Seeder
         ]);
 
         $this->call([
-            // Psychosocial
+            // PROART
             WorkOrganizationSeeder::class,
             ManagementStyleSeeder::class,
             InterpersonalRelationsSeeder::class,
             WorkContentSeeder::class,
-            EmploymentConditionsSeeder::class,
             WorkRelatedDisordersSeeder::class,
 
             // HSE

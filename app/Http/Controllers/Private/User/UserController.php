@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Private\User;
 
 use App\Models\User;
+use App\Services\Auth\AuthenticationService;
+use Illuminate\Support\Facades\Gate;
 
 class UserController
 {   
@@ -18,21 +20,30 @@ class UserController
 
     public function index()
     {
+        Gate::forUser(AuthenticationService::user())->authorize('viewAny', [User::class]);
         return view('private.user.index.index');
     }
 
     public function create()
     {
+        Gate::forUser(AuthenticationService::user())->authorize('create', [User::class]);
         return view('private.user.create.index');
     }
     
     public function import()
     {
+        Gate::forUser(AuthenticationService::user())->authorize('create', [User::class]);
         return view('private.user.import.index');
     }
 
     public function show(User $user)
     {
+        if($user->id === session('auth:user')->id){
+            Gate::forUser(AuthenticationService::user())->authorize('view', [User::class, $user]);
+        } else {
+            Gate::forUser(AuthenticationService::user())->authorize('edit', [User::class, $user]);
+        }
+
         return view('private.user.show.index', compact('user'));
     }
 
@@ -94,32 +105,5 @@ class UserController
     //     }
 
     //     return to_route('user.permissions', $user)->with('message', 'Visão de Setores atualizada com sucesso!');
-    // }
-
-    // public function forgotPassword()
-    // {
-    //     return view('auth.forgot-password.user.index');
-    // }
-
-    // public function resetPassword(Request $request, string $token)
-    // {
-    //     return view('auth.reset-password.user.index', [
-    //         'token' => $token,
-    //         'email' => request('email')
-    //     ]);
-    // }
-
-    // public function resetPasswordModal(Request $request, User $user)
-    // {   
-    //     $credentials = $request->validate([
-    //         "current_password" => ['required'],
-    //         'new_password' => ['required', 'confirmed', Password::defaults()],
-    //     ]);
-        
-    //     if(AuthenticationService::resetPassword('user', $user, $credentials)){  
-    //         return back()->with('message', 'Senha redefinida com sucesso!');
-    //     };
-
-    //     return back()->with('message', 'Não foi possível redefinir sua senha.');
     // }
 }

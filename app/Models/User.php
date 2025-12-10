@@ -4,27 +4,23 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Notifications\CustomResetPassword;
 use App\Notifications\ResetPassword;
-use Closure;
-use Illuminate\Database\Eloquent\Builder;
+use App\Policies\UserPolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 
+#[UsePolicy(UserPolicy::class)]
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     protected $table = 'users';
     
-    protected $cachedPermissionMap;
-
     /* ---- Relations ---- */
     public function companies(): BelongsToMany
     {
@@ -81,17 +77,13 @@ class User extends Authenticatable
 
     public function hasPermission(string $key): bool
     {
-        if (!$this->cachedPermissionMap) {
-            $this->cachedPermissionMap = $this->loadPermissions();
+        $permissions = $this->loadPermissions();
+
+        if (array_key_exists($key, $permissions['custom'])) {
+            return $permissions['custom'][$key] === true;
         }
 
-        // 1. Verifica se existe permissão customizada explícita (allowed ou denied)
-        if (array_key_exists($key, $this->cachedPermissionMap['custom'])) {
-            return $this->cachedPermissionMap['custom'][$key] === true;
-        }
-
-        // 2. Caso contrário, verifica se está permitida via papel
-        return in_array($key, $this->cachedPermissionMap['role']);
+        return in_array($key, $permissions['role']);
     }
 
     private function loadPermissions(): array

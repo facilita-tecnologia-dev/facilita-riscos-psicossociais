@@ -73,7 +73,6 @@
                             </div>
                             
                             <x-new-components.actions.button :href="route('psychosocial.dashboard')" fitSize>
-                                {{-- TODO: Link para o dashboard --}}
                                 <span class="text-main-background text-center text-sm font-semibold">Acompanhar resultados</span>
                             </x-new-components.actions.button>
                         </li>
@@ -86,7 +85,6 @@
                                 <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activeOrganizationalCampaign->name }}</span>
                             </div>
                             <x-new-components.actions.button :href="route('organizational.dashboard')" fitSize>
-                                {{-- TODO: Link para o dashboard --}}
                                 <span class="text-main-background text-center text-sm font-semibold">Acompanhar resultados</span>
                             </x-new-components.actions.button>
                         </li>
@@ -106,8 +104,7 @@
                                 <x-icon icon="calendar-check" class="text-primary-solid h-7 w-7 object-scale-down" />
                                 <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $scheduledCampaign->name . ' - (' . $scheduledCampaign->start_date->format('d/m/Y - H:i') . ')' }}</span>
                             </div>
-                            <x-new-components.actions.button fitSize>
-                                {{-- TODO: Link para a página da campanha agendada --}}
+                            <x-new-components.actions.button :href="route('campaign.edit', $scheduledCampaign)" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Editar</span>
                             </x-new-components.actions.button>
                         </li>
@@ -125,8 +122,7 @@
                         <x-icon icon="calendar-clock" class="text-primary-solid h-7 w-7 object-scale-down" />
                         <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">Agendar campanha de testes</span>
                     </div>
-                    <x-new-components.actions.button fitSize>
-                        {{-- TODO: Link para a pagina de agendar campanha --}}
+                    <x-new-components.actions.button :href="route('campaign.create')"  fitSize>
                         <span class="text-main-background text-center text-sm font-semibold">Agendar campanha</span>
                     </x-new-components.actions.button>
                 </li>
@@ -136,8 +132,7 @@
                         <x-icon icon="users" class="text-primary-solid h-7 w-7 object-scale-down" />
                         <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">Visualizar lista de funcionários</span>
                     </div>
-                    <x-new-components.actions.button fitSize>
-                        {{-- TODO: Link para a lista de funcionarios da empresa --}}
+                    <x-new-components.actions.button :href="route('user.index')" fitSize>
                         <span class="text-main-background text-center text-sm font-semibold">Visualizar funcionários</span>
                     </x-new-components.actions.button>
                 </li>

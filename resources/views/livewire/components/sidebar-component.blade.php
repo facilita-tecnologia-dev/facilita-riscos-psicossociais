@@ -5,20 +5,32 @@
             <x-new-components.actions.nav-item :href="session('auth:guard') === 'user' ? route('home.user') : route('home.company')" icon="home" activeRoute="home.*" tooltip="Início" />
 
             <div class="bg-borders h-0.5 w-8"></div>
-            {{-- Divider --}}
 
-            <x-new-components.actions.nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" tooltip="Riscos Psicossociais" />
-            <x-new-components.actions.nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" tooltip="Pesquisa de Clima Organizacional" />
-            <x-new-components.actions.nav-item :href="route('campaign.index')" icon="calendar-clock" activeRoute="campaign.*" tooltip="Campanhas" />
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialDashboard', [\App\Models\User::class]))
+                <x-new-components.actions.nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" tooltip="Riscos Psicossociais" />
+            @endif
+            
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalDashboard', [\App\Models\User::class]))
+                <x-new-components.actions.nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" tooltip="Pesquisa de Clima Organizacional" />
+            @endif
+
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\Campaign::class]))
+                <x-new-components.actions.nav-item :href="route('campaign.index')" icon="calendar-clock" activeRoute="campaign.*" tooltip="Campanhas" />
+            @endif
 
             <div class="bg-borders h-0.5 w-8"></div>
-            {{-- Divider --}}
+
             @if(session('auth:guard') === 'user')
                 <x-new-components.actions.nav-item :href="route('user.show', session('auth:user'))" icon="profile" activeRoute="['user.show']" label="Meu perfil" />
             @endif
 
-            <x-new-components.actions.nav-item :href="route('company.show', session('auth:company'))" icon="company" :activeRoute="['company.*', 'user.*']" tooltip="Empresa" />
-            <x-new-components.actions.nav-item wire:click='downloadDocumentation' icon="books" activeRoute="" tooltip="Documentação" />
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('show', [\App\Models\Company::class, session('auth:company')]))
+                <x-new-components.actions.nav-item :href="route('company.show', session('auth:company'))" icon="company" :activeRoute="['company.*', 'user.*']" tooltip="Empresa" />
+            @endif
+
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('documentation', [\App\Models\User::class]))
+                <x-new-components.actions.nav-item wire:click='downloadDocumentation' icon="books" activeRoute="" tooltip="Documentação" />
+            @endif
         </nav>
     </aside>
 
@@ -29,9 +41,18 @@
 
             <div class="bg-borders h-0.5 w-8"></div>
 
-            <x-new-components.actions.mobile-nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" label="Riscos Psicossociais" />
-            <x-new-components.actions.mobile-nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" label="Clima Organizacional" />
-            <x-new-components.actions.mobile-nav-item :href="route('campaign.index')" icon="calendar-clock" activeRoute="campaign.*" label="Campanhas" />
+            
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialDashboard', [\App\Models\User::class]))
+                <x-new-components.actions.mobile-nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" label="Riscos Psicossociais" />
+            @endif
+
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalDashboard', [\App\Models\User::class]))
+                <x-new-components.actions.mobile-nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" label="Clima Organizacional" />
+            @endif
+
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\Campaign::class]))
+                <x-new-components.actions.mobile-nav-item :href="route('campaign.index')" icon="calendar-clock" activeRoute="campaign.*" label="Campanhas" />
+            @endif
 
             <div class="bg-borders h-0.5 w-8"></div>
 
@@ -39,8 +60,13 @@
                 <x-new-components.actions.mobile-nav-item :href="route('user.show', session('auth:user'))" icon="profile" activeRoute="['user.show']" label="Meu perfil" />
             @endif
 
-            <x-new-components.actions.mobile-nav-item :href="route('company.show', session('auth:company'))" icon="company" activeRoute="['company.*', 'user.*']"  label="Empresa" />
-            <x-new-components.actions.mobile-nav-item wire:click='downloadDocumentation' icon="books" activeRoute="" label="Documentação" />
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('show', [\App\Models\Company::class, session('auth:company')]))
+                <x-new-components.actions.mobile-nav-item :href="route('company.show', session('auth:company'))" icon="company" activeRoute="['company.*', 'user.*']"  label="Empresa" />
+            @endif
+
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('documentation', [\App\Models\User::class]))
+                <x-new-components.actions.mobile-nav-item wire:click='downloadDocumentation' icon="books" activeRoute="" label="Documentação" />
+            @endif
         </nav>
     </aside>
 </div>

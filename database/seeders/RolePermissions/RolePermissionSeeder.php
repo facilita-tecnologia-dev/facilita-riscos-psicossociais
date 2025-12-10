@@ -13,13 +13,13 @@ class RolePermissionSeeder extends Seeder
         RolePermission::insert([
             [
                 'role_id' => 2,
-                'permission_id' => 5,
+                'permission_id' => 1,
                 'allowed' => 1,
             ],
             [
                 'role_id' => 1,
                 'permission_id' => 1,
-                'allowed' => 0,
+                'allowed' => 1,
             ],
             [
                 'role_id' => 1,
@@ -29,7 +29,7 @@ class RolePermissionSeeder extends Seeder
             [
                 'role_id' => 1,
                 'permission_id' => 3,
-                'allowed' => 1,
+                'allowed' => 0,
             ],
             [
                 'role_id' => 1,
@@ -54,12 +54,12 @@ class RolePermissionSeeder extends Seeder
             [
                 'role_id' => 1,
                 'permission_id' => 8,
-                'allowed' => 1,
+                'allowed' => 0,
             ],
             [
                 'role_id' => 1,
                 'permission_id' => 9,
-                'allowed' => 1,
+                'allowed' => 0,
             ],
             [
                 'role_id' => 1,
@@ -74,7 +74,7 @@ class RolePermissionSeeder extends Seeder
             [
                 'role_id' => 1,
                 'permission_id' => 12,
-                'allowed' => 0,
+                'allowed' => 1,
             ],
             [
                 'role_id' => 1,
@@ -84,7 +84,7 @@ class RolePermissionSeeder extends Seeder
             [
                 'role_id' => 1,
                 'permission_id' => 14,
-                'allowed' => 0,
+                'allowed' => 1,
             ],
             [
                 'role_id' => 1,
@@ -94,57 +94,7 @@ class RolePermissionSeeder extends Seeder
             [
                 'role_id' => 1,
                 'permission_id' => 16,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 17,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 18,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 19,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 20,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 21,
                 'allowed' => 1,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 22,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 23,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 24,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 25,
-                'allowed' => 0,
-            ],
-            [
-                'role_id' => 1,
-                'permission_id' => 26,
-                'allowed' => 0,
             ],
         ]);
     }

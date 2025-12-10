@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Private\Company;
 
 use App\Models\Company;
+use App\Services\Auth\AuthenticationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CompanyController
 {
@@ -37,6 +39,7 @@ class CompanyController
 
     public function show(Company $company)
     {
+        Gate::forUser(AuthenticationService::user())->authorize('show', [Company::class, $company]);
         return view('private.company.show.index', compact('company'));
     }
 }

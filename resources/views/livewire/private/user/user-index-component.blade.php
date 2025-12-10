@@ -20,17 +20,20 @@
         </section>
 
         <aside class="flex h-fit w-full flex-col gap-4 overflow-x-hidden overflow-y-auto pb-0 lg:h-full lg:w-[400px] lg:pb-4 xl:w-[460px]">
-            <div class="bg-secondary-background border-borders hidden w-full flex-col items-center gap-8 rounded-2xl border px-6 py-8 shadow-sm lg:flex">
-                <h2 class="text-main-text text-center text-xl font-semibold">Ações</h2>
-                <div class="w-full flex flex-col gap-3">
-                    <x-new-components.actions.button :href="route('user.import')">
-                        <span class="text-main-background text-center text-sm font-semibold">Importar arquivo de funcionários</span>
-                    </x-new-components.actions.button>
-                    <x-new-components.actions.button :href="route('user.create')">
-                        <span class="text-main-background text-center text-sm font-semibold">Cadastrar funcionário manualmente</span>
-                    </x-new-components.actions.button>
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('create', [\App\Models\User::class]))
+                <div class="bg-secondary-background border-borders hidden w-full flex-col items-center gap-8 rounded-2xl border px-6 py-8 shadow-sm lg:flex">
+                    <h2 class="text-main-text text-center text-xl font-semibold">Ações</h2>
+                    <div class="w-full flex flex-col gap-3">
+        
+                        <x-new-components.actions.button :href="route('user.import')">
+                            <span class="text-main-background text-center text-sm font-semibold">Importar arquivo de funcionários</span>
+                        </x-new-components.actions.button>
+                        <x-new-components.actions.button :href="route('user.create')">
+                            <span class="text-main-background text-center text-sm font-semibold">Cadastrar funcionário manualmente</span>
+                        </x-new-components.actions.button>
+                    </div>
                 </div>
-            </div>
+            @endif
             
             <div class="bg-secondary-background border-borders hidden lg:flex w-full flex-col items-center gap-8 rounded-2xl shadow-sm border px-6 py-8">
                 <h2 class="text-main-text text-center text-xl font-semibold">Filtros</h2>

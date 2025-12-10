@@ -6,6 +6,7 @@ use App\Enums\User\UserRole;
 use App\Helpers\SessionErrorHelper;
 use App\Models\Company;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -173,5 +174,16 @@ class AuthenticationService {
     public static function putCompanyOnSession(Company $company): void
     {
         session()->put('auth:company', $company);
+    }
+
+    public static function user(): Authenticatable|bool
+    {
+        foreach (array_keys(config('auth.guards')) as $guard) {
+            if (Auth::guard($guard)->check()) {
+                return Auth::guard($guard)->user();
+            }
+        }
+
+        return false;
     }
 }

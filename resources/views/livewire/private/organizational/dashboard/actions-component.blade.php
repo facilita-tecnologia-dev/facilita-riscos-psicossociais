@@ -8,9 +8,11 @@
     </header>
 
     <div class="flex flex-col md:flex-row xl:flex-col gap-3">
-        <x-new-components.actions.button :href="route('organizational.feedback')" class="w-full">
-            <span class="font-heading text-main-background text-center text-sm font-semibold">Visualizar Lista de Feedbacks</span>
-        </x-new-components.actions.button>
+        @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\UserFeedback::class]))
+            <x-new-components.actions.button :href="route('organizational.feedback')" class="w-full">
+                <span class="font-heading text-main-background text-center text-sm font-semibold">Visualizar Lista de Feedbacks</span>
+            </x-new-components.actions.button>
+        @endif
 
         <x-new-components.actions.button href="" class="w-full">
             <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>

@@ -28,5 +28,7 @@
             </a>
             <a href="{{ route('company.password-request') }}" class="text-primary-solid font-text text-left text-sm font-normal underline transition hover:scale-105">Esqueci minha senha</a>
         </footer>
+        
+        <a href="{{ route('site.home') }}" class="text-secondary-text font-text text-left text-sm font-normal underline transition hover:scale-105">Voltar para a Home</a>
     </div>
 </div>

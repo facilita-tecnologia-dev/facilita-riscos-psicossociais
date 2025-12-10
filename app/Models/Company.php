@@ -16,7 +16,9 @@ use App\Models\BaseCollection;
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Campaign\CollectionType;
 use App\Enums\Campaign\CollectionCategory;
+use App\Policies\CompanyPolicy;
 
+#[UsePolicy(CompanyPolicy::class)]
 class Company extends Authenticatable
 {
     use HasFactory, Notifiable;
