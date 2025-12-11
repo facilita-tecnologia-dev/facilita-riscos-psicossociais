@@ -1,7 +1,7 @@
 <div x-data="{ createCollectionModalOpen: false }" x-on:open-collection-modal.window="createCollectionModalOpen = true" x-on:close-collection-modal.window="createCollectionModalOpen = false" class="contents">
-    <x-new-components.actions.button  wire:click="openCollectionModal" class="w-full">
+    <x-actions.button  wire:click="openCollectionModal" class="w-full">
         <span class="font-heading text-main-background text-center text-sm font-semibold">Criar novo formulário</span>
-    </x-new-components.actions.button>
+    </x-actions.button>
 
     <div x-show="createCollectionModalOpen" x-transition.opacity x-cloak class="fixed inset-0 z-30 flex items-center justify-center bg-black/60 px-4">
         <div x-on:click.away="$wire.closeCollectionModal()" class="bg-secondary-background border-borders w-full max-w-xl flex flex-col gap-6 rounded-lg border p-6 shadow-sm">
@@ -12,14 +12,14 @@
                 </div>
             </header>
 
-            <x-new-components.form.input-text wireModel="name" name="name" label="Nome do Formulário" placeholder="Digite o nome do formulário..." tooltip="Digite o nome do formulário" />
+            <x-form.input-text wireModel="name" name="name" label="Nome do Formulário" placeholder="Digite o nome do formulário..." tooltip="Digite o nome do formulário" />
 
-            <x-new-components.actions.button wire:click="createFromDefault" class="w-full">
+            <x-actions.button wire:click="createFromDefault" class="w-full">
                 <div wire:loading wire:target="createFromDefault">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
                 <span wire:loading.remove wire:target="createFromDefault" class="font-heading text-main-background text-center text-sm font-semibold">Criar formulário</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </div>
     </div>
 </div>

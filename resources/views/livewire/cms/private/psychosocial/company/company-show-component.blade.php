@@ -5,7 +5,7 @@
             <h1 class="text-main-text text-left text-xl font-semibold md:text-2xl">Facilita Riscos Psicossociais</h1>
         </div>
 
-        <x-new-components.structure.breadcrumbs :links="[
+        <x-structure.breadcrumbs :links="[
             'Lista de empresas' => route('cms.psychosocial.company.index'),
             $company->name => null
         ]" />
@@ -20,9 +20,9 @@
                 <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Gerencie a lista de funcionários da empresa: crie, importe e edite colaboradores conforme necessário.</span>
             </div>
 
-            <x-new-components.actions.button href="{{ route('cms.psychosocial.user.index', $company) }}" fitSize>
+            <x-actions.button href="{{ route('cms.psychosocial.user.index', $company) }}" fitSize>
                 <span class="text-main-background font-heading text-center text-sm font-semibold">Lista de funcionários</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </div>
     </div>
 
@@ -35,9 +35,9 @@
                     <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Faça upload de um vídeo de demonstração que será exibido aos funcionários desta empresa antes de eles realizarem o teste.</span>
                 </div>
 
-                <x-new-components.actions.button wire:click="openHelperVideoModal" fitSize>
+                <x-actions.button wire:click="openHelperVideoModal" fitSize>
                     <span class="text-main-background font-heading text-center text-sm font-semibold">Editar vídeo</span>
-                </x-new-components.actions.button>
+                </x-actions.button>
             </div>
         </div>
 
@@ -65,12 +65,12 @@
                     </div>
 
                     @if ($company->test_helper_video)
-                        <x-new-components.actions.button wire:click="deleteHelperVideo" class="!bg-danger">
+                        <x-actions.button wire:click="deleteHelperVideo" class="!bg-danger">
                             <div wire:loading wire:target="deleteHelperVideo">
                                 <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                             </div>
                             <span wire:loading.remove wire:target="deleteHelperVideo" class="font-heading text-main-background text-center text-sm font-semibold">Excluir vídeo</span>
-                        </x-new-components.actions.button>
+                        </x-actions.button>
                     @endif
                 </div>
                 <div class="flex flex-col gap-4">
@@ -87,13 +87,13 @@
                     </p>
 
                     <form class="flex flex-col gap-2" wire:submit.prevent="updateHelperVideo">
-                        <x-new-components.form.input-file wireModel="new_helper_video" name="new_helper_video" label="Vídeo de demonstração" placeholder="Faça upload do vídeo de demonstração..." tooltip="Faça upload do vídeo de demonstração" :attachments="$new_helper_video" isRequired />
-                        <x-new-components.actions.button>
+                        <x-form.input-file wireModel="new_helper_video" name="new_helper_video" label="Vídeo de demonstração" placeholder="Faça upload do vídeo de demonstração..." tooltip="Faça upload do vídeo de demonstração" :attachments="$new_helper_video" isRequired />
+                        <x-actions.button>
                             <div wire:loading wire:target="updateHelperVideo">
                                 <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                             </div>
                             <span wire:loading.remove wire:target="updateHelperVideo" class="font-heading text-main-background text-center text-sm font-semibold">Salvar</span>
-                        </x-new-components.actions.button>
+                        </x-actions.button>
                     </form>
                 </div>
             </div>

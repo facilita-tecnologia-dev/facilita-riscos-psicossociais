@@ -1,5 +1,5 @@
 <div class="contents">
-    <x-new-components.structure.page-header icon="company" label="Página da Empresa" :breadcrumbs="['Página da Empresa' => null]" />
+    <x-structure.page-header icon="company" label="Página da Empresa" :breadcrumbs="['Página da Empresa' => null]" />
 
     @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('edit', [\App\Models\Company::class, $company]))
         <livewire:private.company.company-edit-component :company="$company" />
@@ -15,9 +15,9 @@
                     <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Gerencie a lista de funcionários da empresa: crie, importe e edite colaboradores conforme necessário.</span>
                 </div>
 
-                <x-new-components.actions.button href="{{ route('user.index') }}" fitSize>
+                <x-actions.button href="{{ route('user.index') }}" fitSize>
                     <span class="text-main-background font-heading text-center text-sm font-semibold">Lista de funcionários</span>
-                </x-new-components.actions.button>
+                </x-actions.button>
             </div>
         @endif
 

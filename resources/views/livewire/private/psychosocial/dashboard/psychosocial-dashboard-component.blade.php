@@ -128,13 +128,13 @@
 
 
                     @if(session('auth:company')->usesHSE())
-                        <x-new-components.actions.button :href="route('psychosocial.absences')" class="w-full">
+                        <x-actions.button :href="route('psychosocial.absences')" class="w-full">
                             <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
-                        </x-new-components.actions.button>
+                        </x-actions.button>
                     @else
-                        <x-new-components.actions.button :href="route('psychosocial.indicators')" class="w-full">
+                        <x-actions.button :href="route('psychosocial.indicators')" class="w-full">
                             <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Dados de Desempenho Organizacional</span>
-                        </x-new-components.actions.button>
+                        </x-actions.button>
                     @endif
                 </div>
             @endif
@@ -155,9 +155,9 @@
                         , garantindo um ambiente de trabalho mais seguro e saudável.
                     </p>
 
-                    <x-new-components.actions.button :href="route('psychosocial.control-action')" class="w-full">
+                    <x-actions.button :href="route('psychosocial.control-action')" class="w-full">
                         <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </div>
             @endif
         </div>

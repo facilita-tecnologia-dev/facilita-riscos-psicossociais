@@ -1,5 +1,5 @@
 <div class="contents">
-    <x-new-components.structure.page-header icon="users" label="Página do Funcionário" :breadcrumbs="['Página da Empresa' => route('company.show', session('auth:company')), 'Lista de Funcionários' => route('user.index'), 'Página do Funcionário' => null]" />
+    <x-structure.page-header icon="users" label="Página do Funcionário" :breadcrumbs="['Página da Empresa' => route('company.show', session('auth:company')), 'Lista de Funcionários' => route('user.index'), 'Página do Funcionário' => null]" />
         
     @if(session('auth:guard') === 'user' && $user->id === session('auth:user')->id)
         <livewire:private.user.user-info-component :user="$user" />

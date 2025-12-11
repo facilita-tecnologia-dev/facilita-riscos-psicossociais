@@ -13,36 +13,36 @@
             , pois isso pode causar erros durante a importação.
         </p>
 
-        <x-new-components.actions.button wire:click="downloadTemplate" data-tippy-content="Clique para fazer download do arquivo modelo">
+        <x-actions.button wire:click="downloadTemplate" data-tippy-content="Clique para fazer download do arquivo modelo">
             <div wire:loading wire:target="downloadTemplate">
                 <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
             </div>
 
             <span wire:loading.remove wire:target="downloadTemplate" class="font-heading text-main-background text-center text-sm font-semibold">Fazer download do arquivo modelo</span>
-        </x-new-components.actions.button>
+        </x-actions.button>
     </div>
 
     <form class="flex flex-col gap-4" wire:submit.prevent="submit">
         <h2 class="text-main-text text-left text-base font-semibold md:text-lg">2. Faça upload do arquivo modelo preenchido</h2>
 
-        <x-new-components.form.input-file wireModel="importUsersFile" name="importUsersFile" label="Arquivo de importação" placeholder="Selecione o arquivo de importação" tooltip="Selecione o arquivo de importação" :attachments="$importUsersFile" isRequired />
+        <x-form.input-file wireModel="importUsersFile" name="importUsersFile" label="Arquivo de importação" placeholder="Selecione o arquivo de importação" tooltip="Selecione o arquivo de importação" :attachments="$importUsersFile" isRequired />
 
         <div class="grid w-full grid-cols-3 gap-2 sm:gap-4">
-            <x-new-components.actions.button class="col-span-2">
+            <x-actions.button class="col-span-2">
                 <div wire:loading wire:target="submit">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
 
                 <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Importar lista de usuários</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
 
-            <x-new-components.actions.button class="!bg-danger" type="button" wire:click="nextStep">
+            <x-actions.button class="!bg-danger" type="button" wire:click="nextStep">
                 <div wire:loading wire:target="nextStep">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
 
                 <span wire:loading.remove wire:target="nextStep" class="font-heading text-main-background text-center text-sm font-semibold">Pular etapa</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </div>
     </form>
 

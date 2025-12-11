@@ -1,5 +1,5 @@
 <div class="contents">
-    <x-new-components.structure.page-header icon="users" label="Cadastrar Funcionário" :breadcrumbs="['Página da Empresa' => route('company.show', session('auth:company')), 'Lista de Funcionários' => route('user.index'), 'Cadastrar Funcionário' => null]" />
+    <x-structure.page-header icon="users" label="Cadastrar Funcionário" :breadcrumbs="['Página da Empresa' => route('company.show', session('auth:company')), 'Lista de Funcionários' => route('user.index'), 'Cadastrar Funcionário' => null]" />
 
     <form class="bg-secondary-background border-borders flex flex-col gap-4 rounded-lg border p-4 shadow-sm md:p-6" wire:submit.prevent="checkUserAlreadyExists">
         <h2 class="text-base md:text-lg text-left font-semibold text-main-text">
@@ -11,16 +11,16 @@
         </p>
 
         <div>
-            <x-new-components.form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf" isRequired />
+            <x-form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf" isRequired />
         </div>
 
-        <x-new-components.actions.button>
+        <x-actions.button>
             <div wire:loading wire:target="checkUserAlreadyExists">
                 <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
             </div>
 
             <span wire:loading.remove wire:target="checkUserAlreadyExists" class="font-heading text-main-background text-center text-sm font-semibold">Verificar</span>
-        </x-new-components.actions.button>
+        </x-actions.button>
     </form>
 
     @if($userExists === false)
@@ -34,27 +34,27 @@
             </p>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-                <x-new-components.form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf" isRequired />
-                <x-new-components.form.input-text wireModel="name" name="name" label="Nome" placeholder="Digite o nome..." tooltip="Digite o nome" isRequired />
-                <x-new-components.form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." tooltip="Digite o e-mail" />
-                <x-new-components.form.input-text wireModel="department" name="department" label="Setor" placeholder="Digite o setor..." tooltip="Digite o setor" isRequired />
-                <x-new-components.form.input-text wireModel="occupation" name="occupation" label="Função" placeholder="Digite a função..." tooltip="Digite a função" isRequired />
-                <x-new-components.form.input-text wireModel="work_shift" name="work_shift" label="Turno" placeholder="Digite o turno..." tooltip="Digite o turno" />
-                <x-new-components.form.input-date wireModel="admission" name="admission" label="Data de admissão" placeholder="Escolha a data de admissão" tooltip="Escolha a data de admissão" />
-                <x-new-components.form.input-date wireModel="birth_date" name="birth_date" label="Data de nascimento" placeholder="Escolha a data de nascimento" tooltip="Escolha a data de nascimento" />
-                <x-new-components.form.input-text wireModel="gender" name="gender" label="Gênero" placeholder="Digite o gênero..." tooltip="Digite o gênero" />
-                <x-new-components.form.input-text wireModel="marital_status" name="marital_status" label="Estado civil" placeholder="Digite o estado civil..." tooltip="Digite o estado civil" />
-                <x-new-components.form.input-text wireModel="education_level" name="education_level" label="Grau de instrução" placeholder="Digite o grau de instrução..." tooltip="Digite o grau de instrução" />
-                <x-new-components.form.input-binary wireModel="role" name="role" label="Hierarquia" tooltip="Escolha o nível de hierarquia do funcionário" :options="$roles" isRequired />
+                <x-form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf" isRequired />
+                <x-form.input-text wireModel="name" name="name" label="Nome" placeholder="Digite o nome..." tooltip="Digite o nome" isRequired />
+                <x-form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." tooltip="Digite o e-mail" />
+                <x-form.input-text wireModel="department" name="department" label="Setor" placeholder="Digite o setor..." tooltip="Digite o setor" isRequired />
+                <x-form.input-text wireModel="occupation" name="occupation" label="Função" placeholder="Digite a função..." tooltip="Digite a função" isRequired />
+                <x-form.input-text wireModel="work_shift" name="work_shift" label="Turno" placeholder="Digite o turno..." tooltip="Digite o turno" />
+                <x-form.input-date wireModel="admission" name="admission" label="Data de admissão" placeholder="Escolha a data de admissão" tooltip="Escolha a data de admissão" />
+                <x-form.input-date wireModel="birth_date" name="birth_date" label="Data de nascimento" placeholder="Escolha a data de nascimento" tooltip="Escolha a data de nascimento" />
+                <x-form.input-text wireModel="gender" name="gender" label="Gênero" placeholder="Digite o gênero..." tooltip="Digite o gênero" />
+                <x-form.input-text wireModel="marital_status" name="marital_status" label="Estado civil" placeholder="Digite o estado civil..." tooltip="Digite o estado civil" />
+                <x-form.input-text wireModel="education_level" name="education_level" label="Grau de instrução" placeholder="Digite o grau de instrução..." tooltip="Digite o grau de instrução" />
+                <x-form.input-binary wireModel="role" name="role" label="Hierarquia" tooltip="Escolha o nível de hierarquia do funcionário" :options="$roles" isRequired />
             </div>
 
-            <x-new-components.actions.button>
+            <x-actions.button>
                 <div wire:loading wire:target="submit">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
 
                 <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Cadastrar</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
 
         </form>
     @endif
@@ -72,15 +72,15 @@
             </p>
 
             <form class="w-full flex flex-col gap-4" wire:submit.prevent="attachExistingUser">
-                <x-new-components.form.input-binary wireModel="role" name="role" label="Hierarquia" tooltip="Escolha o nível de hierarquia do funcionário" :options="$roles" isRequired />
+                <x-form.input-binary wireModel="role" name="role" label="Hierarquia" tooltip="Escolha o nível de hierarquia do funcionário" :options="$roles" isRequired />
     
-               <x-new-components.actions.button>
+               <x-actions.button>
                    <div wire:loading wire:target="attachExistingUser">
                        <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                    </div>
     
                    <span wire:loading.remove wire:target="attachExistingUser" class="font-heading text-main-background text-center text-sm font-semibold">Vincular</span>
-               </x-new-components.actions.button>
+               </x-actions.button>
            </form>
         </div>
     </div>

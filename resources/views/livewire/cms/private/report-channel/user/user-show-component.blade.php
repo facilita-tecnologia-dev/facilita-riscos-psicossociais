@@ -5,7 +5,7 @@
             <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Canal de Denúncias</h1>
         </div>
 
-        <x-new-components.structure.breadcrumbs 
+        <x-structure.breadcrumbs 
             :links="[
                 'Lista de usuários' => route('cms.report-channel.user.index'),
                 'Perfil do usuário' => null

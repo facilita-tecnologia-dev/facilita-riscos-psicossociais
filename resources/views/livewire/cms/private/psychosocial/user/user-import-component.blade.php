@@ -5,7 +5,7 @@
             <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Riscos Psicossociais</h1>
         </div>
 
-        <x-new-components.structure.breadcrumbs 
+        <x-structure.breadcrumbs 
             :links="[
                 'Lista de empresas' => route('cms.psychosocial.company.index'),
                 $company->name => route('cms.psychosocial.company.show', $company),
@@ -29,13 +29,13 @@
                 <span class="font-semibold">Não altere o formato dos dados</span>, pois isso pode causar erros durante a importação.
             </p>
     
-            <x-new-components.actions.button wire:click='downloadTemplate' data-tippy-content="Clique para fazer download do arquivo modelo">
+            <x-actions.button wire:click='downloadTemplate' data-tippy-content="Clique para fazer download do arquivo modelo">
                 <div wire:loading wire:target="downloadTemplate">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
     
                 <span wire:loading.remove wire:target="downloadTemplate" class="font-heading text-main-background text-center text-sm font-semibold">Fazer download do arquivo modelo</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </div>
     
         <form class="lg:col-span-2 bg-secondary-background border-borders flex flex-col gap-4 rounded-lg border p-4 shadow-sm md:p-6" wire:submit.prevent="uploadUsersFile">
@@ -43,15 +43,15 @@
                 2. Faça upload do arquivo modelo preenchido
             </h2>
 
-            <x-new-components.form.input-file wireModel="importUsersFile" name="importUsersFile" label="Arquivo de importação" placeholder="Selecione o arquivo de importação" tooltip="Selecione o arquivo de importação" :attachments="$importUsersFile" isRequired />
+            <x-form.input-file wireModel="importUsersFile" name="importUsersFile" label="Arquivo de importação" placeholder="Selecione o arquivo de importação" tooltip="Selecione o arquivo de importação" :attachments="$importUsersFile" isRequired />
 
-            <x-new-components.actions.button>
+            <x-actions.button>
                 <div wire:loading wire:target="uploadUsersFile">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
     
                 <span wire:loading.remove wire:target="uploadUsersFile" class="font-heading text-main-background text-center text-sm font-semibold">Importar arquivo</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </form>
 
         @if($importErrors)

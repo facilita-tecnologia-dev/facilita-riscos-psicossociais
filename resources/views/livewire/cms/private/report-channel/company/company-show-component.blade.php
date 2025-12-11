@@ -5,7 +5,7 @@
             <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Canal de Denúncias</h1>
         </div>
 
-        <x-new-components.structure.breadcrumbs 
+        <x-structure.breadcrumbs 
             :links="[
                 'Lista de empresas' => route('cms.report-channel.company.index'),
                 $company['register_name'] => null
@@ -33,9 +33,9 @@
                 <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Visite o portal de denúncias da empresa.</span>
             </div>
             
-            <x-new-components.actions.button class="!bg-report-channel-primary-solid" :href="env('REPORT_CHANNEL_URL') . '/' . $company['slug']" fitSize>
+            <x-actions.button class="!bg-report-channel-primary-solid" :href="env('REPORT_CHANNEL_URL') . '/' . $company['slug']" fitSize>
                 <span class="text-main-background font-heading text-center text-sm font-semibold">Visitar</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </div>
 
         <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">

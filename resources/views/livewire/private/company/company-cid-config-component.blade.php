@@ -6,7 +6,7 @@
         </div>
 
         <div class="w-80">
-            <x-new-components.form.input-binary wireModelType="live"  wireModel="cid_config" name="cid_config" :options="$cid_options" isRequired />
+            <x-form.input-binary wireModelType="live"  wireModel="cid_config" name="cid_config" :options="$cid_options" isRequired />
         </div>
     </div>
 </div>

@@ -179,9 +179,9 @@
 
                     <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">Personalize os formulários para que se encaixem no contexto da sua organização. Além de modificar questões, você pode criar novos grupos de questões e até mesmo criar novos formulários completos.</p>
 
-                    <x-new-components.actions.button :href="route('organizational.custom-collection.index')" class="w-full">
+                    <x-actions.button :href="route('organizational.custom-collection.index')" class="w-full">
                         <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </div>
             @endif
         </div>

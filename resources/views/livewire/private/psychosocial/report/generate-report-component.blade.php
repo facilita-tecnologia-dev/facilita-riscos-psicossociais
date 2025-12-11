@@ -1,7 +1,7 @@
 <div x-data="{ reportModalOpen: false }" x-on:open-report-modal.window="reportModalOpen = true" x-on:close-report-modal.window="reportModalOpen = false" class="contents">
-    <x-new-components.actions.button  wire:click="openReportModal" class="w-full">
+    <x-actions.button  wire:click="openReportModal" class="w-full">
         <span class="font-heading text-main-background text-center text-sm font-semibold">Exportar Inventário de Riscos</span>
-    </x-new-components.actions.button>
+    </x-actions.button>
 
 
     @if($processing && !$ready)
@@ -33,7 +33,7 @@
                         @endphp
 
                         <div class="bg-borders flex w-full items-center gap-2 rounded-sm p-3">
-                            <x-new-components.file-icon type="{{ $extension }}" />
+                            <x-file-icon type="{{ $extension }}" />
                             <span class="font-text text-secondary-text flex-1 truncate text-sm font-normal md:text-base" title="{{ $filename }}">{{ $filename }}</span>
                             <span class="font-text text-secondary-text truncate text-xs font-normal">{{ round($size / 1024 / 1024, 2) }}MB</span>
                         </div>
@@ -43,12 +43,12 @@
                         </div>
                     </div>
 
-                    <x-new-components.actions.button wire:click="downloadReport">
+                    <x-actions.button wire:click="downloadReport">
                         <div wire:loading wire:target="downloadReport">
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                         </div>
                         <span wire:loading.remove wire:target="downloadReport" class="font-heading text-main-background text-center text-sm font-semibold">Fazer download</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 @else
                     <div class="flex w-full flex-1 items-center justify-center">
                         <p class="text-secondary-text font-heading text-center text-sm font-normal sm:text-base">Você ainda não gerou nenhum Inventário de Riscos Psicossociais.</p>
@@ -99,12 +99,12 @@
                         </div>
                     </div>
 
-                    <x-new-components.actions.button type="submit">
+                    <x-actions.button type="submit">
                         <div wire:loading wire:target="submit">
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                         </div>
                         <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Exportar</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </form>
             </div>
         </div>

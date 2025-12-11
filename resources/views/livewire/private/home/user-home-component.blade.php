@@ -1,5 +1,5 @@
 <div class="contents">
-    <x-new-components.structure.page-header icon="home" label="{{ session('auth:company')->name }}" :breadcrumbs="[session('auth:company')->name => null]" />
+    <x-structure.page-header icon="home" label="{{ session('auth:company')->name }}" :breadcrumbs="[session('auth:company')->name => null]" />
 
     @if (session('auth:company')->activeCampaigns()->isNotEmpty())
         <section id="active-campaigns" class="space-y-4">
@@ -16,9 +16,9 @@
                             <span class="text-sm text-secondary-text text-left font-normal">Respondido</span>
                         @else
                             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('answer', [\App\Models\Campaign::class]))
-                                <x-new-components.actions.button :href="route('campaign.answer', $activePsychosocialCampaign)" fitSize>
+                                <x-actions.button :href="route('campaign.answer', $activePsychosocialCampaign)" fitSize>
                                     <span class="text-main-background text-center text-sm font-semibold">Responder</span>
-                                </x-new-components.actions.button>
+                                </x-actions.button>
                             @endif
                         @endif
                     </li>
@@ -34,9 +34,9 @@
                         @if(session('auth:user')->hasAnsweredCampaign($this->activeOrganizationalCampaign->id))
                             <span class="text-sm text-secondary-text text-left font-normal">Respondido</span>
                         @else
-                            <x-new-components.actions.button :href="route('campaign.answer', $activeOrganizationalCampaign)" fitSize>
+                            <x-actions.button :href="route('campaign.answer', $activeOrganizationalCampaign)" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Responder</span>
-                            </x-new-components.actions.button>
+                            </x-actions.button>
                         @endif
                     </li>
                 @endif
@@ -53,9 +53,9 @@
                     <x-icon icon="user-check" class="text-primary-solid h-7 w-7 object-scale-down" />
                     <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">Visualizar meu perfil no sistema</span>
                 </div>
-                <x-new-components.actions.button :href="route('user.show', session('auth:user'))" fitSize>
+                <x-actions.button :href="route('user.show', session('auth:user'))" fitSize>
                     <span class="text-main-background text-center text-sm font-semibold">Visualizar meu perfil</span>
-                </x-new-components.actions.button>
+                </x-actions.button>
             </li>
         </ul>
     </section>

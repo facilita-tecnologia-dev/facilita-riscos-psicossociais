@@ -12,24 +12,22 @@
     <p class="text-sm sm:text-base text-main-text text-left font-normal">Abaixo, você pode definir quais setores este gestor pode visualizar. Assim, ao acessar os resultados das campanhas, ele verá apenas os dados dos colaboradores pertencentes a esses setores.</p>
 
     <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-        {{-- @foreach ($permissions as $key => $data)
+        @foreach ($departmentScopes as $department => $permission)
             <label class="flex items-center cursor-pointer">
-                <input type="checkbox" wire:model.live="permissions.{{ $key }}.allowed" class="peer hidden">
+                <input type="checkbox" wire:model.live="departmentScopes.{{ $department }}" @disabled($department === $user->department) class="peer hidden">
 
                 <div class="bg-secondary-background border-borders peer-checked:border-primary-solid flex flex-col gap-1 w-full cursor-pointer items-start rounded-sm border p-3 transition hover:brightness-95">
-                    <p class="font-medium text-sm md:text-base text-gray-800">{{ $data['label'] }}</p>
-                    <span class="text-xs md:text-sm text-gray-800">{{ $data['description'] }}</span>
+                    <p class="font-medium text-sm md:text-base text-gray-800">{{ $department }}</p>
                 </div>
             </label>
-        @endforeach --}}
+        @endforeach
 
-        @foreach ($departmentLabels as $slug => $label)
+        {{-- @foreach ($departmentLabels as $slug => $label)
             <label class="flex items-center cursor-pointer">
                 <input
                     type="checkbox"
                     wire:model="departmentScopes.{{ $slug }}"
                     value="1"
-                    {{-- desabilita se for o próprio departamento --}}
                     @disabled($slug === $userDepartmentSlug)
                     class="hidden peer"
                 >
@@ -42,14 +40,14 @@
                     @endif
                 </div>
             </label>
-        @endforeach
+        @endforeach --}}
     </div>
 
-    <x-new-components.actions.button class="lg:col-span-2">
+    <x-actions.button class="lg:col-span-2">
         <div wire:loading wire:target="submit">
             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
         </div>
 
         <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Salvar</span>
-    </x-new-components.actions.button>
+    </x-actions.button>
 </form>

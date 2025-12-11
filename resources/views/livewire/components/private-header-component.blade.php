@@ -17,11 +17,11 @@
         @endif
 
         <div class="block md:hidden" wire:click="openSidebar">
-            <x-new-components.actions.nav-item icon="hamburguer" />
+            <x-actions.nav-item icon="hamburguer" />
         </div>
 
         <div wire:click="logout">
-            <x-new-components.actions.nav-item icon="logout" tooltip="Sair do sistema" tooltipPosition="left" />
+            <x-actions.nav-item icon="logout" tooltip="Sair do sistema" tooltipPosition="left" />
         </div>
     </div>
     
@@ -30,8 +30,8 @@
             Ao utilizar este sistema, você declara estar ciente e de acordo com a nossa <a href="{{ route('privacy-policy') }}" class="text-primary-solid underline">Política de Privacidade</a>.
         </p>
     
-        <x-new-components.actions.button type="button" fitSize>
+        <x-actions.button type="button" fitSize>
             <span class="font-heading text-main-background text-center text-sm font-semibold">Confirmar</span>
-        </x-new-components.actions.button>
+        </x-actions.button>
     </div>
 </header>

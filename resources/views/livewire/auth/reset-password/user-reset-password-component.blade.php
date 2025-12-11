@@ -8,16 +8,16 @@
             <input type="hidden" wire:model.defer="token" value="{{ $token }}" />
             <input type="hidden" wire:model.defer="email" value="{{ $email }}" />
 
-            <x-new-components.form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a senha..." tooltip="Crie uma senha de 8 a 30 caracteres, com pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial para maior segurança" isRequired isPassword />
-            <x-new-components.form.input-text wireModel="password_confirmation" name="password_confirmation" label="Confirme sua senha" placeholder="Confirme a senha..." tooltip="Confirme a senha que você criou" isRequired isPassword />
+            <x-form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a senha..." tooltip="Crie uma senha de 8 a 30 caracteres, com pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial para maior segurança" isRequired isPassword />
+            <x-form.input-text wireModel="password_confirmation" name="password_confirmation" label="Confirme sua senha" placeholder="Confirme a senha..." tooltip="Confirme a senha que você criou" isRequired isPassword />
 
-            <x-new-components.actions.button class="w-full" type="submit">
+            <x-actions.button class="w-full" type="submit">
                 <div wire:loading wire:target="submit">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
 
                 <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Redefinir senha</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </form>
     </div>
 </div>

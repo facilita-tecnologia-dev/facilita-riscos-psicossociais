@@ -15,13 +15,13 @@
 
             <p class="text-base text-main-text text-left font-normal">Você deseja mesmo excluir este afastamento? Essa ação é irreversível e ele não poderá ser recuperado depois.</p>
 
-            <x-new-components.actions.button class="!bg-danger" type="button" wire:click="delete">
+            <x-actions.button class="!bg-danger" type="button" wire:click="delete">
                 <div wire:loading wire:target="delete">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
 
                 <span wire:loading.remove wire:target="delete" class="font-heading text-main-background text-center text-sm font-semibold">Excluir afastamento</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </div>
     </div>
 </div>

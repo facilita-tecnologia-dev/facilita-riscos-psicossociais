@@ -8,22 +8,22 @@
     </header>
 
     <form class="grid w-full grid-cols-1 gap-4" wire:submit.prevent="submit">
-        <x-new-components.form.input-binary wireModel="evaluation_type" name="evaluation_type" wireModelType="live" label="Tipo de Avaliação" tooltip="Escolha o tipo de avaliação" :options="$evaluation_types" isRequired />
+        <x-form.input-binary wireModel="evaluation_type" name="evaluation_type" wireModelType="live" label="Tipo de Avaliação" tooltip="Escolha o tipo de avaliação" :options="$evaluation_types" isRequired />
 {{-- 
         @if ($evaluation_type === App\Enums\Campaign\EvaluationTypes::DEPARTMENT->value)
-            <x-new-components.form.select wireModel="department" name="department" label="Setor" placeholder="Selecione o setor" tooltip="Selecione o setor" :options="$departments" />
+            <x-form.select wireModel="department" name="department" label="Setor" placeholder="Selecione o setor" tooltip="Selecione o setor" :options="$departments" />
         @endif
 
         @if ($evaluation_type === App\Enums\Campaign\EvaluationTypes::OCCUPATION->value)
-            <x-new-components.form.select wireModel="occupation" name="occupation" label="Função" placeholder="Selecione a função" tooltip="Selecione a função" :options="$occupations" />
+            <x-form.select wireModel="occupation" name="occupation" label="Função" placeholder="Selecione a função" tooltip="Selecione a função" :options="$occupations" />
         @endif --}}
 
-        <x-new-components.actions.button class="w-full" type="submit">
+        <x-actions.button class="w-full" type="submit">
             <div wire:loading wire:target="submit">
                 <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
             </div>
 
             <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Atualizar</span>
-        </x-new-components.actions.button>
+        </x-actions.button>
     </form>
 </div>

@@ -11,6 +11,6 @@
         
         {{ $slot }}
 
-        <x-structure.site-footer />
+        <x-site.site-footer />
     </body>
 </html>

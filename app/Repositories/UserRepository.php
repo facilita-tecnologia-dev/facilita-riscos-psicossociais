@@ -170,6 +170,20 @@ class UserRepository
         });
     }
 
+    public static function updateDepartmentScopes(User $user, array $department_scopes): mixed
+    {
+        return DB::transaction(function() use($user, $department_scopes) {
+            foreach($department_scopes as $department => $permission){
+                $user->departmentScopes()->updateOrCreate([
+                    'company_id' => session('auth:company')->id,
+                    'department' => $department
+                ],[
+                    'allowed' => $permission
+                ]);
+            }
+        });
+    }
+
     public static function activate(Company $company, User $user): mixed
     {
         return DB::transaction(function() use($company, $user) {

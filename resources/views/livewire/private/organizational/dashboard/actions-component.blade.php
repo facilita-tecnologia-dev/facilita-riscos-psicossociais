@@ -9,19 +9,19 @@
 
     <div class="flex flex-col md:flex-row xl:flex-col gap-3">
         @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\UserFeedback::class]))
-            <x-new-components.actions.button :href="route('organizational.feedback')" class="w-full">
+            <x-actions.button :href="route('organizational.feedback')" class="w-full">
                 <span class="font-heading text-main-background text-center text-sm font-semibold">Visualizar Lista de Feedbacks</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         @endif
 
         @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalCustomCollections', [\App\Models\User::class]))
-            <x-new-components.actions.button :href="route('organizational.custom-collection.index')" class="w-full">
+            <x-actions.button :href="route('organizational.custom-collection.index')" class="w-full">
                 <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         @endif
 
-        <x-new-components.actions.button href="" class="w-full">
+        <x-actions.button href="" class="w-full">
             <span class="font-heading text-main-background text-center text-sm font-semibold">Exportar Relatório</span>
-        </x-new-components.actions.button>
+        </x-actions.button>
     </div>
 </div>

@@ -1,5 +1,5 @@
 <div class="contents" x-data="{ videoModalOpen: false }" x-on:open-video-modal.window="videoModalOpen = true" x-on:close-video-modal.window="videoModalOpen = false">
-    <x-new-components.structure.page-header icon="{{ $campaign->collection()->type == App\Enums\Campaign\CollectionType::PSYCHOSOCIAL ? 'brain' : 'cloud' }}" label="Responder Teste" :breadcrumbs="[
+    <x-structure.page-header icon="{{ $campaign->collection()->type == App\Enums\Campaign\CollectionType::PSYCHOSOCIAL ? 'brain' : 'cloud' }}" label="Responder Teste" :breadcrumbs="[
         $campaign->name => null,
         'Responder Teste' => null
     ]" />
@@ -12,13 +12,13 @@
                 <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Assista ao vídeo de demonstração para entender como responder ao teste da forma correta.</span>
             </div>
 
-            <x-new-components.actions.button wire:click="openVideoModal" fitSize>
+            <x-actions.button wire:click="openVideoModal" fitSize>
                 <div wire:loading wire:target="openVideoModal">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
 
                 <span wire:loading.remove wire:target="openVideoModal" class="font-heading text-main-background text-center text-sm font-semibold">Assistir vídeo</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </div>
 
         {{-- Video Modal --}}
@@ -38,13 +38,13 @@
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 @endif
 
-                <x-new-components.actions.button class="w-full" wire:click='confirmVideoWatched'>
+                <x-actions.button class="w-full" wire:click='confirmVideoWatched'>
                     <div wire:loading wire:target="confirmVideoWatched">
                         <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                     </div>
 
                     <span wire:loading.remove wire:target="confirmVideoWatched" class="font-heading text-main-background text-center text-sm font-semibold">Prosseguir</span>
-                </x-new-components.actions.button>
+                </x-actions.button>
             </div>
         </div>
     @endif
@@ -89,13 +89,13 @@
                     </div>
 
                     <nav class="w-full flex justify-between">
-                        <x-new-components.actions.button wire:click="previous" :disabled="$current === 0" fitSize>
+                        <x-actions.button wire:click="previous" :disabled="$current === 0" fitSize>
                             <span class="text-main-background font-heading text-center text-sm font-semibold">Anterior</span>
-                        </x-new-components.actions.button>
+                        </x-actions.button>
 
-                        <x-new-components.actions.button wire:click="next" :disabled="!($current < count($questions) - 1)" fitSize>
+                        <x-actions.button wire:click="next" :disabled="!($current < count($questions) - 1)" fitSize>
                             <span class="text-main-background font-heading text-center text-sm font-semibold">Próximo</span>
-                        </x-new-components.actions.button>
+                        </x-actions.button>
                     </nav>
                 </div>
 
@@ -110,7 +110,7 @@
                         </header>
 
                         <div class="w-full">
-                            <x-new-components.form.textarea wireModel="feedback" name="feedback" label="Seu feedback" placeholder="Deixe seu comentário, crítica, elogio ou sugestão..." tooltip="Deixe seu comentário, crítica, elogio ou sugestão" />
+                            <x-form.textarea wireModel="feedback" name="feedback" label="Seu feedback" placeholder="Deixe seu comentário, crítica, elogio ou sugestão..." tooltip="Deixe seu comentário, crítica, elogio ou sugestão" />
                         </div>
                     </div>
                 @endif
@@ -156,21 +156,21 @@
                 </div>
 
                 <div class="w-full flex flex-col gap-3">
-                    <x-new-components.actions.button class="!bg-danger" wire:click="clearAnswers">
+                    <x-actions.button class="!bg-danger" wire:click="clearAnswers">
                         <div wire:loading wire:target="clearAnswers">
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                         </div>
 
                         <span wire:loading.remove wire:target="clearAnswers" class="font-heading text-main-background text-center text-sm font-semibold">Limpar respostas</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                     
-                    <x-new-components.actions.button wire:click="finish" :disabled="!$this->isCompleted">
+                    <x-actions.button wire:click="finish" :disabled="!$this->isCompleted">
                         <div wire:loading wire:target="finish">
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                         </div>
 
                         <span wire:loading.remove wire:target="finish" class="font-heading text-main-background text-center text-sm font-semibold">Finalizar e Salvar</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </div>
             </aside>
         </section>

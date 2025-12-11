@@ -29,17 +29,17 @@
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-        <x-new-components.info-item label="Nome" value="{{ $user->name }}" truncate />
-        <x-new-components.info-item label="CPF" value="{{ $user->cpf }}" truncate />
-        <x-new-components.info-item label="E-mail" value="{{ $user->email }}" truncate />
-        <x-new-components.info-item label="Setor" value="{{ $user->department }}" truncate />
-        <x-new-components.info-item label="Função" value="{{ $user->occupation }}" truncate />
-        <x-new-components.info-item label="Turno" value="{{ $user->work_shift }}" truncate />
-        <x-new-components.info-item label="Data de admissão" value="{{ $user->admission }}" truncate />
-        <x-new-components.info-item label="Data de nascimento" value="{{ $user->birth_date }}" truncate />
-        <x-new-components.info-item label="Gênero" value="{{ $user->gender }}" truncate />
-        <x-new-components.info-item label="Estado civil" value="{{ $user->marital_status }}" truncate />
-        <x-new-components.info-item label="Grau de instrução" value="{{ $user->education_level }}" truncate />
+        <x-info-item label="Nome" value="{{ $user->name }}" truncate />
+        <x-info-item label="CPF" value="{{ $user->cpf }}" truncate />
+        <x-info-item label="E-mail" value="{{ $user->email }}" truncate />
+        <x-info-item label="Setor" value="{{ $user->department }}" truncate />
+        <x-info-item label="Função" value="{{ $user->occupation }}" truncate />
+        <x-info-item label="Turno" value="{{ $user->work_shift }}" truncate />
+        <x-info-item label="Data de admissão" value="{{ $user->admission }}" truncate />
+        <x-info-item label="Data de nascimento" value="{{ $user->birth_date }}" truncate />
+        <x-info-item label="Gênero" value="{{ $user->gender }}" truncate />
+        <x-info-item label="Estado civil" value="{{ $user->marital_status }}" truncate />
+        <x-info-item label="Grau de instrução" value="{{ $user->education_level }}" truncate />
     </div>
 </form>
 

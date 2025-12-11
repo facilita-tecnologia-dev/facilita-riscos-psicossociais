@@ -5,7 +5,7 @@
             <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Canal de Denúncias</h1>
         </div>
 
-        <x-new-components.structure.breadcrumbs 
+        <x-structure.breadcrumbs 
             :links="[
                 'Dashboard' => null,
             ]" 
@@ -13,12 +13,12 @@
     </div>
 
     <div class="w-full flex flex-col sm:flex-row gap-2 sm:gap-4">
-        <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.company.index') }}">
+        <x-actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.company.index') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de empresas</span>
-        </x-new-components.actions.button>
-        <x-new-components.actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.user.index') }}">
+        </x-actions.button>
+        <x-actions.button class="!bg-report-channel-primary-solid" href="{{ route('cms.report-channel.user.index') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de usuários</span>
-        </x-new-components.actions.button>
+        </x-actions.button>
     </div>
 
     <div class="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

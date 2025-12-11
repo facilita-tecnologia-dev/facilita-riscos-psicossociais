@@ -5,7 +5,7 @@
             <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Riscos Psicossociais</h1>
         </div>
 
-        <x-new-components.structure.breadcrumbs 
+        <x-structure.breadcrumbs 
             :links="[
                 'Lista de empresas' => route('cms.psychosocial.company.index'),
                 $company->name => route('cms.psychosocial.company.show', $company),
@@ -15,14 +15,14 @@
     </div>
 
     <div class="w-full flex lg:hidden gap-2 justify-end">
-        <x-new-components.actions.button href="{{ route('cms.psychosocial.user.import', $company) }}" slim fitSize>
+        <x-actions.button href="{{ route('cms.psychosocial.user.import', $company) }}" slim fitSize>
             <span class="hidden sm:block text-main-background text-center text-sm font-semibold">Importar arquivo de funcionários</span>
             <x-icon icon="upload" class="block sm:hidden text-main-background h-4 w-4 object-scale-down" />
-        </x-new-components.actions.button>
-        <x-new-components.actions.button href="{{ route('cms.psychosocial.user.create', $company) }}" slim fitSize>
+        </x-actions.button>
+        <x-actions.button href="{{ route('cms.psychosocial.user.create', $company) }}" slim fitSize>
             <span class="hidden sm:block text-main-background text-center text-sm font-semibold">Cadastrar funcionário manualmente</span>
             <x-icon icon="plus" class="block sm:hidden text-main-background h-4 w-4 object-scale-down" />
-        </x-new-components.actions.button>
+        </x-actions.button>
 
         @include('cms.private.psychosocial.user.index.side-actions.user-filter-mobile')
     </div>
@@ -42,12 +42,12 @@
             <div class="bg-secondary-background border-borders hidden w-full flex-col items-center gap-8 rounded-2xl border px-6 py-8 shadow-sm lg:flex">
                 <h2 class="text-main-text text-center text-xl font-semibold">Ações</h2>
                 <div class="w-full flex flex-col gap-3">
-                    <x-new-components.actions.button href="{{ route('cms.psychosocial.user.import', $company) }}">
+                    <x-actions.button href="{{ route('cms.psychosocial.user.import', $company) }}">
                         <span class="text-main-background text-center text-sm font-semibold">Importar arquivo de funcionários</span>
-                    </x-new-components.actions.button>
-                    <x-new-components.actions.button href="{{ route('cms.psychosocial.user.create', $company) }}">
+                    </x-actions.button>
+                    <x-actions.button href="{{ route('cms.psychosocial.user.create', $company) }}">
                         <span class="text-main-background text-center text-sm font-semibold">Cadastrar funcionário manualmente</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </div>
             </div>
             

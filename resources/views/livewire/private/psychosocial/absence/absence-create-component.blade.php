@@ -1,7 +1,7 @@
 <div x-data="{ absenceCreateModalOpen: false }">
-    <x-new-components.actions.button type="button" @click="absenceCreateModalOpen = true">
+    <x-actions.button type="button" @click="absenceCreateModalOpen = true">
         <span wire:loading.remove wire:target="delete" class="font-heading text-main-background text-center text-sm font-semibold">Registrar afastamento</span>
-    </x-new-components.actions.button>
+    </x-actions.button>
 
     <div x-show="absenceCreateModalOpen" x-on:absence:updated.window="absenceCreateModalOpen = false" x-cloak @click.self="absenceCreateModalOpen = false" x-transition.opacity class="fixed inset-0 z-30 flex items-center justify-center bg-black/60 px-4">
         <div class="bg-secondary-background border-borders flex flex-col gap-4 w-full max-w-xl rounded-lg border p-6 shadow-sm">
@@ -14,11 +14,11 @@
             </header>
 
             <form class="w-full space-y-4" wire:submit.prevent="create">                
-                <x-new-components.form.select wireModel="cid" name="cid" label="Código CID" placeholder="Selecione o código CID" tooltip="Selecione o Código CID" :options="$cids" required />
-                <x-new-components.form.select wireModel="department" name="department" label="Setor" placeholder="Selecione o setor" tooltip="Selecione o setor" :options="$departments" required />
-                <x-new-components.form.select wireModel="occupation" name="occupation" label="Função" placeholder="Selecione a função" tooltip="Selecione a função" :options="$occupations" required />
+                <x-form.select wireModel="cid" name="cid" label="Código CID" placeholder="Selecione o código CID" tooltip="Selecione o Código CID" :options="$cids" required />
+                <x-form.select wireModel="department" name="department" label="Setor" placeholder="Selecione o setor" tooltip="Selecione o setor" :options="$departments" required />
+                <x-form.select wireModel="occupation" name="occupation" label="Função" placeholder="Selecione a função" tooltip="Selecione a função" :options="$occupations" required />
 
-                <x-new-components.form.input-number wireModel="duration" name="duration" label="Duração (dias)" placeholder="Digite a duração do afastamento..." tooltip="Digite a duração do afastamento" isRequired />
+                <x-form.input-number wireModel="duration" name="duration" label="Duração (dias)" placeholder="Digite a duração do afastamento..." tooltip="Digite a duração do afastamento" isRequired />
                 
 
                 <button type="submit" class="w-full py-2 px-4 bg-primary-solid rounded-md border border-borders cursor-pointer">

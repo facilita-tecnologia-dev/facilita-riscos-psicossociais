@@ -1,5 +1,5 @@
 <div class="contents">
-    <x-new-components.structure.page-header icon="cloud" label="Formulários de Pesquisa de Clima" :breadcrumbs="['Formulários de Pesquisa de Clima' => null]" />
+    <x-structure.page-header icon="cloud" label="Formulários de Pesquisa de Clima" :breadcrumbs="['Formulários de Pesquisa de Clima' => null]" />
 
     <livewire:private.organizational.custom-collection.custom-collection-create-component />
 
@@ -14,12 +14,12 @@
                     </header>
 
                     <div class="flex flex-col gap-2">
-                        <x-new-components.info-item label="Nome do Formulário" :value="$customCollection->name" truncate />
+                        <x-info-item label="Nome do Formulário" :value="$customCollection->name" truncate />
                     </div>
 
-                    <x-new-components.actions.button :href="route('organizational.custom-collection.edit', $customCollection)">
+                    <x-actions.button :href="route('organizational.custom-collection.edit', $customCollection)">
                         <span class="text-main-background text-center text-sm font-semibold">Editar</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </div>
             @endforeach
         </div>

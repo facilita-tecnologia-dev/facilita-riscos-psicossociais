@@ -12,8 +12,8 @@
     @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-        <x-new-components.info-item label="Nome" value="{{ $company->name }}" truncate />
-        <x-new-components.info-item label="CPF" value="{{ $company->cnpj }}" truncate />
-        <x-new-components.info-item label="E-mail" value="{{ $company->email }}" truncate />
+        <x-info-item label="Nome" value="{{ $company->name }}" truncate />
+        <x-info-item label="CPF" value="{{ $company->cnpj }}" truncate />
+        <x-info-item label="E-mail" value="{{ $company->email }}" truncate />
     </div>
 </form>

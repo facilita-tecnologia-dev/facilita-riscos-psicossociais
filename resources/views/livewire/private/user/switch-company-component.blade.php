@@ -14,21 +14,21 @@
                 </header>
 
                 <form class="grid w-full grid-cols-1 gap-4" wire:submit.prevent="submit">
-                    <x-new-components.form.select wireModel="company_id" wireModelType="live" name="company" label="Empresa" placeholder="Selecione a empresa" tooltip="Selecione a empresa" :options="$companies" isRequired />
+                    <x-form.select wireModel="company_id" wireModelType="live" name="company" label="Empresa" placeholder="Selecione a empresa" tooltip="Selecione a empresa" :options="$companies" isRequired />
                     
                     @if($needsPassword)
                         <span class="text-sm sm:text-base text-main-text text-left font-normal">Como você possui perfil de gestor na empresa selecionada, é necessário confirmar sua senha para avançar.</span>
 
-                        <x-new-components.form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a sua senha..." tooltip="Digite a sua senha." isRequired isPassword />
+                        <x-form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a sua senha..." tooltip="Digite a sua senha." isRequired isPassword />
                     @endif
 
-                    <x-new-components.actions.button class="w-full" type="submit">
+                    <x-actions.button class="w-full" type="submit">
                         <div wire:loading wire:target="submit">
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                         </div>
 
                         <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Autenticar</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </form>
             </div>
         </div>

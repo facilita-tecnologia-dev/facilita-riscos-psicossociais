@@ -1,20 +1,20 @@
 <div class="contents">
-    <x-new-components.structure.page-header icon="brain" label="Medidas de Controle" :breadcrumbs="['Medidas de Controle' => null]" />
+    <x-structure.page-header icon="brain" label="Medidas de Controle" :breadcrumbs="['Medidas de Controle' => null]" />
     
     @if(isset($controlActions) && count($controlActions) > 0)
         <div class="border-borders bg-main-background flex flex-col gap-3 rounded-lg border p-4">
             <form class="flex flex-col md:flex-row md:items-end gap-3 md:gap-4" wire:submit.prevent="filter">
-                <x-new-components.form.select wireModel="hazard" name="hazard" label="Dimensão" placeholder="Selecione a dimensão" tooltip="Selecione a dimensão" :options="$hazards" />
-                <x-new-components.form.select wireModel="risk_level" name="risk_level" label="Nível de Risco" placeholder="Selecione o nível de risco" :options="$risk_levels" />
+                <x-form.select wireModel="hazard" name="hazard" label="Dimensão" placeholder="Selecione a dimensão" tooltip="Selecione a dimensão" :options="$hazards" />
+                <x-form.select wireModel="risk_level" name="risk_level" label="Nível de Risco" placeholder="Selecione o nível de risco" :options="$risk_levels" />
     
                 <div class="w-full md:w-fit"> 
-                    <x-new-components.actions.button type="submit">
+                    <x-actions.button type="submit">
                         <div wire:loading wire:target="filter">
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                         </div>
     
                         <span wire:loading.remove wire:target="filter" class="font-heading text-main-background text-center text-sm font-semibold">Filtrar</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </div>
             </form>
         </div>

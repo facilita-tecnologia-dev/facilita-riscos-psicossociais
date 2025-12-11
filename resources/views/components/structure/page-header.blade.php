@@ -11,6 +11,6 @@
     </div>
 
     @if ($breadcrumbs)
-        <x-new-components.structure.breadcrumbs :links="$breadcrumbs" />
+        <x-structure.breadcrumbs :links="$breadcrumbs" />
     @endif
 </header>

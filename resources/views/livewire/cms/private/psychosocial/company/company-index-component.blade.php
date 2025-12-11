@@ -5,7 +5,7 @@
             <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Riscos Psicossociais</h1>
         </div>
 
-        <x-new-components.structure.breadcrumbs 
+        <x-structure.breadcrumbs 
             :links="[
                 'Lista de empresas' => null,
             ]" 
@@ -13,9 +13,9 @@
     </div>
 
     <div class="w-full flex lg:hidden gap-2 justify-end">
-        <x-new-components.actions.button href="{{ route('cms.psychosocial.company.create') }}" slim>
+        <x-actions.button href="{{ route('cms.psychosocial.company.create') }}" slim>
             <span class="text-main-background text-center text-sm font-semibold">Cadastrar nova empresa</span>
-        </x-new-components.actions.button>
+        </x-actions.button>
 
         @include('cms.private.psychosocial.company.index.side-actions.company-filter-mobile')
     </div>
@@ -36,9 +36,9 @@
                 <h2 class="text-main-text text-center text-xl font-semibold">Ações</h2>
 
                 <div class="w-full flex flex-col gap-3">
-                    <x-new-components.actions.button href="{{ route('cms.psychosocial.company.create') }}">
+                    <x-actions.button href="{{ route('cms.psychosocial.company.create') }}">
                         <span class="text-main-background text-center text-sm font-semibold">Cadastrar nova empresa</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </div>
             </div>
             

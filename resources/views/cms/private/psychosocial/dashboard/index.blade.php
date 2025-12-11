@@ -6,16 +6,16 @@
                 <h1 class="text-xl md:text-2xl text-main-text font-semibold text-left">Facilita Riscos Psicossociais</h1>
             </div>
 
-            <x-new-components.structure.breadcrumbs 
+            <x-structure.breadcrumbs 
                 :links="[
                     'Dashboard' => null,
                 ]" 
             />
         </div>
 
-        <x-new-components.actions.button href="{{ route('cms.psychosocial.company.index') }}">
+        <x-actions.button href="{{ route('cms.psychosocial.company.index') }}">
             <span class="text-main-background text-center text-sm font-semibold">Lista de empresas</span>
-        </x-new-components.actions.button>
+        </x-actions.button>
 
         <livewire:cms.private.psychosocial.dashboard.psychosocial-dashboard-component/>
     </section>

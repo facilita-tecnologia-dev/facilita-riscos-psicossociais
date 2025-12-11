@@ -1,11 +1,11 @@
 <div class="contents">
-    <x-new-components.structure.page-header icon="calendar-clock" label="Lista de Campanhas" :breadcrumbs="['Lista de Campanhas' => null]" />
+    <x-structure.page-header icon="calendar-clock" label="Lista de Campanhas" :breadcrumbs="['Lista de Campanhas' => null]" />
 
     @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('create', [\App\Models\Campaign::class]))
         <div>
-            <x-new-components.actions.button :href="route('campaign.create')">
+            <x-actions.button :href="route('campaign.create')">
                 <span class="text-main-background text-center text-sm font-semibold">Agendar nova campanha</span>
-            </x-new-components.actions.button>
+            </x-actions.button>
         </div>
     @endif
 
@@ -33,15 +33,15 @@
                             </header>
 
                             <div class="flex flex-col gap-2">
-                                <x-new-components.info-item label="Nome da Campanha" :value="$campaign->name" truncate />
-                                <x-new-components.info-item label="Data" value="{{ $campaign->start_date->format('d/m/Y') . ' - ' . $campaign->end_date->format('d/m/Y') }}" truncate />
-                                <x-new-components.info-item label="Descrição" :value="$campaign->description ?? 'Sem descrição'" truncate />
+                                <x-info-item label="Nome da Campanha" :value="$campaign->name" truncate />
+                                <x-info-item label="Data" value="{{ $campaign->start_date->format('d/m/Y') . ' - ' . $campaign->end_date->format('d/m/Y') }}" truncate />
+                                <x-info-item label="Descrição" :value="$campaign->description ?? 'Sem descrição'" truncate />
                             </div>
 
                             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('edit', [\App\Models\Campaign::class, $campaign]) && ($campaign->status !== App\Enums\Campaign\CampaignStatus::COMPLETED || !$campaign->end_date->lt(now())))
-                                <x-new-components.actions.button :href="route('campaign.edit', $campaign)">
+                                <x-actions.button :href="route('campaign.edit', $campaign)">
                                     <span class="text-main-background text-center text-sm font-semibold">Editar</span>
-                                </x-new-components.actions.button>
+                                </x-actions.button>
                             @endif
                         </div>
                     @endforeach
@@ -76,9 +76,9 @@
                             </header>
 
                             <div class="flex flex-col gap-2">
-                                <x-new-components.info-item label="Nome da Campanha" :value="$campaign->name" truncate />
-                                <x-new-components.info-item label="Data" value="{{ $campaign->start_date->format('d/m/Y') . ' - ' . $campaign->end_date->format('d/m/Y') }}" truncate />
-                                <x-new-components.info-item label="Descrição" :value="$campaign->description ?? 'Sem descrição'" truncate />
+                                <x-info-item label="Nome da Campanha" :value="$campaign->name" truncate />
+                                <x-info-item label="Data" value="{{ $campaign->start_date->format('d/m/Y') . ' - ' . $campaign->end_date->format('d/m/Y') }}" truncate />
+                                <x-info-item label="Descrição" :value="$campaign->description ?? 'Sem descrição'" truncate />
                             </div>
                         </div>
                     @endforeach

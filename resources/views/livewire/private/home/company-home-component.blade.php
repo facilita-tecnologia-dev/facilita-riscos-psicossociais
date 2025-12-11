@@ -1,5 +1,5 @@
 <div class="contents">
-    <x-new-components.structure.page-header icon="home" label="{{ session('auth:company')->name }}" :breadcrumbs="[session('auth:company')->name => null]" />
+    <x-structure.page-header icon="home" label="{{ session('auth:company')->name }}" :breadcrumbs="[session('auth:company')->name => null]" />
 
     @if ($remainingSteps)
         <div class="bg-main-background border-borders flex flex-col gap-6 rounded-lg border p-4 md:gap-8">
@@ -72,9 +72,9 @@
                                 <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activePsychosocialCampaign->name }}</span>
                             </div>
                             
-                            <x-new-components.actions.button :href="route('psychosocial.dashboard')" fitSize>
+                            <x-actions.button :href="route('psychosocial.dashboard')" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Acompanhar resultados</span>
-                            </x-new-components.actions.button>
+                            </x-actions.button>
                         </li>
                     @endif
 
@@ -84,9 +84,9 @@
                                 <x-icon icon="cloud" class="text-primary-solid h-7 w-7 object-scale-down" />
                                 <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activeOrganizationalCampaign->name }}</span>
                             </div>
-                            <x-new-components.actions.button :href="route('organizational.dashboard')" fitSize>
+                            <x-actions.button :href="route('organizational.dashboard')" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Acompanhar resultados</span>
-                            </x-new-components.actions.button>
+                            </x-actions.button>
                         </li>
                     @endif
                 </ul>
@@ -104,9 +104,9 @@
                                 <x-icon icon="calendar-check" class="text-primary-solid h-7 w-7 object-scale-down" />
                                 <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $scheduledCampaign->name . ' - (' . $scheduledCampaign->start_date->format('d/m/Y - H:i') . ')' }}</span>
                             </div>
-                            <x-new-components.actions.button :href="route('campaign.edit', $scheduledCampaign)" fitSize>
+                            <x-actions.button :href="route('campaign.edit', $scheduledCampaign)" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Editar</span>
-                            </x-new-components.actions.button>
+                            </x-actions.button>
                         </li>
                     @endforeach
                 </ul>
@@ -122,9 +122,9 @@
                         <x-icon icon="calendar-clock" class="text-primary-solid h-7 w-7 object-scale-down" />
                         <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">Agendar campanha de testes</span>
                     </div>
-                    <x-new-components.actions.button :href="route('campaign.create')"  fitSize>
+                    <x-actions.button :href="route('campaign.create')"  fitSize>
                         <span class="text-main-background text-center text-sm font-semibold">Agendar campanha</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </li>
 
                 <li class="bg-secondary-background border-borders flex flex-col items-center gap-4 rounded-sm border p-4 md:flex-row md:justify-between">
@@ -132,9 +132,9 @@
                         <x-icon icon="users" class="text-primary-solid h-7 w-7 object-scale-down" />
                         <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">Visualizar lista de funcionários</span>
                     </div>
-                    <x-new-components.actions.button :href="route('user.index')" fitSize>
+                    <x-actions.button :href="route('user.index')" fitSize>
                         <span class="text-main-background text-center text-sm font-semibold">Visualizar funcionários</span>
-                    </x-new-components.actions.button>
+                    </x-actions.button>
                 </li>
             </ul>
         </section>
