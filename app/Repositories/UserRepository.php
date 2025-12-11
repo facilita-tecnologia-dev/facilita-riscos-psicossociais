@@ -2,23 +2,16 @@
 
 namespace App\Repositories;
 
-use App\Enums\InternalUserUserRole;
 use App\Enums\User\UserRole;
 use App\Enums\User\UserStatus;
 use App\Imports\UsersImport;
 use App\Models\Company;
 use App\Models\Permission;
-use App\Models\Role;
-use App\Models\RolePermission;
 use App\Models\User;
 use App\Models\UserCustomPermission;
 use App\Models\UserDepartmentPermission;
-use App\Services\Auth\AuthenticationService;
-use Dotenv\Exception\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\ValidatedInput;
 
 class UserRepository
 {
@@ -39,7 +32,7 @@ class UserRepository
                 'admission' => $data['admission'],
             ]);
 
-            $company->users()->attach($user, ['role_id' => $data['role']]);
+            $user->companies()->syncWithoutDetaching([$company->id => ['role_id' => $data['role'], 'status' => UserStatus::ACTIVE->value]]);
 
             $role = UserRole::from($data['role']);
 
@@ -61,7 +54,7 @@ class UserRepository
     public static function attach(Company $company, User $user, string $role): mixed
     {
         return DB::transaction(function() use($company, $user, $role) {
-            $company->users()->attach($user, ['role_id' => $role]);
+            $user->companies()->syncWithoutDetaching([$company->id => ['role_id' => $role, 'status' => UserStatus::ACTIVE->value]]);
 
             if ($role === UserRole::MANAGER) {
                 if(!$user->password){

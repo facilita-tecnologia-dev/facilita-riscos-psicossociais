@@ -23,9 +23,19 @@ class ControlPanelComponent extends Component
 
     public function mount()
     {
+       $allowedDepartments = [];
+
+        if (session('auth:guard') === 'user') {
+            $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
+        }
+
         $this->evaluation_types = array_map(fn ($evaluationType) => ['label' => $evaluationType->label(), 'value' => $evaluationType->value], EvaluationTypes::cases());
 
         $departments = session('auth:company')->users()
+            ->when(
+                session('auth:guard') === 'user', 
+                fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
+            )
             ->select('department')
             ->distinct()
             ->pluck('department')
@@ -34,6 +44,10 @@ class ControlPanelComponent extends Component
         $this->departments = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($department) => ['label' => $department, 'value' => $department], $departments));
 
         $occupations = session('auth:company')->users()
+            ->when(
+                session('auth:guard') === 'user', 
+                fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
+            )
             ->select('occupation')
             ->distinct()
             ->pluck('occupation')

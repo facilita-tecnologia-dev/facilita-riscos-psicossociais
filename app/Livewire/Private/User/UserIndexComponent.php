@@ -15,6 +15,8 @@ class UserIndexComponent extends Component
 
     public $filters = [];
 
+    public array $allowedDepartments = [];
+
     public function render()
     {
         return view('livewire.private.user.user-index-component', [
@@ -26,6 +28,10 @@ class UserIndexComponent extends Component
     {
         $this->latestPsychosocialCampaign = session("auth:company")->latestPsychosocialCampaign();
         $this->latestOrganizationalCampaign = session("auth:company")->latestOrganizationalCampaign();
+
+        if (session('auth:guard') === 'user') {
+            $this->allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
+        }
     }
 
     #[On('user-list:filter')]
@@ -42,7 +48,12 @@ class UserIndexComponent extends Component
 
     private function fetchUsers(): Collection
     {
-        $query = session("auth:company")->users();
+
+        $query = session("auth:company")->users()
+                ->when(
+                    session('auth:guard') === 'user', 
+                    fn($q) => $q->whereIn('department', $this->allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
+                );
 
         if (!empty($this->filters['name'])) {
             $query->where('name', 'like', '%' . $this->filters['name'] . '%');

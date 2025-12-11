@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Enums\User\UserStatus;
 use App\Models\Company;
 use App\Models\User;
 use App\Rules\validateCPF;
@@ -52,8 +53,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
                         'birth_date' => $birth_date,
                     ]);
                     
-                    $userAlreadyOnCompany = $this->company->users()->where('users.id', $user->id)->exists();
-                    if(!$userAlreadyOnCompany) $this->company->users()->syncWithoutDetaching([$user->id => ['role_id' => 2]]);
+                                    
+                    $userAlreadyOnCompany = $user->companies()->where('companies.id', $this->company->id)->exists();
+                    if(!$userAlreadyOnCompany) $user->companies()->syncWithoutDetaching([$this->company->id => ['role_id' => 2, 'status' => UserStatus::ACTIVE->value]]);
                     
                     return $user;
                 }
@@ -72,7 +74,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
                     'admission' => $admission,
                 ]);
 
-                $this->company->users()->attach($user, ['role_id' => 2]);
+                $user->companies()->syncWithoutDetaching([$this->company->id => ['role_id' => 2, 'status' => UserStatus::ACTIVE->value]]);
 
                 return $user;
             }

@@ -32,7 +32,7 @@ class PsychosocialDashboardComponent extends Component
     public function mount()
     {
         $this->psychosocialCampaign = session('auth:company')->campaigns()->whereYear('start_date', now()->year)->get()->filter(fn($campaign) => $campaign->collection()->type == CollectionType::PSYCHOSOCIAL && $campaign->status !== CampaignStatus::SCHEDULED)?->first();
-        
+
         if($this->psychosocialCampaign){
             $this->psychosocialResults = $this->getDashboardResults();
             $this->engagement = PsychosocialService::engagement($this->psychosocialCampaign, $this->evaluation_type);

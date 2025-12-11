@@ -13,10 +13,16 @@ class PsychosocialService
     {
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
+        $allowedDepartments = [];
+
+        if (session('auth:guard') === 'user') {
+            $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
+        }
+
         $dashboard = $evaluation_type === EvaluationTypes::DEPARTMENT->value 
-                        ? (session('auth:company')->usesHSE() ? self::HSEDepartments($campaign, $element, $filters) : self::PROARTDepartments($campaign, $element, $filters)) 
-                        : (session('auth:company')->usesHSE() ? self::HSEOccupations($campaign, $element, $filters) : self::PROARTOccupations($campaign, $element, $filters));
-                
+                        ? (session('auth:company')->usesHSE() ? self::HSEDepartments($campaign, $element, $allowedDepartments, $filters) : self::PROARTDepartments($campaign, $element, $allowedDepartments, $filters)) 
+                        : (session('auth:company')->usesHSE() ? self::HSEOccupations($campaign, $element, $allowedDepartments, $filters) : self::PROARTOccupations($campaign, $element, $allowedDepartments, $filters));
+
         return $dashboard;
     }
 
@@ -51,7 +57,7 @@ class PsychosocialService
         }
     }
 
-    public static function HSEDepartments(Campaign $campaign, ?string $element = null, ?array $filters = null)
+    public static function HSEDepartments(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
         session('auth:company', [session('auth:company')->load(['actionPlan'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
@@ -60,7 +66,13 @@ class PsychosocialService
 
         $risks = $campaign->collection()
                         ->questions()
-                        ->with(['answers.user'])
+                        ->when(
+                            session('auth:guard') === 'user',
+                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                            fn($q) => $q->with(['answers' => fn($a) =>
+                                    $a->where('company_id', session('auth:company')->id)->with('user')
+                            ])
+                        )
                         ->get()
                         ->groupBy('group')
                         ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
@@ -140,7 +152,7 @@ class PsychosocialService
         return $evaluatedRisks;
     }
 
-    public static function HSEOccupations(Campaign $campaign, ?string $element = null, ?array $filters = null)
+    public static function HSEOccupations(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
         session('auth:company', [session('auth:company')->load(['actionPlan'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
@@ -149,7 +161,13 @@ class PsychosocialService
 
         $risks = $campaign->collection()
                         ->questions()
-                        ->with(['answers.user'])
+                        ->when(
+                            session('auth:guard') === 'user',
+                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                            fn($q) => $q->with(['answers' => fn($a) =>
+                                    $a->where('company_id', session('auth:company')->id)->with('user')
+                            ])
+                        )
                         ->get()
                         ->groupBy('group')
                         ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
@@ -234,7 +252,7 @@ class PsychosocialService
         return session('auth:company')->CIDabsences()->with('cid')->get()->groupBy($evaluation_type->value);
     }
 
-    public static function PROARTDepartments(Campaign $campaign, ?string $element = null, ?array $filters = null)
+    public static function PROARTDepartments(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
         session('auth:company', [session('auth:company')->load(['proartIndicators', 'actionPlan'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
@@ -243,7 +261,13 @@ class PsychosocialService
 
         $risks = $campaign->collection()
                         ->questions()
-                        ->with(['answers.user'])
+                        ->when(
+                            session('auth:guard') === 'user',
+                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                            fn($q) => $q->with(['answers' => fn($a) =>
+                                    $a->where('company_id', session('auth:company')->id)->with('user')
+                            ])
+                        )
                         ->get()
                         ->groupBy('group')
                         ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
@@ -324,7 +348,7 @@ class PsychosocialService
         return $evaluatedRisks;
     }
 
-    public static function PROARTOccupations(Campaign $campaign, ?string $element = null, ?array $filters = null)
+    public static function PROARTOccupations(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
         session('auth:company', [session('auth:company')->load(['proartIndicators', 'actionPlan'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
@@ -333,7 +357,13 @@ class PsychosocialService
 
         $risks = $campaign->collection()
                         ->questions()
-                        ->with(['answers.user'])
+                        ->when(
+                            session('auth:guard') === 'user',
+                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                            fn($q) => $q->with(['answers' => fn($a) =>
+                                    $a->where('company_id', session('auth:company')->id)->with('user')
+                            ])
+                        )
                         ->get()
                         ->groupBy('group')
                         ->when(filled($filters['group'] ?? null), function ($groups) use ($filters) {
@@ -416,14 +446,36 @@ class PsychosocialService
 
     public static function engagement(Campaign $campaign, string $evaluation_type)
     {
+        $allowedDepartments = [];
+
+        if (session('auth:guard') === 'user') {
+            $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
+        }
+
+        $companyUsers = session('auth:company')->users()
+                ->when(
+                    session('auth:guard') === 'user', 
+                    fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
+                )
+                ->select('users.id', 'users.department', 'users.occupation')
+                ->get();
+
+        $userCollections = $campaign->userCollections()
+                ->when(
+                    session('auth:guard') === 'user',
+                    fn($q) => $q->whereHas('user', fn ($u) => $u->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', ''))
+                )
+                ->with('user:id,department,occupation')
+                ->get();
+
         if($evaluation_type === EvaluationTypes::DEPARTMENT->value){
-            $campaignRespondentsDivided = $campaign->userCollections()->with('user:id,department')->get()->groupBy('user.department');
-            $companyUsersDivided = session('auth:company')->users()->select('users.id', 'users.department')->get()->groupBy('department');
+            $campaignRespondentsDivided = $userCollections->groupBy('user.department');
+            $companyUsersDivided = $companyUsers->groupBy('department');
         }
 
         if($evaluation_type === EvaluationTypes::OCCUPATION->value){
-            $campaignRespondentsDivided = $campaign->userCollections()->with('user:id,occupation')->get()->groupBy('user.occupation');
-            $companyUsersDivided = session('auth:company')->users()->select('users.id', 'users.occupation')->get()->groupBy('occupation');
+            $campaignRespondentsDivided = $userCollections->groupBy('user.occupation');
+            $companyUsersDivided = $companyUsers->groupBy('occupation');
         }
 
         $engagementDivided = [];
@@ -453,4 +505,32 @@ class PsychosocialService
         ]);
     }
 
+    public static function filterDepartmentScopes($query, array $allowedDepartments, int $company_id)
+    {
+        return $query
+            ->whereHas('answers', function ($a) use ($company_id, $allowedDepartments) {
+                $a->where('company_id', $company_id)
+                ->whereHas('user', function ($u) use ($allowedDepartments) {
+                    $u->whereIn('department', $allowedDepartments)
+                        ->whereNotNull('department')
+                        ->where('department', '!=', '');
+                });
+            })
+            ->with([
+                'answers' => function ($a) use ($company_id, $allowedDepartments) {
+                    $a->where('company_id', $company_id)
+                    ->whereHas('user', function ($u) use ($allowedDepartments) {
+                        $u->whereIn('department', $allowedDepartments)
+                            ->whereNotNull('department')
+                            ->where('department', '!=', '');
+                    })
+                    ->with([
+                        'user' => fn($u) =>
+                            $u->whereIn('department', $allowedDepartments)
+                                ->whereNotNull('department')
+                                ->where('department', '!=', ''),
+                    ]);
+                }
+            ]);
+    }
 }

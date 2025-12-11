@@ -42,7 +42,8 @@ class Company extends Authenticatable
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'company_user')
-            ->withPivot('role_id');
+            ->withPivot(['role_id', 'status'])
+            ->wherePivot('status', 1);
     }
 
     public function roles(): BelongsToMany

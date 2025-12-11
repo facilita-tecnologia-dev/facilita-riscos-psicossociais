@@ -35,18 +35,10 @@ class OrganizationalService
                     ->questions()
                     ->when(
                         session('auth:guard') === 'user',
-                        // SE for user → filtra pelo department permitido
-                        function ($q) use ($allowedDepartments) {
-                            return $q->with([
-                                    'answers.user' => function ($u) use ($allowedDepartments) {
-                                        $u->whereIn('department', $allowedDepartments);
-                                    }
-                            ])->whereHas('answers.user', function ($u) use ($allowedDepartments) {
-                                $u->whereIn('department', $allowedDepartments);
-                            });
-                        },
-                        // SE NÃO for user → apenas carrega normalmente
-                        fn($q) => $q->with(['answers.user'])
+                        fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                        fn($q) => $q->with(['answers' => fn($a) =>
+                                $a->where('company_id', session('auth:company')->id)->with('user')
+                        ])
                     )
                     ->get()
                     ->groupBy('group')
@@ -70,7 +62,7 @@ class OrganizationalService
                                                     return data_get($answer, "user.$evaluation_type");
                                                 })
                                                 ->mapWithKeys(fn($answers, $divisionFactor) => 
-                                                    [$divisionFactor => $answers->sum('value') / $answers->count()]
+                                                    [$divisionFactor => round($answers->sum('value') / $answers->count())]
                                                 )
                                                 ->sortKeys();
 
@@ -138,18 +130,10 @@ class OrganizationalService
                     ->questions()
                     ->when(
                         session('auth:guard') === 'user',
-                        // SE for user → filtra pelo department permitido
-                        function ($q) use ($allowedDepartments) {
-                            return $q->with([
-                                    'answers.user' => function ($u) use ($allowedDepartments) {
-                                        $u->whereIn('department', $allowedDepartments);
-                                    }
-                            ])->whereHas('answers.user', function ($u) use ($allowedDepartments) {
-                                $u->whereIn('department', $allowedDepartments);
-                            });
-                        },
-                        // SE NÃO for user → apenas carrega normalmente
-                        fn($q) => $q->with(['answers.user'])
+                        fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                        fn($q) => $q->with(['answers' => fn($a) =>
+                                $a->where('company_id', session('auth:company')->id)->with('user')
+                        ])
                     )
                     ->get()
                     ->groupBy('group')
@@ -172,7 +156,7 @@ class OrganizationalService
                                                     return data_get($answer, "user.$evaluation_type");
                                                 })
                                                 ->mapWithKeys(fn($answers, $divisionFactor) => 
-                                                    [$divisionFactor => $answers->sum('value') / $answers->count()]
+                                                    [$divisionFactor => round($answers->sum('value') / $answers->count())]
                                                 )
                                                 ->sortKeys();
 
@@ -265,22 +249,42 @@ class OrganizationalService
    
     public static function engagement(Campaign $campaign, string $evaluation_type)
     {
-        $companyUsers = session('auth:company')->users()->select('users.id', 'users.department', 'users.occupation', 'users.gender', 'users.work_shift', 'users.admission')->get();
-        $userCollections = $campaign->userCollections()->with('user:id,department,occupation,gender,work_shift,admission')->get();
+        $allowedDepartments = [];
+
+        if (session('auth:guard') === 'user') {
+            $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
+        }
+
+        $companyUsers = session('auth:company')
+            ->users()
+            ->when(
+                session('auth:guard') === 'user', 
+                fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
+            )
+            ->select('users.id', 'users.department', 'users.occupation', 'users.gender', 'users.work_shift', 'users.admission')
+            ->get();
+
+        $userCollections = $campaign->userCollections()
+            ->when(
+                session('auth:guard') === 'user',
+                fn($q) => $q->whereHas('user', fn ($u) => $u->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', ''))
+            )
+            ->with('user:id,department,occupation,gender,work_shift,admission')
+            ->get();
         
         if($evaluation_type === OCEvaluation::DEPARTMENT->value){
-            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->department ?? "Sem informação");;
-            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->department ?? "Sem informação");;
+            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->department ?? "Sem informação");
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->department ?? "Sem informação");
         }
 
         if($evaluation_type === OCEvaluation::OCCUPATION->value){
-            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->occupation ?? "Sem informação");;
-            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->occupation ?? "Sem informação");;
+            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->occupation ?? "Sem informação");
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->occupation ?? "Sem informação");
         }
 
         if($evaluation_type === OCEvaluation::GENDER->value){
-            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->gender ?? "Sem informação");;
-            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->gender ?? "Sem informação");;
+            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->gender ?? "Sem informação");
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->gender ?? "Sem informação");
         }
 
         if($evaluation_type === OCEvaluation::WORK_SHIFT->value){
@@ -330,4 +334,33 @@ class OrganizationalService
             5 => 100,
         };
    }
+
+    public static function filterDepartmentScopes($query, array $allowedDepartments, int $company_id)
+    {
+        return $query
+            ->whereHas('answers', function ($a) use ($company_id, $allowedDepartments) {
+                $a->where('company_id', $company_id)
+                ->whereHas('user', function ($u) use ($allowedDepartments) {
+                    $u->whereIn('department', $allowedDepartments)
+                        ->whereNotNull('department')
+                        ->where('department', '!=', '');
+                });
+            })
+            ->with([
+                'answers' => function ($a) use ($company_id, $allowedDepartments) {
+                    $a->where('company_id', $company_id)
+                    ->whereHas('user', function ($u) use ($allowedDepartments) {
+                        $u->whereIn('department', $allowedDepartments)
+                            ->whereNotNull('department')
+                            ->where('department', '!=', '');
+                    })
+                    ->with([
+                        'user' => fn($u) =>
+                            $u->whereIn('department', $allowedDepartments)
+                                ->whereNotNull('department')
+                                ->where('department', '!=', ''),
+                    ]);
+                }
+            ]);
+    }
 }

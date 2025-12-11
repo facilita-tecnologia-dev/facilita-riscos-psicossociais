@@ -5,6 +5,7 @@ use App\Http\Controllers\CMS\CMSPsychosocialController;
 use App\Http\Controllers\CMS\CMSReportChannelController;
 use App\Http\Controllers\Private\Campaign\CampaignController;
 use App\Http\Controllers\Private\Company\CompanyController;
+use App\Http\Controllers\Private\Documentation\DocumentationController;
 use App\Http\Controllers\Private\Organizational\OrganizationalController;
 use App\Http\Controllers\Private\Psychosocial\PsychosocialController;
 use App\Http\Controllers\Private\Test\TestController;
@@ -16,8 +17,8 @@ use App\Http\Middleware\GuestMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'site.home.index')->name('site.home');
-Route::view('/privacy-policy', 'site.privacy-policy.index')->name('site.privacy-policy');
-Route::view('/terms-of-use', 'site.terms-of-use.index')->name('site.terms-of-use');
+Route::view('/politica-de-privacidade', 'site.privacy-policy.index')->name('site.privacy-policy');
+Route::view('/termos-de-uso', 'site.terms-of-use.index')->name('site.terms-of-use');
 
 
 Route::middleware(GuestMiddleware::class)->group(function() {
@@ -79,7 +80,10 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         });
     });
 
-    Route::view('/politica-de-privacidade', 'private.lgpd.privacy-policy')->name('privacy-policy');
+    Route::prefix('documentacao')->group(function(){
+        Route::get('/', [DocumentationController::class, 'index'])->name('documentation.index');
+        Route::get('/politica-de-privacidade', [DocumentationController::class, 'policy'])->name('documentation.policy');
+    });
 });
 
 /*------------------------- CMS -------------------------------*/ 

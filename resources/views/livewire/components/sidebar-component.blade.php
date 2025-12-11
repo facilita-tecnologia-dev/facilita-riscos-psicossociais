@@ -29,7 +29,7 @@
             @endif
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('documentation', [\App\Models\User::class]))
-                <x-actions.nav-item wire:click='downloadDocumentation' icon="books" activeRoute="" tooltip="Documentação" />
+                <x-actions.nav-item :href="route('documentation.index')" icon="books" activeRoute="documentation.*" tooltip="Documentação" />
             @endif
         </nav>
     </aside>
@@ -65,7 +65,7 @@
             @endif
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('documentation', [\App\Models\User::class]))
-                <x-actions.mobile-nav-item wire:click='downloadDocumentation' icon="books" activeRoute="" label="Documentação" />
+                <x-actions.mobile-nav-item :href="route('documentation.index')" icon="books" activeRoute="documentation.*" label="Documentação" />
             @endif
         </nav>
     </aside>

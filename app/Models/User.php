@@ -124,6 +124,17 @@ class User extends Authenticatable
         ];
     }
 
+    public static function getDepartmentScopes(User $user)
+    {
+        $allowedDepartments = $user->departmentScopes()
+            ->where('allowed', 1)
+            ->get()
+            ->pluck('department')
+            ->toArray();
+
+        return $allowedDepartments;
+    }
+
     /* ---- End Aux/Verifiers/Conditionals ---- */
 
     

@@ -35,8 +35,8 @@
 
                 <livewire:private.psychosocial.dashboard.filter-component />
             </div>
-
-            @if ($psychosocialResults)
+            
+            @if ($psychosocialResults->isNotEmpty())
                 <div wire:loading class="w-full">
                     <div class="flex w-full items-center justify-center gap-2 py-6">
                         <x-icon icon="loading" class="text-primary-solid h-5 w-5 animate-spin object-scale-down" />

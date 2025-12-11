@@ -27,7 +27,7 @@
     
     <div data-role="lgpd-bar" class="fixed bottom-0 left-0 z-30 hidden w-full flex-col items-center justify-between gap-4 bg-secondary-background border border-borders px-4 py-4 shadow-md md:flex-row md:px-8">
         <p class="text-center text-sm sm:text-base md:text-left">
-            Ao utilizar este sistema, você declara estar ciente e de acordo com a nossa <a href="{{ route('privacy-policy') }}" class="text-primary-solid underline">Política de Privacidade</a>.
+            Ao utilizar este sistema, você declara estar ciente e de acordo com a nossa <a href="{{ route('documentation.policy') }}" class="text-primary-solid underline">Política de Privacidade</a>.
         </p>
     
         <x-actions.button type="button" fitSize>
