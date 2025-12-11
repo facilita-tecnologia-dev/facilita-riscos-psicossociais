@@ -53,8 +53,7 @@
                     <x-icon icon="user-check" class="text-primary-solid h-7 w-7 object-scale-down" />
                     <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">Visualizar meu perfil no sistema</span>
                 </div>
-                <x-new-components.actions.button fitSize>
-                    {{-- TODO: Link para o perfil --}}
+                <x-new-components.actions.button :href="route('user.show', session('auth:user'))" fitSize>
                     <span class="text-main-background text-center text-sm font-semibold">Visualizar meu perfil</span>
                 </x-new-components.actions.button>
             </li>

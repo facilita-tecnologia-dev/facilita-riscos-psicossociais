@@ -14,9 +14,11 @@
             </x-new-components.actions.button>
         @endif
 
-        <x-new-components.actions.button href="" class="w-full">
-            <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>
-        </x-new-components.actions.button>
+        @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalCustomCollections', [\App\Models\User::class]))
+            <x-new-components.actions.button :href="route('organizational.custom-collection.index')" class="w-full">
+                <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>
+            </x-new-components.actions.button>
+        @endif
 
         <x-new-components.actions.button href="" class="w-full">
             <span class="font-heading text-main-background text-center text-sm font-semibold">Exportar Relatório</span>

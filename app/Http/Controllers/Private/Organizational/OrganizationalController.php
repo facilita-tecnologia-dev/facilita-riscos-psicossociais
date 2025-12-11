@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Private\Organizational;
 
+use App\Models\CustomCollection;
 use App\Models\User;
 use App\Models\UserFeedback;
 use App\Services\Auth\AuthenticationService;
@@ -21,9 +22,15 @@ class OrganizationalController
         return view('private.organizational.feedback.index.index');
     }
 
-    public function customCollection()
+    public function customCollectionIndex()
     {
         Gate::forUser(AuthenticationService::user())->authorize('organizationalCustomCollections', [User::class]);
-        // return view('private.organizational.feedback.index.index');
+        return view('private.organizational.custom-collection.index.index');
+    }
+
+    public function customCollectionEdit(CustomCollection $customCollection)
+    {
+        Gate::forUser(AuthenticationService::user())->authorize('organizationalCustomCollections', [User::class]);
+        return view('private.organizational.custom-collection.edit.index', compact('customCollection'));
     }
 }

@@ -29,7 +29,7 @@ class CompanyHomeScheduleCampaignComponent extends Component
         $this->collections = [
             [
                 'label' => $psychosocialCollection->name,
-                'value' => $psychosocialCollection->id,
+                'value' => 'base_' . $psychosocialCollection->id,
             ]
         ];
     }
@@ -49,7 +49,7 @@ class CompanyHomeScheduleCampaignComponent extends Component
             'description' => ['nullable', 'string'],
         ]);
         
-        if (session('auth:company')->hasCampaignThisYear($this->collection_id)){
+        if (session('auth:company')->hasCampaignThisYear($this->collection_id, 'base')){
             $this->dispatch('alert:danger', 'Sua empresa já cadastrou uma campanha de testes com o mesmo tipo nesse ano');
             return;
         }

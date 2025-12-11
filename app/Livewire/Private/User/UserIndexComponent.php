@@ -64,8 +64,8 @@ class UserIndexComponent extends Component
         }
 
         return $query->get()->map(function($user){
-            $user->hasAnsweredPsychosocial = $user->hasAnsweredCampaign($this->latestPsychosocialCampaign?->id);
-            $user->hasAnsweredOrganizational = $user->hasAnsweredCampaign($this->latestOrganizationalCampaign?->id);
+            $user->hasAnsweredPsychosocial = $this->latestPsychosocialCampaign ? $user->hasAnsweredCampaign($this->latestPsychosocialCampaign->id) : false;
+            $user->hasAnsweredOrganizational = $this->latestOrganizationalCampaign ? $user->hasAnsweredCampaign($this->latestOrganizationalCampaign->id) : false;
             return $user;
         });
     }

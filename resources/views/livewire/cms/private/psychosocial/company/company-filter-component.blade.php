@@ -2,7 +2,7 @@
     <x-new-components.form.input-text wireModel="name" name="name" label="Razão Social" placeholder="Digite a razão social..." tooltip="Digite a razão social da empresa" />
     <x-new-components.form.input-text wireModel="cnpj" name="cnpj" label="CNPJ" placeholder="Digite o cnpj..." tooltip="Digite o cnpj da empresa" />
 
-    <x-new-components.form.select wireModel="userCountRange" name="userCountRange" label="Faixa de funcionários" placeholder="Selecione a faixa de funcionários" tooltip="Selecione a faixa de funcionários" :options="$userCountRanges" />
+    <x-new-components.form.select wireModel="UsersCountRange" name="UsersCountRange" label="Faixa de funcionários" placeholder="Selecione a faixa de funcionários" tooltip="Selecione a faixa de funcionários" :options="$UsersCountRanges" />
     
     <x-new-components.form.select wireModel="orderBy" name="orderBy" label="Ordenar por" placeholder="Selecione o tipo de ordenação" tooltip="Selecione o tipo de ordenação desejado" :options="$companyOrderTypes" />
 

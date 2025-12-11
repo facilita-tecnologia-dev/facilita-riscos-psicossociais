@@ -64,6 +64,8 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     Route::prefix('clima-organizacional')->group(function () {
         Route::get('/dashboard', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
         Route::get('/feedback', [OrganizationalController::class, 'feedback'])->name('organizational.feedback');
+        Route::get('/formularios', [OrganizationalController::class, 'customCollectionIndex'])->name('organizational.custom-collection.index');
+        Route::get('/formularios/{customCollection}/editar', [OrganizationalController::class, 'customCollectionEdit'])->name('organizational.custom-collection.edit');
     });
 
     Route::prefix('empresa')->group(function(){
@@ -77,25 +79,6 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         });
     });
 
-
-
-    // Route::prefix('custom-collections')->group(function(){
-    //     Route::get('/', [CustomCollectionController::class, 'index'])->name('custom-collections.index');
-    //     Route::get('{customCollection}', [CustomCollectionController::class, 'show'])->name('custom-collections.show');
-    //     Route::get('create', [CustomCollectionController::class, 'create'])->name('custom-collections.create');
-    //     Route::post('store', [CustomCollectionController::class, 'store'])->name('custom-collections.store');
-    //     Route::put('{customCollection}/update', [CustomCollectionController::class, 'update'])->name('custom-collections.update');
-    //     Route::delete('{customCollection}/delete', [CustomCollectionController::class, 'destroy'])->name('custom-collections.destroy');
-        
-    //     Route::post('{customCollection}/tests/store', [CustomTestController::class, 'store'])->name('custom-collections.tests.store');
-    //     Route::get('{customCollection}/tests/{customTest}/delete', [CustomTestController::class, 'destroy'])->name('custom-collections.tests.destroy');    
-        
-    //     Route::post('{customCollection}/questions/store', [CustomQuestionController::class, 'store'])->name('custom-collections.tests.questions.store');
-    //     Route::get('{customCollection}/questions/{customQuestion}/delete', [CustomQuestionController::class, 'destroy'])->name('custom-collections.tests.questions.destroy');
-    // });
-
-
-    
     Route::view('/politica-de-privacidade', 'private.lgpd.privacy-policy')->name('privacy-policy');
 });
 

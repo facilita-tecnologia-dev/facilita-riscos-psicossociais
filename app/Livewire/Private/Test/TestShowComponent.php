@@ -5,19 +5,17 @@ namespace App\Livewire\Private\Test;
 use App\Enums\Campaign\CollectionType;
 use App\Models\Campaign;
 use App\Models\TemporaryAnswer;
-use App\Models\UserAnswer;
 use App\Models\UserFeedback;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-use Illuminate\Support\Str;
 
 class TestShowComponent extends Component
 {
     public Campaign $campaign;
 
     public ?string $videoUrl = null;
+    public bool $video_watched = false;
 
     public array $questions;
     public array $answers;
@@ -37,6 +35,8 @@ class TestShowComponent extends Component
         $this->is_organizational = $this->campaign->collection()->type == CollectionType::ORGANIZATIONAL;
 
         $this->questions = $campaign->collection()->questions->shuffle()->values()->toArray();
+
+        $this->video_watched = session('auth:company')->test_helper_video ? false : true;
 
         try {
             foreach ($this->questions as $question) {
@@ -74,6 +74,12 @@ class TestShowComponent extends Component
     {
         $this->videoUrl = null;
         $this->dispatch('close-video-modal');
+    }
+
+    public function confirmVideoWatched()
+    {
+        $this->video_watched = true;
+        $this->closeVideoModal();
     }
 
     public function answer($value)

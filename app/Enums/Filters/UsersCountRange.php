@@ -2,7 +2,7 @@
 
 namespace App\Enums\Filters;
 
-enum UserCountRange: string
+enum UsersCountRange: string
 {
     case MICRO = '1-10';
     case SMALL = '11-20';

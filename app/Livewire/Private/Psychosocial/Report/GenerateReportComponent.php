@@ -4,7 +4,6 @@ namespace App\Livewire\Private\Psychosocial\Report;
 
 use App\Enums\Psychosocial\RiskInventoryFormat;
 use App\Enums\Psychosocial\RiskInventoryType;
-use App\Jobs\GeneratePsychosocialReportJob;
 use App\Models\ActionPlan;
 use App\Models\Campaign;
 use App\Services\Psychosocial\PsychosocialService;

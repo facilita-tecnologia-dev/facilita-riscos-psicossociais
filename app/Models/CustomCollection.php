@@ -15,4 +15,9 @@ class CustomCollection extends Model
     protected $casts = [
         'type' => CollectionType::class,
     ];
+
+    public function questions(): HasMany
+    {
+        return $this->hasMany(CustomQuestion::class);
+    }
 }

@@ -108,49 +108,58 @@
                 </p>
             </div>
 
-            <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
-                <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Editar Indicadores Epidemiológicos</h2>
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialIndicators', [\App\Models\User::class]))
+                <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
+                    <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Editar Indicadores Epidemiológicos</h2>
 
-                <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
-                    Os indicadores epidemiológicos auxiliam na avaliação dos riscos psicossociais, tornando-a mais
-                    <span class="font-semibold">precisa e direcionada</span>
-                    .
-                </p>
+                    <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                        Os indicadores epidemiológicos auxiliam na avaliação dos riscos psicossociais, tornando-a mais
+                        <span class="font-semibold">precisa e direcionada</span>
+                        .
+                    </p>
 
-                <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
-                    Eles contribuem tanto para
-                    <span class="font-semibold">identificar perigos psicossociais específicos</span>
-                    quanto para
-                    <span class="font-semibold">direcionar a análise</span>
-                    desses riscos nos diferentes setores e funções da empresa.
-                </p>
+                    <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                        Eles contribuem tanto para
+                        <span class="font-semibold">identificar perigos psicossociais específicos</span>
+                        quanto para
+                        <span class="font-semibold">direcionar a análise</span>
+                        desses riscos nos diferentes setores e funções da empresa.
+                    </p>
 
-                {{-- TODO: Link para página de indicadores --}}
-                <x-new-components.actions.button href="">
-                    <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
-                </x-new-components.actions.button>
-            </div>
 
-            <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
-                <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Editar Medidas de Controle</h2>
+                    @if(session('auth:company')->usesHSE())
+                        <x-new-components.actions.button :href="route('psychosocial.absences')" class="w-full">
+                            <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
+                        </x-new-components.actions.button>
+                    @else
+                        <x-new-components.actions.button :href="route('psychosocial.indicators')" class="w-full">
+                            <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Dados de Desempenho Organizacional</span>
+                        </x-new-components.actions.button>
+                    @endif
+                </div>
+            @endif
 
-                <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
-                    As medidas de controle e prevenção ajudam a
-                    <span class="font-semibold">reduzir ou eliminar os riscos psicossociais</span>
-                    identificados na empresa.
-                </p>
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialControlActions', [\App\Models\User::class]))
+                <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
+                    <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Editar Medidas de Controle</h2>
 
-                <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
-                    Elas
-                    <span class="font-semibold">orientam ações práticas e direcionadas para cada perigo mapeado</span>
-                    , garantindo um ambiente de trabalho mais seguro e saudável.
-                </p>
+                    <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                        As medidas de controle e prevenção ajudam a
+                        <span class="font-semibold">reduzir ou eliminar os riscos psicossociais</span>
+                        identificados na empresa.
+                    </p>
 
-                {{-- TODO: Link para página de medidas de controle --}}
-                <x-new-components.actions.button href="">
-                    <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
-                </x-new-components.actions.button>
-            </div>
+                    <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
+                        Elas
+                        <span class="font-semibold">orientam ações práticas e direcionadas para cada perigo mapeado</span>
+                        , garantindo um ambiente de trabalho mais seguro e saudável.
+                    </p>
+
+                    <x-new-components.actions.button :href="route('psychosocial.control-action')" class="w-full">
+                        <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
+                    </x-new-components.actions.button>
+                </div>
+            @endif
         </div>
     @endif
 </div>

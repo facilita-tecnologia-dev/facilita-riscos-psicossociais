@@ -29,11 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeAOS();
     initializeTippy();
     initializeToastr();
-    initializeSidebar();
+    // initializeSidebar();
     initializeLGPDBar();
-    initializeTogglePasswordVisibilityButtons();
-    initializeLogoutModal();
-    initializeFilterModals();
+    // initializeTogglePasswordVisibilityButtons();
+    // initializeLogoutModal();
+    // initializeFilterModals();
     watchCNPJInputsToLiveFormat();
     watchCPFInputsToLiveFormat();
 
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.body = body;
     window.scrollToY = scrollToY;
-    window.checkPasswordSteps = checkPasswordSteps;
+    // window.checkPasswordSteps = checkPasswordSteps;
 
     // Site
     animateString("animated-title", [
@@ -93,27 +93,27 @@ function initializeToastr() {
     }
 }
 
-function initializeSidebar() {
-    const sidebarMobileButton = document.querySelector(
-        '[data-role="sidebar-mobile-button"]'
-    );
+// function initializeSidebar() {
+//     const sidebarMobileButton = document.querySelector(
+//         '[data-role="sidebar-mobile-button"]'
+//     );
 
-    const body = document.querySelector("body");
-    const sidebar = document.querySelector("#sidebar");
+//     const body = document.querySelector("body");
+//     const sidebar = document.querySelector("#sidebar");
 
-    document.querySelector("body").addEventListener("click", function (event) {
-        if (sidebar && !sidebar.contains(event.target)) {
-            sidebar.classList.replace("left-0", "-left-full");
-        }
-    });
+//     document.querySelector("body").addEventListener("click", function (event) {
+//         if (sidebar && !sidebar.contains(event.target)) {
+//             sidebar.classList.replace("left-0", "-left-full");
+//         }
+//     });
 
-    if (sidebarMobileButton) {
-        sidebarMobileButton.addEventListener("click", function (e) {
-            e.stopPropagation();
-            sidebar.classList.replace("-left-full", "left-0");
-        });
-    }
-}
+//     if (sidebarMobileButton) {
+//         sidebarMobileButton.addEventListener("click", function (e) {
+//             e.stopPropagation();
+//             sidebar.classList.replace("-left-full", "left-0");
+//         });
+//     }
+// }
 
 function initializeLGPDBar() {
     const LGPDBar = document.querySelector('[data-role="lgpd-bar"]');
@@ -131,140 +131,140 @@ function initializeLGPDBar() {
     }
 }
 
-function initializeFilterModals() {
-    const triggerFilterModal = document.querySelector(
-        '[data-role="filter-modal-trigger"]'
-    );
+// function initializeFilterModals() {
+//     const triggerFilterModal = document.querySelector(
+//         '[data-role="filter-modal-trigger"]'
+//     );
 
-    const body = document.querySelector("body");
-    const filterModal = document.querySelector('[data-role="filter-modal"]');
+//     const body = document.querySelector("body");
+//     const filterModal = document.querySelector('[data-role="filter-modal"]');
 
-    if (filterModal) {
-        document
-            .querySelector("body")
-            .addEventListener("click", function (event) {
-                if (event.target === filterModal) {
-                    filterModal.classList.replace("flex", "hidden");
-                }
-            });
-    }
+//     if (filterModal) {
+//         document
+//             .querySelector("body")
+//             .addEventListener("click", function (event) {
+//                 if (event.target === filterModal) {
+//                     filterModal.classList.replace("flex", "hidden");
+//                 }
+//             });
+//     }
 
-    if (triggerFilterModal && filterModal) {
-        triggerFilterModal.addEventListener("click", function () {
-            filterModal.classList.replace("hidden", "flex");
-        });
-    }
-}
+//     if (triggerFilterModal && filterModal) {
+//         triggerFilterModal.addEventListener("click", function () {
+//             filterModal.classList.replace("hidden", "flex");
+//         });
+//     }
+// }
 
-function initializeTogglePasswordVisibilityButtons() {
-    const togglePasswordVisibilityButtons = document.querySelectorAll(
-        '[data-role="toggle-password-visibility"]'
-    );
+// function initializeTogglePasswordVisibilityButtons() {
+//     const togglePasswordVisibilityButtons = document.querySelectorAll(
+//         '[data-role="toggle-password-visibility"]'
+//     );
 
-    togglePasswordVisibilityButtons.forEach((button) => {
-        const targetId = button.getAttribute("data-target");
-        const input = document.getElementById(targetId);
-        const hideIcon = button.querySelector('[data-role="password-hide"]');
-        const showIcon = button.querySelector('[data-role="password-show"]');
+//     togglePasswordVisibilityButtons.forEach((button) => {
+//         const targetId = button.getAttribute("data-target");
+//         const input = document.getElementById(targetId);
+//         const hideIcon = button.querySelector('[data-role="password-hide"]');
+//         const showIcon = button.querySelector('[data-role="password-show"]');
 
-        button.addEventListener("click", () => {
-            const type = input.getAttribute("type");
-            input.setAttribute(
-                "type",
-                type === "password" ? "text" : "password"
-            );
+//         button.addEventListener("click", () => {
+//             const type = input.getAttribute("type");
+//             input.setAttribute(
+//                 "type",
+//                 type === "password" ? "text" : "password"
+//             );
 
-            if (type === "password") {
-                showIcon.classList.replace("block", "hidden");
-                hideIcon.classList.replace("hidden", "block");
-            } else {
-                hideIcon.classList.replace("block", "hidden");
-                showIcon.classList.replace("hidden", "block");
-            }
-        });
-    });
-}
+//             if (type === "password") {
+//                 showIcon.classList.replace("block", "hidden");
+//                 hideIcon.classList.replace("hidden", "block");
+//             } else {
+//                 hideIcon.classList.replace("block", "hidden");
+//                 showIcon.classList.replace("hidden", "block");
+//             }
+//         });
+//     });
+// }
 
-function initializeLogoutModal() {
-    const triggerLogoutModal = document.querySelector(
-        '[data-role="logout-modal-trigger"]'
-    );
+// function initializeLogoutModal() {
+//     const triggerLogoutModal = document.querySelector(
+//         '[data-role="logout-modal-trigger"]'
+//     );
 
-    const body = document.querySelector("body");
-    const logoutModal = document.querySelector('[data-role="logout-modal"]');
-    const openModal = localStorage.getItem("open-logout-modal");
+//     const body = document.querySelector("body");
+//     const logoutModal = document.querySelector('[data-role="logout-modal"]');
+//     const openModal = localStorage.getItem("open-logout-modal");
 
-    if (openModal) {
-        showLogoutModal(logoutModal);
-    }
+//     if (openModal) {
+//         showLogoutModal(logoutModal);
+//     }
 
-    if (logoutModal) {
-        document
-            .querySelector("body")
-            .addEventListener("click", function (event) {
-                if (event.target === logoutModal) {
-                    hideLogoutModal(logoutModal);
-                    localStorage.removeItem("open-logout-modal");
-                }
-            });
-    }
+//     if (logoutModal) {
+//         document
+//             .querySelector("body")
+//             .addEventListener("click", function (event) {
+//                 if (event.target === logoutModal) {
+//                     hideLogoutModal(logoutModal);
+//                     localStorage.removeItem("open-logout-modal");
+//                 }
+//             });
+//     }
 
-    if (triggerLogoutModal && logoutModal) {
-        triggerLogoutModal.addEventListener("click", function () {
-            showLogoutModal(logoutModal);
-            localStorage.setItem("open-logout-modal", true);
-        });
-    }
+//     if (triggerLogoutModal && logoutModal) {
+//         triggerLogoutModal.addEventListener("click", function () {
+//             showLogoutModal(logoutModal);
+//             localStorage.setItem("open-logout-modal", true);
+//         });
+//     }
 
-    function showLogoutModal(logoutModal) {
-        logoutModal.classList.replace("hidden", "flex");
-    }
+//     function showLogoutModal(logoutModal) {
+//         logoutModal.classList.replace("hidden", "flex");
+//     }
 
-    function hideLogoutModal(logoutModal) {
-        logoutModal.classList.replace("flex", "hidden");
-    }
-}
+//     function hideLogoutModal(logoutModal) {
+//         logoutModal.classList.replace("flex", "hidden");
+//     }
+// }
 
-function checkPasswordSteps(event) {
-    const password = event?.currentTarget.value;
+// function checkPasswordSteps(event) {
+//     const password = event?.currentTarget.value;
 
-    if (password) {
-        const lengthRequirement = password.length >= 8;
-        const uppercaseRequirement = /[A-Z]/.test(password);
-        const numberRequirement = /[0-9]/.test(password);
-        const specialCharRequirement =
-            /[!@#$%^&*(),.?":{}|<>_\-+=~`[\]\\\/]/.test(password);
+//     if (password) {
+//         const lengthRequirement = password.length >= 8;
+//         const uppercaseRequirement = /[A-Z]/.test(password);
+//         const numberRequirement = /[0-9]/.test(password);
+//         const specialCharRequirement =
+//             /[!@#$%^&*(),.?":{}|<>_\-+=~`[\]\\\/]/.test(password);
 
-        updatePasswordRequirement("length-requirement", lengthRequirement);
-        updatePasswordRequirement(
-            "uppercase-requirement",
-            uppercaseRequirement
-        );
-        updatePasswordRequirement("number-requirement", numberRequirement);
-        updatePasswordRequirement(
-            "special-char-requirement",
-            specialCharRequirement
-        );
-    }
+//         updatePasswordRequirement("length-requirement", lengthRequirement);
+//         updatePasswordRequirement(
+//             "uppercase-requirement",
+//             uppercaseRequirement
+//         );
+//         updatePasswordRequirement("number-requirement", numberRequirement);
+//         updatePasswordRequirement(
+//             "special-char-requirement",
+//             specialCharRequirement
+//         );
+//     }
 
-    function updatePasswordRequirement(requirementId, satisfied) {
-        const requirement = document.getElementById(requirementId);
+//     function updatePasswordRequirement(requirementId, satisfied) {
+//         const requirement = document.getElementById(requirementId);
 
-        const requirementBar = requirement.querySelector(".requirement-bar");
-        const iconChecked = requirement.querySelector(".checked-icon");
-        const iconUnchecked = requirement.querySelector(".unchecked-icon");
+//         const requirementBar = requirement.querySelector(".requirement-bar");
+//         const iconChecked = requirement.querySelector(".checked-icon");
+//         const iconUnchecked = requirement.querySelector(".unchecked-icon");
 
-        if (satisfied) {
-            requirementBar.classList.replace("bg-danger", "bg-success");
-            iconUnchecked.classList.replace("block", "hidden");
-            iconChecked.classList.replace("hidden", "block");
-        } else {
-            requirementBar.classList.replace("bg-success", "bg-danger");
-            iconChecked.classList.replace("block", "hidden");
-            iconUnchecked.classList.replace("hidden", "block");
-        }
-    }
-}
+//         if (satisfied) {
+//             requirementBar.classList.replace("bg-danger", "bg-success");
+//             iconUnchecked.classList.replace("block", "hidden");
+//             iconChecked.classList.replace("hidden", "block");
+//         } else {
+//             requirementBar.classList.replace("bg-success", "bg-danger");
+//             iconChecked.classList.replace("block", "hidden");
+//             iconUnchecked.classList.replace("hidden", "block");
+//         }
+//     }
+// }
 
 function watchCPFInputsToLiveFormat() {
     const cpfInput = document.querySelector('[name="cpf"]');

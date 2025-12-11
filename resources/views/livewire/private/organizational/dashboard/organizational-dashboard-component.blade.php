@@ -173,16 +173,17 @@
                 </p>
             </div>
 
-            <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6 lg:col-span-2">
-                <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Customizar formulários de Pesquisa de Clima</h2>
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalCustomCollections', [\App\Models\User::class]))
+                <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6 lg:col-span-2">
+                    <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Customizar formulários de Pesquisa de Clima</h2>
 
-                <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">Personalize os formulários para que se encaixem no contexto da sua organização. Além de modificar questões, você pode criar novos grupos de questões e até mesmo criar novos formulários completos.</p>
+                    <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">Personalize os formulários para que se encaixem no contexto da sua organização. Além de modificar questões, você pode criar novos grupos de questões e até mesmo criar novos formulários completos.</p>
 
-                {{-- TODO: Link para página de formulários --}}
-                <x-new-components.actions.button href="">
-                    <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar página de formulários</span>
-                </x-new-components.actions.button>
-            </div>
+                    <x-new-components.actions.button :href="route('organizational.custom-collection.index')" class="w-full">
+                        <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>
+                    </x-new-components.actions.button>
+                </div>
+            @endif
         </div>
     @endif
 </div>

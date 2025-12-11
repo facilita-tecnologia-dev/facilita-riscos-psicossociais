@@ -3,7 +3,7 @@
 namespace App\Livewire\CMS\Private\Psychosocial\Company;
 
 use App\Enums\Psychosocial\CompanyOrder;
-use App\Enums\Filters\UserCountRange;
+use App\Enums\Filters\UsersCountRange;
 use App\Models\Company;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
@@ -53,8 +53,8 @@ class CompanyIndexComponent extends Component
             $query->where('cnpj', 'like', '%' . $this->filters['cnpj'] . '%');
         }
         
-        if (!empty($this->filters['userCountRange'])) {
-            $range = UserCountRange::from($this->filters['userCountRange'])->value;
+        if (!empty($this->filters['UsersCountRange'])) {
+            $range = UsersCountRange::from($this->filters['UsersCountRange'])->value;
 
             if ($range === '200+') {
                 $query->having('users_count', '>=', 200);

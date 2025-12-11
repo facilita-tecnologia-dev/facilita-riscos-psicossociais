@@ -12,7 +12,7 @@
 
         @if($isManager)
             <livewire:private.user.user-permission-component :user="$user" />
-            {{-- <livewire:private.user.user-department-scope-component :user="$user" /> TODO: DepartmentScopes --}}
+            <livewire:private.user.user-department-scope-component :user="$user" />
         @endif
     @endif
 </div>
