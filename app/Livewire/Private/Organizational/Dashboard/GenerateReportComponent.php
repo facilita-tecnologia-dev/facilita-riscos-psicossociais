@@ -1,24 +1,25 @@
 <?php
 
-namespace App\Livewire\Private\Psychosocial\Report;
+namespace App\Livewire\Private\Organizational\Dashboard;
 
-use App\Enums\Psychosocial\RiskInventoryFormat;
-use App\Enums\Psychosocial\RiskInventoryType;
-use App\Models\ActionPlan;
+use App\Enums\OC\OCEvaluation;
+use App\Enums\OC\OCVisualization;
 use App\Models\Campaign;
-use App\Services\Psychosocial\PsychosocialService;
+use App\Models\OrganizationalReport;
+use App\Services\Organizational\OrganizationalService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class GenerateReportComponent extends Component
 {
-    public Campaign|null $psychosocialCampaign;
+    public Campaign|null $organizationalCampaign;
+    public OrganizationalReport | null $report;
 
-    public string $type = RiskInventoryType::DEPARTMENT->value;
-    public string $format = RiskInventoryFormat::PDF->value;
-
-    public ActionPlan $report;
+    public string $evaluation_type = OCEvaluation::DEPARTMENT->value;
+    public string $visualization_type = OCVisualization::GENERAL->value;
 
     public bool $processing = false;
     public int $progress = 0;
@@ -31,16 +32,16 @@ class GenerateReportComponent extends Component
 
     public function render()
     {
-        return view('livewire.private.psychosocial.report.generate-report-component');
+        return view('livewire.private.organizational.dashboard.generate-report-component');
     }
 
     public function mount(Campaign $campaign)
     {
-        $this->psychosocialCampaign = $campaign;
-        $this->report = session('auth:company')->actionPlan;
-        $this->cache_key = 'psychosocial-report';
+        $this->organizationalCampaign = $campaign;
+        $this->report = session('auth:company')->organizationalReport;
+        $this->cache_key = 'organizational-report';
 
-        if ($this->report->file_path && Storage::disk('s3')->exists($this->report->file_path)) {
+        if ($this->report && $this->report->file_path && Storage::disk('s3')->exists($this->report->file_path)) {
             $this->ready = true;
             $this->processing = false;
             $this->progress = 100;
@@ -66,15 +67,15 @@ class GenerateReportComponent extends Component
                 $this->downloadUrl = $s3->url($file);
             }
 
-            $this->dispatch('alert:success', 'Seu Inventário de Riscos Psicossociais está pronto!');
+            $this->dispatch('alert:success', 'Seu relatório está pronto!');
         }
     }
 
     public function submit()
     {
         $this->validate([
-            'type' => ['required'],
-            'format' => ['required'],
+            'evaluation_type' => ['required', Rule::enum(OCEvaluation::class)],
+            'visualization_type' => ['required', Rule::enum(OCVisualization::class)],
         ]);
 
         $this->processing = true;
@@ -83,15 +84,19 @@ class GenerateReportComponent extends Component
         $this->downloadUrl = null;
 
         try {
-            PsychosocialService::report($this->psychosocialCampaign, $this->type, $this->format, $this->cache_key);
+            OrganizationalService::report($this->organizationalCampaign, $this->evaluation_type, $this->visualization_type, $this->cache_key);
 
-            $this->dispatch('alert:success', 'Gerando Inventário de Riscos... isso pode levar alguns minutos.');
+            $this->dispatch('alert:success', 'Gerando relatório... isso pode levar alguns minutos.');
             $this->closeReportModal();
 
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
+            Log::error('Erro ao gerar o relatório.', [
+                'company_id' => session('auth:company')->id,
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+            
             $this->dispatch('alert:danger', 'Ocorreu um erro ao gerar o relatório. Tente novamente.');
-            $this->processing = false;
-            $this->progress = 0;
         }
     }
 
@@ -107,7 +112,7 @@ class GenerateReportComponent extends Component
         $this->dispatch('alert:success', 'Download feito com sucesso!');
         return $s3->download($this->report->file_path);
     }
-    
+
     public function openReportModal()
     {
         $this->dispatch('open-report-modal');

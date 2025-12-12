@@ -100,8 +100,16 @@ class GeneratePsychosocialReportJob implements ShouldQueue
 
         $this->updateProgress(30);
 
+        $logoBase64 = null;
+
+        if ($company->logo && $s3->exists($company->logo)) {
+            $fileContent = $s3->get($company->logo);
+            $mime = $s3->mimeType($company->logo);
+            $logoBase64 = 'data:' . $mime . ';base64,' . base64_encode($fileContent);
+        }
+
         $pdf = Pdf::loadView($view, [
-            'companyLogo'    => $company->logo ? $s3->temporaryUrl($company->logo, now()->addMinutes(5)) : null,
+            'companyLogo'    => $logoBase64,
             'company'    => $company,
             'risks'    => $risks,
             'absences' => $company->usesHSE() ? $absences : null,

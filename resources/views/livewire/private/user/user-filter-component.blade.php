@@ -1,10 +1,12 @@
 <form class="flex w-full flex-col items-start gap-4" id="filter-companies" wire:submit.prevent="submit">
     <x-form.input-text wireModel="name" name="name" label="Nome" placeholder="Digite o nome..." tooltip="Digite o nome do funcionário" />
-    <x-form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf do funcionário" />
 
-    <x-form.select wireModel="department" name="department" label="Setor" placeholder="Selecione o setor" tooltip="Selecione o setor" :options="$departments" />
+    <x-form.select wireModel="department" name="department" label="Setor" placeholder="Todos" tooltip="Selecione o setor" :options="$departments" />
+
+    <x-form.select wireModel="has_answered_psychosocial_campaign" name="has_answered_psychosocial_campaign" label="Respondeu Riscos Psicossociais" placeholder="Todos" tooltip="Selecione a opção desejada" :options="[['label' => 'Sim', 'value' => 1], ['label' => 'Não', 'value' => 0]]" />
+    <x-form.select wireModel="has_answered_organizational_campaign" name="has_answered_organizational_campaign" label="Respondeu Clima Organizacional" placeholder="Todos" tooltip="Selecione a opção desejada" :options="[['label' => 'Sim', 'value' => 1], ['label' => 'Não', 'value' => 0]]" />
     
-    <x-form.select wireModel="orderBy" name="orderBy" label="Ordenar por" placeholder="Selecione o tipo de ordenação" tooltip="Selecione o tipo de ordenação desejado" :options="$userOrderTypes" />
+    <x-form.select wireModel="orderBy" name="orderBy" label="Ordenar por" tooltip="Selecione o tipo de ordenação desejado" :options="$userOrderTypes" />
 
     <footer class="flex w-full items-center gap-2">
         <x-actions.button type="submit">

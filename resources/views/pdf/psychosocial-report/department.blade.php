@@ -55,8 +55,8 @@
 
     <body>
         <x-pdf.cover>
-            @if ($company->logo)
-                <img src="{{ $companyLogo }}" class="h-8 object-scale-down transition hover:scale-105 md:h-10" alt="Logomarca" />
+            @if ($companyLogo)
+                <img src="{{ $companyLogo }}" style="height: 90px; margin-bottom:24px;" alt="Logomarca" />
             @endif
 
             <h2 style="margin-bottom: 18px">{{ $company->name }}</h2>

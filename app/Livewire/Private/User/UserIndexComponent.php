@@ -59,10 +59,6 @@ class UserIndexComponent extends Component
             $query->where('name', 'like', '%' . $this->filters['name'] . '%');
         }
 
-        if (!empty($this->filters['cpf'])) {
-            $query->where('cpf', 'like', '%' . $this->filters['cpf'] . '%');
-        }
-
         if (!empty($this->filters['department'])) {
             $query->where('department', $this->filters['department']);
         }
@@ -74,10 +70,33 @@ class UserIndexComponent extends Component
             $query->orderBy($column, $direction);
         }
 
-        return $query->get()->map(function($user){
-            $user->hasAnsweredPsychosocial = $this->latestPsychosocialCampaign ? $user->hasAnsweredCampaign($this->latestPsychosocialCampaign->id) : false;
-            $user->hasAnsweredOrganizational = $this->latestOrganizationalCampaign ? $user->hasAnsweredCampaign($this->latestOrganizationalCampaign->id) : false;
-            return $user;
-        });
+        return $query->get()
+            ->filter(function($user){
+
+                $filterPsychosocial = !empty($this->filters['has_answered_psychosocial_campaign']);
+                $filterOrganizational = !empty($this->filters['has_answered_organizational_campaign']);
+
+                if (!$filterPsychosocial && !$filterOrganizational) {
+                    return true;
+                }
+
+                $answeredPsychosocial = $user->hasAnsweredCampaign($this->latestPsychosocialCampaign->id);
+                $answeredOrganizational = $user->hasAnsweredCampaign($this->latestOrganizationalCampaign->id);
+
+                if ($filterPsychosocial && !$filterOrganizational) {
+                    return $answeredPsychosocial;
+                }
+
+                if ($filterOrganizational && !$filterPsychosocial) {
+                    return $answeredOrganizational;
+                }
+
+                return $answeredPsychosocial && $answeredOrganizational;
+            })
+            ->map(function($user){
+                $user->hasAnsweredPsychosocial = $this->latestPsychosocialCampaign ? $user->hasAnsweredCampaign($this->latestPsychosocialCampaign->id) : false;
+                $user->hasAnsweredOrganizational = $this->latestOrganizationalCampaign ? $user->hasAnsweredCampaign($this->latestOrganizationalCampaign->id) : false;
+                return $user;
+            });
     }
 }

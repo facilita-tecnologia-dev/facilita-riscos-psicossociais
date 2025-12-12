@@ -5,22 +5,60 @@ namespace App\Services\Organizational;
 use App\Enums\Filters\AdmissionRange;
 use App\Enums\OC\OCEvaluation;
 use App\Enums\OC\OCVisualization;
+use App\Jobs\GenerateOrganizationalReportJob;
 use App\Models\Campaign;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class OrganizationalService
 {
     public static function dashboard(Campaign $campaign, string $evaluation_type, string $visualization_type, array $filters = [])
    {    
+        $allowedDepartments = [];
+
+        if (session('auth:guard') === 'user') {
+            $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
+        }
+
         $dashboard = $visualization_type === OCVisualization::GENERAL->value 
-                        ? self::OrganizationalGeneral($campaign, $evaluation_type, $filters)
-                        : self::OrganizationalAnswers($campaign, $evaluation_type, $filters);
+                        ? self::OrganizationalGeneral($campaign, $evaluation_type, $allowedDepartments, $filters)
+                        : self::OrganizationalAnswers($campaign, $evaluation_type, $allowedDepartments, $filters);
 
         return $dashboard;
    }
 
-   public static function OrganizationalGeneral(Campaign $campaign, string $evaluation_type, ?array $filters = null)
+    public static function report(Campaign $campaign, string $evaluation_type, string $visualization_type, string $cache_key)
+   {    
+        try {
+            $company = session('auth:company');
+            
+            Cache::forget("{$cache_key}:progress");
+            Cache::forget("{$cache_key}:file-path");
+            Cache::forget("{$cache_key}:dashboard");
+
+            $allowedDepartments = [];
+
+            if (session('auth:guard') === 'user') {
+                $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
+            }
+
+            $dashboard = $visualization_type === OCVisualization::GENERAL->value 
+                            ? self::OrganizationalGeneral($campaign, $evaluation_type, $allowedDepartments)
+                            : self::OrganizationalAnswers($campaign, $evaluation_type, $allowedDepartments);
+
+            Cache::put("{$cache_key}:dashboard", $dashboard);
+
+            dispatch(new GenerateOrganizationalReportJob($company->id, $evaluation_type, $visualization_type, $cache_key));
+        } catch (\Throwable $th) {
+            Cache::forget("{$cache_key}:risks");
+            Cache::forget("{$cache_key}:absences");
+
+             throw $th;
+        }
+   }
+
+   public static function OrganizationalGeneral(Campaign $campaign, string $evaluation_type, ?array $allowedDepartments = null, ?array $filters = null)
    {
         $allowedDepartments = [];
 
@@ -103,7 +141,10 @@ class OrganizationalService
 
                 return $acc;
             }, collect())
-            ->mapWithKeys(fn ($data, $divisionFactor) => [$divisionFactor => round($data['sum'] / $data['count'])]);
+            ->mapWithKeys(fn ($data, $divisionFactor) => [$divisionFactor => round($data['sum'] / $data['count'])])
+            ->sortBy(function ($_, $key) {
+                return $key === 'Geral' ? 0 : 1;
+            });
 
             return [$group => $groupSatisfaction];
         });
@@ -114,7 +155,7 @@ class OrganizationalService
         ];
    }
 
-   public static function OrganizationalAnswers(Campaign $campaign, string $evaluation_type, ?array $filters = null)
+   public static function OrganizationalAnswers(Campaign $campaign, string $evaluation_type, ?array $allowedDepartments = null, ?array $filters = null)
    {
         $allowedDepartments = [];
 
@@ -190,50 +231,12 @@ class OrganizationalService
 
             return [$group => $groupQuestionsSatisfaction];
         });
-
+        
         return [
             'general-satisfaction-by-group' => $generalSatisfactionByGroup,
             'division-factor-satisfaction-by-group' => $divisionFactorSatisfactionByGroup
         ];
    }
-
-
-    // public function createPDFReport(Request $request)
-    // {
-    //     Gate::authorize('organizational-dashboard-view');
-
-    //     $filtersApplied = [];
-
-    //     $userDepartmentScopes = session('auth:guard') === 'user' ? session('auth:user')->departmentScopes->where('allowed', 1) : false;
-
-    //     foreach ($request->query() as $filterKeyName => $filter) {
-    //         $filtersApplied[$this->filterService->getFilterDisplayName($filterKeyName)] = $filter;
-    //     }
-
-    //     $charts = [];
-
-    //     foreach ($request->all() as $chartName => $chartToBase64) {
-    //         if (str_contains($chartName, '-to-base-64')) {
-    //             $chartName = str_replace('_', ' ', str_replace('-to-base-64', '', $chartName));
-    //             $charts[$chartName] = $chartToBase64;
-    //         }
-    //     }
-
-    //     $company = session('auth:company');
-
-    //     $companyLogo = $company->logo;
-    //     $companyName = $company->name;
-
-    //     $pdf = Pdf::loadView('pdf.organizational-climate-index', [
-    //         'companyLogo' => $companyLogo,
-    //         'companyName' => $companyName,
-    //         'charts' => $charts,
-    //         'filtersApplied' => $filtersApplied,
-    //         'userDepartmentScopes' => $userDepartmentScopes,
-    //     ])->setPaper('a4', 'landscape');
-
-    //     return $pdf->download('graficos_clima_organizacional.pdf');
-    // }
 
     public static function getAdmissionRange(string $admissionDate): AdmissionRange
     {

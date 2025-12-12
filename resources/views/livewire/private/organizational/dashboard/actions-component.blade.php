@@ -20,8 +20,6 @@
             </x-actions.button>
         @endif
 
-        <x-actions.button href="" class="w-full">
-            <span class="font-heading text-main-background text-center text-sm font-semibold">Exportar Relatório</span>
-        </x-actions.button>
+        <livewire:private.organizational.dashboard.generate-report-component :campaign="$organizationalCampaign" />
     </div>
 </div>

@@ -28,7 +28,6 @@ class Company extends Authenticatable
     protected BaseCollection $psychosocialCollection;
     protected BaseCollection $organizationalCollection;
 
-
     // Get the attributes that should be cast.
     protected function casts(): array
     {
@@ -85,6 +84,11 @@ class Company extends Authenticatable
     public function customCollections(): HasMany
     {
         return $this->hasMany(CustomCollection::class);
+    }
+
+    public function organizationalReport(): HasOne
+    {
+        return $this->hasOne(OrganizationalReport::class);
     }
 
     /* --- End Relations --- */

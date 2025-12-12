@@ -2,7 +2,7 @@
 
 namespace App\Livewire\CMS\Private\Psychosocial\User;
 
-use App\Enums\Psychosocial\UserOrder;
+use App\Enums\Psychosocial\CMSUserOrder;
 use App\Models\Company;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
@@ -54,7 +54,7 @@ class UserIndexComponent extends Component
             $query->where('department', $this->filters['department']);
         }
 
-        $orderEnum = UserOrder::tryFrom($this->filters['orderBy'] ?? UserOrder::NAME_ASC->value);
+        $orderEnum = CMSUserOrder::tryFrom($this->filters['orderBy'] ?? CMSUserOrder::NAME_ASC->value);
 
         if ($orderEnum) {
             [$column, $direction] = $orderEnum->config();
