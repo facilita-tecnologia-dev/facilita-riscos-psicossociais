@@ -44,7 +44,7 @@
     
                                     <div class="space-y-2">
                                         @forelse ($types as $action)
-                                            <livewire:private.psychosocial.control-action.control-action-item-component wire:key="control-action-{{ $hazard }}-{{ $risk }}-{{ $action['id'] }}" :action="$action">
+                                            <livewire:private.psychosocial.control-action.control-action-item-component wire:key="{{ uniqid() }}" :action="$action">
 
                                             @if(!$loop->last)
                                                 <div class="h-[1px] w-full bg-borders"></div>

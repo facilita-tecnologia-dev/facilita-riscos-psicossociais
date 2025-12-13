@@ -10,9 +10,11 @@ class ReportChannelService
 {
     public static function reports(Company $company)
     {
-        $response = Http::post('https://canaldenuncias.facilitatecnologia.com.br/api/company/reports', [
+        $response = Http::post(env('REPORT_CHANNEL_URL') . '/api/company/reports', [
             'cnpj' => $company->cnpj,
         ]); 
+
+        
 
         $data = collect($response->json())
             ->filter(fn($_, $nature) => PROARTHazard::tryFrom($nature))
@@ -23,7 +25,7 @@ class ReportChannelService
 
     public static function hasReportChannel(Company $company)
     {
-        $response = Http::post('https://canaldenuncias.facilitatecnologia.com.br/api/company/check', [
+        $response = Http::post(env('REPORT_CHANNEL_URL') . '/api/company/check', [
             'cnpj' => $company->cnpj,
         ]); 
 
@@ -32,19 +34,19 @@ class ReportChannelService
 
     public static function allReports()
     {
-        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/report/all'); 
+        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/report/all'); 
         return $response->json();
     }
 
     public static function companies(?array $filters = null)
     {
-        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/company', $filters); 
+        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/company', $filters); 
         return $response->json();
     }
 
     public static function company(string $companyID)
     {
-        $response = Http::get("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID); 
+        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID); 
         return $response->json();
     }
 
@@ -52,7 +54,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->post('http://facilita-canal-de-denuncias.test/api/data/company/create', $formData); 
+        ])->post(env('REPORT_CHANNEL_URL') . '/api/data/company/create', $formData); 
 
         return $response;
     }
@@ -61,7 +63,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/update', $formData); 
+        ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/update', $formData); 
 
         return $response;
     }
@@ -70,7 +72,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/access', $formData); 
+        ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/access', $formData); 
 
         return $response;
     }
@@ -79,7 +81,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->get("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/committee'); 
+        ])->get(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/committee'); 
 
         return $response->json();
     }
@@ -88,7 +90,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID .  "/committee/" . $userID . "/attach", $formData); 
+        ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID .  "/committee/" . $userID . "/attach", $formData); 
 
         return $response;
     }
@@ -97,7 +99,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID .  "/committee/" . $userID . "/detach"); 
+        ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID .  "/committee/" . $userID . "/detach"); 
 
         return $response;
     }
@@ -106,7 +108,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->get("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department'); 
+        ])->get(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department'); 
 
         return $response->json();
     }
@@ -115,7 +117,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->post("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department/create', $formData); 
+        ])->post(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department/create', $formData); 
 
         return $response;
     }
@@ -124,7 +126,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->delete("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department/' . $departmentID . '/soft-delete'); 
+        ])->delete(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department/' . $departmentID . '/soft-delete'); 
 
         return $response;
     }
@@ -133,7 +135,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->delete("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department/' . $departmentID . '/force-delete'); 
+        ])->delete(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department/' . $departmentID . '/force-delete'); 
 
         return $response;
     }
@@ -142,20 +144,20 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->put("http://facilita-canal-de-denuncias.test/api/data/company/" . $companyID . '/department/' . $departmentID . '/restore'); 
+        ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department/' . $departmentID . '/restore'); 
 
         return $response;
     }
 
     public static function users(array $filters)
     {
-        $response = Http::get('http://facilita-canal-de-denuncias.test/api/data/user', $filters); 
+        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/user', $filters); 
         return $response->json();
     }
 
     public static function user(string $userID)
     {
-        $response = Http::get("http://facilita-canal-de-denuncias.test/api/data/user/" . $userID); 
+        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID); 
         return $response->json();
     }
 
@@ -163,7 +165,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->post('http://facilita-canal-de-denuncias.test/api/data/user/create', $formData); 
+        ])->post(env('REPORT_CHANNEL_URL') . '/api/data/user/create', $formData); 
 
         return $response;
     }
@@ -172,7 +174,7 @@ class ReportChannelService
     {
         $response = Http::withHeaders([
             'Accept' => 'application/json',
-        ])->put("http://facilita-canal-de-denuncias.test/api/data/user/" . $userID . '/update', $formData); 
+        ])->put(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID . '/update', $formData); 
 
         return $response;
     }
@@ -181,14 +183,14 @@ class ReportChannelService
     // {
     //     $response = Http::withHeaders([
     //         'Accept' => 'application/json',
-    //     ])->put("http://facilita-canal-de-denuncias.test/api/data/user/" . $userID . '/companies', $formData); 
+    //     ])->put(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID . '/companies', $formData); 
 
     //     return $response;
     // }
 
     public static function userCompanies(string $userID)
     {
-        $response = Http::get("http://facilita-canal-de-denuncias.test/api/data/user/" . $userID . "/companies"); 
+        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID . "/companies"); 
         return $response->json();
     }
 }

@@ -84,7 +84,7 @@ class UserCreateComponent extends Component
 
         if ($user) {
             if(session('auth:company')->users()->find($user)){
-                $this->dispatch('alert:info', 'Este usuário já está vinculado �� sua empresa!');
+                $this->dispatch('alert:info', 'Este usuário já está vinculado �� sua empresa!');
             } else {
                 $this->user = $user;
                 $this->userExists = true;

@@ -390,63 +390,73 @@ function scrollToY(event, id, offset = 0) {
 function heroSectionSwiper() {
     const sliderContainer = document.querySelector(".hero-section-swiper");
 
-    if (sliderContainer) {
-        const videoPlayer = document.getElementById(
-            "hero-section-video-canvas"
-        );
-        const slides = sliderContainer.querySelectorAll(".swiper-slide");
+    if (!sliderContainer) return;
 
-        const swiper = new Swiper(sliderContainer, {
-            modules: [Navigation],
-            slidesPerView: "auto",
-            spaceBetween: 8,
-            loop: true,
-            allowTouchMove: window.innerWidth < 640,
-            navigation: {
-                nextEl: ".custom-next",
-                prevEl: ".custom-prev",
-            },
+    const videoPlayer = document.getElementById(
+        "hero-section-video-canvas"
+    );
+
+    const slides = sliderContainer.querySelectorAll(".swiper-slide");
+
+    const swiper = new Swiper(sliderContainer, {
+        modules: [Navigation],
+        slidesPerView: "auto",
+        spaceBetween: 8,
+        loop: true,
+        allowTouchMove: window.innerWidth < 640,
+        navigation: {
+            nextEl: ".custom-next",
+            prevEl: ".custom-prev",
+        },
+    });
+
+    function setActiveVideo(videoSrc, activeSlide) {
+        videoPlayer.src = videoSrc;
+
+        slides.forEach((slide) => {
+            slide.querySelector("button")
+                .classList.remove("!bg-primary-solid");
+
+            slide.querySelector("span")
+                .classList.remove("!text-main-background");
         });
 
-        function setActiveVideo(videoSrc, activeSlide) {
-            videoPlayer.src = videoSrc;
+        activeSlide.querySelector("button")
+            .classList.add("!bg-primary-solid");
 
-            slides.forEach((slide) => {
-                const btn = slide.querySelector("button");
-                const span = slide.querySelector("span");
-                btn.classList.remove("!bg-primary-solid");
-                span.classList.remove("!text-main-background");
-            });
-
-            const activeBtn = activeSlide.querySelector("button");
-            const activeSpan = activeSlide.querySelector("span");
-
-            activeBtn.classList.add("!bg-primary-solid");
-            activeSpan.classList.add("!text-main-background");
-        }
-
-        // Inicializa o primeiro GIF
-        setActiveVideo(slides[0].dataset.video, slides[0]);
-
-        // Clique nos slides
-        slides.forEach((slide, index) => {
-            slide.addEventListener("click", () => {
-                swiper.slideToLoop(index);
-                setActiveVideo(slide.dataset.video, slide);
-            });
-        });
-
-        // Atualiza o vídeo ao mudar o slide via navegação
-        swiper.on("slideChange", () => {
-            const activeSlide = slides[swiper.realIndex];
-            setActiveVideo(activeSlide.dataset.video, activeSlide);
-        });
-
-        window.addEventListener("resize", () => {
-            swiper.allowTouchMove = window.innerWidth < 640;
-        });
+        activeSlide.querySelector("span")
+            .classList.add("!text-main-background");
     }
+
+    // Inicializa
+    setActiveVideo(slides[0].dataset.video, slides[0]);
+
+    slides.forEach((slide, index) => {
+        slide.addEventListener("click", () => {
+            swiper.slideToLoop(index);
+            setActiveVideo(slide.dataset.video, slide);
+        });
+    });
+
+    swiper.on("slideChange", () => {
+        const activeSlide = slides[swiper.realIndex];
+        setActiveVideo(activeSlide.dataset.video, activeSlide);
+    });
+
+    // Clique no preview → abre modal
+    document
+        .getElementById("hero-video-click")
+        .addEventListener("click", () => {
+            Livewire.dispatch("openHeroVideoModal", {
+                video: videoPlayer.src,
+            });
+        });
+
+    window.addEventListener("resize", () => {
+        swiper.allowTouchMove = window.innerWidth < 640;
+    });
 }
+
 
 function ourMetodolodySwiper() {
     const sliderContainer = document.querySelector(".our-metodology-swiper");
