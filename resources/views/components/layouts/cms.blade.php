@@ -3,7 +3,7 @@
     <head>
         @include('components.imports.head')
         
-        <title>{{ 'CMS - ' . (env('APP_NAME') ?? 'Facilita Riscos Psicossociais') }}</title>
+        <title>{{ 'Cms - ' . (env('APP_NAME') ?? 'Facilita Riscos Psicossociais') }}</title>
     </head>
 
     <body class="bg-main-background relative flex flex-col-reverse lg:flex-row h-screen overflow-hidden">
@@ -17,8 +17,8 @@
         {{-- Main content --}}
         <main class="flex-1 h-full flex flex-col overflow-hidden">
             <header class="w-full bg-secondary-background px-4 py-3 lg:px-6 lg:py-4 border-b border-borders shadow-sm flex justify-between items-center">
-                <span class="text-md lg:text-lg text-main-text font-semibold">Facilita Tecnologia - CMS</span>
-                <x-actions.nav-item href="{{ route('cms.logout') }}" icon="logout" tooltip="Sair do CMS" tooltipPosition="left" />
+                <span class="text-md lg:text-lg text-main-text font-semibold">Facilita Tecnologia - Cms</span>
+                <x-actions.nav-item href="{{ route('cms.logout') }}" icon="logout" tooltip="Sair do Cms" tooltipPosition="left" />
             </header>
 
             <section class="flex-1 overflow-auto">

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\CMS;
+namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
 
-class CMSReportChannelController
+class CmsReportChannelController
 {
     public function dashboard()
     {

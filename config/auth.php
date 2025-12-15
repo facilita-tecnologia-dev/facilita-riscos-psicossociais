@@ -85,7 +85,7 @@ return [
         ],
         'cms_users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\CMSUser::class, // novo model
+            'model' => App\Models\CmsUser::class, // novo model
         ],
     ],
 

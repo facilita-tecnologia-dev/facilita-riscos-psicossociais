@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CMS\Private\ReportChannel\Dashboard;
+namespace App\Livewire\Cms\Private\ReportChannel\Dashboard;
 
 use App\Services\ReportChannel\ReportChannelService;
 use Carbon\Carbon;

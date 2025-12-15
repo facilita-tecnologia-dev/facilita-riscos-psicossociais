@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CMS\Private\Psychosocial\Company;
+namespace App\Livewire\Cms\Private\Psychosocial\Company;
 
 use App\Enums\Campaign\CampaignStatus;
 use App\Models\Company;

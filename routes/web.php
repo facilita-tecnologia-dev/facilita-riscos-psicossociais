@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\CMS\CMSLogoutController;
-use App\Http\Controllers\CMS\CMSPsychosocialController;
-use App\Http\Controllers\CMS\CMSReportChannelController;
+use App\Http\Controllers\Cms\CmsLogoutController;
+use App\Http\Controllers\Cms\CmsPsychosocialController;
+use App\Http\Controllers\Cms\CmsReportChannelController;
 use App\Http\Controllers\Private\Campaign\CampaignController;
 use App\Http\Controllers\Private\Company\CompanyController;
 use App\Http\Controllers\Private\Documentation\DocumentationController;
@@ -11,8 +11,8 @@ use App\Http\Controllers\Private\Psychosocial\PsychosocialController;
 use App\Http\Controllers\Private\Test\TestController;
 use App\Http\Controllers\Private\User\UserController;
 use App\Http\Middleware\AuthMiddleware;
-use App\Http\Middleware\CMSAuthMiddleware;
-use App\Http\Middleware\CMSGuestMiddleware;
+use App\Http\Middleware\CmsAuthMiddleware;
+use App\Http\Middleware\CmsGuestMiddleware;
 use App\Http\Middleware\GuestMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -86,37 +86,37 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     });
 });
 
-/*------------------------- CMS -------------------------------*/ 
+/*------------------------- Cms -------------------------------*/ 
 
-Route::middleware(CMSGuestMiddleware::class)->group(function(){
+Route::middleware(CmsGuestMiddleware::class)->group(function(){
     Route::view('/cms', 'cms.auth.login')->name('cms.login');
 });
 
-Route::middleware(CMSAuthMiddleware::class)->group(function(){
+Route::middleware(CmsAuthMiddleware::class)->group(function(){
     Route::prefix('cms')->group(function(){
         Route::prefix('riscos-psicossociais')->group(function(){
-            Route::get('/dashboard', [CMSPsychosocialController::class, 'dashboard'])->name('cms.psychosocial.dashboard');
-            Route::get('/empresa', [CMSPsychosocialController::class, 'companyIndex'])->name('cms.psychosocial.company.index');
-            Route::get('/empresa/cadastrar', [CMSPsychosocialController::class, 'companyCreate'])->name('cms.psychosocial.company.create');
-            Route::get('/empresa/{company}', [CMSPsychosocialController::class, 'companyShow'])->name('cms.psychosocial.company.show');
+            Route::get('/dashboard', [CmsPsychosocialController::class, 'dashboard'])->name('cms.psychosocial.dashboard');
+            Route::get('/empresa', [CmsPsychosocialController::class, 'companyIndex'])->name('cms.psychosocial.company.index');
+            Route::get('/empresa/cadastrar', [CmsPsychosocialController::class, 'companyCreate'])->name('cms.psychosocial.company.create');
+            Route::get('/empresa/{company}', [CmsPsychosocialController::class, 'companyShow'])->name('cms.psychosocial.company.show');
 
-            Route::get('/empresa/{company}/funcionario', [CMSPsychosocialController::class, 'userIndex'])->name('cms.psychosocial.user.index');
-            Route::get('/empresa/{company}/funcionario/cadastrar', [CMSPsychosocialController::class, 'userCreate'])->name('cms.psychosocial.user.create');
-            Route::get('/empresa/{company}/funcionario/importar', [CMSPsychosocialController::class, 'userImport'])->name('cms.psychosocial.user.import');
-            Route::get('/empresa/{company}/funcionario/{user}', [CMSPsychosocialController::class, 'userShow'])->name('cms.psychosocial.user.show');
+            Route::get('/empresa/{company}/funcionario', [CmsPsychosocialController::class, 'userIndex'])->name('cms.psychosocial.user.index');
+            Route::get('/empresa/{company}/funcionario/cadastrar', [CmsPsychosocialController::class, 'userCreate'])->name('cms.psychosocial.user.create');
+            Route::get('/empresa/{company}/funcionario/importar', [CmsPsychosocialController::class, 'userImport'])->name('cms.psychosocial.user.import');
+            Route::get('/empresa/{company}/funcionario/{user}', [CmsPsychosocialController::class, 'userShow'])->name('cms.psychosocial.user.show');
         });
 
         Route::prefix('report-channel')->group(function(){
-            Route::get('/dashboard', [CMSReportChannelController::class, 'dashboard'])->name('cms.report-channel.dashboard');
-            Route::get('/empresa', [CMSReportChannelController::class, 'companyIndex'])->name('cms.report-channel.company.index');
-            Route::get('/empresa/cadastrar', [CMSReportChannelController::class, 'companyCreate'])->name('cms.report-channel.company.create');
-            Route::get('/empresa/{companyID}', [CMSReportChannelController::class, 'companyShow'])->name('cms.report-channel.company.show');
+            Route::get('/dashboard', [CmsReportChannelController::class, 'dashboard'])->name('cms.report-channel.dashboard');
+            Route::get('/empresa', [CmsReportChannelController::class, 'companyIndex'])->name('cms.report-channel.company.index');
+            Route::get('/empresa/cadastrar', [CmsReportChannelController::class, 'companyCreate'])->name('cms.report-channel.company.create');
+            Route::get('/empresa/{companyID}', [CmsReportChannelController::class, 'companyShow'])->name('cms.report-channel.company.show');
 
-            Route::get('/funcionario', [CMSReportChannelController::class, 'userIndex'])->name('cms.report-channel.user.index');
-            Route::get('/funcionario/cadastrar', [CMSReportChannelController::class, 'userCreate'])->name('cms.report-channel.user.create');
-            Route::get('/funcionario/{userID}', [CMSReportChannelController::class, 'userShow'])->name('cms.report-channel.user.show');
+            Route::get('/funcionario', [CmsReportChannelController::class, 'userIndex'])->name('cms.report-channel.user.index');
+            Route::get('/funcionario/cadastrar', [CmsReportChannelController::class, 'userCreate'])->name('cms.report-channel.user.create');
+            Route::get('/funcionario/{userID}', [CmsReportChannelController::class, 'userShow'])->name('cms.report-channel.user.show');
         });
 
-        Route::get('/logout', [CMSLogoutController::class, 'logout'])->name('cms.logout');
+        Route::get('/logout', [CmsLogoutController::class, 'logout'])->name('cms.logout');
     });
 });

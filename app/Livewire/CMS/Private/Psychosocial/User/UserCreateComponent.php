@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CMS\Private\Psychosocial\User;
+namespace App\Livewire\Cms\Private\Psychosocial\User;
 
 use App\Enums\User\UserRole;
 use App\Models\Company;

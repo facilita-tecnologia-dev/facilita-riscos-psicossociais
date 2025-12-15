@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\CMS;
+namespace App\Http\Controllers\Cms;
 
 use App\Services\Auth\AuthenticationService;
 use Illuminate\Http\Request;
 
-class CMSLogoutController
+class CmsLogoutController
 {
     public function logout(Request $request)
     {

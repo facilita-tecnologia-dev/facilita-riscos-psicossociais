@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CMS\Private\Psychosocial\User;
+namespace App\Livewire\Cms\Private\Psychosocial\User;
 
 use App\Models\Company;
 use App\Repositories\UserRepository;

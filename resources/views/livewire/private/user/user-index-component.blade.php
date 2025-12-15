@@ -11,7 +11,7 @@
             <x-icon icon="plus" class="block sm:hidden text-main-background h-4 w-4 object-scale-down" />
         </x-actions.button>
 
-        @include('cms.private.psychosocial.user.index.side-actions.user-filter-mobile')
+        @include('private.user.index.side-actions.user-filter-mobile')
     </div>
 
     <main class="flex min-h-0 w-full flex-1 flex-col-reverse items-start justify-end gap-4 lg:flex-row lg:justify-start lg:overflow-hidden">

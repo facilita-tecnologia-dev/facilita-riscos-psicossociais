@@ -1,17 +1,17 @@
 <?php
 
-namespace Database\Seeders\CMS;
+namespace Database\Seeders\Cms;
 
-use App\Models\CMSUser;
+use App\Models\CmsUser;
 use Illuminate\Database\Seeder;
 
-class CMSUserSeeder extends Seeder
+class CmsUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        CMSUser::create(['user' => 'facilita.code', 'password' => 'F@cilita3015']);
+        CmsUser::create(['user' => 'facilita.code', 'password' => 'F@cilita3015']);
     }
 }

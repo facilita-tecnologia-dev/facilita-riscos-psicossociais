@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CMS\Private\Psychosocial\Dashboard;
+namespace App\Livewire\Cms\Private\Psychosocial\Dashboard;
 
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Campaign\CollectionType;

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Livewire\CMS\Auth;
+namespace App\Livewire\Cms\Auth;
 
-use App\Models\CMSUser;
+use App\Models\CmsUser;
 use App\Services\Auth\AuthenticationService;
 use Livewire\Component;
 
-class CMSLoginComponent extends Component
+class CmsLoginComponent extends Component
 {
     public ?string $user = null; 
     public ?string $password = null; 
@@ -23,9 +23,9 @@ class CMSLoginComponent extends Component
             'password' => ['required', 'string', 'max:100'],
         ]);
         
-        $CMSUser = CMSUser::firstWhere('user', $credentials['user']);
+        $CmsUser = CmsUser::firstWhere('user', $credentials['user']);
 
-        if($CMSUser){
+        if($CmsUser){
             // $isInvalidSubscription = $company->subscription_type === CompanySubscriptionTypes::FREE_TRIAL_EXPIRED;
             
             // if($isInvalidSubscription){

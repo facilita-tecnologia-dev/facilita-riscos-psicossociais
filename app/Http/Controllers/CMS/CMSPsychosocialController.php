@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\CMS;
+namespace App\Http\Controllers\Cms;
 
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class CMSPsychosocialController
+class CmsPsychosocialController
 {
     public function dashboard()
     {

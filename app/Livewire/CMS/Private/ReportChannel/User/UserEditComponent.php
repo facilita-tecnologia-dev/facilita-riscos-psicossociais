@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CMS\Private\ReportChannel\User;
+namespace App\Livewire\Cms\Private\ReportChannel\User;
 
 use App\Enums\ReportChannel\ReportChannelUserTypes;
 use App\Services\ReportChannel\ReportChannelService;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\CMS\Private\Psychosocial\User;
+namespace App\Livewire\Cms\Private\Psychosocial\User;
 
-use App\Enums\Psychosocial\CMSUserOrder;
+use App\Enums\Psychosocial\CmsUserOrder;
 use App\Models\Company;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Component;
@@ -14,7 +14,7 @@ class UserFilterComponent extends Component
     public $name = '';
     public $cpf = '';
     public $department = '';
-    public $orderBy = CMSUserOrder::NAME_ASC->value;
+    public $orderBy = CmsUserOrder::NAME_ASC->value;
 
     public $departments = [];
     public $userOrderTypes = [];
@@ -33,7 +33,7 @@ class UserFilterComponent extends Component
             ->toArray();
 
         $this->departments = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($department) => ['label' => $department, 'value' => $department], $departments));
-        $this->userOrderTypes = array_map(fn ($userOrderType) => ['label' => $userOrderType->label(), 'value' => $userOrderType->value], CMSUserOrder::cases());
+        $this->userOrderTypes = array_map(fn ($userOrderType) => ['label' => $userOrderType->label(), 'value' => $userOrderType->value], CmsUserOrder::cases());
     }
 
     public function submit()
@@ -42,7 +42,7 @@ class UserFilterComponent extends Component
             'name' => ['nullable', 'string', 'max:255'],
             'cpf' => ['nullable', 'string', 'max:255'],
             'department' => ['nullable', 'string', 'max:255'],
-            'orderBy' => ['nullable', new Enum(CMSUserOrder::class)],
+            'orderBy' => ['nullable', new Enum(CmsUserOrder::class)],
         ]);
 
         $this->dispatch('user-list:filter', $filters);

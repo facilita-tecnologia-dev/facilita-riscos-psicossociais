@@ -6,7 +6,7 @@ use Database\Seeders\ActionPlan\ActionPlanSeeder;
 use Database\Seeders\BaseTests\BaseCollectionsSeeder;
 use Database\Seeders\Campaigns\CampaignSeeder;
 use Database\Seeders\CIDS\CIDSeeder;
-use Database\Seeders\CMS\CMSUserSeeder;
+use Database\Seeders\Cms\CmsUserSeeder;
 use Database\Seeders\PROARTIndicator\PROARTIndicatorSeeder;
 use Database\Seeders\Risks\HSERiskSeeder;
 use Database\Seeders\Risks\PROARTRiskSeeder;
@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            CMSUserSeeder::class,
+            CmsUserSeeder::class,
             BaseCollectionsSeeder::class,
             RoleSeeder::class,
             PROARTRiskSeeder::class,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\CMS\Private\ReportChannel\Company;
+namespace App\Livewire\Cms\Private\ReportChannel\Company;
 
 use App\Enums\ReportChannel\CompanyOrder;
 use Illuminate\Validation\Rules\Enum;
