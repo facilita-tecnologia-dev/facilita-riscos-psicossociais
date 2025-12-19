@@ -17,7 +17,7 @@ class DocumentationIndexComponent extends Component
         /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
         $s3 = Storage::disk('s3');
         
-        $file_path = 'documentacao/criterios-para-avaliação-de-riscos-psicossociais.pdf';
+        $file_path = session('auth:company')->usesHSE() ? 'documentacao/riscos-psicossociais-hse.pdf' : 'documentacao/criterios-para-avaliação-de-riscos-psicossociais.pdf';
 
         if (! $s3->exists($file_path)) {
             $this->dispatch('alert:danger', 'Arquivo não encontrado, tente novamente mais tarde.');
