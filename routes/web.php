@@ -56,14 +56,14 @@ Route::middleware(AuthMiddleware::class)->group(function() {
     });
 
     Route::prefix('riscos-psicossociais')->group(function () {
-        Route::get('/dashboard', [PsychosocialController::class, 'dashboard'])->name('psychosocial.dashboard');
+        Route::get('/dashboard/{campaign?}', [PsychosocialController::class, 'dashboard'])->name('psychosocial.dashboard');
         Route::get('/indicadores', [PsychosocialController::class, 'indicators'])->name('psychosocial.indicators');
         Route::get('/afastamentos', [PsychosocialController::class, 'absences'])->name('psychosocial.absences');
         Route::get('/medidas-de-controle', [PsychosocialController::class, 'controlActions'])->name('psychosocial.control-action');
     });
 
     Route::prefix('clima-organizacional')->group(function () {
-        Route::get('/dashboard', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
+        Route::get('/dashboard/{campaign?}', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
         Route::get('/feedback', [OrganizationalController::class, 'feedback'])->name('organizational.feedback');
         Route::get('/formularios', [OrganizationalController::class, 'customCollectionIndex'])->name('organizational.custom-collection.index');
         Route::get('/formularios/{customCollection}/editar', [OrganizationalController::class, 'customCollectionEdit'])->name('organizational.custom-collection.edit');

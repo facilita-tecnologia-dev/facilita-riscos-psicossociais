@@ -2,8 +2,6 @@
 
 namespace App\Livewire\Private\Psychosocial\Dashboard;
 
-use App\Enums\Campaign\CollectionType;
-use App\Enums\Campaign\CampaignStatus;
 use App\Enums\Campaign\EvaluationTypes;
 use App\Models\Campaign;
 use App\Services\Psychosocial\PsychosocialService;
@@ -29,9 +27,9 @@ class PsychosocialDashboardComponent extends Component
         return view('livewire.private.psychosocial.dashboard.psychosocial-dashboard-component');
     }
 
-    public function mount()
+    public function mount($campaign = null)
     {
-        $this->psychosocialCampaign = session('auth:company')->campaigns()->whereYear('start_date', now()->year)->get()->filter(fn($campaign) => $campaign->collection()->type == CollectionType::PSYCHOSOCIAL && $campaign->status !== CampaignStatus::SCHEDULED)?->first();
+        $this->psychosocialCampaign = $campaign;
 
         if($this->psychosocialCampaign){
             $this->psychosocialResults = $this->getDashboardResults();

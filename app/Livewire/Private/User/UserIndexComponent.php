@@ -26,8 +26,15 @@ class UserIndexComponent extends Component
 
     public function mount()
     {
-        $this->latestPsychosocialCampaign = session("auth:company")->latestPsychosocialCampaign();
-        $this->latestOrganizationalCampaign = session("auth:company")->latestOrganizationalCampaign();
+        $this->latestPsychosocialCampaign = 
+            session("auth:company")->latestPsychosocialCampaign()?->start_date->year == now()->year
+            ? session("auth:company")->latestPsychosocialCampaign() :
+            null;
+            
+        $this->latestOrganizationalCampaign = 
+            session("auth:company")->latestOrganizationalCampaign()?->start_date->year == now()->year 
+            ? session("auth:company")->latestOrganizationalCampaign()
+            : null;
 
         if (session('auth:guard') === 'user') {
             $this->allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
@@ -79,9 +86,9 @@ class UserIndexComponent extends Component
                 if (!$filterPsychosocial && !$filterOrganizational) {
                     return true;
                 }
-
-                $answeredPsychosocial = $user->hasAnsweredCampaign($this->latestPsychosocialCampaign->id);
-                $answeredOrganizational = $user->hasAnsweredCampaign($this->latestOrganizationalCampaign->id);
+                
+                $answeredPsychosocial = $this->latestPsychosocialCampaign ? $user->hasAnsweredCampaign($this->latestPsychosocialCampaign->id) : false;
+                $answeredOrganizational = $this->latestOrganizationalCampaign ? $user->hasAnsweredCampaign($this->latestOrganizationalCampaign->id) : false;
 
                 if ($filterPsychosocial && !$filterOrganizational) {
                     return $answeredPsychosocial;

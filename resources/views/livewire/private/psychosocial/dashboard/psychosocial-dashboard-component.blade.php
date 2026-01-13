@@ -1,5 +1,16 @@
 <div class="contents">
-    @if ($psychosocialCampaign)
+    @if ($psychosocialCampaign && $psychosocialCampaign->status !== App\Enums\Campaign\CampaignStatus::SCHEDULED)
+        <div class="flex items-center gap-2">
+            <x-icon icon="brain" class="text-main-text h-6 w-6 object-scale-down" />
+            <h1 class="text-main-text font-heading text-left text-base sm:text-xl font-semibold">{{ $psychosocialCampaign->name }} ({{ $psychosocialCampaign->start_date->year }})</h1>
+        </div>
+    
+        @if($psychosocialCampaign->start_date->year < now()->year)
+            <div class="border-alert bg-main-background flex rounded-lg border px-4 py-3">
+                <span class="text-sm text-secondary-text text-left font-normal">Esta campanha não foi realizada no ano atual, tendo sido concluída no ano de {{ $psychosocialCampaign->start_date->year }}. Para visualizar campanhas anteriores ou agendar uma nova avaliação de riscos psicossociais, acesse a página de Campanhas.</span>
+            </div>
+        @endif
+
         <section class="flex flex-col gap-4">
             <div id="relevant-infos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-start gap-4">
                 <livewire:private.psychosocial.dashboard.psychosocial-campaign-engagement-component :engagement="$engagement" />
@@ -35,7 +46,7 @@
 
                 <livewire:private.psychosocial.dashboard.filter-component />
             </div>
-            
+
             @if ($psychosocialResults->isNotEmpty())
                 <div wire:loading class="w-full">
                     <div class="flex w-full items-center justify-center gap-2 py-6">
@@ -87,8 +98,8 @@
             <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:col-span-2 sm:p-6 lg:col-span-1">
                 <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
                     Oops! Parece que você ainda
-                    <span class="font-semibold">não agendou uma campanha</span>
-                    de Avaliação de Riscos Psicossociais — por isso
+                    <span class="font-semibold">não tem uma campanha de Avaliação de Riscos Psicossociais ativa</span>
+                     — por isso
                     <span class="font-semibold">o dashboard ainda não está disponível</span>
                     .
                 </p>

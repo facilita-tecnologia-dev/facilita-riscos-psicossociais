@@ -29,9 +29,9 @@ class OrganizationalDashboardComponent extends Component
         return view('livewire.private.organizational.dashboard.organizational-dashboard-component');
     }
 
-    public function mount()
+    public function mount($campaign = null)
     {
-        $this->organizationalCampaign = session('auth:company')->campaigns()->whereYear('start_date', now()->year)->get()->filter(fn($campaign) => $campaign->collection()->type == CollectionType::ORGANIZATIONAL && $campaign->status !== CampaignStatus::SCHEDULED)?->first();
+        $this->organizationalCampaign = $campaign;
         
         if($this->organizationalCampaign){
             $this->organizationalResults = $this->getDashboardResults();
@@ -66,6 +66,6 @@ class OrganizationalDashboardComponent extends Component
     {
         return $this->organizationalCampaign 
                     ? OrganizationalService::dashboard($this->organizationalCampaign, $this->evaluation_type, $this->visualization_type, $this->filters) 
-                    : collect();
+                    : [];
     }
 }

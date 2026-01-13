@@ -188,7 +188,6 @@ class Company extends Authenticatable
     public function latestPsychosocialCampaign(): Campaign | null
     {
         return $this->campaigns()
-                    ->whereYear('start_date', now()->year)
                     ->get()
                     ->filter(fn($campaign) => $campaign->collection()->type === CollectionType::PSYCHOSOCIAL)
                     ->sortByDesc('start_date')
@@ -198,7 +197,6 @@ class Company extends Authenticatable
     public function latestOrganizationalCampaign(): Campaign | null
     {
         return $this->campaigns()
-                    ->whereYear('start_date', now()->year)
                     ->get()
                     ->filter(fn($campaign) => $campaign->collection()->type === CollectionType::ORGANIZATIONAL)
                     ->sortByDesc('start_date')

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Private\Psychosocial;
 
+use App\Models\Campaign;
 use App\Models\User;
 use App\Services\Auth\AuthenticationService;
 use Illuminate\Support\Facades\Gate;
 
 class PsychosocialController
 {
-    public function dashboard()
+    public function dashboard(?Campaign $campaign = null)
     {
-        Gate::forUser(AuthenticationService::user())->authorize('psychosocialDashboard', [User::class]);
-        return view('private.psychosocial.dashboard.index');
+        if($campaign) Gate::forUser(AuthenticationService::user())->authorize('psychosocialDashboard', $campaign);
+        return view('private.psychosocial.dashboard.index', ['campaign'=> $campaign]);
     }
 
     public function indicators()

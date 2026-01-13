@@ -1,5 +1,17 @@
 <div class="contents">
     @if ($organizationalCampaign)
+        <div class="flex items-center gap-2">
+            <x-icon icon="cloud" class="text-main-text h-6 w-6 object-scale-down" />
+            <h1 class="text-main-text font-heading text-left text-base sm:text-xl font-semibold">{{ $organizationalCampaign->name }} ({{ $organizationalCampaign->start_date->year }})</h1>
+        </div>
+    
+
+        @if($organizationalCampaign->start_date->year < now()->year)
+            <div class="border-alert bg-main-background flex rounded-lg border px-4 py-3">
+                <span class="text-sm text-secondary-text text-left font-normal">Esta campanha não foi realizada no ano atual, tendo sido concluída no ano de {{ $organizationalCampaign->start_date->year }}. Para visualizar campanhas anteriores ou agendar uma nova avaliação de riscos psicossociais, acesse a página de Campanhas.</span>
+            </div>
+        @endif
+
         <section class="flex flex-col gap-4">
             <div id="relevant-infos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-start gap-4">
                 <livewire:private.organizational.dashboard.organizational-campaign-engagement-component :engagement="$engagement" />
@@ -35,7 +47,7 @@
                                     </div>
                                 </header>
 
-                                <div class="grid grid-cols-3 gap-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                     @foreach ($organizationalResults['general-satisfaction-by-group'] as $group => $satisfaction)
                                         <div class="flex flex-col gap-1.5">
                                             <header class="flex items-center justify-between">
@@ -54,7 +66,7 @@
 
                     @if($visualization_type === App\Enums\OC\OCVisualization::GENERAL->value)
                         @if(isset($organizationalResults['division-factor-satisfaction-by-group']) && $organizationalResults['division-factor-satisfaction-by-group']->count())
-                            <section id="division-factor-satisfaction-by-group" class="grid grid-cols-3 gap-4">
+                            <section id="division-factor-satisfaction-by-group" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                                 @foreach ($organizationalResults['division-factor-satisfaction-by-group'] as $group => $satisfactions)                         
                                     <div class="border-borders bg-main-background flex flex-col gap-4 rounded-lg border px-4 py-4">
                                         <header class="flex w-full items-center justify-between">
@@ -109,7 +121,7 @@
                                             <div class="flex flex-col gap-3 pb-6 border-b border-borders">
                                                 <span class="text-base text-main-text text-left font-normal">{{ $question['statement'] }}</span>
     
-                                                <div class="grid grid-cols-3 gap-4">
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                                     <div class="flex flex-col gap-1.5 p-2 border border-borders rounded-md">
                                                         <header class="flex items-center justify-between">
                                                             <span class="text-sm text-left text-main-text font-normal">Geral</span>
@@ -148,7 +160,7 @@
         </section>
     @else
         <div class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div class="bg-secondary-background border-borders flex flex-col items-center gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
+            <div class="bg-secondary-background border-borders flex flex-col items-center gap-4 rounded-lg border p-4 shadow-sm sm:p-6 sm:col-span-2 lg:col-span-1">
                 <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
                     Oops! Parece que você ainda
                     <span class="font-semibold">não agendou uma campanha</span>
@@ -167,20 +179,32 @@
                 </p>
 
                 <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
-                    Você pode criar ou editar o formulário a qualquer momento
-                    <span class="font-semibold">através do card à direita</span>
+                    Você pode acessar a página de Formulários e a Lista de Feedbacks
+                    <span class="font-semibold">através dos cards à direita</span>
                     .
                 </p>
             </div>
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalCustomCollections', [\App\Models\User::class]))
-                <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6 lg:col-span-2">
+                <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
                     <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Customizar formulários de Pesquisa de Clima</h2>
 
                     <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">Personalize os formulários para que se encaixem no contexto da sua organização. Além de modificar questões, você pode criar novos grupos de questões e até mesmo criar novos formulários completos.</p>
 
                     <x-actions.button :href="route('organizational.custom-collection.index')" class="w-full">
-                        <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>
+                        <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar página de Formulários</span>
+                    </x-actions.button>
+                </div>
+            @endif
+
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalDashboard', [\App\Models\User::class]))
+                <div class="bg-secondary-background border-borders flex flex-col items-start gap-4 rounded-lg border p-4 shadow-sm sm:p-6">
+                    <h2 class="text-main-text font-heading text-left text-base font-semibold sm:text-lg">Visualizar Lista de Feedbacks</h2>
+
+                    <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">Visualize os feedbacks escritos pelos seus funcionários e extraia insights valiosos a partir de opiniões e sugestões que ajudam a aprimorar os processos internos da sua empresa.</p>
+
+                    <x-actions.button :href="route('organizational.feedback')" class="w-full">
+                        <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Lista de Feedbacks</span>
                     </x-actions.button>
                 </div>
             @endif

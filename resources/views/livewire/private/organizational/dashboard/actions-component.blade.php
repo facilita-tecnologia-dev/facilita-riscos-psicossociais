@@ -7,19 +7,23 @@
         </div>
     </header>
 
-    <div class="flex flex-col md:flex-row xl:flex-col gap-3">
-        @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\UserFeedback::class]))
-            <x-actions.button :href="route('organizational.feedback')" class="w-full">
-                <span class="font-heading text-main-background text-center text-sm font-semibold">Visualizar Lista de Feedbacks</span>
-            </x-actions.button>
-        @endif
+    @if($organizationalCampaign->start_date->year == now()->year)
+        <div class="flex flex-col md:flex-row xl:flex-col gap-3">
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\UserFeedback::class]))
+                <x-actions.button :href="route('organizational.feedback')" class="w-full">
+                    <span class="font-heading text-main-background text-center text-sm font-semibold">Visualizar Lista de Feedbacks</span>
+                </x-actions.button>
+            @endif
 
-        @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalCustomCollections', [\App\Models\User::class]))
-            <x-actions.button :href="route('organizational.custom-collection.index')" class="w-full">
-                <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>
-            </x-actions.button>
-        @endif
+            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalCustomCollections', [\App\Models\User::class]))
+                <x-actions.button :href="route('organizational.custom-collection.index')" class="w-full">
+                    <span class="font-heading text-main-background text-center text-sm font-semibold">Acesar Página de Formulários</span>
+                </x-actions.button>
+            @endif
 
-        <livewire:private.organizational.dashboard.generate-report-component :campaign="$organizationalCampaign" />
-    </div>
+            <livewire:private.organizational.dashboard.generate-report-component :campaign="$organizationalCampaign" />
+        </div>
+    @else
+        <span class="text-secondary-text font-heading text-left text-sm font-normal">Não há ações disponíveis</span>
+    @endif
 </div>

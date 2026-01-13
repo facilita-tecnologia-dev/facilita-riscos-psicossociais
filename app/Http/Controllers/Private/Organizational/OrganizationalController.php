@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers\Private\Organizational;
 
-use App\Enums\OC\OCEvaluation;
-use App\Enums\OC\OCVisualization;
 use App\Models\Campaign;
 use App\Models\CustomCollection;
 use App\Models\User;
 use App\Models\UserFeedback;
 use App\Services\Auth\AuthenticationService;
-use App\Services\Organizational\OrganizationalService;
 use Illuminate\Support\Facades\Gate;
 
 class OrganizationalController
 {
-    public function dashboard()
+    public function dashboard(?Campaign $campaign = null)
     {
-        Gate::forUser(AuthenticationService::user())->authorize('organizationalDashboard', [User::class]);
-        return view('private.organizational.dashboard.index');
+        if($campaign) Gate::forUser(AuthenticationService::user())->authorize('organizationalDashboard', $campaign);
+        return view('private.organizational.dashboard.index', ['campaign'=> $campaign]);
     }
 
     public function feedback()

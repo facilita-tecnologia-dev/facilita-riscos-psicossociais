@@ -7,11 +7,11 @@
             <div class="bg-borders h-0.5 w-8"></div>
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialDashboard', [\App\Models\User::class]))
-                <x-actions.nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" tooltip="Riscos Psicossociais" />
+                <x-actions.nav-item :href="route('psychosocial.dashboard', session('auth:company')->latestPsychosocialCampaign())" icon="brain" activeRoute="psychosocial.*" tooltip="Riscos Psicossociais" />
             @endif
             
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalDashboard', [\App\Models\User::class]))
-                <x-actions.nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" tooltip="Pesquisa de Clima Organizacional" />
+                <x-actions.nav-item :href="route('organizational.dashboard', session('auth:company')->latestOrganizationalCampaign())" icon="cloud" activeRoute="organizational.*" tooltip="Pesquisa de Clima Organizacional" />
             @endif
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\Campaign::class]))
@@ -43,11 +43,11 @@
 
             
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialDashboard', [\App\Models\User::class]))
-                <x-actions.mobile-nav-item :href="route('psychosocial.dashboard')" icon="brain" activeRoute="psychosocial.*" label="Riscos Psicossociais" />
+                <x-actions.mobile-nav-item :href="route('psychosocial.dashboard', session('auth:company')->latestPsychosocialCampaign())" icon="brain" activeRoute="psychosocial.*" label="Riscos Psicossociais" />
             @endif
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalDashboard', [\App\Models\User::class]))
-                <x-actions.mobile-nav-item :href="route('organizational.dashboard')" icon="cloud" activeRoute="organizational.*" label="Clima Organizacional" />
+                <x-actions.mobile-nav-item :href="route('organizational.dashboard', session('auth:company')->latestOrganizationalCampaign())" icon="cloud" activeRoute="organizational.*" label="Clima Organizacional" />
             @endif
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\Campaign::class]))

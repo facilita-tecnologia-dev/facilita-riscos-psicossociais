@@ -72,7 +72,7 @@
                                 <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activePsychosocialCampaign->name }}</span>
                             </div>
                             
-                            <x-actions.button :href="route('psychosocial.dashboard')" fitSize>
+                            <x-actions.button :href="route('psychosocial.dashboard', session('auth:company')->latestPsychosocialCampaign())" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Acompanhar resultados</span>
                             </x-actions.button>
                         </li>
@@ -84,7 +84,7 @@
                                 <x-icon icon="cloud" class="text-primary-solid h-7 w-7 object-scale-down" />
                                 <span class="text-main-text font-heading flex-1 text-left text-sm font-normal sm:text-base lg:text-lg">{{ $activeOrganizationalCampaign->name }}</span>
                             </div>
-                            <x-actions.button :href="route('organizational.dashboard')" fitSize>
+                            <x-actions.button :href="route('organizational.dashboard', session('auth:company')->latestOrganizationalCampaign())" fitSize>
                                 <span class="text-main-background text-center text-sm font-semibold">Acompanhar resultados</span>
                             </x-actions.button>
                         </li>

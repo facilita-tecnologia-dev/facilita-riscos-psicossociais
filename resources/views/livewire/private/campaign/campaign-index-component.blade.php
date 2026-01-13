@@ -80,6 +80,10 @@
                                 <x-info-item label="Data" value="{{ $campaign->start_date->format('d/m/Y') . ' - ' . $campaign->end_date->format('d/m/Y') }}" truncate />
                                 <x-info-item label="Descrição" :value="$campaign->description ?? 'Sem descrição'" truncate />
                             </div>
+
+                            <x-actions.button :href="$campaign->collection()->type === App\Enums\Campaign\CollectionType::PSYCHOSOCIAL ? route('psychosocial.dashboard', $campaign) : route('organizational.dashboard', $campaign)">
+                                <span class="text-main-background text-center text-sm font-semibold">Visualizar resultados</span>
+                            </x-actions.button>
                         </div>
                     @endforeach
                 </div>

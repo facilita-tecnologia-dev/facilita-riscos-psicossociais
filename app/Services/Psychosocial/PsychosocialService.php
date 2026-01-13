@@ -11,6 +11,8 @@ class PsychosocialService
 {
     public static function dashboard(Campaign $campaign, string $evaluation_type, ?string $element = null, array $filters = [])
     {
+        if(!$campaign->userCollections()->count()) return collect();
+        
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $allowedDepartments = [];
@@ -28,6 +30,8 @@ class PsychosocialService
 
     public static function report(Campaign $campaign, string $evaluation_type, string $format, string $cache_key)
     {
+        if(!$campaign->userCollections()->count()) return collect();
+
         try {
             $company = session('auth:company');
             $report = $company->actionPlan;
@@ -68,9 +72,9 @@ class PsychosocialService
                         ->questions()
                         ->when(
                             session('auth:guard') === 'user',
-                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id, $campaign->id),
                             fn($q) => $q->with(['answers' => fn($a) =>
-                                    $a->where('company_id', session('auth:company')->id)->with('user')
+                                    $a->where('campaign_id', $campaign->id)->where('company_id', session('auth:company')->id)->with('user')
                             ])
                         )
                         ->get()
@@ -163,9 +167,9 @@ class PsychosocialService
                         ->questions()
                         ->when(
                             session('auth:guard') === 'user',
-                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id, $campaign->id),
                             fn($q) => $q->with(['answers' => fn($a) =>
-                                    $a->where('company_id', session('auth:company')->id)->with('user')
+                                    $a->where('campaign_id', $campaign->id)->where('company_id', session('auth:company')->id)->with('user')
                             ])
                         )
                         ->get()
@@ -263,9 +267,9 @@ class PsychosocialService
                         ->questions()
                         ->when(
                             session('auth:guard') === 'user',
-                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id, $campaign->id),
                             fn($q) => $q->with(['answers' => fn($a) =>
-                                    $a->where('company_id', session('auth:company')->id)->with('user')
+                                    $a->where('campaign_id', $campaign->id)->where('company_id', session('auth:company')->id)->with('user')
                             ])
                         )
                         ->get()
@@ -359,9 +363,9 @@ class PsychosocialService
                         ->questions()
                         ->when(
                             session('auth:guard') === 'user',
-                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id),
+                            fn($q) => self::filterDepartmentScopes($q, $allowedDepartments, session('auth:company')->id, $campaign->id),
                             fn($q) => $q->with(['answers' => fn($a) =>
-                                    $a->where('company_id', session('auth:company')->id)->with('user')
+                                    $a->where('campaign_id', $campaign->id)->where('company_id', session('auth:company')->id)->with('user')
                             ])
                         )
                         ->get()
@@ -505,11 +509,12 @@ class PsychosocialService
         ]);
     }
 
-    public static function filterDepartmentScopes($query, array $allowedDepartments, int $company_id)
+    public static function filterDepartmentScopes($query, array $allowedDepartments, int $company_id, int $campaign_id)
     {
         return $query
-            ->whereHas('answers', function ($a) use ($company_id, $allowedDepartments) {
+            ->whereHas('answers', function ($a) use ($company_id, $campaign_id, $allowedDepartments) {
                 $a->where('company_id', $company_id)
+                ->where('campaign_id', $campaign_id)
                 ->whereHas('user', function ($u) use ($allowedDepartments) {
                     $u->whereIn('department', $allowedDepartments)
                         ->whereNotNull('department')
@@ -517,8 +522,9 @@ class PsychosocialService
                 });
             })
             ->with([
-                'answers' => function ($a) use ($company_id, $allowedDepartments) {
+                'answers' => function ($a) use ($company_id, $campaign_id, $allowedDepartments) {
                     $a->where('company_id', $company_id)
+                    ->where('campaign_id', $campaign_id)
                     ->whereHas('user', function ($u) use ($allowedDepartments) {
                         $u->whereIn('department', $allowedDepartments)
                             ->whereNotNull('department')
