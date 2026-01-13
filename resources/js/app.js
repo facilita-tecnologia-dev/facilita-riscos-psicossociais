@@ -117,14 +117,19 @@ function initializeToastr() {
 
 function initializeLGPDBar() {
     const LGPDBar = document.querySelector('[data-role="lgpd-bar"]');
-    const LGPDAcceptButton = LGPDBar?.querySelector("button");
+
+    if (!LGPDBar) {
+        return;
+    }
+
+    const LGPDAcceptButton = LGPDBar.querySelector("button");
 
     if (!getCookie("lgpd_consent")) {
         LGPDBar.style.display = "flex";
     }
 
     if (LGPDAcceptButton) {
-        LGPDAcceptButton.addEventListener("click", function () {
+        LGPDAcceptButton.addEventListener("click", () => {
             setCookie("lgpd_consent", "1", 30);
             LGPDBar.style.display = "none";
         });
@@ -456,7 +461,6 @@ function heroSectionSwiper() {
         swiper.allowTouchMove = window.innerWidth < 640;
     });
 }
-
 
 function ourMetodolodySwiper() {
     const sliderContainer = document.querySelector(".our-metodology-swiper");
