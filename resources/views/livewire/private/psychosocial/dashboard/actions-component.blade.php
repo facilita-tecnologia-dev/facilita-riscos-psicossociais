@@ -7,7 +7,7 @@
         </div>
     </header>
 
-    @if($psychosocialCampaign->start_date->year == now()->year)
+    {{-- @if($psychosocialCampaign->start_date->year == now()->year) --}}
         <div class="flex flex-col md:flex-row xl:flex-col gap-3">
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialControlActions', [\App\Models\User::class]))
                 <x-actions.button :href="route('psychosocial.control-action')" class="w-full">
@@ -29,7 +29,7 @@
 
             <livewire:private.psychosocial.report.generate-report-component :campaign="$psychosocialCampaign">
         </div>
-    @else
+    {{-- @else
         <span class="text-secondary-text font-heading text-left text-sm font-normal">Não há ações disponíveis</span>
-    @endif
+    @endif --}}
 </div>

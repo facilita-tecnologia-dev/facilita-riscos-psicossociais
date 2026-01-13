@@ -7,7 +7,7 @@
         </div>
     </header>
 
-    @if($organizationalCampaign->start_date->year == now()->year)
+    {{-- @if($organizationalCampaign->start_date->year == now()->year) --}}
         <div class="flex flex-col md:flex-row xl:flex-col gap-3">
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\UserFeedback::class]))
                 <x-actions.button :href="route('organizational.feedback')" class="w-full">
@@ -23,7 +23,7 @@
 
             <livewire:private.organizational.dashboard.generate-report-component :campaign="$organizationalCampaign" />
         </div>
-    @else
+    {{-- @else
         <span class="text-secondary-text font-heading text-left text-sm font-normal">Não há ações disponíveis</span>
-    @endif
+    @endif --}}
 </div>

@@ -5,6 +5,7 @@ namespace App\Services\ReportChannel;
 use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Models\Company;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ReportChannelService
 {
@@ -25,11 +26,26 @@ class ReportChannelService
 
     public static function hasReportChannel(Company $company)
     {
+        try {
         $response = Http::post(env('REPORT_CHANNEL_URL') . '/api/company/check', [
             'cnpj' => $company->cnpj,
         ]); 
 
-        return $response->json();
+        if (! $response->successful()) {
+            return false;
+        }
+
+        return (bool) $response->json();
+        } catch (\Throwable $e) {
+            // Loga o erro para análise
+            Log::error('Erro ao checar empresa no canal de denúncias', [
+                'company_id' => $company->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            
+            return false;
+        }
     }
 
     public static function allReports()
