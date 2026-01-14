@@ -22,7 +22,7 @@ class CompanyShowComponent extends Component
     
     public $helper_video;
 
-    #[Validate('mimes:mp4,mov,avi,wmv,mkv|max:20480')] // 20MB Max
+    #[Validate('mimes:mp4,mov,avi,wmv,mkv|max:20480')]
     public $new_helper_video;
 
     public Collection $campaigns;
