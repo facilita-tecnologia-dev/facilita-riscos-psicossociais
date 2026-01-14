@@ -44,7 +44,7 @@ class CompanyShowComponent extends Component
             ['label' => MetodologyType::PROART->label(), 'value' => MetodologyType::PROART->value],
         ];
 
-        $this->campaigns = $company->campaigns->sortByDesc('start_date')->each(function($campaign) use($company) {
+        $this->campaigns = $company->campaigns()->get()->sortByDesc('start_date')->each(function($campaign) use($company) {
             $totalCompanyUsers = $company->users()                
                 ->select('users.id', 'users.department', 'users.occupation')
                 ->count();
