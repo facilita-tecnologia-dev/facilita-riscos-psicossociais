@@ -36,6 +36,8 @@ class CompanyShowComponent extends Component
     {
         $this->company = $company;
 
+        $this->campaigns = collect();
+
         $this->psychosocialMetodology = $company->psychosocial_collection_type;
         $this->psychosocialMetodologies = [
             ['label' => MetodologyType::HSE->label(), 'value' => MetodologyType::HSE->value],

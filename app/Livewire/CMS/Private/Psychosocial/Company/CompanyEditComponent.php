@@ -40,7 +40,6 @@ class CompanyEditComponent extends Component
     public function mount(Company $company)
     {
         $this->company = $company;
-        $this->campaigns = collect();
 
         /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
         $s3 = Storage::disk('s3');
