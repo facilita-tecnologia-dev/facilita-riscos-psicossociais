@@ -4,6 +4,7 @@ namespace App\Livewire\Cms\Private\Psychosocial\Company;
 
 use App\Enums\Campaign\MetodologyType;
 use App\Models\Company;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
@@ -24,6 +25,8 @@ class CompanyShowComponent extends Component
     #[Validate('mimes:mp4,mov,avi,wmv,mkv|max:20480')] // 20MB Max
     public $new_helper_video;
 
+    public Collection $campaigns;
+
     public function render()
     {
         return view('livewire.cms.private.psychosocial.company.company-show-component');
@@ -38,6 +41,20 @@ class CompanyShowComponent extends Component
             ['label' => MetodologyType::HSE->label(), 'value' => MetodologyType::HSE->value],
             ['label' => MetodologyType::PROART->label(), 'value' => MetodologyType::PROART->value],
         ];
+
+        $this->campaigns = $company->campaigns->sortByDesc('start_date')->each(function($campaign) use($company) {
+            $totalCompanyUsers = $company->users()                
+                ->select('users.id', 'users.department', 'users.occupation')
+                ->count();
+
+            $totalCampaignRespondents =  $campaign->userCollections()
+                ->with('user:id,department,occupation')
+                ->count();
+
+            $generalEngagement =  $totalCompanyUsers > 0 ? round(($totalCampaignRespondents / $totalCompanyUsers) * 100) : 0;
+
+            $campaign->engagement = $generalEngagement;
+        });
     }
 
     #[On('company:update')]

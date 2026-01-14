@@ -6,6 +6,7 @@ use App\Enums\Campaign\CampaignStatus;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
 use App\Services\ReportChannel\ReportChannelService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
