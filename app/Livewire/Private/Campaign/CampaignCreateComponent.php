@@ -4,6 +4,7 @@ namespace App\Livewire\Private\Campaign;
 
 use App\Models\CustomCollection;
 use App\Repositories\CampaignRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -44,7 +45,11 @@ class CampaignCreateComponent extends Component
         $validatedData = $this->validate([
             'name' => ['required', 'string', 'min:8', 'max:255'],
             'collection_id' => ['required'],
-            'start_date' => ['required', 'date', Rule::date()->afterOrEqual(now())],
+            'start_date' => ['required', 'date',    function ($attribute, $value, $fail) {
+                if (Carbon::createFromFormat('Y-m-d\TH:i', $value)->lt(now()->addMinutes(5))) {
+                    $fail('A data inicial deve ser pelo menos 5 minutos após o horário atual.');}
+            }
+            ],
             'end_date' => ['required', 'date', 'after:start_date'],
             'description' => ['nullable', 'string', 'max:512'],
         ]);

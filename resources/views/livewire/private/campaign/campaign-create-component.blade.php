@@ -6,8 +6,8 @@
             <x-form.input-text wireModel="name" name="name" label="Nome da Campanha" placeholder="Digite o nome da campanha..." tooltip="Digite o nome da campanha" isRequired />
             <x-form.select wireModel="collection_id" name="collection_id" label="Tipo de Campanha" placeholder="Selecione o tipo de campanha" tooltip="Selecione o tipo de campanha" :options="$collections" isRequired />
             
-            <x-form.input-datetime wireModel="start_date" name="start_date" label="Data de Início" tooltip="Escolha a data de início da campanha" value="{{ \Carbon\Carbon::now()->addMinutes(15)->format('Y-m-d\TH:i') }}"  min="{{ \Carbon\Carbon::now()->format('Y-m-d\TH:i') }}" isRequired />
-            <x-form.input-datetime wireModel="end_date" name="end_date" label="Data de Encerramento" tooltip="Escolha a data de encerramento da campanha" value="{{ \Carbon\Carbon::now()->addDay()->format('Y-m-d\TH:i') }}" min="{{ \Carbon\Carbon::now()->addHours(1)->format('Y-m-d\TH:i') }}" isRequired />
+            <x-form.input-datetime wireModel="start_date" name="start_date" label="Data de Início" tooltip="Escolha a data de início da campanha" isRequired />
+            <x-form.input-datetime wireModel="end_date" name="end_date" label="Data de Encerramento" tooltip="Escolha a data de encerramento da campanha" isRequired />
             
             <div class="lg:col-span-2">
                 <x-form.textarea wireModel="description" name="description" label="Descrição da Campanha" placeholder="Digite uma descrição para a campanha..." tooltip="Digite uma descrição para a campanha" />
