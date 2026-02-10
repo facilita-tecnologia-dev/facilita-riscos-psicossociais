@@ -88,7 +88,7 @@
                             <tbody>
                                 <tr>
                                     <td style="width: 40%">
-                                        <span style="font-size: 8px; display: block; margin: 0 2px 0 2px">Setor: {{ $occupation }}</span>
+                                        <span style="font-size: 8px; display: block; margin: 0 2px 0 2px">Função: {{ $occupation }}</span>
                                         <p>Perigo Psicossocial:</p>
                                         <span style="font-weight: bold; margin: 2px">{{ App\Enums\Psychosocial\HSE\HSEHazard::from($hazard)->label() }}</span>
                                     </td>
