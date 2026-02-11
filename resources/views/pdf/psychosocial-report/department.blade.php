@@ -66,6 +66,83 @@
 
         <div class="page-break"></div>
 
+        @if($company->usesHSE())
+            <div style="margin-bottom: 24px">
+                <h2 style="margin-bottom: 16px">Objetivo</h2>
+
+                <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">O objetivo deste Inventário é consolidar e apresentar, de forma estruturada e sistematizada, os riscos psicossociais identificados a partir da avaliação realizada com base nas respostas agregadas dos colaboradores. O documento tem como finalidade organizar os perigos mapeados por grupos de risco, evidenciando os fatores organizacionais que podem impactar a saúde mental, emocional e social dos trabalhadores, em conformidade com a NR-1.</p>
+            </div>
+
+            <div style="margin-bottom: 24px">
+                <h2 style="margin-bottom: 16px">Metodologia</h2>
+
+                <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">A metodologia adotada para a avaliação dos riscos psicossociais baseia-se na organização e análise estruturada das respostas coletadas por meio de formulários, considerando grupos de perigos previamente definidos e fatores organizacionais como setor e função. Os dados são tratados de forma agregada, permitindo avaliar contextos de trabalho e não indivíduos. A partir dessa organização, um mecanismo técnico realiza a análise dos resultados conforme critérios específicos para cada tipo de perigo, podendo considerar informações complementares de saúde ocupacional quando disponíveis, garantindo coerência normativa, consistência técnica e maior precisão na identificação dos níveis de risco.</p>
+            </div>
+
+            <div style="margin-bottom: 24px">
+                <h2 style="margin-bottom: 16px">Matriz de Risco</h2>
+
+                <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">
+                    A matriz de risco é o instrumento utilizado para classificar e representar o nível de risco psicossocial identificado após a etapa de avaliação. Ela combina a probabilidade estimada de ocorrência com a gravidade previamente definida de cada perigo, permitindo posicionar o risco em níveis que facilitam sua interpretação.
+                </p>
+
+                <table style="border-radius: 8px; margin-top: 16px;">
+                    <thead>
+                        <th style="background-color: #E0E0E0; font-weight: bold;">Matriz de Risco</th>
+                        <th style="background-color: #E0E0E0; font-weight: normal;">Leve</th>
+                        <th style="background-color: #E0E0E0; font-weight: normal;">Baixa</th>
+                        <th style="background-color: #E0E0E0; font-weight: normal;">Moderada</th>
+                        <th style="background-color: #E0E0E0; font-weight: normal;">Alta</th>
+                        <th style="background-color: #E0E0E0; font-weight: normal;">Extrema</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="background-color: #E0E0E0;">Muito Improvável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TRIVIAL->color() }};">Trivial</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TRIVIAL->color() }};">Trivial</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TOLERABLE->color() }};">Tolerável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->color() }};">Moderado</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->color() }};">Moderado</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #E0E0E0;">Improvável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TRIVIAL->color() }};">Trivial</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TOLERABLE->color() }};">Tolerável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->color() }};">Moderado</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->color() }};">Moderado</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::SUBSTANTIAL->color() }};">Substancial</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #E0E0E0;">Possível</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TRIVIAL->color() }};">Trivial</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TOLERABLE->color() }};">Tolerável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->color() }};">Moderado</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::SUBSTANTIAL->color() }};">Substancial</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::INTOLERABLE->color() }};">Intolerável</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #E0E0E0;">Provável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TOLERABLE->color() }};">Tolerável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TOLERABLE->color() }};">Tolerável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->color() }};">Moderado</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::SUBSTANTIAL->color() }};">Substancial</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::INTOLERABLE->color() }};">Intolerável</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #E0E0E0;">Muito Provável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::TOLERABLE->color() }};">Tolerável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->color() }};">Moderado</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::SUBSTANTIAL->color() }};">Substancial</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::INTOLERABLE->color() }};">Intolerável</td>
+                            <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::INTOLERABLE->color() }};">Intolerável</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-break"></div>
+        @endif
+        
         @foreach ($risks as $department => $departmentRisks)
             <table>
                 <thead>

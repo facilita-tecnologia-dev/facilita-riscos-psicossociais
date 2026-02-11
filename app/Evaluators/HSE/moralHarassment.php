@@ -45,7 +45,7 @@ class moralHarassment
             if($absences->isNotEmpty()) $hasCIDAbsences = true;
         }
 
-        $probability = min(5, $initialProbability + $baseline +  $modifiers);
+        $probability = max(1, min(5, $initialProbability + $baseline + $modifiers));
 
         return [
             'probability' => $probability,

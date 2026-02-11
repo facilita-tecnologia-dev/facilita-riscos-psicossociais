@@ -45,6 +45,7 @@ class CompanyRegisterComponent extends Component
                     'email' => $this->email,
                     'password' => Hash::make($this->password),
                     'psychosocial_collection_type' => MetodologyType::HSE->value,
+                    'has_cids' => true,
                 ]);
 
                 $this->createMetrics($company);

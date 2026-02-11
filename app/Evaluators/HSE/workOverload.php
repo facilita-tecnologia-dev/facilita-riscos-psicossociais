@@ -28,8 +28,7 @@ class workOverload
         $initialProbability = HSERiskService::scoreToProbability($score, inverted: true);
         $baseline = $absences->isNotEmpty() ? $hazard->baseline : 0;
         $modifiers = HSERiskService::modifiers($absences, $evaluationType, $evaluationFactor); 
-
-        $probability = min(5, $initialProbability + $baseline +  $modifiers);
+        $probability = max(1, min(5, $initialProbability + $baseline + $modifiers));
 
         return $probability;
     }

@@ -63,7 +63,7 @@ class PsychosocialService
 
     public static function HSEDepartments(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
-        session('auth:company', [session('auth:company')->load(['actionPlan'])]);
+        session('auth:company', [session('auth:company')->load(['actionPlan', 'CIDAbsences'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $hazards = $campaign->collection()->hazards->groupBy('group');
@@ -158,7 +158,7 @@ class PsychosocialService
 
     public static function HSEOccupations(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
-        session('auth:company', [session('auth:company')->load(['actionPlan'])]);
+        session('auth:company', [session('auth:company')->load(['actionPlan', 'CIDAbsences'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $hazards = $campaign->collection()->hazards->groupBy('group');

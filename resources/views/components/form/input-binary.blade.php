@@ -20,8 +20,8 @@
         @foreach ($options as $key => $option)
             <div class="w-full">
                 <input type="radio" name="{{ $name }}" id="{{ $name . '_' . $key }}" @if($wireModelType === 'defer') wire:model.defer="{{ $wireModel }}" @endif @if($wireModelType === 'live') wire:model.live="{{ $wireModel }}" @endif value="{{ $option['value'] }}" class="peer hidden" {{ old($name) == $option['value'] || $value == $option['value'] ? 'checked' : '' }} />
-                <label for="{{ $name . '_' . $key }}" class="bg-secondary-background border-borders peer-checked:border-primary-solid flex w-full cursor-pointer items-center justify-between rounded-sm border p-3 transition hover:brightness-95">
-                    <span class="text-main-text text-left text-sm font-normal">{{ $option['label'] }}</span>
+                <label for="{{ $name . '_' . $key }}" class="bg-secondary-background text-main-text border-borders peer-checked:bg-primary-solid peer-checked:text-main-background flex w-full cursor-pointer items-center justify-between rounded-sm border p-3 transition hover:brightness-95">
+                    <span class="text-left text-sm font-normal">{{ $option['label'] }}</span>
                 </label>
             </div>
         @endforeach

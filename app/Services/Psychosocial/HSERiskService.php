@@ -82,15 +82,12 @@ class HSERiskService
 
     public static function modifiers(Collection $absences, EvaluationTypes $evaluationType = EvaluationTypes::DEPARTMENT, ?string $evaluationFactor = null)
     {
-        $twoLeaves = $absences->count() >= 2;
-        $fifteenDaysLeave = $absences->where('duration', '>=', 15)->isNotEmpty();
-        $multiLeaves = $absences->where($evaluationType->value, $evaluationFactor)->isNotEmpty();
-        
-        $sum = 0;
+        $hasLeave = $absences->where($evaluationType->value, $evaluationFactor)->isNotEmpty();
+        $hasFifteenDaysLeave = $absences->where($evaluationType->value, $evaluationFactor)->where('duration', '>=', 15)->isNotEmpty();
 
-        if($twoLeaves && !$multiLeaves) $sum += 1;
-        if($multiLeaves) $sum += 2;
-        if($fifteenDaysLeave) $sum += 1;
+        $sum = 0;
+        if($hasLeave) {$sum += 1;} else {$sum -= 1;}
+        if($hasFifteenDaysLeave) $sum += 1;
         
         return $sum;
     }
