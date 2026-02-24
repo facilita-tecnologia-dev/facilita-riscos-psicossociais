@@ -44,19 +44,7 @@ class CompanyShowComponent extends Component
             ['label' => MetodologyType::PROART->label(), 'value' => MetodologyType::PROART->value],
         ];
 
-        $this->campaigns = $company->campaigns()->get()->sortByDesc('start_date')->each(function($campaign) use($company) {
-            $totalCompanyUsers = $company->users()                
-                ->select('users.id', 'users.department', 'users.occupation')
-                ->count();
-
-            $totalCampaignRespondents =  $campaign->userCollections()
-                ->with('user:id,department,occupation')
-                ->count();
-
-            $generalEngagement =  $totalCompanyUsers > 0 ? round(($totalCampaignRespondents / $totalCompanyUsers) * 100) : 0;
-
-            $campaign->engagement = $generalEngagement;
-        });
+        $this->campaigns = $company->campaigns()->get()->sortByDesc('start_date');
     }
 
     #[On('company:update')]

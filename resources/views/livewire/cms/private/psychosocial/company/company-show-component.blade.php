@@ -106,9 +106,7 @@
         @if (isset($campaigns) && $campaigns->count())
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 items-start">
                 @foreach ($campaigns as $campaign)
-                    @php
-                        $engagementLevel = App\Enums\Campaign\EngagementLevel::fromPercentage($campaign->engagement);
-                    @endphp
+
                     <div class="p-6 rounded-2xl bg-secondary-background border border-borders shadow-sm flex flex-col gap-4">
                         <header class="flex justify-between items-start">
                             <div class="w-14 h-14 bg-primary-solid rounded-full flex items-center justify-center">
@@ -126,16 +124,6 @@
                         </header>
 
                         <div class="flex flex-col gap-3">
-                            <div id="percentage" class="space-y-1.5">
-                                <header class="flex items-center justify-between">
-                                    <span style="color: {{ $engagementLevel->color() }}" class="font-heading text-left text-sm font-semibold">Adesão {{ $engagementLevel->value }} ({{ $campaign->userCollections->count() }} respondentes)</span>
-                                    <span style="color: {{ $engagementLevel->color() }}" class="font-heading text-right text-sm font-semibold">{{ $campaign->engagement }}%</span>
-                                </header>
-
-                                <div class="bg-borders h-1 w-full rounded-full">
-                                    <div style="background-color: {{ $engagementLevel->color() }}; width: {{ $campaign->engagement }}%" class="h-full rounded-full"></div>
-                                </div>
-                            </div>
                             <x-info-item label="Nome da Campanha" :value="$campaign->name" truncate />
                             <x-info-item label="Data" value="{{ $campaign->start_date->format('d/m/Y') . ' - ' . $campaign->end_date->format('d/m/Y') }}" truncate />
                         </div>
