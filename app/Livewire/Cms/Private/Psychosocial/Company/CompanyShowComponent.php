@@ -90,7 +90,10 @@ class CompanyShowComponent extends Component
     {
         /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
         $s3 = Storage::disk('s3');
-        $this->helper_video = $s3->temporaryUrl($this->company->test_helper_video, now()->addMinutes(5));
+
+        if($this->company->test_helper_video){
+            $this->helper_video = $s3->temporaryUrl($this->company->test_helper_video, now()->addMinutes(5));
+        }
     }
 
     public function deleteHelperVideo()
