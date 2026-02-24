@@ -23,7 +23,7 @@
 
         {{-- Video Modal --}}
         <div x-show="videoModalOpen" x-transition.opacity x-cloak class="fixed inset-0 bg-black/60 flex items-center justify-center z-30 px-4">
-            <div x-on:click.away="$wire.closeVideoModal()" class="bg-secondary-background border-borders flex flex-col gap-6 rounded-lg border p-6 shadow-sm w-full max-w-2xl">
+            <div x-on:click.away="$wire.closeVideoModal()" class="bg-secondary-background border-borders flex flex-col rounded-lg border p-6 shadow-sm w-[80vw] h-[80vh]">
                 <header class="flex w-full items-center justify-between">
                     <h2 class="font-heading text-main-text text-left text-lg font-semibold">Video de demonstração</h2>
 
@@ -33,7 +33,14 @@
                 </header>
 
                 @if ($videoUrl)
-                    <video src="{{ $videoUrl }}" controls autoplay class="w-full object-contain rounded-sm"></video>
+                    <div class="flex-1 min-h-0 flex items-center justify-center">
+                        <video 
+                            src="{{ $videoUrl }}" 
+                            controls 
+                            autoplay 
+                            class="max-h-full max-w-full object-contain rounded-sm">
+                        </video>
+                    </div>
                 @else
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 @endif
