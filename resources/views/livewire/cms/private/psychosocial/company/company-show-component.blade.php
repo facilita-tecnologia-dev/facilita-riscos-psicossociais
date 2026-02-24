@@ -55,7 +55,7 @@
                     <div class="flex w-full flex-1 items-center justify-center">
                         @if ($company->test_helper_video)
                             @if ($helper_video)
-                                <video src="{{ $helper_video }}" controls autoplay muted class="w-full rounded-sm object-contain"></video>
+                                <video src="{{ $helper_video }}" controls autoplay muted class="w-full max-h-48 rounded-sm object-contain"></video>
                             @else
                                 <x-icon icon="loading" class="text-secondary-text h-4 w-4 animate-spin object-scale-down" />
                             @endif

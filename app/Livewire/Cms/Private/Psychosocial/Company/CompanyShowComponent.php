@@ -22,7 +22,7 @@ class CompanyShowComponent extends Component
     
     public $helper_video;
 
-    #[Validate('mimes:mp4,mov,avi,wmv,mkv|max:20480')]
+    #[Validate('mimes:mp4,mov,avi,wmv,mkv|max:40960')]
     public $new_helper_video;
 
     public Collection $campaigns;
@@ -56,7 +56,7 @@ class CompanyShowComponent extends Component
     public function updateHelperVideo()
     {
         $this->validate([
-            'new_helper_video' => ['required', 'mimes:mp4,mov,avi,wmv,mkv', 'max:20480'],
+            'new_helper_video' => ['required', 'mimes:mp4,mov,avi,wmv,mkv', 'max:40960'],
         ]);
 
         /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
@@ -90,7 +90,7 @@ class CompanyShowComponent extends Component
     {
         /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
         $s3 = Storage::disk('s3');
-        $this->helper_video = $s3->temporaryUrl('videos-de-ajuda/video-template.mp4', now()->addMinutes(5));
+        $this->helper_video = $s3->temporaryUrl($this->company->test_helper_video, now()->addMinutes(5));
     }
 
     public function deleteHelperVideo()
