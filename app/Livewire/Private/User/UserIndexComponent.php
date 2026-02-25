@@ -10,8 +10,8 @@ use Livewire\Component;
 
 class UserIndexComponent extends Component
 {
-    public Campaign | null $latestPsychosocialCampaign;
-    public Campaign | null $latestOrganizationalCampaign;
+    public ?Campaign $latestPsychosocialCampaign = null;
+    public ?Campaign $latestOrganizationalCampaign = null;
 
     public $filters = [];
 
