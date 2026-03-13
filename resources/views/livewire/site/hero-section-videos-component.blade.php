@@ -12,7 +12,7 @@
                     </button>
                 </div>
 
-                <div class="swiper-slide cursor-pointer h-full !w-fit" data-video="{{ asset('assets/site/visualizar-dashboard-de-resultados.mp4') }}">
+                <div class="swiper-slide cursor-pointer h-full !w-fit" data-video="{{ asset('assets/site/visualizar-resultados.mp4') }}">
                     <button class="bg-main-background border-borders rounded-lg border-3 px-4 py-2 shadow-sm">
                         <span class="font-text text-main-text text-xs sm:text-sm">
                             Visualizar resultados
@@ -28,17 +28,17 @@
                     </button>
                 </div>
 
-                <div class="swiper-slide cursor-pointer h-full !w-fit" data-video="{{ asset('assets/site/gerenciar-colaboradores.mp4') }}" >
+                <div class="swiper-slide cursor-pointer h-full !w-fit" data-video="{{ asset('assets/site/gerenciar-funcionarios.mp4') }}" >
                     <button class="bg-main-background border-borders rounded-lg border-3 px-4 py-2 shadow-sm">
                         <span class="font-text text-main-text text-xs sm:text-sm">
-                            Gerenciar colaboradores
+                            Gerenciar funcionários
                         </span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="flex h-[160px] gap-2 sm:h-[210px] md:h-[245px] mt-4">
+        <div class="flex h-[170px] gap-2 sm:h-[220px] md:h-[260px] mt-4">
             <button class="custom-prev bg-main-background border-borders hidden w-[45px] cursor-pointer items-center justify-center rounded-lg border-3 shadow-sm transition hover:scale-[102%] sm:flex">
                 <x-icon icon="double-chevron-left" class="text-secondary-text h-6 w-6 object-scale-down" />
             </button>
