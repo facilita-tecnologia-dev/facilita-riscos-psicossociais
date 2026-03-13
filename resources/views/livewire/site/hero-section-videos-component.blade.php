@@ -4,7 +4,7 @@
             <div class="swiper-wrapper">
                 <div
                     class="swiper-slide cursor-pointer h-full !w-fit"
-                    data-video="{{ asset('assets/site/respondendo-testes.mp4') }}">
+                    data-video="{{ asset('assets/site/respondendo-campanha.mp4') }}">
                     <button class="bg-main-background border-borders rounded-lg border-3 px-4 py-2 shadow-sm">
                         <span class="font-text text-main-text text-xs sm:text-sm">
                             Responder testes
@@ -12,7 +12,7 @@
                     </button>
                 </div>
 
-                <div class="swiper-slide cursor-pointer h-full !w-fit" data-video="{{ asset('assets/site/visualizar-resultados.mp4') }}">
+                <div class="swiper-slide cursor-pointer h-full !w-fit" data-video="{{ asset('assets/site/visualizar-dashboard.mp4') }}">
                     <button class="bg-main-background border-borders rounded-lg border-3 px-4 py-2 shadow-sm">
                         <span class="font-text text-main-text text-xs sm:text-sm">
                             Visualizar resultados
@@ -20,7 +20,7 @@
                     </button>
                 </div>
 
-                <div class="swiper-slide cursor-pointer h-full !w-fit" data-video="{{ asset('assets/site/gerenciar-plano-de-acao.mp4') }}" >
+                <div class="swiper-slide cursor-pointer h-full !w-fit" data-video="{{ asset('assets/site/gerenciar-medidas-de-controle.mp4') }}" >
                     <button class="bg-main-background border-borders rounded-lg border-3 px-4 py-2 shadow-sm">
                         <span class="font-text text-main-text text-xs sm:text-sm">
                             Gerenciar Plano de Ação
