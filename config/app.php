@@ -124,6 +124,14 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'aws-company-logo-path' => env('AWS_COMPANY_LOGO_PATH'),
+    'aws-user-profile-photo-path' => env('AWS_USER_PROFILE_PHOTO_PATH'),
+    'aws-test-helper-video-path' => env('AWS_TEST_HELPER_VIDEO_PATH'),
+    'aws-action-plan-path' => env('AWS_ACTION_PLAN_PATH'),
+    'aws-organizational-report-path' => env('AWS_ORGANIZATIONAL_REPORT_PATH'),
+    'aws-import-user-template-path' => env('AWS_IMPORT_USER_TEMPLATE_PATH'),
+    'aws-documentation-path' => env('AWS_DOCUMENTATION_PATH'),
+
     'absence-deadline' => env('ABSENCE_DEADLINE', 24),
     
     'facilita-contact-email' => env('FACILITA_CONTACT_EMAIL'),
