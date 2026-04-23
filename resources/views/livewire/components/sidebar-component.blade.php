@@ -1,34 +1,52 @@
 <div class="contents" x-data="{ isSidebarMobileOpened: @entangle('isSidebarMobileOpened') }">
+    @php
+        $hasPsychosocial = Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialDashboard', [\App\Models\User::class]);
+        $hasOrganizational = Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalDashboard', [\App\Models\User::class]);
+        $hasCampaign = Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\Campaign::class]);
+
+        $hasFirstSection = $hasPsychosocial || $hasOrganizational || $hasCampaign;
+
+        $hasProfile = session('auth:guard') === 'user';
+        $hasCompany = Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('show', [\App\Models\Company::class, session('auth:company')]);
+        $hasDocumentation = Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('documentation', [\App\Models\User::class]);
+
+        $hasSecondSection = $hasProfile || $hasCompany || $hasDocumentation;
+    @endphp
+
     {{-- Desktop --}}
     <aside class="bg-secondary-background border-borders hidden h-full w-fit flex-col items-center justify-center border-r p-3 px-3 py-0 shadow-sm md:flex">
         <nav class="flex flex-col gap-4">
             <x-actions.nav-item :href="session('auth:guard') === 'user' ? route('home.user') : route('home.company')" icon="home" activeRoute="home.*" tooltip="Início" />
+            
+            @if($hasFirstSection)
+                <div class="bg-borders h-0.5 w-8"></div>
+            @endif
 
-            <div class="bg-borders h-0.5 w-8"></div>
-
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialDashboard', [\App\Models\User::class]))
+            @if($hasPsychosocial)
                 <x-actions.nav-item :href="route('psychosocial.dashboard', session('auth:company')->latestPsychosocialCampaign())" icon="brain" activeRoute="psychosocial.*" tooltip="Riscos Psicossociais" />
             @endif
             
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalDashboard', [\App\Models\User::class]))
+            @if($hasOrganizational)
                 <x-actions.nav-item :href="route('organizational.dashboard', session('auth:company')->latestOrganizationalCampaign())" icon="cloud" activeRoute="organizational.*" tooltip="Pesquisa de Clima Organizacional" />
             @endif
 
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\Campaign::class]))
+            @if($hasCampaign)
                 <x-actions.nav-item :href="route('campaign.index')" icon="calendar-clock" activeRoute="campaign.*" tooltip="Campanhas" />
             @endif
 
-            <div class="bg-borders h-0.5 w-8"></div>
-
-            @if(session('auth:guard') === 'user')
-                <x-actions.nav-item :href="route('user.show', session('auth:user'))" icon="profile" activeRoute="['user.show']" label="Meu perfil" />
+            @if($hasSecondSection)
+                <div class="bg-borders h-0.5 w-8"></div>
             @endif
 
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('show', [\App\Models\Company::class, session('auth:company')]))
+            @if($hasProfile)
+                <x-actions.nav-item :href="route('user.show', session('auth:user'))" icon="profile" activeRoute="['user.show']" tooltip="Meu perfil" />
+            @endif
+
+            @if($hasCompany)
                 <x-actions.nav-item :href="route('company.show', session('auth:company'))" icon="company" :activeRoute="['company.*', 'user.*']" tooltip="Empresa" />
             @endif
 
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('documentation', [\App\Models\User::class]))
+            @if($hasDocumentation)
                 <x-actions.nav-item :href="route('documentation.index')" icon="books" activeRoute="documentation.*" tooltip="Documentação" />
             @endif
         </nav>
@@ -39,32 +57,35 @@
         <nav class="flex w-full flex-col gap-4">
             <x-actions.mobile-nav-item :href="session('auth:guard') === 'user' ? route('home.user') : route('home.company')" icon="home" activeRoute="home.*" label="Início" />
 
-            <div class="bg-borders h-0.5 w-8"></div>
-
+            @if($hasFirstSection)
+                <div class="bg-borders h-0.5 w-8"></div>
+            @endif
             
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialDashboard', [\App\Models\User::class]))
+            @if($hasPsychosocial)
                 <x-actions.mobile-nav-item :href="route('psychosocial.dashboard', session('auth:company')->latestPsychosocialCampaign())" icon="brain" activeRoute="psychosocial.*" label="Riscos Psicossociais" />
             @endif
 
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalDashboard', [\App\Models\User::class]))
+            @if($hasOrganizational)
                 <x-actions.mobile-nav-item :href="route('organizational.dashboard', session('auth:company')->latestOrganizationalCampaign())" icon="cloud" activeRoute="organizational.*" label="Clima Organizacional" />
             @endif
 
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('viewAny', [\App\Models\Campaign::class]))
+            @if($hasCampaign)
                 <x-actions.mobile-nav-item :href="route('campaign.index')" icon="calendar-clock" activeRoute="campaign.*" label="Campanhas" />
             @endif
 
-            <div class="bg-borders h-0.5 w-8"></div>
+            @if($hasSecondSection)
+                <div class="bg-borders h-0.5 w-8"></div>
+            @endif
 
-            @if(session('auth:guard') === 'user')
+            @if($hasProfile)
                 <x-actions.mobile-nav-item :href="route('user.show', session('auth:user'))" icon="profile" activeRoute="['user.show']" label="Meu perfil" />
             @endif
 
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('show', [\App\Models\Company::class, session('auth:company')]))
+            @if($hasCompany)
                 <x-actions.mobile-nav-item :href="route('company.show', session('auth:company'))" icon="company" activeRoute="['company.*', 'user.*']"  label="Empresa" />
             @endif
 
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('documentation', [\App\Models\User::class]))
+            @if($hasDocumentation)
                 <x-actions.mobile-nav-item :href="route('documentation.index')" icon="books" activeRoute="documentation.*" label="Documentação" />
             @endif
         </nav>
