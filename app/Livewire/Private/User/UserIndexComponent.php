@@ -26,15 +26,18 @@ class UserIndexComponent extends Component
 
     public function mount()
     {
-        $this->latestPsychosocialCampaign = 
-            session("auth:company")->latestPsychosocialCampaign()?->start_date->year == now()->year
-            ? session("auth:company")->latestPsychosocialCampaign() :
-            null;
+        // $this->latestPsychosocialCampaign = 
+        //     session("auth:company")->latestPsychosocialCampaign()?->start_date->year == now()->year
+        //     ? session("auth:company")->latestPsychosocialCampaign() :
+        //     null;
             
-        $this->latestOrganizationalCampaign = 
-            session("auth:company")->latestOrganizationalCampaign()?->start_date->year == now()->year 
-            ? session("auth:company")->latestOrganizationalCampaign()
-            : null;
+        // $this->latestOrganizationalCampaign = 
+        //     session("auth:company")->latestOrganizationalCampaign()?->start_date->year == now()->year 
+        //     ? session("auth:company")->latestOrganizationalCampaign()
+        //     : null;
+
+        $this->latestPsychosocialCampaign = session("auth:company")->latestPsychosocialCampaign() ?? null;
+        $this->latestOrganizationalCampaign = session("auth:company")->latestOrganizationalCampaign() ?? null;
 
         if (session('auth:guard') === 'user') {
             $this->allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));

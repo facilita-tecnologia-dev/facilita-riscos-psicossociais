@@ -119,7 +119,7 @@ class ControlActionEditComponent extends Component
         if(session('auth:company')->usesHSE()){
             foreach ($this->controlActions as &$gravities) {
                 foreach ($gravities as &$actions) {
-                    foreach ($actions as $action) {
+                    foreach ($actions as &$action) {
                         if ($action['id'] == $controlAction['id']) {
                             $action = $controlAction;
                             break 3;
@@ -127,11 +127,12 @@ class ControlActionEditComponent extends Component
                     }
                 }
             }
+
         } else {
             foreach ($this->controlActions as &$gravities) {
                 foreach ($gravities as &$types) {
                     foreach ($types as &$actions) {
-                        foreach ($actions as $action) {
+                        foreach ($actions as &$action) {
                             if ($action['id'] == $controlAction['id']) {
                                 $action = $controlAction;
                                 break 4;

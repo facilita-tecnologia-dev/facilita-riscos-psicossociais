@@ -22,12 +22,19 @@ class ControlActionItemComponent extends Component
 
     public function mount(array $action)
     {
-        $this->action = CustomControlAction::find($action['id']);
-        $this->content = $action['content'];
+        // $this->action = CustomControlAction::find($action['id']);
+        // $this->content = $action['content'];
         
-        if($action['deadline']) $this->deadline = $action['deadline'];
-        if($action['assignee']) $this->assignee = $action['assignee'];
-        if($action['status']) $this->status = $action['status'];
+        // if($action['deadline']) $this->deadline = $action['deadline'];
+        // if($action['assignee']) $this->assignee = $action['assignee'];
+        // if($action['status']) $this->status = $action['status'];
+
+        $this->action = CustomControlAction::findOrFail($action['id']);
+
+        $this->content  = $this->action->content ?? '';
+        $this->deadline = $this->action->deadline ?? '';
+        $this->assignee = $this->action->assignee ?? '';
+        $this->status   = $this->action->status ?? '';
     }
 
     public function update()
@@ -43,6 +50,13 @@ class ControlActionItemComponent extends Component
             if (! $this->action->isDirty()) return;
     
             $this->action->save();
+
+            $this->action->refresh();
+
+            $this->content  = $this->action->content ?? '';
+            $this->deadline = $this->action->deadline ?? '';
+            $this->assignee = $this->action->assignee ?? '';
+            $this->status   = $this->action->status ?? '';
     
             $this->dispatch('control-action:update', $this->action->load(['hazard', 'type'])->toArray());
             $this->dispatch('alert:success', 'Medida atualizada!');
