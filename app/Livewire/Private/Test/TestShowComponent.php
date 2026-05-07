@@ -15,8 +15,9 @@ class TestShowComponent extends Component
     public Campaign $campaign;
 
     public ?string $videoUrl = null;
+    public bool $video_finished = false;
     public bool $video_watched = false;
-
+    
     public array $questions;
     public array $answers;
     public int $current = 0;
@@ -61,6 +62,11 @@ class TestShowComponent extends Component
     {
         $this->dispatch('open-video-modal');
         $this->loadVideo();
+    }
+
+    public function markVideoAsFinished()
+    {
+        $this->video_finished = true;
     }
 
     public function loadVideo()

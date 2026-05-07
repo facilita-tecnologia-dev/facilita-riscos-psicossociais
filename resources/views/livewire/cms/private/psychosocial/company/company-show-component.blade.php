@@ -31,8 +31,8 @@
         <div class="w-full space-y-4 lg:col-span-3">
             <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
                 <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
-                    <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Vídeo de Demonstração dos Testes</h2>
-                    <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Faça upload de um vídeo de demonstração que será exibido aos funcionários desta empresa antes de eles realizarem o teste.</span>
+                    <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Vídeo de contextualização dos Testes</h2>
+                    <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Faça upload de um vídeo de contextualização que será exibido aos funcionários desta empresa antes de eles realizarem o teste.</span>
                 </div>
 
                 <x-actions.button wire:click="openHelperVideoModal" fitSize>
@@ -46,8 +46,8 @@
             <div x-on:click.away="$wire.closeHelperVideoModal()" class="bg-secondary-background border-borders grid w-full max-w-5xl grid-cols-2 gap-6 rounded-lg border p-6 shadow-sm">
                 <div class="flex flex-col gap-4">
                     <header class="flex w-full items-center justify-between">
-                        <h2 class="font-heading text-main-text text-left text-lg font-semibold">Ver video de demonstração</h2>
-                        <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de demonstração para entender como responder ao teste da forma correta.">
+                        <h2 class="font-heading text-main-text text-left text-lg font-semibold">Ver video de contextualização</h2>
+                        <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de contextualização para entender como responder ao teste da forma correta.">
                             <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
                         </div>
                     </header>
@@ -75,19 +75,19 @@
                 </div>
                 <div class="flex flex-col gap-4">
                     <header class="flex w-full items-center justify-between">
-                        <h2 class="font-heading text-main-text text-left text-lg font-semibold">Editar video de demonstração</h2>
-                        <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de demonstração para entender como responder ao teste da forma correta.">
+                        <h2 class="font-heading text-main-text text-left text-lg font-semibold">Editar video de contextualização</h2>
+                        <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de contextualização para entender como responder ao teste da forma correta.">
                             <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
                         </div>
                     </header>
 
                     <p class="text-main-text font-heading text-left text-sm font-normal sm:text-base">
-                        Use o campo de upload abaixo para enviar um novo vídeo de demonstração.
+                        Use o campo de upload abaixo para enviar um novo vídeo de contextualização.
                         <span class="font-semibold">Atenção: se já existir um vídeo cadastrado, ele será substituído pelo novo arquivo.</span>
                     </p>
 
                     <form class="flex flex-col gap-2" wire:submit.prevent="updateHelperVideo">
-                        <x-form.input-file wireModel="new_helper_video" name="new_helper_video" label="Vídeo de demonstração" placeholder="Faça upload do vídeo de demonstração..." tooltip="Faça upload do vídeo de demonstração" :attachments="$new_helper_video" isRequired />
+                        <x-form.input-file wireModel="new_helper_video" name="new_helper_video" label="Vídeo de contextualização" placeholder="Faça upload do vídeo de contextualização..." tooltip="Faça upload do vídeo de contextualização" :attachments="$new_helper_video" isRequired />
                         <x-actions.button>
                             <div wire:loading wire:target="updateHelperVideo">
                                 <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />

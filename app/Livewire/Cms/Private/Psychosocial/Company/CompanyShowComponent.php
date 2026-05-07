@@ -71,7 +71,7 @@ class CompanyShowComponent extends Component
 
         $this->helper_video = $s3->temporaryUrl($path, now()->addMinutes(5));
 
-        $this->dispatch('alert:success', 'Vídeo de demonstração atualizado!');
+        $this->dispatch('alert:success', 'Vídeo de contextualização atualizado!');
     }
 
     public function openHelperVideoModal()
@@ -102,6 +102,6 @@ class CompanyShowComponent extends Component
         $this->company->update(['test_helper_video' => null]);
         $this->helper_video = null;
 
-        $this->dispatch('alert:success', 'Vídeo de demonstração removido!');
+        $this->dispatch('alert:success', 'Vídeo de contextualização removido!');
     }
 }

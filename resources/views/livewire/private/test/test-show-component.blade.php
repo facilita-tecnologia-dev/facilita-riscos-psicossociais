@@ -8,8 +8,8 @@
     @if(session('auth:company')->test_helper_video)
         <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
             <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
-                <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Vídeo de demonstração</h2>
-                <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Assista ao vídeo de demonstração para entender como responder ao teste da forma correta.</span>
+                <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Vídeo de contextualização</h2>
+                <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Assista ao vídeo de contextualização para entender como responder ao teste da forma correta.</span>
             </div>
 
             <x-actions.button wire:click="openVideoModal" fitSize>
@@ -23,11 +23,11 @@
 
         {{-- Video Modal --}}
         <div x-show="videoModalOpen" x-transition.opacity x-cloak class="fixed inset-0 bg-black/60 flex items-center justify-center z-30 px-4">
-            <div x-on:click.away="$wire.closeVideoModal()" class="bg-secondary-background border-borders flex flex-col rounded-lg border p-6 shadow-sm w-[80vw] h-[80vh]">
+            <div x-on:click.away="$wire.closeVideoModal()" class="bg-secondary-background border-borders flex flex-col gap-4 rounded-lg border p-6 shadow-sm w-[80vw] h-[80vh]">
                 <header class="flex w-full items-center justify-between">
-                    <h2 class="font-heading text-main-text text-left text-lg font-semibold">Video de demonstração</h2>
+                    <h2 class="font-heading text-main-text text-left text-lg font-semibold">Video de contextualização</h2>
 
-                    <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de demonstração para entender como responder ao teste da forma correta.">
+                    <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de contextualização para entender como responder ao teste da forma correta.">
                         <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
                     </div>
                 </header>
@@ -37,21 +37,33 @@
                         <video 
                             src="{{ $videoUrl }}" 
                             controls 
-                            autoplay 
-                            class="max-h-full max-w-full object-contain rounded-sm">
+                            autoplay
+                            wire:ignore
+                            x-on:ended="$wire.markVideoAsFinished()"
+                            class="max-h-full max-w-full object-contain rounded-md">
                         </video>
                     </div>
                 @else
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 @endif
 
-                <x-actions.button class="w-full" wire:click='confirmVideoWatched'>
-                    <div wire:loading wire:target="confirmVideoWatched">
-                        <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
-                    </div>
+                @if($video_finished)
+                    <x-actions.button class="w-full" wire:click='confirmVideoWatched'>
+                        <div wire:loading wire:target="confirmVideoWatched">
+                            <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
+                        </div>
 
-                    <span wire:loading.remove wire:target="confirmVideoWatched" class="font-heading text-main-background text-center text-sm font-semibold">Prosseguir</span>
-                </x-actions.button>
+                        <span wire:loading.remove wire:target="confirmVideoWatched" class="font-heading text-main-background text-center text-sm font-semibold">
+                            Prosseguir
+                        </span>
+                    </x-actions.button>
+                @else
+                    <x-actions.button class="w-full opacity-50 cursor-not-allowed" disabled>
+                        <span class="font-heading text-main-background text-center text-sm font-semibold">
+                            Assista o vídeo até o final
+                        </span>
+                    </x-actions.button>
+                @endif
             </div>
         </div>
     @endif
