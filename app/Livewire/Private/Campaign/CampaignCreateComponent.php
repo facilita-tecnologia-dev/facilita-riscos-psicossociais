@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Private\Campaign;
 
+use App\Enums\Campaign\CollectionType;
+use App\Models\BaseCollection;
 use App\Models\CustomCollection;
 use App\Repositories\CampaignRepository;
 use Carbon\Carbon;
@@ -28,16 +30,27 @@ class CampaignCreateComponent extends Component
     {
         $customCollections = session('auth:company')->customCollections()->get();
         $baseCollections = session('auth:company')->baseCollections();
-  
-        $this->collections = $baseCollections
-                        ->concat($customCollections)
-                        ->map(fn($collection) => [
-                                'label' => $collection->name, 
-                                'value' => ($collection instanceof CustomCollection ? 'custom_' : 'base_') . $collection->id
-                            ]
-                        )
-                        ->values()
-                        ->toArray();
+
+        if(session('auth:company')->can_access_organizational){
+            $this->collections = $baseCollections
+                            ->concat($customCollections)
+                            ->map(fn($collection) => [
+                                    'label' => $collection->name, 
+                                    'value' => ($collection instanceof CustomCollection ? 'custom_' : 'base_') . $collection->id
+                                ]
+                            )
+                            ->values()
+                            ->toArray();
+        } else {
+            $this->collections = $baseCollections->where('type', CollectionType::PSYCHOSOCIAL->value)
+                           ->map(fn($collection) => [
+                                    'label' => $collection->name, 
+                                    'value' => ($collection instanceof CustomCollection ? 'custom_' : 'base_') . $collection->id
+                                ]
+                            )
+                            ->values()
+                            ->toArray();;
+        }
     }
 
     public function submit()

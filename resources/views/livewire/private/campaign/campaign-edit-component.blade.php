@@ -23,13 +23,24 @@
                 <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Salvar</span>
             </x-actions.button>
 
-            <x-actions.button wire:click='deleteCampaign' type="button" class="!bg-danger" :disabled="$campaign->status != App\Enums\Campaign\CampaignStatus::SCHEDULED">
-                <div wire:loading wire:target="deleteCampaign">
-                    <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
-                </div>
+            @if($campaign->status == App\Enums\Campaign\CampaignStatus::SCHEDULED)
+                <x-actions.button wire:click='deleteCampaign' type="button" class="!bg-danger">
+                    <div wire:loading wire:target="deleteCampaign">
+                        <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
+                    </div>
 
-                <span wire:loading.remove wire:target="deleteCampaign" class="font-heading text-main-background text-center text-sm font-semibold">Excluir campanha</span>
-            </x-actions.button>
+                    <span wire:loading.remove wire:target="deleteCampaign" class="font-heading text-main-background text-center text-sm font-semibold">Excluir campanha</span>
+                </x-actions.button>
+            @else
+                <x-actions.button wire:click='completeCampaign' type="button" onclick="confirm('Você deseja finalizar a campanha agora mesmo?')" data-tippy-content="Caso você finalize a campanha agora, ela não poderá ser reaberta e nenhuma nova resposta poderá ser enviada.">
+                    <div wire:loading wire:target="completeCampaign">
+                        <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
+                    </div>
+
+                    <span wire:loading.remove wire:target="completeCampaign" class="font-heading text-main-background text-center text-sm font-semibold">Finalizar campanha</span>
+                </x-actions.button>
+            @endif
         </div>
     </form>
 </div>
+ 

@@ -11,8 +11,10 @@ use App\Http\Controllers\Private\Psychosocial\PsychosocialController;
 use App\Http\Controllers\Private\Test\TestController;
 use App\Http\Controllers\Private\User\UserController;
 use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\CanAccessOrganizationalMiddleware;
 use App\Http\Middleware\CmsAuthMiddleware;
 use App\Http\Middleware\CmsGuestMiddleware;
+use App\Http\Middleware\EnsureCompanyHasAccess;
 use App\Http\Middleware\GuestMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -43,47 +45,51 @@ Route::middleware(GuestMiddleware::class)->group(function() {
 });
 
 Route::middleware(AuthMiddleware::class)->group(function() {
-    Route::prefix('inicio')->group(function(){
-        Route::get('/empresa', [CompanyController::class, 'home'])->name('home.company');
-        Route::get('/funcionario', [UserController::class, 'home'])->name('home.user');
-    });
-
-    Route::prefix('campanha')->group(function(){
-        Route::get('/', [CampaignController::class, 'index'])->name('campaign.index');
-        Route::get('agendar', [CampaignController::class, 'create'])->name('campaign.create');
-        Route::get('{campaign}/editar', [CampaignController::class, 'edit'])->name('campaign.edit');
-        Route::get('/{campaign}/responder', [TestController::class, 'show'])->name('campaign.answer');
-    });
-
-    Route::prefix('riscos-psicossociais')->group(function () {
-        Route::get('/dashboard/{campaign?}', [PsychosocialController::class, 'dashboard'])->name('psychosocial.dashboard');
-        Route::get('/indicadores', [PsychosocialController::class, 'indicators'])->name('psychosocial.indicators');
-        Route::get('/afastamentos', [PsychosocialController::class, 'absences'])->name('psychosocial.absences');
-        Route::get('/medidas-de-controle', [PsychosocialController::class, 'controlActions'])->name('psychosocial.control-action');
-    });
-
-    Route::prefix('clima-organizacional')->group(function () {
-        Route::get('/dashboard/{campaign?}', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
-        Route::get('/feedback', [OrganizationalController::class, 'feedback'])->name('organizational.feedback');
-        Route::get('/formularios', [OrganizationalController::class, 'customCollectionIndex'])->name('organizational.custom-collection.index');
-        Route::get('/formularios/{customCollection}/editar', [OrganizationalController::class, 'customCollectionEdit'])->name('organizational.custom-collection.edit');
-    });
-
-    Route::prefix('empresa')->group(function(){
-        Route::get('/{company}/perfil', [CompanyController::class, 'show'])->name('company.show');
-
-        Route::prefix('funcionario')->group(function(){
-            Route::get('/', [UserController::class, 'index'])->name('user.index');
-            Route::get('/cadastrar', [UserController::class, 'create'])->name('user.create');
-            Route::get('/importar', [UserController::class, 'import'])->name('user.import');
-            Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
+    // Route::middleware(EnsureCompanyHasAccess::class)->group(function(){
+        Route::prefix('inicio')->group(function(){
+            Route::get('/empresa', [CompanyController::class, 'home'])->name('home.company');
+            Route::get('/funcionario', [UserController::class, 'home'])->name('home.user');
         });
-    });
 
-    Route::prefix('documentacao')->group(function(){
-        Route::get('/', [DocumentationController::class, 'index'])->name('documentation.index');
-        Route::get('/politica-de-privacidade', [DocumentationController::class, 'policy'])->name('documentation.policy');
-    });
+        Route::prefix('campanha')->group(function(){
+            Route::get('/', [CampaignController::class, 'index'])->name('campaign.index');
+            Route::get('agendar', [CampaignController::class, 'create'])->name('campaign.create');
+            Route::get('{campaign}/editar', [CampaignController::class, 'edit'])->name('campaign.edit');
+            Route::get('/{campaign}/responder', [TestController::class, 'show'])->name('campaign.answer');
+        });
+
+        Route::prefix('riscos-psicossociais')->group(function () {
+            Route::get('/dashboard/{campaign?}', [PsychosocialController::class, 'dashboard'])->name('psychosocial.dashboard');
+            Route::get('/indicadores', [PsychosocialController::class, 'indicators'])->name('psychosocial.indicators');
+            Route::get('/afastamentos', [PsychosocialController::class, 'absences'])->name('psychosocial.absences');
+            Route::get('/medidas-de-controle', [PsychosocialController::class, 'controlActions'])->name('psychosocial.control-action');
+        });
+
+        Route::middleware(CanAccessOrganizationalMiddleware::class)->group(function() {
+            Route::prefix('clima-organizacional')->group(function () {
+                Route::get('/dashboard/{campaign?}', [OrganizationalController::class, 'dashboard'])->name('organizational.dashboard');
+                Route::get('/feedback', [OrganizationalController::class, 'feedback'])->name('organizational.feedback');
+                Route::get('/formularios', [OrganizationalController::class, 'customCollectionIndex'])->name('organizational.custom-collection.index');
+                Route::get('/formularios/{customCollection}/editar', [OrganizationalController::class, 'customCollectionEdit'])->name('organizational.custom-collection.edit');
+            });
+        });
+        
+        Route::prefix('empresa')->group(function(){
+            Route::get('/{company}/perfil', [CompanyController::class, 'show'])->name('company.show');
+
+            Route::prefix('funcionario')->group(function(){
+                Route::get('/', [UserController::class, 'index'])->name('user.index');
+                Route::get('/cadastrar', [UserController::class, 'create'])->name('user.create');
+                Route::get('/importar', [UserController::class, 'import'])->name('user.import');
+                Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
+            });
+        });
+
+        Route::prefix('documentacao')->group(function(){
+            Route::get('/', [DocumentationController::class, 'index'])->name('documentation.index');
+            Route::get('/politica-de-privacidade', [DocumentationController::class, 'policy'])->name('documentation.policy');
+        });
+    // });
 });
 
 /*------------------------- Cms -------------------------------*/ 

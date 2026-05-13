@@ -40,7 +40,7 @@ class CompanyIndexComponent extends Component
     private function fetchCompanies(): LengthAwarePaginator
     {
         $query = Company::with('campaigns')->withCount([
-            'users as users_count' => function ($query) {
+            'activeUsers as users_count' => function ($query) {
                 $query->where('company_user.status', 1);
             },
         ]);

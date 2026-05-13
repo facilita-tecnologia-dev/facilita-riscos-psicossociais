@@ -100,6 +100,8 @@
         </div>
     </div>
 
+    <livewire:cms.private.psychosocial.company.company-organizational-access-config-component :company="$company" />
+
     <div id="company-campaigns" class="space-y-4">
         <h2 class="text-xl text-left font-semibold text-main-text">Lista de Campanhas</h2>
 

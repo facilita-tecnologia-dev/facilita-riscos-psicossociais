@@ -4,8 +4,11 @@
     <x-form.select wireModel="department" name="department" label="Setor" placeholder="Todos" tooltip="Selecione o setor" :options="$departments" />
 
     <x-form.select wireModel="has_answered_psychosocial_campaign" name="has_answered_psychosocial_campaign" label="Respondeu Riscos Psicossociais" placeholder="Todos" tooltip="Selecione a opção desejada" :options="[['label' => 'Sim', 'value' => 1], ['label' => 'Não', 'value' => 0]]" />
-    <x-form.select wireModel="has_answered_organizational_campaign" name="has_answered_organizational_campaign" label="Respondeu Clima Organizacional" placeholder="Todos" tooltip="Selecione a opção desejada" :options="[['label' => 'Sim', 'value' => 1], ['label' => 'Não', 'value' => 0]]" />
     
+    @if(session('auth:company')->can_access_organizational)
+        <x-form.select wireModel="has_answered_organizational_campaign" name="has_answered_organizational_campaign" label="Respondeu Clima Organizacional" placeholder="Todos" tooltip="Selecione a opção desejada" :options="[['label' => 'Sim', 'value' => 1], ['label' => 'Não', 'value' => 0]]" />
+    @endif
+
     <x-form.select wireModel="orderBy" name="orderBy" label="Ordenar por" tooltip="Selecione o tipo de ordenação desejado" :options="$userOrderTypes" />
 
     <footer class="flex w-full items-center gap-2">
