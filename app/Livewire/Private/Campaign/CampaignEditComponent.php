@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Private\Campaign;
 
+use App\Enums\Campaign\CampaignStatus;
 use App\Models\Campaign;
 use App\Repositories\CampaignRepository;
 use Illuminate\Support\Facades\Log;
@@ -81,6 +82,27 @@ class CampaignEditComponent extends Component
             ]);
 
             $this->dispatch('alert:danger', 'Erro ao excluir campanha.');
+        }
+    }
+
+    public function completeCampaign()
+    {
+        try {
+            $this->campaign->end_date = now();
+            $this->campaign->status = CampaignStatus::COMPLETED;
+            $this->campaign->save();
+
+            $this->dispatch('alert:success', 'Campanha finalizada com sucesso!');
+            
+            return redirect()->to(route('campaign.index'));
+        } catch (\Throwable $th) {
+            Log::error('Erro ao finalizar campanha', [
+                'campaign_id' => $this->campaign->id,
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
+            $this->dispatch('alert:danger', 'Erro ao finalizar campanha.');
         }
     }
 }
