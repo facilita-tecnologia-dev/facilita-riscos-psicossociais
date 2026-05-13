@@ -485,7 +485,7 @@ class PsychosocialService
             $totalDividedUsers = $users->count();
             $totalRespondents = $users->filter(fn ($user) => isset($respondentIds[$user->id]))->count();
 
-            $percent = $totalDividedUsers > 0 ? round(($totalRespondents / $totalDividedUsers) * 100) : 0;
+            $percent = $totalDividedUsers > 0 ? floor(($totalRespondents / $totalDividedUsers) * 100) : 0;
 
             $engagementDivided[$divisionFactor] = [
                 'total_users' => $totalDividedUsers,

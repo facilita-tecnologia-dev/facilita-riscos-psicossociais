@@ -254,9 +254,86 @@ class OrganizationalService
         };
     }
    
+    // public static function engagement(Campaign $campaign, string $evaluation_type)
+    // {
+    //     $allowedDepartments = [];
+
+    //     if (session('auth:guard') === 'user') {
+    //         $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
+    //     }
+
+    //     $companyUsers = session('auth:company')
+    //         ->activeUsers()
+    //         ->when(
+    //             session('auth:guard') === 'user', 
+    //             fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
+    //         )
+    //         ->select('users.id', 'users.department', 'users.occupation', 'users.gender', 'users.work_shift', 'users.admission')
+    //         ->get();
+
+    //     $userCollections = $campaign->userCollections()
+    //         ->when(
+    //             session('auth:guard') === 'user',
+    //             fn($q) => $q->whereHas('user', fn ($u) => $u->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', ''))
+    //         )
+    //         ->with('user:id,department,occupation,gender,work_shift,admission')
+    //         ->get();
+        
+    //     if($evaluation_type === OCEvaluation::DEPARTMENT->value){
+    //         $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->department ?? "Sem informação");
+    //         $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->department ?? "Sem informação");
+    //     }
+
+    //     if($evaluation_type === OCEvaluation::OCCUPATION->value){
+    //         $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->occupation ?? "Sem informação");
+    //         $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->occupation ?? "Sem informação");
+    //     }
+
+    //     if($evaluation_type === OCEvaluation::GENDER->value){
+    //         $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->gender ?? "Sem informação");
+    //         $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->gender ?? "Sem informação");
+    //     }
+
+    //     if($evaluation_type === OCEvaluation::WORK_SHIFT->value){
+    //         $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->work_shift ?? "Sem informação");
+    //         $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->work_shift ?? "Sem informação");
+    //     }
+
+    //     if($evaluation_type === OCEvaluation::ADMISSION_RANGE->value){
+    //         $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->admission ? self::getAdmissionRange($userCollection->user->admission)->value . ' anos' : "Sem informação");
+    //         $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->admission ? self::getAdmissionRange($user->admission)->value . ' anos' : "Sem informação");
+    //     }
+
+    //     $engagementDivided = [];
+
+    //     foreach($companyUsersDivided as $divisionFactor => $users){
+    //         $totalDividedUsers = $users->count();
+    //         $respondents = $campaignRespondentsDivided[$divisionFactor] ?? collect();
+    //         $totalRespondents = $respondents->count();
+
+    //         $percent = $totalDividedUsers > 0 ? round(($totalRespondents / $totalDividedUsers) * 100) : 0;
+
+    //         $engagementDivided[$divisionFactor] = [
+    //             'total_users' => $totalDividedUsers,
+    //             'respondents' => $totalRespondents,
+    //             'engagement' => $percent,
+    //         ];
+    //     }
+
+    //     $totalCompanyUsers = array_sum(array_column($engagementDivided, 'total_users'));
+    //     $totalCompanyRespondents = array_sum(array_column($engagementDivided, 'respondents'));
+
+    //     $generalEngagement =  $totalCompanyUsers > 0 ? round(($totalCompanyRespondents / $totalCompanyUsers) * 100) : 0;
+        
+    //     return collect([
+    //         'general' => $generalEngagement,
+    //         'divided' => collect($engagementDivided)->sortByDesc('engagement')->toArray()
+    //     ]);
+    // }
+
     public static function engagement(Campaign $campaign, string $evaluation_type)
     {
-        $allowedDepartments = [];
+         $allowedDepartments = [];
 
         if (session('auth:guard') === 'user') {
             $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
@@ -265,53 +342,44 @@ class OrganizationalService
         $companyUsers = session('auth:company')
             ->activeUsers()
             ->when(
-                session('auth:guard') === 'user', 
-                fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
+                session('auth:guard') === 'user',
+                fn ($query) => $query->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
             )
             ->select('users.id', 'users.department', 'users.occupation', 'users.gender', 'users.work_shift', 'users.admission')
             ->get();
 
-        $userCollections = $campaign->userCollections()
-            ->when(
-                session('auth:guard') === 'user',
-                fn($q) => $q->whereHas('user', fn ($u) => $u->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', ''))
-            )
-            ->with('user:id,department,occupation,gender,work_shift,admission')
-            ->get();
-        
-        if($evaluation_type === OCEvaluation::DEPARTMENT->value){
-            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->department ?? "Sem informação");
-            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->department ?? "Sem informação");
+        $respondentIds = $campaign
+            ->userCollections()
+            ->pluck('user_id')
+            ->flip();
+
+        if ($evaluation_type === OCEvaluation::DEPARTMENT->value) {
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->department ?? 'Sem informação');
         }
 
-        if($evaluation_type === OCEvaluation::OCCUPATION->value){
-            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->occupation ?? "Sem informação");
-            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->occupation ?? "Sem informação");
+        if ($evaluation_type === OCEvaluation::OCCUPATION->value) {
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->occupation ?? 'Sem informação');
         }
 
-        if($evaluation_type === OCEvaluation::GENDER->value){
-            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->gender ?? "Sem informação");
-            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->gender ?? "Sem informação");
+        if ($evaluation_type === OCEvaluation::GENDER->value) {
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->gender ?? 'Sem informação');
         }
 
-        if($evaluation_type === OCEvaluation::WORK_SHIFT->value){
-            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->work_shift ?? "Sem informação");
-            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->work_shift ?? "Sem informação");
+        if ($evaluation_type === OCEvaluation::WORK_SHIFT->value) {
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->work_shift ?? 'Sem informação');
         }
 
-        if($evaluation_type === OCEvaluation::ADMISSION_RANGE->value){
-            $campaignRespondentsDivided = $userCollections->groupBy(fn ($userCollection) => $userCollection->user->admission ? self::getAdmissionRange($userCollection->user->admission)->value . ' anos' : "Sem informação");
-            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->admission ? self::getAdmissionRange($user->admission)->value . ' anos' : "Sem informação");
+        if ($evaluation_type === OCEvaluation::ADMISSION_RANGE->value) {
+            $companyUsersDivided = $companyUsers->groupBy(fn ($user) => $user->admission ? self::getAdmissionRange($user->admission)->value . ' anos' : 'Sem informação');
         }
 
         $engagementDivided = [];
 
-        foreach($companyUsersDivided as $divisionFactor => $users){
+        foreach ($companyUsersDivided as $divisionFactor => $users) {
             $totalDividedUsers = $users->count();
-            $respondents = $campaignRespondentsDivided[$divisionFactor] ?? collect();
-            $totalRespondents = $respondents->count();
+            $totalRespondents = $users->filter(fn ($user) => isset($respondentIds[$user->id]))->count();
 
-            $percent = $totalDividedUsers > 0 ? round(($totalRespondents / $totalDividedUsers) * 100) : 0;
+            $percent = $totalDividedUsers > 0 ? floor(($totalRespondents / $totalDividedUsers) * 100) : 0;
 
             $engagementDivided[$divisionFactor] = [
                 'total_users' => $totalDividedUsers,
@@ -323,8 +391,8 @@ class OrganizationalService
         $totalCompanyUsers = array_sum(array_column($engagementDivided, 'total_users'));
         $totalCompanyRespondents = array_sum(array_column($engagementDivided, 'respondents'));
 
-        $generalEngagement =  $totalCompanyUsers > 0 ? round(($totalCompanyRespondents / $totalCompanyUsers) * 100) : 0;
-        
+        $generalEngagement = $totalCompanyUsers > 0 ? floor(($totalCompanyRespondents / $totalCompanyUsers) * 100) : 0;
+
         return collect([
             'general' => $generalEngagement,
             'divided' => collect($engagementDivided)->sortByDesc('engagement')->toArray()
