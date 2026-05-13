@@ -19,7 +19,7 @@ class ReportChannelService
 
         $data = collect($response->json())
             ->filter(fn($_, $nature) => PROARTHazard::tryFrom($nature))
-            ->mapWithKeys(fn($count, $risk) => [$risk => round(($count / session('auth:company')->users->count()) * 100)]);
+            ->mapWithKeys(fn($count, $risk) => [$risk => round(($count / session('auth:company')->activeUsers->count()) * 100)]);
             
         return $data;
     }

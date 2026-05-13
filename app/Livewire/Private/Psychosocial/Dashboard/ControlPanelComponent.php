@@ -31,7 +31,7 @@ class ControlPanelComponent extends Component
 
         $this->evaluation_types = array_map(fn ($evaluationType) => ['label' => $evaluationType->label(), 'value' => $evaluationType->value], EvaluationTypes::cases());
 
-        $departments = session('auth:company')->users()
+        $departments = session('auth:company')->activeUsers()
             ->when(
                 session('auth:guard') === 'user', 
                 fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
@@ -43,7 +43,7 @@ class ControlPanelComponent extends Component
 
         $this->departments = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($department) => ['label' => $department, 'value' => $department], $departments));
 
-        $occupations = session('auth:company')->users()
+        $occupations = session('auth:company')->activeUsers()
             ->when(
                 session('auth:guard') === 'user', 
                 fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')

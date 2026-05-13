@@ -26,7 +26,7 @@ class UserDepartmentScopeComponent extends Component
     {
         $this->user = $user;
 
-        $companyDepartments = session('auth:company')->users()
+        $companyDepartments = session('auth:company')->allUsers()
             ->select('department')
             ->distinct()
             ->pluck('department');

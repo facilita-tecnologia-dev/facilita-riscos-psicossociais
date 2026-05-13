@@ -27,7 +27,7 @@ class AbsenceCreateComponent extends Component
 
     public function mount(Collection $cids)
     {
-        $users = session('auth:company')->users()->get();
+        $users = session('auth:company')->allUsers()->get();
 
         $this->cids = $cids->map(fn($cid) => ['label' => $cid->type, 'value' => $cid->id]);
         $this->departments = $users->pluck('department')->unique()->map(fn($department) => ['label' => $department, 'value' => $department]);

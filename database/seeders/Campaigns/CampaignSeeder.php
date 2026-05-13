@@ -52,7 +52,7 @@ class CampaignSeeder extends Seeder
                 'status' => CampaignStatus::COMPLETED
             ]);
 
-            $company->users()->each(function($user) use ($psychosocialCampaign, $organizationalCampaign, $company) {
+            $company->activeUsers()->each(function($user) use ($psychosocialCampaign, $organizationalCampaign, $company) {
                 $willAnswer = rand(0, 1);
 
                 if ($willAnswer) {

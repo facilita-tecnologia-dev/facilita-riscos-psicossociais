@@ -40,7 +40,7 @@ class UserIndexComponent extends Component
 
     private function fetchUsers(): LengthAwarePaginator
     {
-        $query = $this->company->users();
+        $query = $this->company->allUsers();
 
         if (!empty($this->filters['name'])) {
             $query->where('name', 'like', '%' . $this->filters['name'] . '%');

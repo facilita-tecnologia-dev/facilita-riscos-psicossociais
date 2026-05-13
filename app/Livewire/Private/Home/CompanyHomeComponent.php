@@ -33,7 +33,7 @@ class CompanyHomeComponent extends Component
         } else {
             $completedSteps = [
                 'logo' => (bool) session('auth:company')->logo,
-                'import-users' => session('auth:company')->users->isNotEmpty(),
+                'import-users' => session('auth:company')->allUsers->isNotEmpty(),
                 'schedule-campaign' => session('auth:company')->campaigns->isNotEmpty(),
             ];
 

@@ -28,7 +28,7 @@ Route::post('/data/company/department', function (Request $request){
         ], 404);
     }
 
-    $departments = $company->users()
+    $departments = $company->allUsers()
     ->select('department')
     ->distinct()
     ->pluck('department');

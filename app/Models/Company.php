@@ -16,6 +16,9 @@ use App\Models\BaseCollection;
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Campaign\CollectionType;
 use App\Enums\Campaign\CollectionCategory;
+use App\Enums\Subscription\AccessStatus;
+use App\Enums\Subscription\SubscriptionStatus;
+use App\Enums\Subscription\TrialExpiredReason;
 use App\Policies\CompanyPolicy;
 
 #[UsePolicy(CompanyPolicy::class)]
@@ -33,16 +36,25 @@ class Company extends Authenticatable
     {
         return [
             'password' => 'hashed',
+
         ];
     }
 
+
+
     /* --- Relations --- */
 
-    public function users(): BelongsToMany
+    public function allUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'company_user')
-            ->withPivot(['role_id', 'status'])
-            ->wherePivot('status', 1);
+                ->withPivot(['role_id','status',]);
+    }
+
+    public function activeUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'company_user')
+                ->withPivot(['role_id', 'status'])
+                ->wherePivot('status', 1);
     }
 
     public function roles(): BelongsToMany
@@ -89,6 +101,11 @@ class Company extends Authenticatable
     public function organizationalReport(): HasOne
     {
         return $this->hasOne(OrganizationalReport::class);
+    }
+
+    public function userCollections(): HasMany
+    {
+        return $this->hasMany(UserCollection::class);
     }
 
     /* --- End Relations --- */

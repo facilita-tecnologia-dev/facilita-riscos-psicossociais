@@ -88,8 +88,8 @@ class UserCreateComponent extends Component
         $user = User::firstWhere('cpf', $this->cpf);
 
         if ($user) {
-            if($this->company->users->find($user)){
-                $this->dispatch('alert:info', 'Este usuário já está vinculado �� sua empresa!');
+            if($this->company->allUsers->find($user)){
+                $this->dispatch('alert:info', 'Este usuário já está vinculado �� sua empresa!');
             } else {
                 $this->user = $user;
                 $this->userExists = true;

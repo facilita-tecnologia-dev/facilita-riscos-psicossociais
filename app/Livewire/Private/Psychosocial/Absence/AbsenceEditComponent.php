@@ -30,7 +30,7 @@ class AbsenceEditComponent extends Component
     {
         $this->absence = $absence;
 
-        $users = session('auth:company')->users;
+        $users = session('auth:company')->allUsers;
         
         $this->cid = $absence->cid_id;
         $this->department = $absence->department;

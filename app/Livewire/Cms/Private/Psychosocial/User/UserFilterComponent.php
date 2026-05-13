@@ -26,7 +26,7 @@ class UserFilterComponent extends Component
 
     public function mount(Company $company)
     {
-        $departments = $company->users()
+        $departments = $company->allUsers()
             ->select('department')
             ->distinct()
             ->pluck('department')

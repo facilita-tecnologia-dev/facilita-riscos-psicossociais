@@ -21,7 +21,7 @@ class CompanySeeder extends Seeder
         Company::factory(3)->create(['password' => Hash::make('facilita3015'), 'psychosocial_collection_type' => MetodologyType::PROART->value])->each(function($company){
             // Users
             User::factory(rand(8, 100))->create(['password' => null])->each(function($user) use($company) {
-                $company->users()->attach($user, ['role_id' => rand(1, 2)]);
+                $company->allUsers()->attach($user, ['role_id' => rand(1, 2)]);
             });
 
             // Action Plan
@@ -51,7 +51,7 @@ class CompanySeeder extends Seeder
             // Absences 
             CID::all()->each(function($cid) use($company){
                 for($i = 0; $i < rand(0,2); $i++){
-                    $user = $company->users->random();
+                    $user = $company->activeUsers->random();
                     CompanyAbsence::create([
                         'company_id' => $company->id,
                         'cid_id' => $cid->id,
@@ -66,7 +66,7 @@ class CompanySeeder extends Seeder
         Company::factory(3)->create(['password' => Hash::make('facilita3015'), 'psychosocial_collection_type' => MetodologyType::HSE->value])->each(function($company){
             // Users
             User::factory(rand(8, 100))->create(['password' => null])->each(function($user) use($company) {
-                $company->users()->attach($user, ['role_id' => rand(1, 2)]);
+                $company->allUsers()->attach($user, ['role_id' => rand(1, 2)]);
             });
 
             // Action Plan
@@ -96,7 +96,7 @@ class CompanySeeder extends Seeder
             // Absences 
             CID::all()->each(function($cid) use($company){
                 for($i = 0; $i < rand(0,2); $i++){
-                    $user = $company->users->random();
+                    $user = $company->activeUsers->random();
                     CompanyAbsence::create([
                         'company_id' => $company->id,
                         'cid_id' => $cid->id,

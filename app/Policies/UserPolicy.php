@@ -20,7 +20,7 @@ class UserPolicy extends BasePolicy
             return true;
         }
 
-        $userInThisCompany = session('auth:company')->users->where('id', $model->id)->isNotEmpty();
+        $userInThisCompany = session('auth:company')->allUsers->where('id', $model->id)->isNotEmpty();
         return $this->checkPermission('user_edit') && $userInThisCompany;
     }
 
@@ -35,7 +35,7 @@ class UserPolicy extends BasePolicy
             return true;
         }
 
-        $userInThisCompany = session('auth:company')->users()->where('users.id', $model->id)->exists();
+        $userInThisCompany = session('auth:company')->allUsers()->where('users.id', $model->id)->exists();
         return $this->checkPermission('user_edit') && $userInThisCompany;
     }
 

@@ -47,7 +47,7 @@ class CompanyEditComponent extends Component
         $this->cnpj = $this->company->cnpj;
         $this->email = $this->company->email;
 
-        $this->usersCount = $company->users()->count();
+        $this->usersCount = $company->activeUsers()->count();
         $this->psychosocialCampaignStatus =   $company->latestPsychosocialCampaign()?->start_date->year == now()->year 
                                             ? $company->latestPsychosocialCampaign()?->status->label()
                                             : 'Sem previsão';

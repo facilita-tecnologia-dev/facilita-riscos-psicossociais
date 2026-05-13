@@ -263,7 +263,7 @@ class OrganizationalService
         }
 
         $companyUsers = session('auth:company')
-            ->users()
+            ->activeUsers()
             ->when(
                 session('auth:guard') === 'user', 
                 fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')

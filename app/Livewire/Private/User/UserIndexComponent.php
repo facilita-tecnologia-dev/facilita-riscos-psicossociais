@@ -26,16 +26,6 @@ class UserIndexComponent extends Component
 
     public function mount()
     {
-        // $this->latestPsychosocialCampaign = 
-        //     session("auth:company")->latestPsychosocialCampaign()?->start_date->year == now()->year
-        //     ? session("auth:company")->latestPsychosocialCampaign() :
-        //     null;
-            
-        // $this->latestOrganizationalCampaign = 
-        //     session("auth:company")->latestOrganizationalCampaign()?->start_date->year == now()->year 
-        //     ? session("auth:company")->latestOrganizationalCampaign()
-        //     : null;
-
         $this->latestPsychosocialCampaign = session("auth:company")->latestPsychosocialCampaign() ?? null;
         $this->latestOrganizationalCampaign = session("auth:company")->latestOrganizationalCampaign() ?? null;
 
@@ -59,7 +49,7 @@ class UserIndexComponent extends Component
     private function fetchUsers(): Collection
     {
 
-        $query = session("auth:company")->users()
+        $query = session("auth:company")->allUsers()
                 ->when(
                     session('auth:guard') === 'user', 
                     fn($q) => $q->whereIn('department', $this->allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
