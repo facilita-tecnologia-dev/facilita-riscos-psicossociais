@@ -456,38 +456,34 @@ class PsychosocialService
             $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
         }
 
-        $companyUsers = session('auth:company')->users()
-                ->when(
-                    session('auth:guard') === 'user', 
-                    fn($q) => $q->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
-                )
-                ->select('users.id', 'users.department', 'users.occupation')
-                ->get();
+        $companyUsers = session('auth:company')
+            ->users()
+            ->when(
+                session('auth:guard') === 'user',
+                fn ($query) => $query->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', '')
+            )
+            ->select('users.id', 'users.department', 'users.occupation')
+            ->get();
 
-        $userCollections = $campaign->userCollections()
-                ->when(
-                    session('auth:guard') === 'user',
-                    fn($q) => $q->whereHas('user', fn ($u) => $u->whereIn('department', $allowedDepartments)->whereNotNull('department')->where('department', '!=', ''))
-                )
-                ->with('user:id,department,occupation')
-                ->get();
+        $respondentIds = $campaign
+            ->userCollections()
+            ->pluck('user_id')
+            ->flip();
 
-        if($evaluation_type === EvaluationTypes::DEPARTMENT->value){
-            $campaignRespondentsDivided = $userCollections->groupBy('user.department');
+
+        if ($evaluation_type === EvaluationTypes::DEPARTMENT->value) {
             $companyUsersDivided = $companyUsers->groupBy('department');
         }
 
-        if($evaluation_type === EvaluationTypes::OCCUPATION->value){
-            $campaignRespondentsDivided = $userCollections->groupBy('user.occupation');
+        if ($evaluation_type === EvaluationTypes::OCCUPATION->value) {
             $companyUsersDivided = $companyUsers->groupBy('occupation');
         }
-
+        
         $engagementDivided = [];
 
-        foreach($companyUsersDivided as $divisionFactor => $users){
+        foreach ($companyUsersDivided as $divisionFactor => $users) {
             $totalDividedUsers = $users->count();
-            $respondents = $campaignRespondentsDivided[$divisionFactor] ?? collect();
-            $totalRespondents = $respondents->count();
+            $totalRespondents = $users->filter(fn ($user) => isset($respondentIds[$user->id]))->count();
 
             $percent = $totalDividedUsers > 0 ? round(($totalRespondents / $totalDividedUsers) * 100) : 0;
 
@@ -501,8 +497,8 @@ class PsychosocialService
         $totalCompanyUsers = array_sum(array_column($engagementDivided, 'total_users'));
         $totalCompanyRespondents = array_sum(array_column($engagementDivided, 'respondents'));
 
-        $generalEngagement =  $totalCompanyUsers > 0 ? round(($totalCompanyRespondents / $totalCompanyUsers) * 100) : 0;
-        
+        $generalEngagement = $totalCompanyUsers > 0 ? floor(($totalCompanyRespondents / $totalCompanyUsers) * 100) : 0;
+
         return collect([
             'general' => $generalEngagement,
             'divided' => collect($engagementDivided)->sortByDesc('engagement')->toArray()

@@ -4,7 +4,7 @@
     @endphp
 
     <header class="flex items-center justify-between">
-        <h2 class="text-main-text font-heading text-left text-lg font-semibold">Participação</h2>
+        <h2 class="text-main-text font-heading text-left text-lg font-semibold">Adesão</h2>
 
         <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Neste card, você pode visualizar a adesão da sua campanha de testes, dividida por setor ou por função.">
             <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
@@ -22,7 +22,14 @@
         </div>
     </div>
 
-    <div class="flex flex-1 flex-col gap-2 overflow-y-auto pr-2">
+    <div wire:loading class="w-full">
+        <div class="flex w-full items-center justify-center gap-2 py-6">
+            <x-icon icon="loading" class="text-primary-solid h-5 w-5 animate-spin object-scale-down" />
+            <span class="text-secondary-text text-left text-sm font-normal">Carregando adesão...</span>
+        </div>
+    </div>
+
+    <div wire:loading.remove class="flex flex-1 flex-col gap-2 overflow-y-auto pr-2">
         @foreach ($engagement['divided'] as $itemName => $itemEngagement)
             @php
                 $departmentEngagementLevel = App\Enums\Campaign\EngagementLevel::fromPercentage($itemEngagement['engagement']);
