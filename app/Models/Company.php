@@ -39,7 +39,6 @@ class Company extends Authenticatable
         ];
     }
 
-
     /* --- Relations --- */
 
     public function allUsers(): BelongsToMany
@@ -164,7 +163,7 @@ class Company extends Authenticatable
         return ReportChannelService::hasReportChannel($this)
             ? ReportChannelService::reports($this)
             : $this->reports
-                ->filter() // remove nulos
+                ->filter()
                 ->mapWithKeys(fn($report) => [$report->type => $report->value]);
     }
 
@@ -212,7 +211,10 @@ class Company extends Authenticatable
     {
         return $this->campaigns()
                     ->get()
-                    ->filter(fn($campaign) => $campaign->collection()->type === CollectionType::PSYCHOSOCIAL)
+                    ->filter(fn($campaign) => 
+                        $campaign->collection()->type === CollectionType::PSYCHOSOCIAL 
+                        && ($campaign->status === CampaignStatus::IN_PROGRESS || $campaign->status === CampaignStatus::COMPLETED)
+                    )
                     ->sortByDesc('start_date')
                     ->first();
     }
@@ -221,7 +223,10 @@ class Company extends Authenticatable
     {
         return $this->campaigns()
                     ->get()
-                    ->filter(fn($campaign) => $campaign->collection()->type === CollectionType::ORGANIZATIONAL)
+                    ->filter(fn($campaign) => 
+                        $campaign->collection()->type === CollectionType::ORGANIZATIONAL 
+                        && ($campaign->status === CampaignStatus::IN_PROGRESS || $campaign->status === CampaignStatus::COMPLETED)
+                    )
                     ->sortByDesc('start_date')
                     ->first();
     }

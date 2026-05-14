@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Private\Organizational\Dashboard;
 
+use App\Actions\Private\Campaign\SnapshotCampaignEngagementAction;
 use App\Enums\Campaign\CollectionType;
 use App\Enums\Campaign\CampaignStatus;
 use App\Enums\OC\OCEvaluation;
@@ -35,13 +36,24 @@ class OrganizationalDashboardComponent extends Component
         
         if($this->organizationalCampaign){
             $this->organizationalResults = $this->getDashboardResults();
-            $this->engagement = $this->organizationalCampaign->status === CampaignStatus::COMPLETED 
-                ? collect([
+            if ($this->organizationalCampaign->status === CampaignStatus::COMPLETED) {
+                if (! $this->organizationalCampaign->engagement_percentage) {
+                    app(SnapshotCampaignEngagementAction::class)->execute(session('auth:company'), $this->organizationalCampaign);
+                    $this->organizationalCampaign->refresh();
+                }
+
+                $this->engagement = collect([
                     'campaign_status' => $this->organizationalCampaign->status,
-                    'general' => $this->organizationalCampaign->engagement_percentage, 
-                    'divided' => []
-                  ])
-                : OrganizationalService::engagement(session('auth:company'), $this->organizationalCampaign, $this->evaluation_type);
+                    'general' => $this->organizationalCampaign->engagement_percentage,
+                    'divided' => [],
+                ]);
+            } else {
+                $this->engagement = OrganizationalService::engagement(
+                    session('auth:company'),
+                    $this->organizationalCampaign,
+                    $this->evaluation_type
+                );
+            }
         }
     }
 

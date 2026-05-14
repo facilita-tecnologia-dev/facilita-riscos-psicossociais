@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Private\Psychosocial\Dashboard;
 
+use App\Actions\Private\Campaign\SnapshotCampaignEngagementAction;
 use App\Enums\Campaign\CampaignStatus;
 use App\Enums\Campaign\EvaluationTypes;
 use App\Models\Campaign;
@@ -31,16 +32,27 @@ class PsychosocialDashboardComponent extends Component
     public function mount($campaign = null)
     {
         $this->psychosocialCampaign = $campaign;
-
+  
         if($this->psychosocialCampaign){
             $this->psychosocialResults = $this->getDashboardResults();
-            $this->engagement = $this->psychosocialCampaign->status === CampaignStatus::COMPLETED 
-                ? collect([
+            if ($this->psychosocialCampaign->status === CampaignStatus::COMPLETED) {
+                if (! $this->psychosocialCampaign->engagement_percentage) {
+                    app(SnapshotCampaignEngagementAction::class)->execute(session('auth:company'), $this->psychosocialCampaign);
+                    $this->psychosocialCampaign->refresh();
+                }
+
+                $this->engagement = collect([
                     'campaign_status' => $this->psychosocialCampaign->status,
-                    'general' => $this->psychosocialCampaign->engagement_percentage, 
-                    'divided' => []
-                  ])
-                : PsychosocialService::engagement(session('auth:company'), $this->psychosocialCampaign, $this->evaluation_type);
+                    'general' => $this->psychosocialCampaign->engagement_percentage,
+                    'divided' => [],
+                ]);
+            } else {
+                $this->engagement = PsychosocialService::engagement(
+                    session('auth:company'),
+                    $this->psychosocialCampaign,
+                    $this->evaluation_type
+                );
+            }
         }
     }
 
