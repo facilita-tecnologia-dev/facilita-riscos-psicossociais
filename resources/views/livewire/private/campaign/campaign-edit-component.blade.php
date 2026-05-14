@@ -5,7 +5,6 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
             <x-form.input-text wireModel="name" name="name" label="Nome da Campanha" placeholder="Digite o nome da campanha..." tooltip="Digite o nome da campanha" isRequired />
             <x-form.input-text wireModel="collection" name="collection" label="Tipo de Campanha" tooltip="Você não pode alterar o tipo da campanha" readonly />
-            
             <x-form.input-datetime wireModel="start_date" name="start_date" label="Data de Início" tooltip="{{ $campaign->start_date->lt(now()->addMinutes(5)) ? 'A campanha começará daqui a pouco, portanto você não pode mais alterar a data de início.' : 'Escolha a data de início da campanha' }}" min="{{ \Carbon\Carbon::now()->format('Y-m-d\TH:i') }}" :readonly="$campaign->start_date->lt(now()->addMinutes(5)) ? true : false" isRequired />
             <x-form.input-datetime wireModel="end_date" name="end_date" label="Data de Encerramento" tooltip="Escolha a data de encerramento da campanha" min="{{ \Carbon\Carbon::now()->addHours(1)->format('Y-m-d\TH:i') }}" isRequired />
             

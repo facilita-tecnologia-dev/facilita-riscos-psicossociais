@@ -48,9 +48,9 @@ class CompanyHomeScheduleCampaignComponent extends Component
             'end_date' => ['required', 'date', 'after:start_date'],
             'description' => ['nullable', 'string'],
         ]);
-        
-        if (session('auth:company')->hasCampaignThisYear($this->collection_id, 'base')){
-            $this->dispatch('alert:danger', 'Sua empresa já cadastrou uma campanha de testes com o mesmo tipo nesse ano');
+
+        if (session('auth:company')->hasOverlappingCampaign($this->collection_id, 'base', $validatedData['start_date'], $validatedData['end_date'])) {
+            $this->dispatch('alert:danger', 'Já existe uma campanha deste tipo agendada/em andamento neste período.');
             return;
         }
 

@@ -4,6 +4,7 @@ namespace App\Livewire\Private\Campaign;
 
 use App\Actions\Private\Campaign\SnapshotCampaignEngagementAction;
 use App\Enums\Campaign\CampaignStatus;
+use App\Models\BaseCollection;
 use App\Models\Campaign;
 use App\Repositories\CampaignRepository;
 use Carbon\Carbon;
@@ -17,6 +18,7 @@ class CampaignEditComponent extends Component
 
     public ?string $name = null;
     public ?string $collection = null;
+    public ?string $collection_id = null;
     public ?string $start_date = null;
     public ?string $end_date = null;
     public ?string $description = null;
@@ -29,8 +31,10 @@ class CampaignEditComponent extends Component
     public function mount(Campaign $campaign)
     {
         $this->campaign = $campaign;
+        $collection = $this->campaign->collection();
         $this->name = $this->campaign->name;
-        $this->collection = $this->campaign->collection()->type->label();
+        $this->collection = $collection->type->label();
+        $this->collection_id = $collection->id;
         $this->start_date = $this->campaign->start_date;
         $this->end_date = $this->campaign->end_date;
         $this->description = $this->campaign->description;
@@ -50,7 +54,15 @@ class CampaignEditComponent extends Component
             'description' => ['nullable', 'string', 'max:512'],
         ]);
 
+
         try {
+            $collection_type =  $this->campaign->collection() instanceof BaseCollection ? 'base' : 'custom';
+                                                   
+            if (session('auth:company')->hasOverlappingCampaign($this->collection_id, $collection_type, $validatedData['start_date'], $validatedData['end_date'], $this->campaign->id)) {
+                $this->dispatch('alert:danger', 'Já existe uma campanha deste tipo agendada/em andamento neste período.');
+                return;
+            }
+
             CampaignRepository::update($this->campaign, $validatedData);
             $this->dispatch('alert:success', 'Campanha atualizada com sucesso!');
             

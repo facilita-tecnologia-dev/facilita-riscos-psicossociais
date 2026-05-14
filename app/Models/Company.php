@@ -36,10 +36,8 @@ class Company extends Authenticatable
     {
         return [
             'password' => 'hashed',
-
         ];
     }
-
 
 
     /* --- Relations --- */
@@ -175,21 +173,29 @@ class Company extends Authenticatable
         return $this->psychosocial_collection_type === MetodologyType::HSE->value;
     }
 
-    public function hasCampaignThisYear(string $collection_id, string $collection_type, ?string $status = null): bool
+    public function hasOverlappingCampaign(string $collection_id, string $collection_type, string $start_date, string $end_date, ?int $ignore_campaign_id = null,): bool 
     {
-        $collection = $collection_type === CollectionCategory::BASE->value 
-                        ? BaseCollection::find($collection_id) 
-                        : CustomCollection::find($collection_id);
+        $collection = $collection_type === CollectionCategory::BASE->value
+            ? BaseCollection::find($collection_id)
+            : CustomCollection::find($collection_id);
 
-        return session('auth:company')
-                        ->campaigns()
-                        ->when($status, function($q) use($status) {
-                            $q->where('status', $status);
-                        })
-                        ->whereYear('start_date', now()->year)
-                        ->get()
-                        ->filter(fn($campaign) => $campaign->collection()->type === $collection->type)
-                        ->isNotEmpty();
+        $campaigns = $this->campaigns()
+            ->when($ignore_campaign_id, function ($query) use ($ignore_campaign_id) {
+                $query->where('id', '!=', $ignore_campaign_id);
+            })
+            ->where(function ($query) use ($start_date, $end_date) {
+                $query->where('start_date', '<=', $end_date)->where('end_date', '>=', $start_date);
+            })
+            ->get();
+
+        return $campaigns
+            ->filter(function ($campaign) use ($collection) {
+                $campaignCollection = $campaign->collection();
+                if (! $campaignCollection) return false;
+
+                return $campaignCollection->type === $collection->type;
+            })
+            ->isNotEmpty();
     }
 
     public function activeCampaigns() : Collection

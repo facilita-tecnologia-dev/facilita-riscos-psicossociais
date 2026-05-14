@@ -70,8 +70,8 @@ class CampaignCreateComponent extends Component
         try {
             [$collection_type, $collection_id] = explode('_', $this->collection_id);
 
-            if(session('auth:company')->hasCampaignThisYear($collection_id, $collection_type)) {
-                $this->dispatch('alert:danger', 'Você já agendou uma campanha do mesmo tipo no ano atual.');
+            if (session('auth:company')->hasOverlappingCampaign($collection_id, $collection_type, $validatedData['start_date'], $validatedData['end_date'])) {
+                $this->dispatch('alert:danger', 'Já existe uma campanha deste tipo agendada/em andamento neste período.');
                 return;
             }
 
