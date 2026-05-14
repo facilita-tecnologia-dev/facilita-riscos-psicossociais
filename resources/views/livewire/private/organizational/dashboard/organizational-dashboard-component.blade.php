@@ -5,14 +5,22 @@
             <h1 class="text-main-text font-heading text-left text-base sm:text-xl font-semibold">{{ $organizationalCampaign->name }} ({{ $organizationalCampaign->start_date->year }})</h1>
         </div>
     
-
-        @if($organizationalCampaign->start_date->year < now()->year)
-            <div class="border-alert bg-main-background flex rounded-lg border px-4 py-3">
-                <span class="text-sm text-secondary-text text-left font-normal">Esta campanha não foi realizada no ano atual, tendo sido concluída no ano de {{ $organizationalCampaign->start_date->year }}. Para visualizar campanhas anteriores ou agendar uma nova avaliação de riscos psicossociais, acesse a página de Campanhas.</span>
-            </div>
-        @endif
-
         <section class="flex flex-col gap-4">
+            @if($organizationalCampaign->start_date->year < now()->year)
+                <div class="border-alert bg-main-background flex rounded-lg border px-4 py-3">
+                    <span class="text-sm text-secondary-text text-left font-normal">Esta campanha não foi realizada no ano atual, tendo sido concluída no ano de {{ $organizationalCampaign->start_date->year }}. Para visualizar campanhas anteriores ou agendar uma nova avaliação de riscos psicossociais, acesse a página de Campanhas.</span>
+                </div>
+            @endif
+
+            <div id="date-n-status-infos" class="border-borders bg-main-background flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 rounded-lg border px-4 py-3">
+                <span class="text-sm text-secondary-text text-left font-normal">Data de Início: {{ $organizationalCampaign->start_date->format('d/m/Y') }}</span>
+                <div class="h-1.5 w-1.5 rounded-full bg-secondary-text hidden sm:block"></div>
+                <span class="text-sm text-secondary-text text-left font-normal">Data de Encerramento: {{ $organizationalCampaign->end_date->format('d/m/Y') }}</span>
+                <div class="h-1.5 w-1.5 rounded-full bg-secondary-text hidden sm:block"></div>
+                <span class="text-sm text-secondary-text text-left font-normal">Status: {{ $organizationalCampaign->status->label() }}</span>
+            </div>
+
+
             <div id="relevant-infos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-start gap-4">
                 <livewire:private.organizational.dashboard.organizational-campaign-engagement-component :engagement="$engagement" />
 

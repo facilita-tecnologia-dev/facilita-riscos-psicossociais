@@ -7,29 +7,25 @@
         </div>
     </header>
 
-    {{-- @if($psychosocialCampaign->start_date->year == now()->year) --}}
-        <div class="flex flex-col md:flex-row xl:flex-col gap-3">
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialControlActions', [\App\Models\User::class]))
-                <x-actions.button :href="route('psychosocial.control-action')" class="w-full">
-                    <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
+    <div class="flex flex-col md:flex-row xl:flex-col gap-3">
+        @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialControlActions', [\App\Models\User::class]))
+            <x-actions.button :href="route('psychosocial.control-action')" class="w-full">
+                <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Medidas de Controle</span>
+            </x-actions.button>
+        @endif
+
+        @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialIndicators', [\App\Models\User::class]))
+            @if(session('auth:company')->usesHSE())
+                <x-actions.button :href="route('psychosocial.absences')" class="w-full">
+                    <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
+                </x-actions.button>
+            @else
+                <x-actions.button :href="route('psychosocial.indicators')" class="w-full">
+                    <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Dados de Desempenho Organizacional</span>
                 </x-actions.button>
             @endif
+        @endif
 
-            @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialIndicators', [\App\Models\User::class]))
-                @if(session('auth:company')->usesHSE())
-                    <x-actions.button :href="route('psychosocial.absences')" class="w-full">
-                        <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
-                    </x-actions.button>
-                @else
-                    <x-actions.button :href="route('psychosocial.indicators')" class="w-full">
-                        <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Dados de Desempenho Organizacional</span>
-                    </x-actions.button>
-                @endif
-            @endif
-
-            <livewire:private.psychosocial.report.generate-report-component :campaign="$psychosocialCampaign">
-        </div>
-    {{-- @else
-        <span class="text-secondary-text font-heading text-left text-sm font-normal">Não há ações disponíveis</span>
-    @endif --}}
+        <livewire:private.psychosocial.report.generate-report-component :campaign="$psychosocialCampaign">
+    </div>
 </div>

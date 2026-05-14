@@ -35,7 +35,13 @@ class OrganizationalDashboardComponent extends Component
         
         if($this->organizationalCampaign){
             $this->organizationalResults = $this->getDashboardResults();
-            $this->engagement = OrganizationalService::engagement($this->organizationalCampaign, $this->evaluation_type);
+            $this->engagement = $this->organizationalCampaign->status === CampaignStatus::COMPLETED 
+                ? collect([
+                    'campaign_status' => $this->organizationalCampaign->status,
+                    'general' => $this->organizationalCampaign->engagement_percentage, 
+                    'divided' => []
+                  ])
+                : OrganizationalService::engagement(session('auth:company'), $this->organizationalCampaign, $this->evaluation_type);
         }
     }
 
@@ -52,7 +58,7 @@ class OrganizationalDashboardComponent extends Component
         $this->evaluation_type = $evaluation_type;
 
         $this->organizationalResults = $this->getDashboardResults();
-        $this->engagement = OrganizationalService::engagement($this->organizationalCampaign, $this->evaluation_type);
+        $this->engagement = OrganizationalService::engagement(session('auth:company'), $this->organizationalCampaign, $this->evaluation_type);
     }
 
     #[On('organizational-evaluation:filter')]

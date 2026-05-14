@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Private\Psychosocial\Dashboard;
 
+use App\Models\Campaign;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;

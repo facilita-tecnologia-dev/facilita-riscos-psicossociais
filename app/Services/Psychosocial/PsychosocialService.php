@@ -5,6 +5,7 @@ namespace App\Services\Psychosocial;
 use App\Enums\Campaign\EvaluationTypes;
 use App\Jobs\GeneratePsychosocialReportJob;
 use App\Models\Campaign;
+use App\Models\Company;
 use Illuminate\Support\Facades\Cache;
 
 class PsychosocialService
@@ -448,7 +449,7 @@ class PsychosocialService
         return $evaluatedRisks;
     }
 
-    public static function engagement(Campaign $campaign, string $evaluation_type)
+    public static function engagement(Company $company, Campaign $campaign, string $evaluation_type)
     {
         $allowedDepartments = [];
 
@@ -456,7 +457,7 @@ class PsychosocialService
             $allowedDepartments = session('auth:user')->getDepartmentScopes(session('auth:user'));
         }
 
-        $companyUsers = session('auth:company')
+        $companyUsers = $company
             ->activeUsers()
             ->when(
                 session('auth:guard') === 'user',
@@ -500,6 +501,7 @@ class PsychosocialService
         $generalEngagement = $totalCompanyUsers > 0 ? floor(($totalCompanyRespondents / $totalCompanyUsers) * 100) : 0;
 
         return collect([
+            'campaign_status' => $campaign->status,
             'general' => $generalEngagement,
             'divided' => collect($engagementDivided)->sortByDesc('engagement')->toArray()
         ]);

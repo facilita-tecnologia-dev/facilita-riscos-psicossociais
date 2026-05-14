@@ -26,8 +26,8 @@ class CampaignRepository
                 'status' => CampaignStatus::SCHEDULED
             ]);
 
-            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
-            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::COMPLETED)->delay(Carbon::parse($data['end_date']));
+            UpdateCampaignStatusJob::dispatch(session('auth:company'), $campaign, CampaignStatus::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
+            UpdateCampaignStatusJob::dispatch(session('auth:company'), $campaign, CampaignStatus::COMPLETED)->delay(Carbon::parse($data['end_date']));
         });
     }
 
@@ -41,8 +41,8 @@ class CampaignRepository
                 'end_date' => $data['end_date'],
             ]);
 
-            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
-            UpdateCampaignStatusJob::dispatch($campaign, CampaignStatus::COMPLETED)->delay(Carbon::parse($data['end_date']));
+            UpdateCampaignStatusJob::dispatch(session('auth:company'), $campaign, CampaignStatus::IN_PROGRESS)->delay(Carbon::parse($data['start_date']));
+            UpdateCampaignStatusJob::dispatch(session('auth:company'), $campaign, CampaignStatus::COMPLETED)->delay(Carbon::parse($data['end_date']));
         });
     }
 

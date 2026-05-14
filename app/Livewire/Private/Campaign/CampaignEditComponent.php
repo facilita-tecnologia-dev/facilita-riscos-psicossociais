@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Private\Campaign;
 
+use App\Actions\Private\Campaign\SnapshotCampaignEngagementAction;
 use App\Enums\Campaign\CampaignStatus;
 use App\Models\Campaign;
 use App\Repositories\CampaignRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -36,9 +38,14 @@ class CampaignEditComponent extends Component
 
     public function submit()
     {
+        $startDateWasChanged = ! $this->campaign->start_date->equalTo(Carbon::parse($this->start_date));
+        $startDateRules = ['required', 'date',];
+
+        if ($startDateWasChanged) $startDateRules[] = Rule::date()->afterOrEqual(now());
+
         $validatedData = $this->validate([
             'name' => ['required', 'string', 'min:8', 'max:255'],
-            'start_date' => ['required', 'date', Rule::date()->afterOrEqual(now())],
+            'start_date' => $startDateRules,
             'end_date' => ['required', 'date', 'after:start_date'],
             'description' => ['nullable', 'string', 'max:512'],
         ]);
@@ -91,7 +98,8 @@ class CampaignEditComponent extends Component
             $this->campaign->end_date = now();
             $this->campaign->status = CampaignStatus::COMPLETED;
             $this->campaign->save();
-
+            
+            app(SnapshotCampaignEngagementAction::class)->execute(session('auth:company'), $this->campaign);
             $this->dispatch('alert:success', 'Campanha finalizada com sucesso!');
             
             return redirect()->to(route('campaign.index'));

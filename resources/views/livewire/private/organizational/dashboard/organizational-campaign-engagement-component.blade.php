@@ -6,40 +6,60 @@
     <header class="flex items-center justify-between">
         <h2 class="text-main-text font-heading text-left text-lg font-semibold">Adesão</h2>
 
-        <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Neste card, você pode visualizar a adesão da sua campanha de testes, dividida por setor ou por função.">
-            <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
-        </div>
+        @if($engagement['campaign_status'] === App\Enums\Campaign\CampaignStatus::COMPLETED)
+            <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Neste card, você pode visualizar a adesão total obtida na campanha.">
+                <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
+            </div>
+        @else
+            <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Neste card, você pode visualizar a adesão da sua campanha de testes, dividida pelo fator de avaliação.">
+                <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
+            </div>
+        @endif
     </header>
 
-    <div id="percentage" class="space-y-1.5">
-        <header class="flex items-center justify-between">
-            <span style="color: {{ $engagementLevel->color() }}" class="font-heading text-left text-sm font-semibold">Adesão {{ $engagementLevel->value }}</span>
-            <span style="color: {{ $engagementLevel->color() }}" class="font-heading text-right text-sm font-semibold">{{ $engagement['general'] }}%</span>
-        </header>
-
-        <div class="bg-borders h-1 w-full rounded-full">
-            <div style="background-color: {{ $engagementLevel->color() }}; width: {{ $engagement['general'] }}%" class="h-full rounded-full"></div>
-        </div>
-    </div>
-
-    <div wire:loading class="w-full">
-        <div class="flex w-full items-center justify-center gap-2 py-6">
-            <x-icon icon="loading" class="text-primary-solid h-5 w-5 animate-spin object-scale-down" />
-            <span class="text-secondary-text text-left text-sm font-normal">Carregando adesão...</span>
-        </div>
-    </div>
-  
-    
-    <div wire:loading.remove class="flex flex-1 flex-col gap-2 overflow-y-auto pr-2">
-        @foreach ($engagement['divided'] as $itemName => $itemEngagement)
-            @php
-                $departmentEngagementLevel = App\Enums\Campaign\EngagementLevel::fromPercentage($itemEngagement['engagement']);
-            @endphp
-
-            <div class="flex items-center justify-between">
-                <span class="text-main-text font-heading text-left text-sm font-normal">{{ $itemName }}</span>
-                <span style="color: {{ $departmentEngagementLevel->color() }}" class="font-heading text-left text-sm font-semibold">{{ $itemEngagement['engagement'] }}%</span>
+    @if($engagement['campaign_status'] === App\Enums\Campaign\CampaignStatus::COMPLETED)
+        @if($engagement['general'] !== null)
+            <div class="flex flex-col items-center gap-3 sm:gap-4 pb-4 sm:pb-6">
+                <span class="text-sm sm:text-base text-main-text text-center font-normal">A adesão total desta campanha foi de:</span>
+                <span style="color: {{ $engagementLevel->color() }}" class="text-4xl sm:text-5xl font-semibold">{{ $engagement['general'] }}%</span>
+                <span class="text-sm sm:text-base text-main-text text-center font-normal">sendo considerada uma <span style="color: {{ $engagementLevel->color() }}" class="font-semibold">Adesão {{ $engagementLevel->value }}</span>.</span>
             </div>
-        @endforeach
-    </div>
+        @else
+            <div class="flex flex-col items-center gap-2 pb-4 sm:pb-6">
+                <x-icon icon="x-mark" class="text-secondary-text h-24 w-24 object-contain" />
+                <span class="text-sm sm:text-base text-secondary-text text-center font-normal">Não conseguimos buscar dados sobre a adesão desta campanha...</span>
+            </div>
+        @endif
+    @else
+        <div id="percentage" class="space-y-1.5">
+            <header class="flex items-center justify-between">
+                <span style="color: {{ $engagementLevel->color() }}" class="font-heading text-left text-sm font-semibold">Adesão {{ $engagementLevel->value }}</span>
+                <span style="color: {{ $engagementLevel->color() }}" class="font-heading text-right text-sm font-semibold">{{ $engagement['general'] }}%</span>
+            </header>
+
+            <div class="bg-borders h-1 w-full rounded-full">
+                <div style="background-color: {{ $engagementLevel->color() }}; width: {{ $engagement['general'] }}%" class="h-full rounded-full"></div>
+            </div>
+        </div>
+
+        <div wire:loading class="w-full">
+            <div class="flex w-full items-center justify-center gap-2 py-6">
+                <x-icon icon="loading" class="text-primary-solid h-5 w-5 animate-spin object-scale-down" />
+                <span class="text-secondary-text text-left text-sm font-normal">Carregando adesão...</span>
+            </div>
+        </div>
+        
+        <div wire:loading.remove class="flex flex-1 flex-col gap-2 overflow-y-auto pr-2">
+            @foreach ($engagement['divided'] as $itemName => $itemEngagement)
+                @php
+                    $departmentEngagementLevel = App\Enums\Campaign\EngagementLevel::fromPercentage($itemEngagement['engagement']);
+                @endphp
+
+                <div class="flex items-center justify-between">
+                    <span class="text-main-text font-heading text-left text-sm font-normal">{{ $itemName }}</span>
+                    <span style="color: {{ $departmentEngagementLevel->color() }}" class="font-heading text-left text-sm font-semibold">{{ $itemEngagement['engagement'] }}%</span>
+                </div>
+            @endforeach
+        </div>
+    @endif
 </div>

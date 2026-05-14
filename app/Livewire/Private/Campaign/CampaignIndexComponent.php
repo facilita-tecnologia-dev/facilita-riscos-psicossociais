@@ -19,5 +19,5 @@ class CampaignIndexComponent extends Component
     {
         $this->currentYearCampaigns  = session('auth:company')->campaigns()->whereYear("start_date", now()->year)->get();
         $this->previousYearCampaigns   = session('auth:company')->campaigns()->whereYear('start_date', '<', now()->year)->get();
-    }
+    } 
 }

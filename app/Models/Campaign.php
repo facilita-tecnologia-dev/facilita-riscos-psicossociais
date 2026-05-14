@@ -8,6 +8,7 @@ use App\Policies\CampaignPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[UsePolicy(CampaignPolicy::class)]
 class Campaign extends Model
@@ -24,6 +25,10 @@ class Campaign extends Model
         'end_date' => 'datetime',
     ];
 
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     public function collection(): BaseCollection | CustomCollection
     {   
