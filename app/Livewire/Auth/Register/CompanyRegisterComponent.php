@@ -2,13 +2,16 @@
 
 namespace App\Livewire\Auth\Register;
 
+use App\Actions\Subscription\CreateSubscriptionAction;
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Psychosocial\PROART\PROARTHazard;
+use App\Enums\Subscription\PaymentType;
 use App\Models\BaseControlAction;
 use App\Models\Company;
 use App\Models\CompanyReport;
-use App\Models\PROARTIndicator;
+use App\Models\Organizationalndicator;
 use App\Services\Auth\AuthenticationService;
+use App\Services\Subscription\SubscriptionPricingService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -21,6 +24,28 @@ class CompanyRegisterComponent extends Component
     public ?string $email = null;
     public ?string $password = null;
     public ?string $password_confirmation = null;
+
+    public int $employees;
+    public int $amount;
+
+    public string $employeeRange;
+    public string $formattedAmount;
+
+    public PaymentType $paymentType;
+
+    public function mount()
+    {
+        $subscriptionData = session('subscription_data');
+
+        if (!$subscriptionData) {return redirect()->route('site.home');}
+
+        $this->employees = $subscriptionData['employees'];
+        $this->amount = $subscriptionData['amount'];
+
+        $this->employeeRange = SubscriptionPricingService::employeeRange($subscriptionData['employees']);
+        $this->formattedAmount = number_format($subscriptionData['amount'] / 100, 2, ',', '.');
+        $this->paymentType = PaymentType::from($subscriptionData['payment_type']);
+    }
 
     public function render()
     {
@@ -48,7 +73,8 @@ class CompanyRegisterComponent extends Component
                     'has_cids' => true,
                 ]);
 
-                $this->createMetrics($company);
+                $this->createSubscription($company);
+                $this->createIndicators($company);
                 $this->createReports($company);
                 $this->createActionPlan($company);
                 
@@ -67,9 +93,9 @@ class CompanyRegisterComponent extends Component
         }
     }
 
-    private function createMetrics(Company $company)
+    private function createIndicators(Company $company)
     {
-        PROARTIndicator::each(fn($metric) => $company->proartIndicators()->create(['indicator_id' => $metric->id]));
+        Organizationalndicator::each(fn($indicator) => $company->organizationalIndicators()->create(['indicator_id' => $indicator->id]));
     }
     
     private function createReports(Company $company)
@@ -95,5 +121,11 @@ class CompanyRegisterComponent extends Component
                 'content' => $controlAction->content,
             ])
         );
+    }
+
+    private function createSubscription(Company $company)
+    {
+        $subscription = app(CreateSubscriptionAction::class)->execute(company: $company, employees: $this->employees, amount: $this->amount, type: $this->paymentType);
+        if($subscription) {session()->forget('subscription_data');}
     }
 }
