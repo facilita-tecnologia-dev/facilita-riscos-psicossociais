@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PROARTIndicator extends Model
+class Organizationalndicator extends Model
 {
-    protected $table = 'proart_indicator';
+    protected $table = 'organizational_indicator';
     public $timestamps = false;
 }

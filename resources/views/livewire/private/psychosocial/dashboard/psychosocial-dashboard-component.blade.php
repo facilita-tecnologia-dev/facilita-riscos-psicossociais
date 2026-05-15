@@ -145,16 +145,9 @@
                         desses riscos nos diferentes setores e funções da empresa.
                     </p>
 
-
-                    @if(session('auth:company')->usesHSE())
-                        <x-actions.button :href="route('psychosocial.absences')" class="w-full">
-                            <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Epidemiológicos</span>
-                        </x-actions.button>
-                    @else
-                        <x-actions.button :href="route('psychosocial.indicators')" class="w-full">
-                            <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Dados de Desempenho Organizacional</span>
-                        </x-actions.button>
-                    @endif
+                    <x-actions.button :href="route('psychosocial.indicators')" class="w-full">
+                        <span class="font-heading text-main-background text-center text-sm font-semibold">Editar Indicadores Organizacionais</span>
+                    </x-actions.button>
                 </div>
             @endif
 

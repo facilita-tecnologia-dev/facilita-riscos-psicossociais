@@ -65,9 +65,9 @@ class Company extends Authenticatable
         return $this->hasMany(UserFeedback::class);
     }
 
-    public function proartIndicators(): HasMany
+    public function organizationalIndicators(): HasMany
     {
-        return $this->hasMany(CompanyPROARTIndicator::class, 'company_id');
+        return $this->hasMany(CompanyOrganizationalIndicator::class, 'company_id');
     }
 
     public function CIDAbsences(): HasMany
@@ -135,27 +135,27 @@ class Company extends Authenticatable
 
     public function absences(): float | null
     {
-        return $this->proartIndicators->where('indicator.type', 'absences')->first()->value;
+        return $this->organizationalIndicators->where('indicator.type', 'absences')->first()->value;
     }
 
     public function absenteeism(): float | null
     {
-        return $this->proartIndicators->where('indicator.type', 'absenteeism')->first()->value;
+        return $this->organizationalIndicators->where('indicator.type', 'absenteeism')->first()->value;
     }
 
     public function accidents(): float | null
     {
-        return $this->proartIndicators->where('indicator.type', 'accidents')->first()->value;
+        return $this->organizationalIndicators->where('indicator.type', 'accidents')->first()->value;
     }
 
     public function extraHours(): float | null
     {
-        return $this->proartIndicators->where('indicator.type', 'extra-hours')->first()->value;
+        return $this->organizationalIndicators->where('indicator.type', 'extra-hours')->first()->value;
     }
 
     public function turnover(): float | null
     {
-        return $this->proartIndicators->where('indicator.type', 'turnover')->first()->value;
+        return $this->organizationalIndicators->where('indicator.type', 'turnover')->first()->value;
     }
     
     public function getReports()

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Livewire\Private\Psychosocial\Absence;
+namespace App\Livewire\Private\Psychosocial\Indicator;
 
 use App\Models\CID;
-use App\Models\Company;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
@@ -19,8 +18,8 @@ class AbsenceIndexComponent extends Component
     public Collection $cids;
 
     public function render()
-    {    
-        return view('livewire.private.psychosocial.absence.absence-index-component');
+    {
+        return view('livewire.private.psychosocial.indicator.absence-index-component');
     }
 
     public function mount()
@@ -28,7 +27,7 @@ class AbsenceIndexComponent extends Component
         $this->absences = $this->fetchAbsences();
         $this->cids =  CID::all();
     }
-
+    
     public function refresh()
     {
         $this->absences = $this->fetchAbsences();

@@ -1,23 +1,21 @@
 <?php
 
-namespace App\Enums\Psychosocial\PROART;
+namespace App\Enums\Psychosocial;
 
-enum PROARTIndicator: string
+enum Indicator: string
 {
-    case ABSENCES = 'absences';
-    case ABSENTEEISM = 'absenteeism';
-    case ACCIDENTS = 'accidents';
     case EXTRA_HOURS = 'extra-hours';
+    case ABSENTEEISM = 'absenteeism';
     case TURNOVER = 'turnover';
+    case REPORTS = 'reports';
 
     public function label(): string
     {
         return match ($this) {
-            self::ABSENCES => 'Afastamentos',
-            self::ABSENTEEISM => 'Absenteísmo',
-            self::ACCIDENTS => 'Acidentes',
             self::EXTRA_HOURS => 'Horas Extra',
+            self::ABSENTEEISM => 'Absenteísmo',
             self::TURNOVER => 'Rotatividade',
+            self::REPORTS => 'Denúncias',
         };
     }
 

@@ -21,12 +21,6 @@ class PsychosocialController
         return view('private.psychosocial.indicator.index');
     }
 
-    public function absences()
-    {
-        Gate::forUser(AuthenticationService::user())->authorize('psychosocialIndicators', [User::class]);
-        return view('private.psychosocial.absence.index');
-    }
-
     public function controlActions()
     {
         Gate::forUser(AuthenticationService::user())->authorize('psychosocialControlActions', [User::class]);

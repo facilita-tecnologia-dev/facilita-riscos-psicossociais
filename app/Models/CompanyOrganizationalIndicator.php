@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CompanyPROARTIndicator extends Model
+class CompanyOrganizationalIndicator extends Model
 {
-    protected $table = 'company_proart_indicator';
+    protected $table = 'company_organizational_indicator';
     public $timestamps = false;
 
     public function company(): BelongsTo
@@ -17,6 +17,6 @@ class CompanyPROARTIndicator extends Model
 
     public function indicator(): BelongsTo
     {
-        return $this->belongsTo(PROARTIndicator::class, 'indicator_id');
+        return $this->belongsTo(Organizationalndicator::class, 'indicator_id');
     }
 }

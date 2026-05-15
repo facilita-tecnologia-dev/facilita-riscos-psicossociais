@@ -35,6 +35,7 @@ class PsychosocialDashboardComponent extends Component
   
         if($this->psychosocialCampaign){
             $this->psychosocialResults = $this->getDashboardResults();
+            
             if ($this->psychosocialCampaign->status === CampaignStatus::COMPLETED) {
                 if (! $this->psychosocialCampaign->engagement_percentage) {
                     app(SnapshotCampaignEngagementAction::class)->execute(session('auth:company'), $this->psychosocialCampaign);

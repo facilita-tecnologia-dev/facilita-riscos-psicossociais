@@ -1,48 +1,40 @@
 <?php
 
-namespace App\Livewire\Private\Psychosocial\Absence;
+namespace App\Livewire\Private\Psychosocial\Indicator;
 
-use App\Models\CompanyAbsence;
+use App\Jobs\SoftDeleteAbsenceAfterDeadline;
+use App\Models\CID;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
-class AbsenceEditComponent extends Component
+class AbsenceCreateComponent extends Component
 {
-    public CompanyAbsence $absence;
-
     public ?string $cid = null; 
     public ?string $department = null; 
     public ?string $occupation = null; 
     public ?string $duration = null; 
-
+    
     public Collection $cids; 
     public Collection $departments; 
     public Collection $occupations; 
 
     public function render()
     {
-        return view('livewire.private.psychosocial.absence.absence-edit-component');
+        return view('livewire.private.psychosocial.indicator.absence-create-component');
     }
 
-    public function mount(CompanyAbsence $absence, Collection $cids)
+    public function mount(Collection $cids)
     {
-        $this->absence = $absence;
-
-        $users = session('auth:company')->allUsers;
-        
-        $this->cid = $absence->cid_id;
-        $this->department = $absence->department;
-        $this->occupation = $absence->occupation;
-        $this->duration = $absence->duration;
+        $users = session('auth:company')->allUsers()->get();
 
         $this->cids = $cids->map(fn($cid) => ['label' => $cid->type, 'value' => $cid->id]);
         $this->departments = $users->pluck('department')->unique()->map(fn($department) => ['label' => $department, 'value' => $department]);
         $this->occupations = $users->pluck('occupation')->unique()->map(fn($occupation) => ['label' => $occupation, 'value' => $occupation]);
     }
 
-    public function update()
+    public function create()
     {
         $this->validate([
             'cid' => ['required'],
@@ -53,18 +45,21 @@ class AbsenceEditComponent extends Component
 
         try {
             DB::transaction(function(){
-                $this->absence->update([
+                $absence = session('auth:company')->CIDabsences()->create([
                     'cid_id' => $this->cid,
                     'department' => $this->department,
                     'occupation' => $this->occupation,
                     'duration' => $this->duration,
                 ]);
+
+                SoftDeleteAbsenceAfterDeadline::dispatch($absence)->delay(now()->addMonths((int) config('app.absence-deadline')));
                 
-                $this->dispatch('absence:updated');
-                $this->dispatch('alert:success', 'Afastamento atualizado!');
-            });
+                $this->dispatch('absence:created');
+                $this->dispatch('alert:success', 'Afastamento registrado!');
+                $this->reset(['cid', 'department', 'occupation', 'duration']);
+            });    
         } catch (\Throwable $th) {
-            Log::error('Erro ao atualizar afastamento', [
+            Log::error('Erro ao registrar afastamento', [
                 'company' => session('auth:company')->id,
                 'cid_id' => $this->cid,
                 'department' => $this->department,
@@ -74,8 +69,7 @@ class AbsenceEditComponent extends Component
                 'trace' => $th->getTraceAsString(),
             ]);
 
-            $this->dispatch('alert:danger', 'Erro ao atualizar afastamento.');
+            $this->dispatch('alert:danger', 'Erro ao registrar afastamento.');
         }
-
     }
 }

@@ -1,9 +1,7 @@
 <div class="contents">
-    <x-structure.page-header icon="brain" label="Indicadores Epidemiológicos" :breadcrumbs="['Indicadores Epidemiológicos' => null]" />
-
     <div class="w-full flex justify-end">
         @if(session('auth:company')->has_cids)
-            <livewire:private.psychosocial.absence.absence-create-component :cids="$cids" />
+            <livewire:private.psychosocial.indicator.absence-create-component :cids="$cids" />
         @endif
     </div>
 
@@ -49,10 +47,10 @@
                                     <span class="text-secondary-text text-left font-text truncate text-sm font-normal md:text-base" title="{{ $absence->duration }}">{{ $absence->duration }} dias</span>
                                 </x-table.td>
                                 <x-table.td>
-                                    <livewire:private.psychosocial.absence.absence-edit-component wire:key="edit-{{ $absence->id }}" :absence="$absence" :cids="$cids">
+                                    <livewire:private.psychosocial.indicator.absence-edit-component wire:key="edit-{{ $absence->id }}" :absence="$absence" :cids="$cids">
                                 </x-table.td>
                                 <x-table.td>
-                                    <livewire:private.psychosocial.absence.absence-delete-component wire:key="delete-{{ $absence->id }}" :absence="$absence">
+                                    <livewire:private.psychosocial.indicator.absence-delete-component wire:key="delete-{{ $absence->id }}" :absence="$absence">
                                 </x-table.td>
                             </x-table.tr>
                         @endforeach
@@ -61,7 +59,6 @@
             </div>
         @else
             <div class="w-full flex flex-col items-center gap-2">
-                <img src="{{ asset('assets/registers-not-found.svg') }}" alt="" class="max-w-72">
                 <p class="text-base text-center">Você ainda não registrou afastamentos.</p>
             </div>      
         @endif

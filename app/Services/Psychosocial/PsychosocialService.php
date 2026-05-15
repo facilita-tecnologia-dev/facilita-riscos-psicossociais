@@ -259,7 +259,7 @@ class PsychosocialService
 
     public static function PROARTDepartments(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
-        session('auth:company', [session('auth:company')->load(['proartIndicators', 'actionPlan'])]);
+        session('auth:company', [session('auth:company')->load(['organiaztionalIndicators', 'actionPlan'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $hazards = $campaign->collection()->hazards->groupBy('group');
@@ -355,7 +355,7 @@ class PsychosocialService
 
     public static function PROARTOccupations(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
-        session('auth:company', [session('auth:company')->load(['proartIndicators', 'actionPlan'])]);
+        session('auth:company', [session('auth:company')->load(['organiaztionalIndicators', 'actionPlan'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $hazards = $campaign->collection()->hazards->groupBy('group');

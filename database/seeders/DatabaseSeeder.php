@@ -7,6 +7,7 @@ use Database\Seeders\BaseTests\BaseCollectionsSeeder;
 use Database\Seeders\Campaigns\CampaignSeeder;
 use Database\Seeders\CIDS\CIDSeeder;
 use Database\Seeders\Cms\CmsUserSeeder;
+use Database\Seeders\OrganizationalIndicator\OrganizationalIndicatorSeeder;
 use Database\Seeders\PROARTIndicator\PROARTIndicatorSeeder;
 use Database\Seeders\Risks\HSERiskSeeder;
 use Database\Seeders\Risks\PROARTRiskSeeder;
@@ -19,17 +20,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            CmsUserSeeder::class,
-            BaseCollectionsSeeder::class,
-            RoleSeeder::class,
-            PROARTRiskSeeder::class,
-            HSERiskSeeder::class,
-            CIDSeeder::class,
-            PermissionSeeder::class,
-            PROARTIndicatorSeeder::class,
-            ActionPlanSeeder::class,
-            CompanySeeder::class,
-            CampaignSeeder::class
+            // CmsUserSeeder::class,
+            // BaseCollectionsSeeder::class,
+            // RoleSeeder::class,
+            // PROARTRiskSeeder::class,
+            // HSERiskSeeder::class,
+            // CIDSeeder::class,
+            // PermissionSeeder::class,
+            OrganizationalIndicatorSeeder::class,
+            // ActionPlanSeeder::class,
+            // CompanySeeder::class,
+            // CampaignSeeder::class
         ]);
     }
 }

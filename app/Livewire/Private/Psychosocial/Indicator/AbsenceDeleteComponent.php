@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Private\Psychosocial\Absence;
+namespace App\Livewire\Private\Psychosocial\Indicator;
 
 use App\Models\CompanyAbsence;
 use Illuminate\Support\Facades\Log;
@@ -12,7 +12,7 @@ class AbsenceDeleteComponent extends Component
 
     public function render()
     {
-        return view('livewire.private.psychosocial.absence.absence-delete-component');
+        return view('livewire.private.psychosocial.indicator.absence-delete-component');
     }
 
     public function mount(CompanyAbsence $absence)
