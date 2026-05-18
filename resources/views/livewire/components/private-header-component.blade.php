@@ -7,7 +7,7 @@
         @endphp
         <div class="flex items-center gap-4">
             <img src="{{ $logo }}" title="{{ session('auth:company')->name }}" class="h-8 object-scale-down transition hover:scale-105 md:h-10" alt="Logomarca" />
-            <h1 class="text-secondary-text font-heading text-left text-xs sm:text-sm font-semibold" title="{{ session('auth:company')->name }}">{{ session('auth:company')->name }}</h1>
+            <h1 class="text-secondary-text font-heading text-left text-sm font-semibold hidden md:block" title="{{ session('auth:company')->name }}">{{ session('auth:company')->name }}</h1>
         </div>
     @else
         <h1 class="text-main-text font-heading text-left text-base font-semibold">{{ session('auth:company')->name }}</h1>
@@ -15,7 +15,9 @@
 
     <div class="flex gap-3">
         @if(session('auth:guard') === 'user')
-            <livewire:private.user.switch-company-component />
+            <div class="hidden md:block">
+                <livewire:private.user.switch-company-component />
+            </div>
         @endif
 
         <div class="block md:hidden" wire:click="openSidebar">

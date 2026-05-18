@@ -69,7 +69,7 @@
     @endif
 
     @if($video_watched)
-        <section id="campaign.answer" class="flex flex-col lg:grid lg:grid-cols-3 gap-4 items-start">
+        <section id="campaign.answer" class="flex flex-col lg:grid lg:grid-cols-3 gap-4 items-start pb-16 sm:pb-0">
             <div class="flex flex-col gap-4 w-full lg:col-span-2">
                 <div class="w-full bg-secondary-background border-borders flex flex-col items-start gap-8 rounded-2xl border px-4 py-6 sm:px-6 sm:py-8 shadow-sm">
                     <header class="flex w-full items-center justify-between">
