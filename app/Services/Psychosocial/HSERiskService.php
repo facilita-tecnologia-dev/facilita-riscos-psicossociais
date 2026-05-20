@@ -56,7 +56,7 @@ class HSERiskService
         HSEHazard::SOCIAL_ISOLATION->value => socialIsolation::class,
         HSEHazard::CHRONIC_TEAM_CONFLICTS->value => chronicTeamConflicts::class,
         HSEHazard::MORAL_HARASSMENT->value => moralHarassment::class,
-        HSEHazard::SEXUAL_HARASSMENT->value => sexualHarassment::class,
+        // HSEHazard::SEXUAL_HARASSMENT->value => sexualHarassment::class,
         HSEHazard::INCIVILITY->value => incivility::class,
         HSEHazard::DISCRIMINATION->value => discrimination::class,
         HSEHazard::VIOLENCE->value => violence::class,

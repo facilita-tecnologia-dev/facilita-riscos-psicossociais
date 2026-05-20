@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Private\Psychosocial\Report;
 
+use App\Enums\Psychosocial\RiskInventoryCoverage;
 use App\Enums\Psychosocial\RiskInventoryFormat;
 use App\Enums\Psychosocial\RiskInventoryType;
 use App\Models\ActionPlan;
@@ -17,6 +18,7 @@ class GenerateReportComponent extends Component
 
     public string $type = RiskInventoryType::DEPARTMENT->value;
     public string $format = RiskInventoryFormat::PDF->value;
+    public string $coverage = RiskInventoryCoverage::ALL_RISKS->value;
 
     public ActionPlan $report;
 
@@ -83,7 +85,7 @@ class GenerateReportComponent extends Component
         $this->downloadUrl = null;
 
         try {
-            PsychosocialService::report($this->psychosocialCampaign, $this->type, $this->format, $this->cache_key);
+            PsychosocialService::report($this->psychosocialCampaign, $this->type, $this->format, $this->coverage, $this->cache_key);
 
             $this->dispatch('alert:success', 'Gerando Inventário de Riscos... isso pode levar alguns minutos.');
             $this->closeReportModal();

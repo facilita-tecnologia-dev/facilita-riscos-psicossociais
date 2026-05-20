@@ -20,7 +20,7 @@ enum HSEHazard: string
     case SOCIAL_ISOLATION = 'hse-social-isolation';
     case CHRONIC_TEAM_CONFLICTS = 'hse-chronic-team-conflicts';
     case MORAL_HARASSMENT = 'hse-moral-harassment';
-    case SEXUAL_HARASSMENT = 'hse-sexual-harassment';
+    // case SEXUAL_HARASSMENT = 'hse-sexual-harassment';
     case INCIVILITY = 'hse-incivility';
     case DISCRIMINATION = 'hse-discrimination';
     case VIOLENCE = 'hse-violence';
@@ -49,12 +49,12 @@ enum HSEHazard: string
             self::LOW_SCHEDULE_FLEXIBILITY => 'Baixa flexibilidade de horário/local',
             self::RIGID_PROCEDURES => 'Procedimentos excessivamente rígidos',
             self::LACK_OF_FEEDBACK => 'Falta de feedback/reconhecimento',
-            self::TOXIC_LEADERSHIP => 'Liderança tóxica',
+            self::TOXIC_LEADERSHIP => 'Relações hierárquicas disfuncionais',
             self::INSUFFICIENT_TRAINING => 'Treinamento/recursos de trabalho insuficientes',
             self::SOCIAL_ISOLATION => 'Isolamento social',
             self::CHRONIC_TEAM_CONFLICTS => 'Conflitos crônicos de equipe',
-            self::MORAL_HARASSMENT => 'Assédio moral',
-            self::SEXUAL_HARASSMENT => 'Assédio sexual',
+            self::MORAL_HARASSMENT => 'Assédio/Conduta inadequada',
+            // self::SEXUAL_HARASSMENT => 'Assédio sexual',
             self::INCIVILITY => 'Incivilidade/humilhações',
             self::DISCRIMINATION => 'Discriminação',
             self::VIOLENCE => 'Violência/ameaças',

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\Campaign\EvaluationTypes;
+use App\Enums\Psychosocial\HSE\HSERisk;
 use App\Enums\Psychosocial\RiskInventoryFormat;
 use App\Exports\HSEReportDepartmentExport;
 use App\Exports\HSEReportOccupationExport;
@@ -91,6 +92,14 @@ class GeneratePsychosocialReportJob implements ShouldQueue
     {
         $this->updateProgress(20);
 
+        $hasCriticalRisks = collect($risks)
+            ->flatMap(fn ($divisionFactor) => $divisionFactor)
+            ->flatMap(fn ($category) => $category)
+            ->contains(function ($hazard) {
+                return in_array($hazard['risk']['evaluated'], [HSERisk::SUBSTANTIAL, HSERisk::INTOLERABLE], true);
+            });
+
+
         /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
         $s3 = Storage::disk('s3');
 
@@ -113,6 +122,7 @@ class GeneratePsychosocialReportJob implements ShouldQueue
             'company'    => $company,
             'risks'    => $risks,
             'absences' => $company->usesHSE() ? $absences : null,
+            'hasCriticalRisks' => $hasCriticalRisks,
         ])->setPaper('a4', 'portrait');
 
         $this->updateProgress(55);

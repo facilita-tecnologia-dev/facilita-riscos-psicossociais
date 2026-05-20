@@ -4,6 +4,7 @@ namespace App\Evaluators\HSE;
 
 use App\Enums\Campaign\EvaluationTypes;
 use App\Enums\Psychosocial\HSE\HSERisk;
+use App\Enums\Psychosocial\Indicator;
 use App\Models\Hazard;
 use App\Services\Psychosocial\HSERiskService;
 
@@ -15,8 +16,12 @@ class moralHarassment
         $gravity = $hazard->gravity;
 
         $risk = HSERiskService::riskMatrix($probability['probability'], $gravity);
-
+        
         if(session('auth:company')->has_cids && !$probability['hasCIDAbsences']){
+            $risk = HSERisk::from($risk->value - 1);
+        };
+
+        if(!$probability['hasReports']){
             $risk = HSERisk::from($risk->value - 1);
         };
         
@@ -47,9 +52,19 @@ class moralHarassment
 
         $probability = max(1, min(5, $initialProbability + $baseline + $modifiers));
 
+        $companyReports = session('auth:company')->organizationalIndicators->filter(fn($companyIndicator) => $companyIndicator->indicator->type == Indicator::REPORTS->value)->first();
+        
+        $hasReports = $companyReports
+                        ? (
+                            $companyReports->value > 0
+                            ? true
+                            : false
+                        ) : false;
+
         return [
             'probability' => $probability,
-            'hasCIDAbsences' => $hasCIDAbsences
+            'hasCIDAbsences' => $hasCIDAbsences,
+            'hasReports' => $hasReports,
         ];
     }
 }

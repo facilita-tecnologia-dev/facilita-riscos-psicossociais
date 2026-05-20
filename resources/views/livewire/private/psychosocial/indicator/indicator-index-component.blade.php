@@ -2,12 +2,12 @@
     <x-structure.page-header icon="brain" label="Indicadores Organizacionais" :breadcrumbs="['Indicadores Organizacionais' => null]" />
 
     {{-- TABS --}}
-    <div class="w-fit flex border border-borders rounded-md overflow-hidden">
-        <button @click="tab = 'absences'" class="bg-main-background cursor-pointer px-4 py-2 text-sm font-semibold transition hover:brightness-95" :class="tab === 'absences' ? 'bg-primary-solid text-main-background' : 'text-secondary-text'">
+    <div class="w-fit flex border border-borders rounded-md">
+        <button @click="tab = 'absences'" class="bg-main-background rounded-l-md cursor-pointer px-4 py-2 text-sm font-semibold transition hover:brightness-95" :class="tab === 'absences' ? 'bg-primary-solid text-main-background' : 'text-secondary-text'">
             Afastamentos
         </button>
 
-        <button @click="tab = 'performance'" class="bg-main-background cursor-pointer px-4 py-2 text-sm font-semibold transition hover:brightness-95" :class="tab === 'performance' ? 'bg-primary-solid text-main-background' : 'text-secondary-text'">
+        <button @click="tab = 'performance'" class="bg-main-background rounded-r-md cursor-pointer px-4 py-2 text-sm font-semibold transition hover:brightness-95" :class="tab === 'performance' ? 'bg-primary-solid text-main-background' : 'text-secondary-text'">
             Dados de Desempenho
         </button>
     </div>

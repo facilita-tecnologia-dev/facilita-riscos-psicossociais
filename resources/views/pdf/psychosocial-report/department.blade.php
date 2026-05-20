@@ -183,6 +183,11 @@
                                         <span style="font-weight: bold; margin: 2px">{{ $risk['risk']['evaluated']->label() }}</span>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <span>Interpretação: {{ $risk['risk']['evaluated']->message() }}</span>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
 
@@ -263,14 +268,26 @@
                 <div class="page-break"></div>
             @endif
         @endforeach
+        
+        <div style="margin-top: 48px">
+            <h2 style="margin-bottom: 16px">Conclusão</h2>
+
+            <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">
+                @if($hasCriticalRisks)
+                        Após a realização do Inventário de Riscos Psicossociais, verificou-se a existência de pontuações classificadas como substanciais e/ou intoleráveis, indicando a necessidade de inclusão e acompanhamento dos riscos psicossociais no PGR.
+                @else
+                    Após a realização do Inventário de Riscos Psicossociais, verificou-se que não foram identificadas pontuações classificadas como substanciais e/ou intoleráveis, não havendo, portanto, necessidade de inclusão de riscos psicossociais no PGR.
+                @endif
+            </p>
+        </div>
 
         @if ($company->usesHSE())
             @if ($absences->isNotEmpty())
                 <div class="page-break"></div>
 
                 <x-pdf.cover>
-                    @if ($company->logo)
-                        <img src="{{ $companyLogo }}" style="max-width: 8cm; object-fit: contain; margin-bottom: 24px" />
+                    @if ($companyLogo)
+                        <img src="{{ $companyLogo }}" style="height: 90px; margin-bottom:24px;" alt="Logomarca" />
                     @endif
 
                     <h2 style="margin-bottom: 18px">{{ $company->name }}</h2>

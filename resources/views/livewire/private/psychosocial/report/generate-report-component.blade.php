@@ -99,6 +99,23 @@
                         </div>
                     </div>
 
+                    <div class="flex w-full flex-col items-center gap-3">
+                        <header class="flex w-full items-center justify-between">
+                            <h3 class="text-main-text text-center text-sm font-semibold">Cobertura de Riscos</h3>
+                            <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Nas opções abaixo, selecione o formato do Inventário de Riscos que deseja exportar.">
+                                <x-icon icon="circle-question-mark" class="text-secondary-text h-4 w-4 object-contain" />
+                            </div>
+                        </header>
+                        <div class="grid w-full grid-cols-2 gap-2">
+                            @foreach (App\Enums\Psychosocial\RiskInventoryCoverage::cases() as $coverage)
+                                <label class="border-borders has-checked:bg-primary-solid hover:bg-secondary-background flex cursor-pointer items-center justify-center rounded-md border py-2 transition">
+                                    <input type="radio" wire:model="coverage" id="pdf" value="{{ $coverage->value }}" class="peer hidden" />
+                                    <span class="text-main-text peer-checked:text-main-background text-center text-sm font-normal transition">{{ $coverage->label() }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
                     <x-actions.button type="submit">
                         <div wire:loading wire:target="submit">
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />

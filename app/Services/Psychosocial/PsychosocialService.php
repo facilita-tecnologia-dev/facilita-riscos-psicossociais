@@ -3,9 +3,12 @@
 namespace App\Services\Psychosocial;
 
 use App\Enums\Campaign\EvaluationTypes;
+use App\Enums\Psychosocial\HSE\HSERisk;
+use App\Enums\Psychosocial\RiskInventoryCoverage;
 use App\Jobs\GeneratePsychosocialReportJob;
 use App\Models\Campaign;
 use App\Models\Company;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class PsychosocialService
@@ -29,7 +32,7 @@ class PsychosocialService
         return $dashboard;
     }
 
-    public static function report(Campaign $campaign, string $evaluation_type, string $format, string $cache_key)
+    public static function report(Campaign $campaign, string $evaluation_type, string $format, string $coverage, string $cache_key)
     {
         if(!$campaign->userCollections()->count()) return collect();
 
@@ -45,12 +48,16 @@ class PsychosocialService
             $risks = $evaluation_type === EvaluationTypes::DEPARTMENT->value 
                             ? ($company->usesHSE() ? PsychosocialService::HSEDepartments($campaign, null, null) : PsychosocialService::PROARTDepartments($campaign, null, null)) 
                             : ($company->usesHSE() ? PsychosocialService::HSEOccupations($campaign, null, null) : PsychosocialService::PROARTOccupations($campaign, null, null));
-            
+
+            $filteredRisks = $coverage === RiskInventoryCoverage::HIGH_RISKS->value
+                            ? self::filterHighRisks($risks)
+                            : $risks;
+                            ;
             $absences = $evaluation_type === EvaluationTypes::DEPARTMENT->value 
                             ? ($company->usesHSE() ? PsychosocialService::HSEAbsences(EvaluationTypes::DEPARTMENT) : null) 
                             : ($company->usesHSE() ? PsychosocialService::HSEAbsences(EvaluationTypes::OCCUPATION) : null);
-    
-            Cache::put("{$cache_key}:risks", $risks);
+
+            Cache::put("{$cache_key}:risks", $filteredRisks);
             Cache::put("{$cache_key}:absences", $absences);
 
             dispatch(new GeneratePsychosocialReportJob($company->id, $report->id, $evaluation_type, $format, $cache_key));
@@ -64,7 +71,7 @@ class PsychosocialService
 
     public static function HSEDepartments(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
-        session('auth:company', [session('auth:company')->load(['actionPlan', 'CIDAbsences'])]);
+        session('auth:company', [session('auth:company')->load(['actionPlan', 'CIDAbsences', 'organizationalIndicators.indicator'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $hazards = $campaign->collection()->hazards->groupBy('group');
@@ -119,7 +126,7 @@ class PsychosocialService
                                                 $evaluated = HSERiskService::evaluate($hazard, $average, EvaluationTypes::DEPARTMENT, $department);
                                                 
                                                 if (filled($filters['risk_level'] ?? null) && $evaluated['evaluated']->value !== $filters['risk_level']) {return [];}
-
+                                               
                                                 return [$hazard->type => [
                                                     'risk' => $evaluated,
                                                     'control_actions' => session('auth:company')->actionPlan
@@ -127,7 +134,7 @@ class PsychosocialService
                                                                                                 ->where('hazard_id', $hazard->id)
                                                                                                 ->where('gravity', $evaluated['evaluated']->value)
                                                                                                  ->toArray()
-                                                                                            
+                                                                           
                                                 ]];
                                             });
 
@@ -159,7 +166,7 @@ class PsychosocialService
 
     public static function HSEOccupations(Campaign $campaign, ?string $element = null, ?array $allowedDepartments = null, ?array $filters = null)
     {
-        session('auth:company', [session('auth:company')->load(['actionPlan', 'CIDAbsences'])]);
+        session('auth:company', [session('auth:company')->load(['actionPlan', 'CIDAbsences', 'organizationalIndicators.indicator'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
         $hazards = $campaign->collection()->hazards->groupBy('group');
@@ -536,5 +543,20 @@ class PsychosocialService
                     ]);
                 }
             ]);
+    }
+
+    private static function filterHighRisks(Collection $data): Collection
+    {
+        return $data->map(function (Collection $categories) {
+                return $categories->map(function (Collection $risks) {
+                        return $risks->filter(function (array $riskData) {
+                                $risk = $riskData['risk']['evaluated'];
+                                return in_array($risk, [HSERisk::SUBSTANTIAL, HSERisk::INTOLERABLE], true);
+                            }
+                        );
+                    })
+                    ->filter(fn (Collection $risks) => $risks->isNotEmpty());
+            })
+            ->filter(fn (Collection $categories) => $categories->isNotEmpty());
     }
 }
