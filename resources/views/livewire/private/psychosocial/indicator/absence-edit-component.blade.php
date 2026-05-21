@@ -14,9 +14,9 @@
             </header>
 
             <form class="w-full space-y-4" wire:submit.prevent="update">                
-                <x-form.select wireModel="cid" name="cid" label="Código CID" placeholder="Selecione o código CID" tooltip="Selecione o Código CID" :options="$cids" required />
-                <x-form.select wireModel="department" name="department" label="Setor" placeholder="Selecione o setor" tooltip="Selecione o setor" :options="$departments" required />
-                <x-form.select wireModel="occupation" name="occupation" label="Função" placeholder="Selecione a função" tooltip="Selecione a função" :options="$occupations" required />
+                <x-form.select wireModel="cid" name="cid" label="Código CID" placeholder="Selecione o código CID" tooltip="Selecione o Código CID" :options="$cids" isRequired />
+                <x-form.select wireModel="department" name="department" label="Setor" placeholder="Selecione o setor" tooltip="Selecione o setor" :options="$departments" isRequired />
+                <x-form.select wireModel="occupation" name="occupation" label="Função" placeholder="Selecione a função" tooltip="Selecione a função" :options="$occupations" isRequired />
 
                 <x-form.input-number wireModel="duration" name="duration" label="Duração (dias)" placeholder="Digite a duração do afastamento..." tooltip="Digite a duração do afastamento" isRequired />
                 

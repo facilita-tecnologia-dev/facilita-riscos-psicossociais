@@ -4,7 +4,7 @@
     @if(isset($controlActions) && count($controlActions) > 0)
         <div class="border-borders bg-main-background flex flex-col gap-3 rounded-lg border p-4">
             <form class="flex flex-col md:flex-row md:items-end gap-3 md:gap-4" wire:submit.prevent="filter">
-                <x-form.select wireModel="hazard" name="hazard" label="Dimensão" placeholder="Selecione a dimensão" tooltip="Selecione a dimensão" :options="$hazards" />
+                <x-form.select wireModel="hazard" name="hazard" label="Perigo Psicossocial" placeholder="Selecione o perigo psicossocial" tooltip="Selecione o perigo psicossocial" :options="$hazards" />
                 <x-form.select wireModel="risk_level" name="risk_level" label="Nível de Risco" placeholder="Selecione o nível de risco" :options="$risk_levels" />
     
                 <div class="w-full md:w-fit"> 
