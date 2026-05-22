@@ -27,14 +27,12 @@
                         @php
                             $s3 = Storage::disk('s3');
                             $filename = basename($report->file_path);
-                            $size = $s3->size($report->file_path);
                             $extension = pathinfo($report->file_path, PATHINFO_EXTENSION);
                         @endphp
 
                         <div class="bg-borders flex w-full items-center gap-2 rounded-sm p-3">
                             <x-file-icon type="{{ $extension }}" />
                             <span class="font-text text-secondary-text flex-1 truncate text-sm font-normal md:text-base" title="{{ $filename }}">{{ $filename }}</span>
-                            <span class="font-text text-secondary-text truncate text-xs font-normal">{{ round($size / 1024 / 1024, 2) }}MB</span>
                         </div>
 
                         <div class="flex items-center">

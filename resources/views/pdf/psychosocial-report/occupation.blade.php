@@ -280,53 +280,55 @@
         </div>
 
         @if ($company->usesHSE())
-            <div class="page-break"></div>
+            @if ($absences->isNotEmpty())
+                <div class="page-break"></div>
 
-            <x-pdf.cover>
-                @if ($companyLogo)
-                    <img src="{{ $companyLogo }}" style="height: 90px; margin-bottom:24px;" alt="Logomarca" />
-                @endif
+                <x-pdf.cover>
+                    @if ($companyLogo)
+                        <img src="{{ $companyLogo }}" style="height: 90px; margin-bottom:24px;" alt="Logomarca" />
+                    @endif
 
-                <h2 style="margin-bottom: 18px">{{ $company->name }}</h2>
-                <h1 style="margin-bottom: 8px; font-size: 32px">Relatório de Afastamentos</h1>
-                <p style="font-size: 16px">Lista de afastamentos registrados agrupados por função.</p>
-            </x-pdf.cover>
+                    <h2 style="margin-bottom: 18px">{{ $company->name }}</h2>
+                    <h1 style="margin-bottom: 8px; font-size: 32px">Relatório de Afastamentos</h1>
+                    <p style="font-size: 16px">Lista de afastamentos registrados agrupados por setor.</p>
+                </x-pdf.cover>
 
-            <div class="page-break"></div>
+                <div class="page-break"></div>
 
-            @foreach ($absences as $evaluationFactor => $factorAbsences)
-                <table style="margin-top: 28px">
-                    <tbody>
-                        <tr>
-                            <td style="width: 100%">
-                                <p>Função:</p>
-                                <span style="font-weight: bold; margin: 2px">{{ $evaluationFactor }}</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table>
-                    <thead>
-                        <th style="width: 20%; font-size: 10px">Código CID</th>
-                        <th style="width: 20%; font-size: 10px">Data de Registro</th>
-                        <th style="width: 20%; font-size: 10px">Setor</th>
-                        <th style="width: 20%; font-size: 10px">Função</th>
-                        <th style="width: 20%; font-size: 10px">Duração</th>
-                    </thead>
-                    <tbody>
-                        @foreach ($factorAbsences as $absence)
+                @foreach ($absences as $evaluationFactor => $factorAbsences)
+                    <table style="margin-top: 28px">
+                        <tbody>
                             <tr>
-                                <td style="width: 20%; font-size: 10px">{{ $absence->cid->type }}</td>
-                                <td style="width: 20%; font-size: 10px">{{ $absence->created_at->format('d/m/Y') }}</td>
-                                <td style="width: 20%; font-size: 10px">{{ $absence->department }}</td>
-                                <td style="width: 20%; font-size: 10px">{{ $absence->occupation }}</td>
-                                <td style="width: 20%; font-size: 10px">{{ $absence->duration }} dias</td>
+                                <td style="width: 100%">
+                                    <p>Setor:</p>
+                                    <span style="font-weight: bold; margin: 2px">{{ $evaluationFactor }}</span>
+                                </td>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endforeach
+                        </tbody>
+                    </table>
+
+                    <table>
+                        <thead>
+                            <th style="width: 20%; font-size: 10px">Código CID</th>
+                            <th style="width: 20%; font-size: 10px">Data de Registro</th>
+                            <th style="width: 20%; font-size: 10px">Setor</th>
+                            <th style="width: 20%; font-size: 10px">Função</th>
+                            <th style="width: 20%; font-size: 10px">Duração</th>
+                        </thead>
+                        <tbody>
+                            @foreach ($factorAbsences as $absence)
+                                <tr>
+                                    <td style="width: 20%; font-size: 10px">{{ $absence->cid->type }}</td>
+                                    <td style="width: 20%; font-size: 10px">{{ $absence->created_at->format('d/m/Y') }}</td>
+                                    <td style="width: 20%; font-size: 10px">{{ $absence->department }}</td>
+                                    <td style="width: 20%; font-size: 10px">{{ $absence->occupation }}</td>
+                                    <td style="width: 20%; font-size: 10px">{{ $absence->duration }} dias</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endforeach
+            @endif
         @endif
 
         <x-pdf.footer />
