@@ -58,7 +58,14 @@ class UserLoginComponent extends Component
             } else {
                 $this->selected_company_id = $this->companies[0]['id'];
 
-                $company = Company::find($this->selected_company_id );
+                $isActive = AuthenticationService::checkUserIsActiveInCompany($this->user, $this->selected_company_id);
+
+                if (! $isActive) {
+                    $this->dispatch('alert:danger', 'Seu acesso a esta empresa está inativo.');
+                    return;
+                }
+
+                $company = Company::find($this->selected_company_id);
                 AuthenticationService::putCompanyOnSession($company);
                 
                 return $this->checkManager();
@@ -77,6 +84,13 @@ class UserLoginComponent extends Component
 
         if (!$this->selected_company_id) {
             $this->dispatch('alert:danger', 'Selecione uma empresa.');
+            return;
+        }
+
+        $isActive = AuthenticationService::checkUserIsActiveInCompany($this->user, (int) $companyID);
+
+        if (! $isActive) {
+            $this->dispatch('alert:danger', 'Seu acesso a esta empresa está bloqueado.');
             return;
         }
 

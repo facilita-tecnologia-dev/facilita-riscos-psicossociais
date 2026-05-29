@@ -3,6 +3,7 @@
 namespace App\Services\Auth;
 
 use App\Enums\User\UserRole;
+use App\Enums\User\UserStatus;
 use App\Helpers\SessionErrorHelper;
 use App\Models\Company;
 use App\Models\User;
@@ -121,6 +122,13 @@ class AuthenticationService {
         return $user->hasRole(UserRole::MANAGER->value);
     }
 
+    public static function checkUserIsActiveInCompany(User $user, int $companyId): bool {
+        return $user->companies()
+            ->where('companies.id', $companyId)
+            ->wherePivot('status', UserStatus::ACTIVE->value)
+            ->exists();
+    }
+    
     public static function redirectLoginRoute($guard)
     {
         return match ($guard) {
