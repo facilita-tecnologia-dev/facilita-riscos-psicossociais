@@ -24,11 +24,11 @@ enum HSEOption: int
     public function label(): string
     {
         return match ($this) {
-            self::NEVER => 'Nunca',
-            self::RARELY => 'Raramente',
-            self::SOMETIMES => 'Às vezes',
-            self::FREQUENTLY => 'Frequentemente',
-            self::ALWAYS => 'Sempre',
+            self::NEVER => __('hse_options.never'),
+            self::RARELY => __('hse_options.rarely'),
+            self::SOMETIMES => __('hse_options.sometimes'),
+            self::FREQUENTLY => __('hse_options.frequently'),
+            self::ALWAYS => __('hse_options.always'),
         };
     }
 }

@@ -5,6 +5,7 @@ namespace App\Livewire\Private\User;
 use App\Enums\User\UserRole;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Services\Subscription\CompanySubscriptionLimitService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -38,11 +39,16 @@ class UserCreateComponent extends Component
 
     public function mount()
     {
+        if((session('auth:company')->hasActiveTrial() && session('auth:company')->hasReachedTrialEmployeeLimit()) || (!CompanySubscriptionLimitService::canAddEmployee(session('auth:company')))){
+            return redirect()->to(route('user.index'));
+        }
+        
         $this->roles = array_map(fn ($role) => ['label' => $role->label(), 'value' => $role->value], UserRole::cases());
     }
 
     public function submit()
     {
+
         $validatedData = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'cpf' => ['required', 'max:18', 'cpf', 'unique:users'],

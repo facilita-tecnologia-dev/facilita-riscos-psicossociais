@@ -11,6 +11,9 @@ class UserListComponent extends Component
     #[Reactive]
     public Collection $users;
 
+    #[Reactive]
+    public array $filters;
+
     public function render()
     {
         return view('livewire.private.user.user-list-component');

@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use Database\Seeders\ActionPlan\ActionPlanSeeder;
 use Database\Seeders\BaseTests\BaseCollectionsSeeder;
+use Database\Seeders\BaseTests\HSEQuestions\HSEEnglishTranslationSeeder;
+use Database\Seeders\BaseTests\HSEQuestions\HSEFrenchTranslationSeeder;
+use Database\Seeders\BaseTests\HSEQuestions\HSESpanishTranslationSeeder;
 use Database\Seeders\Campaigns\CampaignSeeder;
 use Database\Seeders\CIDS\CIDSeeder;
 use Database\Seeders\Cms\CmsUserSeeder;
@@ -27,10 +30,13 @@ class DatabaseSeeder extends Seeder
             // HSERiskSeeder::class,
             // CIDSeeder::class,
             // PermissionSeeder::class,
-            OrganizationalIndicatorSeeder::class,
+            // OrganizationalIndicatorSeeder::class,
             // ActionPlanSeeder::class,
             // CompanySeeder::class,
             // CampaignSeeder::class
+            HSESpanishTranslationSeeder::class,
+            HSEFrenchTranslationSeeder::class,
+            HSEEnglishTranslationSeeder::class,
         ]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WebhookController;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +35,7 @@ Route::post('/data/company/department', function (Request $request){
     ->pluck('department');
 
     return $departments;
-}); 
+});
+
+// Subscription
+Route::post('/webhooks/pagseguro', [WebhookController::class, 'pagSeguro']);

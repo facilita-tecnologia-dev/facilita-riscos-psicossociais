@@ -12,6 +12,7 @@ class AbsenceIndexComponent extends Component
         'absence:created' => 'refresh',
         'absence:updated' => 'refresh',
         'absence:force-deleted' => 'refresh',
+        'absence:config-updated' => 'refresh',
     ];
 
     public Collection $absences;

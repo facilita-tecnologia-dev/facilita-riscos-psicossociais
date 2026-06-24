@@ -1,15 +1,65 @@
 <div class="contents" x-data="{ videoModalOpen: false }" x-on:open-video-modal.window="videoModalOpen = true" x-on:close-video-modal.window="videoModalOpen = false">
-    <x-structure.page-header icon="{{ $campaign->collection()->type == App\Enums\Campaign\CollectionType::PSYCHOSOCIAL ? 'brain' : 'cloud' }}" label="Responder Teste" :breadcrumbs="[
+    <x-structure.page-header icon="{{ $campaign->collection()->type == App\Enums\Campaign\CollectionType::PSYCHOSOCIAL ? 'brain' : 'cloud' }}" label="{{ __('test.page_title') }}" :breadcrumbs="[
         $campaign->name => null,
-        'Responder Teste' => null
+        __('test.breadcrumb_current') => null
     ]" />
 
+    {{-- <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
+        <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
+            <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Tradução</h2>
+            <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Deseja traduzir esta página para outros idiomas? Defina o idioma desejado através dos botões ao lado.</span>
+        </div>
+
+        <div class="flex gap-2">
+            <button wire:click="changeLocale('pt_BR')" class="p-2 bg-secondary-background border border-borders rounded-md hover:brightness-95 transition cursor-pointer">
+                🇧🇷 Português
+            </button>
+
+            <button wire:click="changeLocale('en')" class="p-2 bg-secondary-background border border-borders rounded-md hover:brightness-95 transition cursor-pointer">
+                🇪🇸 English
+            </button>
+
+            <button wire:click="changeLocale('es')" class="p-2 bg-secondary-background border border-borders rounded-md hover:brightness-95 transition cursor-pointer">
+                🇪🇸 Español
+            </button>
+
+            <button wire:click="changeLocale('fr')" class="p-2 bg-secondary-background border border-borders rounded-md hover:brightness-95 transition cursor-pointer">
+                🇫🇷 Français
+            </button>
+        </div>
+    </div> --}}
+
+    <div class="ml-auto w-fit flex border border-borders rounded-md">
+        <button wire:click="changeLocale('pt_BR')" class="flex items-center gap-2 {{ $locale === 'pt_BR' ? 'bg-primary-solid/30' : 'bg-main-background' }} rounded-l-md cursor-pointer px-3 py-2 text-sm font-normal transition hover:brightness-95" class="text-secondary-text">
+            <img src="https://flagcdn.com/w20/br.png" width="20" alt="Brazil" class="rounded-xs">
+            <span class="hidden sm:inline">Português</span>
+            <span class="sm:hidden inline">BR</span>
+        </button>
+
+        <button wire:click="changeLocale('en')" class="flex items-center gap-2 {{ $locale === 'en' ? 'bg-primary-solid/30' : 'bg-main-background' }} rounded-r-md cursor-pointer px-3 py-2 text-sm font-normal transition hover:brightness-95" class="text-secondary-text">
+            <img src="https://flagcdn.com/w20/us.png" width="20" alt="USA" class="rounded-xs">
+            <span class="hidden sm:inline">English</span>
+            <span class="sm:hidden inline">EN</span>
+        </button>
+
+        <button wire:click="changeLocale('es')" class="flex items-center gap-2 {{ $locale === 'es' ? 'bg-primary-solid/30' : 'bg-main-background' }} rounded-r-md cursor-pointer px-3 py-2 text-sm font-normal transition hover:brightness-95" class="text-secondary-text">
+            <img src="https://flagcdn.com/w20/es.png" width="20" alt="Spain" class="rounded-xs">
+            <span class="hidden sm:inline">Español</span>
+            <span class="sm:hidden inline">ES</span>
+        </button>
+
+        <button wire:click="changeLocale('fr')" class="flex items-center gap-2 {{ $locale === 'fr' ? 'bg-primary-solid/30' : 'bg-main-background' }} rounded-r-md cursor-pointer px-3 py-2 text-sm font-normal transition hover:brightness-95" class="text-secondary-text">
+            <img src="https://flagcdn.com/w20/fr.png" width="20" alt="France" class="rounded-xs">
+            <span class="hidden sm:inline">Français</span>
+            <span class="sm:hidden inline">FR</span>
+        </button>
+    </div>
 
     @if(session('auth:company')->test_helper_video)
         <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
             <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
-                <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Vídeo de contextualização</h2>
-                <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Assista ao vídeo de contextualização para entender como responder ao teste da forma correta.</span>
+                <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">{{ __('test.video_title') }}</h2>
+                <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">{{ __('test.video_description') }}</span>
             </div>
 
             <x-actions.button wire:click="openVideoModal" fitSize>
@@ -17,19 +67,15 @@
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
 
-                <span wire:loading.remove wire:target="openVideoModal" class="font-heading text-main-background text-center text-sm font-semibold">Assistir vídeo</span>
+                <span wire:loading.remove wire:target="openVideoModal" class="font-heading text-main-background text-center text-sm font-semibold">{{ __('test.watch_video') }}</span>
             </x-actions.button>
         </div>
 
         {{-- Video Modal --}}
         <div x-show="videoModalOpen" x-transition.opacity x-cloak class="fixed inset-0 bg-black/60 flex items-center justify-center z-30 px-4">
             <div x-on:click.away="$wire.closeVideoModal()" class="bg-secondary-background border-borders flex flex-col gap-4 rounded-lg border p-6 shadow-sm w-[80vw] h-[80vh]">
-                <header class="flex w-full items-center justify-between">
-                    <h2 class="font-heading text-main-text text-left text-lg font-semibold">Video de contextualização</h2>
-
-                    <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Assista ao vídeo de contextualização para entender como responder ao teste da forma correta.">
-                        <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
-                    </div>
+                <header class="flex w-full items-center">
+                    <h2 class="font-heading text-main-text text-left text-lg font-semibold">{{ __('test.video_title') }}</h2>
                 </header>
 
                 @if ($videoUrl)
@@ -54,13 +100,13 @@
                         </div>
 
                         <span wire:loading.remove wire:target="confirmVideoWatched" class="font-heading text-main-background text-center text-sm font-semibold">
-                            Prosseguir
+                            {{ __('test.continue') }}
                         </span>
                     </x-actions.button>
                 @else
                     <x-actions.button class="w-full opacity-50 cursor-not-allowed" disabled>
                         <span class="font-heading text-main-background text-center text-sm font-semibold">
-                            Assista o vídeo até o final
+                            {{ __('test.watch_until_end') }}
                         </span>
                     </x-actions.button>
                 @endif
@@ -73,7 +119,7 @@
             <div class="flex flex-col gap-4 w-full lg:col-span-2">
                 <div class="w-full bg-secondary-background border-borders flex flex-col items-start gap-8 rounded-2xl border px-4 py-6 sm:px-6 sm:py-8 shadow-sm">
                     <header class="flex w-full items-center justify-between">
-                        <h2 class="font-heading text-main-text text-left text-lg font-semibold">Formulário de questões</h2>
+                        <h2 class="font-heading text-main-text text-left text-lg font-semibold">{{ __('test.form_title') }}</h2>
 
                         <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Responda as questões através do formulário abaixo.">
                             <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
@@ -109,11 +155,11 @@
 
                     <nav class="w-full flex justify-between">
                         <x-actions.button wire:click="previous" :disabled="$current === 0" fitSize>
-                            <span class="text-main-background font-heading text-center text-sm font-semibold">Anterior</span>
+                            <span class="text-main-background font-heading text-center text-sm font-semibold">{{ __('test.previous') }}</span>
                         </x-actions.button>
 
                         <x-actions.button wire:click="next" :disabled="!($current < count($questions) - 1)" fitSize>
-                            <span class="text-main-background font-heading text-center text-sm font-semibold">Próximo</span>
+                            <span class="text-main-background font-heading text-center text-sm font-semibold">{{ __('test.next') }}</span>
                         </x-actions.button>
                     </nav>
                 </div>
@@ -122,14 +168,10 @@
                     <div class="w-full bg-secondary-background border-borders flex flex-col items-start gap-8 rounded-2xl border px-4 py-6 sm:px-6 sm:py-8 shadow-sm">
                         <header class="flex w-full items-center justify-between">
                             <h2 class="font-heading text-main-text text-left text-lg font-semibold">Feedback</h2>
-
-                            <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Deixe seu comentário, crítica, elogio ou sugestão.">
-                                <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
-                            </div>
                         </header>
 
                         <div class="w-full">
-                            <x-form.textarea wireModel="feedback" name="feedback" label="Seu feedback" placeholder="Deixe seu comentário, crítica, elogio ou sugestão..." tooltip="Deixe seu comentário, crítica, elogio ou sugestão" />
+                            <x-form.textarea wireModel="feedback" name="feedback" label="Seu feedback" placeholder="{{ __('test.feedback_placeholder') }}" tooltip="{{ __('test.feedback_placeholder') }}" />
                         </div>
                     </div>
                 @endif
@@ -137,7 +179,7 @@
 
             <aside class="w-full bg-secondary-background border-borders flex flex-col items-start gap-8 rounded-2xl border px-4 py-6 sm:px-6 sm:py-8 shadow-sm">
                 <header class="flex w-full items-center justify-between">
-                    <h2 class="font-heading text-main-text text-left text-lg font-semibold">Informações</h2>
+                    <h2 class="font-heading text-main-text text-left text-lg font-semibold">{{ __('test.information_title') }}</h2>
 
                     <div class="cursor-pointer transition hover:scale-105" data-tippy-content="Verifique abaixo as informações sobre o andamento do seu teste e clique em "Salvar Resposta" quando tiver respondido todas as questões.">
                         <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain" />
@@ -146,7 +188,7 @@
 
                 <div id="progress" class="w-full flex flex-col gap-1.5">
                     <header class="flex justify-between items-center">
-                        <span class="text-primary-solid text-left text-sm font-semibold font-heading">Progresso</span>
+                        <span class="text-primary-solid text-left text-sm font-semibold font-heading">{{ __('test.progress_title') }}</span>
                         <span class="text-primary-solid text-right text-sm font-semibold font-heading">{{ $this->progress }}%</span>
                     </header>
 
@@ -166,11 +208,11 @@
                 <div id="caption" class="flex items-center gap-6">
                     <div class="flex gap-2 items-center">
                         <div class="w-4 h-4 bg-borders rounded-full"></div>
-                        <span class="text-sm text-main-text text-left font-normal font-heading">Não respondido</span>
+                        <span class="text-sm text-main-text text-left font-normal font-heading">{{ __('test.question_not_answered') }}</span>
                     </div>
                     <div class="flex gap-2 items-center">
                         <div class="w-4 h-4 bg-primary-solid rounded-full"></div>
-                        <span class="text-sm text-main-text text-left font-normal font-heading">Respondido</span>
+                        <span class="text-sm text-main-text text-left font-normal font-heading">{{ __('test.question_answered') }}</span>
                     </div>
                 </div>
 
@@ -180,7 +222,7 @@
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                         </div>
 
-                        <span wire:loading.remove wire:target="clearAnswers" class="font-heading text-main-background text-center text-sm font-semibold">Limpar respostas</span>
+                        <span wire:loading.remove wire:target="clearAnswers" class="font-heading text-main-background text-center text-sm font-semibold">{{ __('test.clear_answers') }}</span>
                     </x-actions.button>
                     
                     <x-actions.button wire:click="finish" :disabled="!$this->isCompleted">
@@ -188,7 +230,7 @@
                             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                         </div>
 
-                        <span wire:loading.remove wire:target="finish" class="font-heading text-main-background text-center text-sm font-semibold">Finalizar e Salvar</span>
+                        <span wire:loading.remove wire:target="finish" class="font-heading text-main-background text-center text-sm font-semibold">{{ __('test.finish_and_save') }}</span>
                     </x-actions.button>
                 </div>
             </aside>

@@ -4,6 +4,7 @@ namespace App\Livewire\Private\Psychosocial\Dashboard;
 
 use App\Enums\Psychosocial\HSE\HSEGroup;
 use App\Enums\Psychosocial\HSE\HSERisk;
+use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Enums\Psychosocial\PROART\PROARTGroup;
 use App\Enums\Psychosocial\PROART\PROARTRisk;
 use Illuminate\Validation\Rule;
@@ -25,7 +26,7 @@ class FilterComponent extends Component
     public function mount()
     {
         $this->groups = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($group) => ['label' => $group->label(), 'value' => $group->value], (session('auth:company')->usesHSE() ? HSEGroup::cases() : PROARTGroup::cases())));
-        $this->risk_levels = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($risk) => ['label' => $risk->label(), 'value' => $risk->value], (session('auth:company')->usesHSE() ? HSERisk::cases() : PROARTRisk::cases())));
+        $this->risk_levels = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($risk) => ['label' => session('auth:company')->usesHSE() && session('auth:company')->risk_matrix == HSERiskMatrix::AIHA ? $risk->aiha() : $risk->default(), 'value' => $risk->value], (session('auth:company')->usesHSE() ? HSERisk::cases() : PROARTRisk::cases())));
     }
 
     public function submit()

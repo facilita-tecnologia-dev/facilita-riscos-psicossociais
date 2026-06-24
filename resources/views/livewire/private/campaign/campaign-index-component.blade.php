@@ -1,11 +1,19 @@
 <div class="contents">
     <x-structure.page-header icon="calendar-clock" label="Lista de Campanhas" :breadcrumbs="['Lista de Campanhas' => null]" />
 
-    @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('create', [\App\Models\Campaign::class]))
+    @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('create', [\App\Models\Campaign::class]) && !(session('auth:company')->hasActiveTrial() && session('auth:company')->hasReachedTrialCampaignLimit()))
         <div>
             <x-actions.button :href="route('campaign.create')">
                 <span class="text-main-background text-center text-sm font-semibold">Agendar nova campanha</span>
             </x-actions.button>
+        </div>
+    @endif
+
+    @if(session('auth:company')->hasActiveTrial())
+        <div class="px-4 py-2 bg-alert/20 border border-alert rounded-md cursor-pointer flex items-start flex-col gap-1">
+            <span class="text-sm text-left text-main-text font-normal">
+                O agendamento de campanhas está limitado por você estar utilizando o período de teste gratuito. Para liberar todas as funcionalidades do sistema, <a href="{{ route('company.subscription.index') }}" class="underline">é necessário regularizar sua assinatura</a>.
+            </span>
         </div>
     @endif
 

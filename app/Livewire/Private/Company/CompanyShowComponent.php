@@ -3,6 +3,7 @@
 namespace App\Livewire\Private\Company;
 
 use App\Models\Company;
+use App\Models\Subscription;
 use Livewire\Component;
 
 class CompanyShowComponent extends Component

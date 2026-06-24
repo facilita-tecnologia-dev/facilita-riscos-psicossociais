@@ -49,10 +49,16 @@ class PsychosocialService
                             ? ($company->usesHSE() ? PsychosocialService::HSEDepartments($campaign, null, null) : PsychosocialService::PROARTDepartments($campaign, null, null)) 
                             : ($company->usesHSE() ? PsychosocialService::HSEOccupations($campaign, null, null) : PsychosocialService::PROARTOccupations($campaign, null, null));
 
+            if (session('auth:company')->hasActiveTrial()) {
+                $risks = $risks->take(1)->map(function ($group) {
+                    return collect(['demands' => $group['demands']]);
+                });
+            }
+
             $filteredRisks = $coverage === RiskInventoryCoverage::HIGH_RISKS->value
                             ? self::filterHighRisks($risks)
                             : $risks;
-                            ;
+            
             $absences = $evaluation_type === EvaluationTypes::DEPARTMENT->value 
                             ? ($company->usesHSE() ? PsychosocialService::HSEAbsences(EvaluationTypes::DEPARTMENT) : null) 
                             : ($company->usesHSE() ? PsychosocialService::HSEAbsences(EvaluationTypes::OCCUPATION) : null);

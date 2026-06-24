@@ -13,6 +13,14 @@
             <x-form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a senha..." tooltip="Crie uma senha de 8 a 30 caracteres, com pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial para maior segurança" isRequired isPassword />
             <x-form.input-text wireModel="password_confirmation" name="password_confirmation" label="Confirme sua senha" placeholder="Confirme a senha..." tooltip="Confirme a senha que você criou" isRequired isPassword />
 
+            <div class="col-span-2 flex flex-col gap-1">
+                <label class="text-secondary-text font-heading text-left text-sm font-semibold peer-focus:text-lg md:text-base">
+                    Como você deseja começar?
+                    <span class="text-danger">*</span>
+                </label>
+                <x-form.input-binary wireModel="start_mode" name="start_mode" :options="$start_mode_options" isRequired />
+            </div>
+
             <x-actions.button class="w-full sm:col-span-2" type="submit">
                 <div wire:loading wire:target="submit">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />

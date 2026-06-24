@@ -2,7 +2,9 @@
     <x-form.input-text wireModel="name" name="name" label="Nome" placeholder="Digite o nome..." tooltip="Digite o nome do funcionário" />
 
     <x-form.select wireModel="department" name="department" label="Setor" placeholder="Todos" tooltip="Selecione o setor" :options="$departments" />
-
+    
+    <x-form.select wireModel="status" name="status" label="Status" placeholder="Todos" tooltip="Selecione o setor" :options="$userStatusTypes" />
+    
     <x-form.select wireModel="has_answered_psychosocial_campaign" name="has_answered_psychosocial_campaign" label="Respondeu Riscos Psicossociais" placeholder="Todos" tooltip="Selecione a opção desejada" :options="[['label' => 'Sim', 'value' => 1], ['label' => 'Não', 'value' => 0]]" />
     
     @if(session('auth:company')->can_access_organizational)

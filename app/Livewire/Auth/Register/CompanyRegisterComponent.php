@@ -2,16 +2,17 @@
 
 namespace App\Livewire\Auth\Register;
 
-// use App\Actions\Subscription\CreateSubscriptionAction;
+use App\Actions\Subscription\CreateSubscriptionAction;
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Psychosocial\PROART\PROARTHazard;
-// use App\Enums\Subscription\PaymentType;
+use App\Enums\Subscription\AccessStatus;
+use App\Enums\Subscription\PaymentType;
 use App\Models\BaseControlAction;
 use App\Models\Company;
 use App\Models\CompanyReport;
 use App\Models\Organizationalndicator;
 use App\Services\Auth\AuthenticationService;
-// use App\Services\Subscription\SubscriptionPricingService;
+use App\Services\Subscription\SubscriptionService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -25,31 +26,20 @@ class CompanyRegisterComponent extends Component
     public ?string $password = null;
     public ?string $password_confirmation = null;
 
-    // public int $employees;
-    // public int $amount;
-
-    // public string $employeeRange;
-    // public string $formattedAmount;
-
-    // public PaymentType $paymentType;
-
-    // public function mount()
-    // {
-    //     $subscriptionData = session('subscription_data');
-
-    //     if (!$subscriptionData) {return redirect()->route('site.home');}
-
-    //     $this->employees = $subscriptionData['employees'];
-    //     $this->amount = $subscriptionData['amount'];
-
-    //     $this->employeeRange = SubscriptionPricingService::employeeRange($subscriptionData['employees']);
-    //     $this->formattedAmount = number_format($subscriptionData['amount'] / 100, 2, ',', '.');
-    //     $this->paymentType = PaymentType::from($subscriptionData['payment_type']);
-    // }
+    public string $start_mode = 'trial';
+    public array $start_mode_options = [];
 
     public function render()
     {
         return view('livewire.auth.register.company-register-component');
+    }
+
+    public function mount()
+    {
+        $this->start_mode_options = [
+            ['label' => 'Teste grátis (14 dias)', 'value' => 'trial'],
+            ['label' => 'Assinatura imediata', 'value' => 'subscription'],
+        ];
     }
 
     public function submit()
@@ -60,6 +50,7 @@ class CompanyRegisterComponent extends Component
             'email' => ['required', 'email'],
             'password' => ['required', 'string', 'max:100', Password::defaults()],
             'password_confirmation' => ['required', 'string', 'same:password', 'max:100'],
+            'start_mode' => ['required', 'in:trial,subscription'],
         ]);
 
         try {
@@ -71,12 +62,16 @@ class CompanyRegisterComponent extends Component
                     'password' => Hash::make($this->password),
                     'psychosocial_collection_type' => MetodologyType::HSE->value,
                     'has_cids' => true,
+                    'access_status' => AccessStatus::BLOCKED,
+                    'subscription_status' => null,
                 ]);
 
-                // $this->createSubscription($company);
                 $this->createIndicators($company);
                 $this->createReports($company);
                 $this->createActionPlan($company);
+
+
+                if ($this->start_mode === 'trial') SubscriptionService::startTrial(company: $company, employeesCount: 1);
                 
                 AuthenticationService::authenticate('company', $company);
 
@@ -86,7 +81,12 @@ class CompanyRegisterComponent extends Component
 
             $this->dispatch('alert:success', "Cadastro realizado com sucesso!");
 
-            return redirect()->to(AuthenticationService::redirectLoginRoute('company'));
+
+            if ($this->start_mode === 'trial') {
+                return redirect()->to(AuthenticationService::redirectLoginRoute('company'));
+            }
+        
+            return redirect()->route('company.subscription.index');
         } catch (\Throwable $th) {
             report($th);
             $this->dispatch('alert:danger', "Ocorreu um erro ao realizar o cadastro.");
@@ -122,10 +122,4 @@ class CompanyRegisterComponent extends Component
             ])
         );
     }
-
-    // private function createSubscription(Company $company)
-    // {
-    //     $subscription = app(CreateSubscriptionAction::class)->execute(company: $company, employees: $this->employees, amount: $this->amount, type: $this->paymentType);
-    //     if($subscription) {session()->forget('subscription_data');}
-    // }
 }

@@ -10,7 +10,7 @@ enum HSERisk: string
     case SUBSTANTIAL = '4';
     case INTOLERABLE = '5';
 
-    public function label(): string
+    public function default(): string
     {
         return match ($this) {
             self::TRIVIAL => 'Trivial',
@@ -21,7 +21,18 @@ enum HSERisk: string
         };
     }
 
-    public function color(): string
+    public function aiha(): string
+    {
+        return match ($this) {
+            self::TRIVIAL => 'Trivial',
+            self::TOLERABLE => 'Baixo',
+            self::MODERATE => 'Moderado',
+            self::SUBSTANTIAL => 'Alto',
+            self::INTOLERABLE => 'Muito Alto',
+        };
+    }
+
+    public function defaultColor(): string
     {
         return match ($this) {
             self::INTOLERABLE => '#F44336',
@@ -32,7 +43,18 @@ enum HSERisk: string
         };
     }
 
-    public function message(): string
+    public function aihaColor(): string
+    {
+        return match ($this) {
+            self::INTOLERABLE => '#8D8484',
+            self::SUBSTANTIAL => '#EB2B20',
+            self::MODERATE => '#F0A23D',
+            self::TOLERABLE => '#E8DD0A',
+            self::TRIVIAL => '#46C41E',
+        };
+    }
+
+    public function defaultMessage(): string
     {
         return match ($this) {
             self::INTOLERABLE => 'representa um nível elevado de impacto aos colaboradores, indicando uma situação crítica que requer atenção imediata e atuação prioritária.',
@@ -40,6 +62,17 @@ enum HSERisk: string
             self::MODERATE => 'apresenta condições que merecem atenção e acompanhamento, sem indicar situação crítica no momento.',
             self::TOLERABLE => 'não apresenta perigo imediato aos colaboradores no momento, podendo ser acompanhado por medidas preventivas básicas.',
             self::TRIVIAL => 'não apresenta impacto relevante aos colaboradores, mantendo-se dentro de condições consideradas seguras e controladas.',
+        };
+    }
+
+    public function aihaMessage(): string
+    {
+        return match ($this) {
+            self::INTOLERABLE =>'prioridade máxima. Adotar medidas imediatas de controle. Quando não, a continuidade da operação só poderá ocorrer com ciência e aprovação do gerente geral da unidade ou instalação. Iniciar processo de avaliação quantitativa do Setor / GHE para verificação do rebaixamento da categoria de risco.',
+            self::SUBSTANTIAL => 'prioridade preferencial. Adotar medidas de controle para redução da exposição e iniciar processo de avaliação quantitativa do Setor / GHE.',
+            self::MODERATE => 'prioridade básica. Iniciar processo de avalição quantitativa do Setor / GHE para confirmação da categoria e monitoramento periódico.',
+            self::TOLERABLE => 'não prioritário. Ações dentro do princípio de melhoria contínua. Pode ser necessária avaliação quantitativa do Setor / GHE para confirmação da categoria, a critério profissional de Higiene Ocupacional.',
+            self::TRIVIAL => 'não prioritário. Ações dentro do princípio de melhoria contínua. Pode ser necessária avaliação quantitativa do Setor / GHE para confirmação da categoria, a critério profissional de Higiene Ocupacional.',
         };
     }
 }

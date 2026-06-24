@@ -2,12 +2,9 @@
 
 namespace App\Livewire\Private\Company;
 
-use App\Models\Company;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password as FacadePassword;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 

@@ -37,7 +37,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
         <x-form.input-text wireModel="name" name="name" label="Nome" placeholder="Digite o nome..." tooltip="Digite o nome" isRequired />
-        <x-form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf" isRequired />
+        <x-form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf" readonly isRequired />
         <x-form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." tooltip="Digite o e-mail" />
         <x-form.input-text wireModel="department" name="department" label="Setor" placeholder="Digite o setor..." tooltip="Digite o setor" isRequired />
         <x-form.input-text wireModel="occupation" name="occupation" label="Função" placeholder="Digite a função..." tooltip="Digite a função" isRequired />
@@ -59,6 +59,7 @@
             <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Salvar</span>
         </x-actions.button>
 
+        
         @if($status == App\Enums\User\UserStatus::ACTIVE->value)
             <x-actions.button class="!bg-danger" type="button" wire:click='inactivateUser'>
                 <div wire:loading wire:target="inactivateUser">
@@ -70,7 +71,7 @@
         @endif
 
         @if($status == App\Enums\User\UserStatus::INACTIVE->value)
-            <x-actions.button type="button" wire:click='activateUser'>
+            <x-actions.button type="button" wire:click='activateUser' :disabled="!(App\Services\Subscription\CompanySubscriptionLimitService::canAddEmployee(session('auth:company')))">
                 <div wire:loading wire:target="activateUser">
                     <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
                 </div>
@@ -79,5 +80,13 @@
             </x-actions.button>
         @endif
     </div>
+
+    @if(! App\Services\Subscription\CompanySubscriptionLimitService::canAddEmployee(session('auth:company')))
+        <div class="px-4 py-2 bg-alert/20 border border-alert rounded-md cursor-pointer flex items-start flex-col gap-1">
+            <span class="text-sm text-left text-main-text font-normal">
+                Seu plano atual atingiu o limite de usuários ativos. Para continuar adicionando funcionários, <a href="{{ route('company.show', session('auth:company')) }}" class="underline">altere sua assinatura para uma faixa superior</a>.
+            </span>
+        </div>
+    @endif
 </form>
 

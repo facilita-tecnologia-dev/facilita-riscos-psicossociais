@@ -44,9 +44,18 @@
                         @endphp
 
                         @foreach ($caption as $risk)
+                            @php
+                                $riskLabel = $risk->default(); 
+                                $riskColor = $risk->defaultColor();
+
+                                if(session('auth:company')->usesHSE() && session('auth:company')->risk_matrix == App\Enums\Psychosocial\HSE\HSERiskMatrix::AIHA){
+                                    $riskLabel = $risk->aiha();
+                                    $riskColor = $risk->aihaColor();
+                                }
+                            @endphp
                             <div class="flex items-center gap-2">
-                                <div style="border-color: {{ $risk->color() }}" class="h-4 w-4 rounded-full border-3 bg-transparent"></div>
-                                <span class="text-main-text text-left text-sm leading-relaxed font-normal">{{ $risk->label() }}</span>
+                                <div style="border-color: {{ $riskColor }}" class="h-4 w-4 rounded-full border-3 bg-transparent"></div>
+                                <span class="text-main-text text-left text-sm leading-relaxed font-normal">{{ $riskLabel }}</span>
                             </div>
                         @endforeach
                     </div>
@@ -67,6 +76,14 @@
                     <header class="flex items-center justify-between">
                         <h2 class="text-main-text font-heading text-left text-2xl font-semibold">Riscos Identificados</h2>
                     </header>
+
+                    @if(session('auth:company')->hasActiveTrial())
+                        <div class="px-4 py-2 bg-alert/20 border border-alert rounded-md cursor-pointer">
+                            <span class="text-sm text-left text-main-text font-normal">
+                                Seu acesso ao dashboard está limitado por você estar utilizando o período de teste gratuito. Para liberar todas as funcionalidades do sistema, <a href="{{ route('company.subscription.index') }}" class="underline">é necessário regularizar sua assinatura</a>.
+                            </span>
+                        </div>
+                    @endif
 
                     <div class="flex flex-col gap-6">
                         @foreach ($psychosocialResults as $divisionFactor => $groups)

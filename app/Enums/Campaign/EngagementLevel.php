@@ -11,7 +11,7 @@ enum EngagementLevel: string
     public static function fromPercentage(float $value): self
     {
         return match (true) {
-            $value >= 70 => self::SATISFACTORY,
+            $value >= 75 => self::SATISFACTORY,
             $value >= 40 => self::MEDIUM,
             default      => self::UNSATISFACTORY,
         };

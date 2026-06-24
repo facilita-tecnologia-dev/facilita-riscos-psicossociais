@@ -14,6 +14,11 @@ class CompanyController
         return view('auth.register.company.index');
     }
 
+    public function subscription()
+    {
+        return view('subscription.company.index');
+    }
+
     public function login()
     {
         return view('auth.login.company.index');

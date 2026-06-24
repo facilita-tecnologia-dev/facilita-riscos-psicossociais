@@ -21,7 +21,7 @@
             <x-form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." tooltip="Digite o e-mail" isRequired />
             <x-form.input-text wireModel="cnpj" name="cnpj" label="CNPJ" placeholder="Digite o cnpj..." tooltip="Digite o cnpj" isRequired />
 
-            <x-form.select wireModel="psychosocialMetodology" name="psychosocialMetodology" label="Metodologia de avaliação de Riscos" placeholder="Selecione a metodologia" tooltip="Selecione a metodologia de avaliação dos riscos psicossociais que será utilizada pela empresa" :options="$psychosocialMetodologies" isRequired />
+            <x-form.select wireModel="riskMatrix" name="riskMatrix" label="Matriz de Risco" placeholder="Selecione a matriz" tooltip="Selecione a matriz de riscos que será utilizada pela empresa" :options="$riskMatrixes" isRequired />
 
             <x-form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a senha..." tooltip="Crie uma senha de 8 a 30 caracteres, com pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial para maior segurança" isRequired isPassword />
             <x-form.input-text wireModel="passwordConfirmation" name="passwordConfirmation" label="Confirme a senha" placeholder="Confirme a senha..." tooltip="Confirme a senha que você criou" isRequired isPassword />

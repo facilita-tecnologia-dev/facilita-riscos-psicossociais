@@ -12,6 +12,6 @@
             <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />
         </div>
 
-        <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Editar</span>
+        <span wire:loading.remove wire:target="submit" class="font-heading text-main-background text-center text-sm font-semibold">Salvar</span>
     </x-actions.button>
 </form>

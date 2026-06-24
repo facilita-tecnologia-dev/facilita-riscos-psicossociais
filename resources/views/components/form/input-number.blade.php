@@ -1,7 +1,8 @@
 @props([
     'name',
-    'label',
+    'label' => null,
     'wireModel',
+    'wireModelType' => 'defer',
     'placeholder' => null,
     'value' => null,
     'tooltip' => null,
@@ -23,7 +24,7 @@
             <div class="bg-secondary-background border-borders flex h-10 items-center rounded-sm border px-4 md:h-[45px]"><span>{{ $prefix }}</span></div>
         @endif
 
-        <input type="number" name="{{ $name }}" id="{{ $name }}" wire:model.defer="{{ $wireModel }}" placeholder="{{ $placeholder }}" value="{{ $value }}" {{ $attributes->merge(['class' => 'peer bg-secondary-background border-borders text-main-text font-text placeholder:text-secondary-text focus:shadow-primary-solid/50 h-10 md:h-[45px] w-full rounded-sm border px-3 text-sm md:text-base font-normal transition focus:shadow-sm focus:outline-none']) }} />
+        <input type="number" name="{{ $name }}" id="{{ $name }}" @if($wireModelType === 'defer') wire:model.defer="{{ $wireModel }}" @endif @if($wireModelType === 'lazy') wire:model.lazy="{{ $wireModel }}" @endif placeholder="{{ $placeholder }}" value="{{ $value }}" {{ $attributes->merge(['class' => 'peer bg-secondary-background border-borders text-main-text font-text placeholder:text-secondary-text focus:shadow-primary-solid/50 h-10 md:h-[45px] w-full rounded-sm border px-3 text-sm md:text-base font-normal transition focus:shadow-sm focus:outline-none']) }} />
 
         @if ($sufix)
             <div class="bg-secondary-background border-borders flex h-10 items-center rounded-sm border px-4 md:h-[45px]"><span>{{ $sufix }}</span></div>

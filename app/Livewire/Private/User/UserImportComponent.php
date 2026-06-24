@@ -3,9 +3,11 @@
 namespace App\Livewire\Private\User;
 
 use App\Repositories\UserRepository;
+use App\Services\Subscription\CompanySubscriptionLimitService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Throwable;
@@ -20,6 +22,13 @@ class UserImportComponent extends Component
     public function render()
     {
         return view('livewire.private.user.user-import-component');
+    }
+    
+    public function mount()
+    {
+        if((session('auth:company')->hasActiveTrial() && session('auth:company')->hasReachedTrialEmployeeLimit()) || (!CompanySubscriptionLimitService::canAddEmployee(session('auth:company')))){
+            return redirect()->to(route('user.index'));
+        }
     }
 
     public function downloadTemplate()
@@ -58,7 +67,11 @@ class UserImportComponent extends Component
                 $this->dispatch('alert:success', 'Importação concluída com sucesso!');
                 return redirect()->to(route('user.index'));
             }
-        } catch (Throwable $th) {
+        } catch (ValidationException $e) {
+            $this->dispatch('alert:danger', collect($e->errors())->flatten()->first());
+            return;
+        }
+        catch (Throwable $th) {
             Log::error('Erro ao importar arquivo de funcionários', [
                 'company_id' => session('auth:company')->id,
                 'error' => $th->getMessage(),

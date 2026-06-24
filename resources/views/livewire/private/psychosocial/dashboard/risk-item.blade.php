@@ -1,12 +1,17 @@
-<div x-data="{ dropdownOpen: false }" style="border-color: {{ $evaluation->color() }}" class="bg-main-background rounded-md border-1 p-3">
-    @php
-        $hazardName = session('auth:company')->usesHSE() ? App\Enums\Psychosocial\HSE\HSEHazard::from($hazardName)->label() : App\Enums\Psychosocial\PROART\PROARTHazard::from($hazardName)->label();
-    @endphp
+@php
+    $hazardName = session('auth:company')->usesHSE() ? App\Enums\Psychosocial\HSE\HSEHazard::from($hazardName)->label() : App\Enums\Psychosocial\PROART\PROARTHazard::from($hazardName)->label();
+    $evaluationColor = $evaluation->defaultColor(); 
+
+    if(session('auth:company')->usesHSE() && session('auth:company')->risk_matrix == App\Enums\Psychosocial\HSE\HSERiskMatrix::AIHA){
+        $evaluationColor = $evaluation->aihaColor();
+    }
+@endphp
+<div x-data="{ dropdownOpen: false }" style="border-color: {{ $evaluationColor }}" class="bg-main-background rounded-md border-1 p-3">
 
     <button class="flex w-full items-center justify-between cursor-pointer" @click="dropdownOpen = !dropdownOpen" data-tippy-content="Clique para alternar a visão das medidas de controle desse perigo psicossocial.">
         <span class="text-main-text text-left text-sm sm:text-base font-normal">{{ $hazardName }}</span>
 
-        <div style="border-color: {{ $evaluation->color() }}" class="h-4 w-4 rounded-full border-3 bg-transparent"></div>
+        <div style="border-color: {{ $evaluationColor }}" class="h-4 w-4 rounded-full border-3 bg-transparent"></div>
     </button>
 
     <div x-show="dropdownOpen" x-collapse class="mt-4 text-main-text flex flex-col gap-4">
@@ -22,7 +27,7 @@
             @if(session('auth:company')->usesHSE())
                 @foreach ($controlActions as $type => $action)            
                     <li class="flex items-start gap-2">
-                        <div class="h-2 w-2 shrink-0 mt-1.5" style="background: {{ $evaluation->color() }}"></div>
+                        <div class="h-2 w-2 shrink-0 mt-1.5" style="background: {{ $evaluationColor }}"></div>
                         <span class="flex-1 text-sm text-main-text text-left font-normal">{{ $action['content'] }}</span>
                     </li>
                 @endforeach
@@ -31,7 +36,7 @@
                     <span class="block text-sm font-semibold text-main-text text-left">{{ App\Enums\Psychosocial\PROART\PROARTControlActionTypes::from($type)->label() }}</span>     
                     @foreach ($actions as $action)            
                         <li class="flex items-start gap-2">
-                            <div class="h-2 w-2 shrink-0 mt-1.5" style="background: {{ $evaluation->color() }}"></div>
+                            <div class="h-2 w-2 shrink-0 mt-1.5" style="background: {{ $evaluationColor }}"></div>
                             <span class="flex-1 text-sm text-main-text text-left font-normal">{{ $action['content'] }}</span>
                         </li>
                     @endforeach

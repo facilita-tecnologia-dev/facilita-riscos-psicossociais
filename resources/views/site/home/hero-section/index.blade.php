@@ -30,4 +30,8 @@
     <div class="bg-main-background border-borders relative flex w-full max-w-[650px] cursor-help items-center gap-2 rounded-lg border-3 px-5 py-3 transition hover:scale-[102%] sm:px-6 sm:py-4">
         <span class="font-text text-main-text w-full text-center text-sm font-normal">Promova um ambiente ético, saudável e protegido, com base em dados e conformidade.</span>
     </div>
+
+    <a href="{{ route('company.register') }}" class="bg-primary-solid border-borders relative flex w-full max-w-[650px] items-center justify-center rounded-lg border-3 px-4 py-4 transition hover:scale-[102%] hover:brightness-95">
+        <span class="text-main-background font-heading text-center text-sm font-semibold sm:text-base">Comece a usar agora mesmo</span>
+    </a>
 </section>

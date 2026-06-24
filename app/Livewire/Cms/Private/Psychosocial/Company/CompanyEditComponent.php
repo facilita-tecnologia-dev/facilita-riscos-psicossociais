@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Cms\Private\Psychosocial\Company;
 
+use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
 use App\Services\ReportChannel\ReportChannelService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -29,6 +31,9 @@ class CompanyEditComponent extends Component
     public int $usersCount;
     public string $psychosocialCampaignStatus;
     public bool $hasReportChannel;
+    public string $riskMatrix;
+
+    public array $riskMatrixes;
 
     public function render()
     {
@@ -46,6 +51,7 @@ class CompanyEditComponent extends Component
         $this->registerName = $this->company->name;
         $this->cnpj = $this->company->cnpj;
         $this->email = $this->company->email;
+        $this->riskMatrix = $this->company->risk_matrix->value;
 
         $this->usersCount = $company->activeUsers()->count();
         $this->psychosocialCampaignStatus =   $company->latestPsychosocialCampaign()?->start_date->year == now()->year 
@@ -53,6 +59,8 @@ class CompanyEditComponent extends Component
                                             : 'Sem previsão';
 
         $this->hasReportChannel = ReportChannelService::hasReportChannel($company);
+
+        $this->riskMatrixes = array_map(fn ($userOrderType) => ['label' => $userOrderType->label(), 'value' => $userOrderType->value], HSERiskMatrix::cases());
     }
 
     public function submit()
@@ -61,11 +69,14 @@ class CompanyEditComponent extends Component
             'logo' => ['nullable', Rule::when($this->logo instanceof TemporaryUploadedFile,['image', 'max:5120'])],
             'registerName' => ['required', 'string', 'max:255'],
             'cnpj' => ['required', 'max:18', 'cnpj'],
+            'riskMatrix' => ['required', new Enum(HSERiskMatrix::class)],
             'email' => ['required', 'email', 'max:100'],
         ]);
 
         try {
             $this->company = CompanyRepository::update($this->company, $validatedData);
+
+            $this->company->update(['risk_matrix' => $this->riskMatrix]);
     
             /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
             $s3 = Storage::disk('s3');

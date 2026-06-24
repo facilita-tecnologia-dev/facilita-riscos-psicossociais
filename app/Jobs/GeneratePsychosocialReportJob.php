@@ -121,7 +121,7 @@ class GeneratePsychosocialReportJob implements ShouldQueue
             'companyLogo'    => $logoBase64,
             'company'    => $company,
             'risks'    => $risks,
-            'absences' => $company->usesHSE() ? $absences : null,
+            'absences' => $company->usesHSE() ? $absences : [],
             'hasCriticalRisks' => $hasCriticalRisks,
         ])->setPaper('a4', 'portrait');
 

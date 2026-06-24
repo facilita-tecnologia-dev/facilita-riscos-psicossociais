@@ -4,14 +4,18 @@ namespace App\Repositories;
 
 use App\Enums\User\UserRole;
 use App\Enums\User\UserStatus;
+use App\Imports\UsersCountImport;
 use App\Imports\UsersImport;
 use App\Models\Company;
 use App\Models\Permission;
 use App\Models\User;
 use App\Models\UserCustomPermission;
 use App\Models\UserDepartmentPermission;
+use App\Services\Subscription\CompanySubscriptionLimitService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class UserRepository
 {
@@ -73,11 +77,26 @@ class UserRepository
         });
     }
 
-    public static function import(Company $company, $file): mixed
-    {
+    public static function import(Company $company, $file): mixed {
+        $tempPath = $file->store('temp');
+
+        $countImport = new UsersCountImport();
+        $countImport->import($tempPath);
+
+
+        if (! CompanySubscriptionLimitService::canImportEmployees($company, $countImport->count)) {
+            $availableSlots = CompanySubscriptionLimitService::availableSlots($company);
+
+            Storage::delete($tempPath);
+
+            throw ValidationException::withMessages(['import_users_file' => "O arquivo contém {$countImport->count} funcionários, mas seu plano permite importar apenas {$availableSlots} funcionário(s) adicional(is). Atualize seu plano ou reduza a quantidade de registros do arquivo."]);
+        }
+
         $import = new UsersImport($company);
 
-        $import->import($file->store('temp'));
+        $import->import($tempPath);
+
+        Storage::delete($tempPath);
 
         if ($import->failures()->isNotEmpty()) {
             return $import->failures();

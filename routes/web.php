@@ -10,10 +10,12 @@ use App\Http\Controllers\Private\Organizational\OrganizationalController;
 use App\Http\Controllers\Private\Psychosocial\PsychosocialController;
 use App\Http\Controllers\Private\Test\TestController;
 use App\Http\Controllers\Private\User\UserController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\CanAccessOrganizationalMiddleware;
 use App\Http\Middleware\CmsAuthMiddleware;
 use App\Http\Middleware\CmsGuestMiddleware;
+use App\Http\Middleware\EnsureCompanyCanCreateSubscription;
 use App\Http\Middleware\EnsureCompanyHasAccess;
 use App\Http\Middleware\GuestMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -45,7 +47,13 @@ Route::middleware(GuestMiddleware::class)->group(function() {
 });
 
 Route::middleware(AuthMiddleware::class)->group(function() {
-    // Route::middleware(EnsureCompanyHasAccess::class)->group(function(){
+    Route::middleware(EnsureCompanyCanCreateSubscription::class)->group(function(){
+        Route::get('/assinatura', [CompanyController::class, 'subscription'])->name('company.subscription.index');
+        Route::view('/assinatura/sucesso', 'subscription.company.success')->name('company.subscription.success');
+    });
+
+
+    Route::middleware(EnsureCompanyHasAccess::class)->group(function(){
         Route::prefix('inicio')->group(function(){
             Route::get('/empresa', [CompanyController::class, 'home'])->name('home.company');
             Route::get('/funcionario', [UserController::class, 'home'])->name('home.user');
@@ -61,7 +69,6 @@ Route::middleware(AuthMiddleware::class)->group(function() {
         Route::prefix('riscos-psicossociais')->group(function () {
             Route::get('/dashboard/{campaign?}', [PsychosocialController::class, 'dashboard'])->name('psychosocial.dashboard');
             Route::get('/indicadores', [PsychosocialController::class, 'indicators'])->name('psychosocial.indicators');
-            Route::get('/afastamentos', [PsychosocialController::class, 'absences'])->name('psychosocial.absences');
             Route::get('/medidas-de-controle', [PsychosocialController::class, 'controlActions'])->name('psychosocial.control-action');
         });
 
@@ -89,8 +96,10 @@ Route::middleware(AuthMiddleware::class)->group(function() {
             Route::get('/', [DocumentationController::class, 'index'])->name('documentation.index');
             Route::get('/politica-de-privacidade', [DocumentationController::class, 'policy'])->name('documentation.policy');
         });
-    // });
+    });
 });
+
+Route::post('/webhooks/pagseguro', [WebhookController::class, 'pagSeguro'])->name('webhooks.pagseguro');
 
 /*------------------------- Cms -------------------------------*/ 
 

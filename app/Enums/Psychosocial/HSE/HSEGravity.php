@@ -11,7 +11,7 @@ enum HSEGravity: string
     case EXTREME = '5';
 
     
-    public function label(): string
+    public function default(): string
     {
         return match ($this) {
             self::LIGHT => 'Leve',
@@ -19,6 +19,17 @@ enum HSEGravity: string
             self::MODERATE => 'Moderada',
             self::HIGH => 'Alta',
             self::EXTREME => 'Extrema',
+        };
+    }
+
+    public function aiha(): string
+    {
+        return match ($this) {
+            self::LIGHT => 'Pouca importância',
+            self::LOW => 'Preocupante',
+            self::MODERATE => 'Severo',
+            self::HIGH => 'Irreversível',
+            self::EXTREME => 'Ameaça',
         };
     }
 

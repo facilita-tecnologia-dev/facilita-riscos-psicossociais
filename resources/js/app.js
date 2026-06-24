@@ -1,5 +1,7 @@
 import "./bootstrap";
 
+import { registerAccessHandler } from './access-handler';
+
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 
@@ -20,6 +22,8 @@ import Typed from "typed.js";
 import { Chart, registerables } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
+registerAccessHandler();
+
 // registra tudo do chart.js + o plugin
 Chart.register(...registerables, ChartDataLabels);
 
@@ -27,6 +31,7 @@ window.Chart = Chart;
 
 document.addEventListener("DOMContentLoaded", () => {
     initializeAOS();
+    initializeScrollByURL();
     initializeTippy();
     initializeToastr();
     initializeLGPDBar();
@@ -309,5 +314,17 @@ function ourMetodolodySwiper() {
             spaceBetween: 32,
             allowTouchMove: true,
         });
+    }
+}
+
+function initializeScrollByURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const section = urlParams.get('scroll');
+
+    if (section) {
+        const el = document.getElementById(section);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 }

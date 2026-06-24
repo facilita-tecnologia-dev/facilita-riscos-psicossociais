@@ -3,7 +3,11 @@
 namespace App\Livewire\Cms\Private\Psychosocial\Company;
 
 use App\Enums\Campaign\MetodologyType;
+use App\Enums\Psychosocial\HSE\HSERiskMatrix;
+use App\Enums\Subscription\AccessStatus;
+use App\Enums\Subscription\SubscriptionStatus;
 use App\Models\Company;
+use App\Services\Subscription\CompanyNotificationService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
@@ -24,10 +28,11 @@ class CompanyCreateComponent extends Component
     public ?string $cnpj = null;
     public ?string $email = null;
     public ?string $psychosocialMetodology = MetodologyType::HSE->value;
+    public ?string $riskMatrix = HSERiskMatrix::DEFAULT->value;
     public ?string $password = null;
     public ?string $passwordConfirmation = null;
 
-    public array $psychosocialMetodologies;
+    public array $riskMatrixes;
 
     public function render()
     {
@@ -36,10 +41,7 @@ class CompanyCreateComponent extends Component
 
     public function mount()
     {
-        $this->psychosocialMetodologies = [
-            ['label' => MetodologyType::HSE->label(), 'value' => MetodologyType::HSE->value],
-            ['label' => MetodologyType::PROART->label(), 'value' => MetodologyType::PROART->value],
-        ];
+        $this->riskMatrixes = array_map(fn ($userOrderType) => ['label' => $userOrderType->label(), 'value' => $userOrderType->value], HSERiskMatrix::cases());
     }
 
     public function submit()
@@ -49,7 +51,7 @@ class CompanyCreateComponent extends Component
             'registerName' => ['required', 'string', 'max:255'],
             'cnpj' => ['required', 'max:18', 'cnpj'],
             'email' => ['required', 'email', 'max:100'],
-            'psychosocialMetodology' => ['required', new Enum(MetodologyType::class)],
+            'riskMatrix' => ['required', new Enum(HSERiskMatrix::class)],
             'password' => ['required', 'string', 'max:100', Password::defaults()],
             'passwordConfirmation' => ['required', 'string', 'same:password', 'max:100'],
         ]);
@@ -70,11 +72,26 @@ class CompanyCreateComponent extends Component
             'email' => $this->email,
             'cnpj' => $this->cnpj,
             'psychosocial_collection_type' => $this->psychosocialMetodology,
+            'risk_matrix' => $this->riskMatrix,
             'password' => $this->password,
+
+            'billing_managed_externally' => true,
+
+            'subscription_status' => SubscriptionStatus::ACTIVE,
+            'access_status' => AccessStatus::ACTIVE,
+
+            'trial_started_at' => null,
+            'trial_ends_at' => null,
+            'trial_expired_at' => null,
+            'trial_expired_reason' => null,
         ]);
 
-        $this->logo = $s3->temporaryUrl($path, now()->addMinutes(5));
-
+        if($this->logo){
+            $this->logo = $s3->temporaryUrl($path, now()->addMinutes(5));
+        }
+        
+        CompanyNotificationService::notifyExternalCompany($company);
+        
         $this->dispatch('alert:success', 'Empresa cadastrada!');
 
         return redirect()->to(route('cms.psychosocial.company.show', $company));

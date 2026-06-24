@@ -24,11 +24,11 @@ enum OCOption: int
     public function label(): string
     {
         return match ($this) {
-            self::STRONGLY_DISAGREE => 'Discordo totalmente',
-            self::DISAGREE => 'Discordo parcialmente',
-            self::NEUTRAL => 'Não tenho uma opinião definida',
-            self::AGREE => 'Concordo parcialmente',
-            self::STRONGLY_AGREE => 'Concordo totalmente',
+            self::STRONGLY_DISAGREE => __('oc_options.strongly_disagree'),
+            self::DISAGREE => __('oc_options.disagree'),
+            self::NEUTRAL => __('oc_options.neutral'),
+            self::AGREE => __('oc_options.agree'),
+            self::STRONGLY_AGREE => __('oc_options.strongly_agree'),
         };
     }
 }

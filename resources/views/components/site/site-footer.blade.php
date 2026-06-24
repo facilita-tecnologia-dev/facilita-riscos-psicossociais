@@ -8,23 +8,15 @@
                 <nav class="space-y-4 sm:space-y-5 md:space-y-6">
                     <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'hero-section\')' : null }}" href="{{ request()->routeIs('site.home') ? null : route('site.home') }}">Início</a>
                     <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'how-it-works\', 112)' : null }}" href="{{ request()->routeIs('site.home') ? null : route('site.home') }}">Como funciona</a>
-                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'system-resources\', 112)' : null }}" href="{{ request()->routeIs('site.home') ? null : route('site.home') }}">Recursos</a>
+                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'sign-section\', 112)' : null }}" href="{{ request()->routeIs('site.home') ? null : route('site.home') }}">Assinar</a>
+                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'our-metodology\', 112)' : null }}" href="{{ request()->routeIs('site.home') ? null : route('site.home') }}">Nossa metodologia</a>
                 </nav>
             </div>
-
-            {{-- <div class="space-y-6 sm:space-y-7 md:space-y-8">
-                <h3 class="text-main-text font-heading text-left text-lg font-semibold">Termos e Política</h3>
-                <nav class="space-y-4 sm:space-y-5 md:space-y-6">
-                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ route('site.privacy-policy') }}">Política de Privacidade</a>
-                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ route('site.terms-of-use') }}">Termos de uso</a>
-                </nav>
-            </div> --}}
 
             <div class="space-y-6 sm:space-y-7 md:space-y-8">
                 <h3 class="text-main-text font-heading text-left text-lg font-semibold">Contato</h3>
                 <nav class="space-y-4 sm:space-y-5 md:space-y-6">
                     <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="mailto:{{ config('app.facilita-contact-email') }}">{{ config('app.facilita-contact-email') }}</a>
-                    <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition">{{ config('app.facilita-contact-landline') }}</a>
                     <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ config('app.facilita-whatsapp-phone-1-url') }}">{{ config('app.facilita-whatsapp-phone-1') }}</a>
                     <a class="text-main-text font-text hover:text-primary-solid block cursor-pointer text-left text-base font-normal transition" href="{{ config('app.facilita-whatsapp-phone-2-url') }}">{{ config('app.facilita-whatsapp-phone-2') }}</a>
                 </nav>

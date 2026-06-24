@@ -3,6 +3,7 @@
 namespace App\Livewire\Private\User;
 
 use App\Enums\Psychosocial\UserOrder;
+use App\Enums\User\UserStatus;
 use App\Models\Campaign;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
@@ -63,6 +64,10 @@ class UserIndexComponent extends Component
             $query->where('department', $this->filters['department']);
         }
 
+        if (!empty($this->filters['status'])) {
+            $query->wherePivot('status', $this->filters['status']);
+        }
+
         $orderEnum = UserOrder::tryFrom($this->filters['orderBy'] ?? UserOrder::NAME_ASC->value);
 
         if ($orderEnum) {
@@ -96,6 +101,7 @@ class UserIndexComponent extends Component
             ->map(function($user){
                 $user->hasAnsweredPsychosocial = $this->latestPsychosocialCampaign ? $user->hasAnsweredCampaign($this->latestPsychosocialCampaign->id) : false;
                 $user->hasAnsweredOrganizational = $this->latestOrganizationalCampaign ? $user->hasAnsweredCampaign($this->latestOrganizationalCampaign->id) : false;
+                $user->status = UserStatus::from($user->pivot->status);
                 return $user;
             });
     }

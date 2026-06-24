@@ -27,6 +27,10 @@ class AbsenceCreateComponent extends Component
 
     public function mount(Collection $cids)
     {
+        if(session('auth:company')->hasActiveTrial() && session('auth:company')->hasReachedTrialAbsenceLimit()){
+            return;
+        }
+
         $users = session('auth:company')->allUsers()->get();
 
         $this->cids = $cids->map(fn($cid) => ['label' => $cid->type, 'value' => $cid->id]);

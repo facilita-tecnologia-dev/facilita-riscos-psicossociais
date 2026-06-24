@@ -10,7 +10,7 @@ enum PROARTRisk: string
     case CRITICAL = '4';
 
     
-    public function label(): string
+    public function default(): string
     {
         return match ($this) {
             self::LOW => 'Risco Baixo',
@@ -20,7 +20,7 @@ enum PROARTRisk: string
         };
     }
 
-    public function color(): string
+    public function defaultColor(): string
     {
         return match ($this) {
             self::LOW => "#A8E6CF",

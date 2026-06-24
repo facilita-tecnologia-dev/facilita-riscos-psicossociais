@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class CompanyCidConfigComponent extends Component
 {
-    public ?string $cid_config = null; 
+    public bool $cid_config; 
 
     public array $cid_options = [];
 
@@ -31,6 +31,8 @@ class CompanyCidConfigComponent extends Component
         try {
             session('auth:company')->has_cids = $value;
             session('auth:company')->save();
+
+            $this->dispatch('absence:config-updated');
             $this->dispatch('alert:success', "Configuração atualizada!");
         } catch (\Throwable $th) {
             Log::error('Não foi possível atualizar a configuração.', [

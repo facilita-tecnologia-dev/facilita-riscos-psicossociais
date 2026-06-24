@@ -34,12 +34,21 @@
                         <div class="flex flex-col gap-4">
                             @foreach ($risks as $risk => $types)
                                 <div class="space-y-2">
-                                    <div style="border-color: {{ App\Enums\Psychosocial\HSE\HSERisk::from($risk)->color() }}" class="w-full rounded-md border px-4 py-2 flex justify-between items-center gap-2">
+                                    @php
+                                        $riskLabel = App\Enums\Psychosocial\HSE\HSERisk::from($risk)->default(); 
+                                        $riskColor = App\Enums\Psychosocial\HSE\HSERisk::from($risk)->defaultColor();
+
+                                        if(session('auth:company')->usesHSE() && session('auth:company')->risk_matrix == App\Enums\Psychosocial\HSE\HSERiskMatrix::AIHA){
+                                            $riskLabel = App\Enums\Psychosocial\HSE\HSERisk::from($risk)->aiha();
+                                            $riskColor = App\Enums\Psychosocial\HSE\HSERisk::from($risk)->aihaColor();
+                                        }
+                                    @endphp
+                                    <div style="border-color: {{ $riskColor }}" class="w-full rounded-md border px-4 py-2 flex justify-between items-center gap-2">
                                         <h2 class="text-sm sm:text-base text-left text-main-text font-semibold flex-1">
-                                            {{ App\Enums\Psychosocial\HSE\HSERisk::from($risk)->label() }}
+                                            {{ $riskLabel }}
                                         </h2>
     
-                                        <div style="border-color: {{ App\Enums\Psychosocial\HSE\HSERisk::from($risk)->color() }}" class="h-4 w-4 rounded-full border-3 bg-transparent"></div>
+                                        <div style="border-color: {{ $riskColor }}" class="h-4 w-4 rounded-full border-3 bg-transparent"></div>
                                     </div>
     
                                     <div class="space-y-2">

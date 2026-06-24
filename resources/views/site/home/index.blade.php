@@ -8,8 +8,6 @@
 
         @include('site.home.why-choose-us.index')
 
-        @include('site.home.price-preview.index')
-
         @include('site.home.our-metodology.index')
 
         @include('site.home.recommendations.index')

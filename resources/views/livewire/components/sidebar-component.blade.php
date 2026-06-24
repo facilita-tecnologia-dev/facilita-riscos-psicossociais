@@ -90,6 +90,12 @@
             @if($hasDocumentation)
                 <x-actions.mobile-nav-item :href="route('documentation.index')" icon="books" activeRoute="documentation.*" label="Documentação" />
             @endif
+          
+            @if(session('auth:guard') === 'user')
+                <div class="block md:hidden">
+                    <livewire:private.user.switch-company-component />
+                </div>
+            @endif
         </nav>
     </aside>
 </div>

@@ -5,10 +5,15 @@
         <x-form.input-text wireModel="registerName" name="registerName" label="Razão social" placeholder="Digite a razão social..." value="{{ $company->name }}" tooltip="Digite a razão social" isRequired />
         <x-form.input-text wireModel="email" name="email" label="E-mail" placeholder="Digite o e-mail..." value="{{ $company->email }}" tooltip="Digite o e-mail" isRequired />
         <x-form.input-text wireModel="cnpj" name="cnpj" label="CNPJ" placeholder="Digite o cnpj..." value="{{ $company->cnpj }}" disabled isRequired />
+        
+        <div class="col-span-3">
+            <x-form.select wireModel="riskMatrix" name="riskMatrix" label="Matriz de Risco" placeholder="Selecione a matriz" tooltip="Selecione a matriz de riscos que será utilizada pela empresa" :options="$riskMatrixes" isRequired />
+        </div>
 
         <x-info-item label="Qtd. de funcionários ativos" :value="$usersCount . ' funcionários'" truncate />
         <x-info-item label="{{ 'Campanha de Riscos Psicossociais ' . now()->year }}" :value="$psychosocialCampaignStatus" truncate />
         <x-info-item label="Facilita Canal de Denúncias" value="{{ $hasReportChannel ? 'Sim' : 'Não' }}" truncate />
+        <x-info-item label="Tipo de Cobrança" value="{{ $company->usesExternalBilling() ? 'Externa' : 'Automática' }}" truncate />
     </div>
 
     <x-actions.button>

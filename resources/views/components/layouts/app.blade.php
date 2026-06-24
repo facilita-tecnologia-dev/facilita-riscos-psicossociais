@@ -16,5 +16,7 @@
                 {{ $slot }}
             </section>
         </main>
+
+        <livewire:subscription.subscription-modal-component />
     </body>
 </html>

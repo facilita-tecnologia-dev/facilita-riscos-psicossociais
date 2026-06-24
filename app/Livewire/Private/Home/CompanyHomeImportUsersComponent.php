@@ -4,7 +4,9 @@ namespace App\Livewire\Private\Home;
 
 use App\Repositories\UserRepository;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Throwable;
@@ -64,7 +66,17 @@ class CompanyHomeImportUsersComponent extends Component
                 $this->dispatch('alert:success', 'Importação concluída com sucesso!');
                 $this->nextStep();
             }
-        } catch (Throwable $e) {
+        } catch (ValidationException $e) {
+            $this->dispatch('alert:danger', collect($e->errors())->flatten()->first());
+            return;
+        }
+        catch (Throwable $th) {
+            Log::error('Erro ao importar arquivo de funcionários', [
+                'company_id' => session('auth:company')->id,
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
             $this->dispatch('alert:danger', 'Ocorreu um erro ao importar os funcionários. Tente novamente mais tarde.');
         }
     }

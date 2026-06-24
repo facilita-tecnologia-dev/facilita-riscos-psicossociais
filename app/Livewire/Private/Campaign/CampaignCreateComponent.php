@@ -28,6 +28,10 @@ class CampaignCreateComponent extends Component
 
     public function mount()
     {
+        if(session('auth:company')->hasActiveTrial() && session('auth:company')->hasReachedTrialCampaignLimit()){
+            return redirect()->to(route('campaign.index'));
+        }
+
         $customCollections = session('auth:company')->customCollections()->get();
         $baseCollections = session('auth:company')->baseCollections();
 

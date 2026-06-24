@@ -11,7 +11,7 @@ enum HSEProbability: string
     case VERY_LIKELY = '5';
 
     
-    public function label(): string
+    public function default(): string
     {
         return match ($this) {
             self::VERY_UNLIKELY => 'Muito improvável',
@@ -21,6 +21,18 @@ enum HSEProbability: string
             self::VERY_LIKELY => 'Muito provável',
         };
     }
+
+    public function aiha(): string
+    {
+        return match ($this) {
+            self::VERY_UNLIKELY => 'Não há exposição',
+            self::UNLIKELY => 'Exposição a níveis baixos',
+            self::POSSIBLE => 'Exposição moderada',
+            self::LIKELY => 'Exposição elevada',
+            self::VERY_LIKELY => 'Exposição elevadíssima',
+        };
+    }
+
 
     public static function values(): array
     {

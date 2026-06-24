@@ -33,7 +33,7 @@ class CampaignEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Notificação de Campanha de Testes',
+            subject: 'Notificação de Campanha',
         );
     }
 

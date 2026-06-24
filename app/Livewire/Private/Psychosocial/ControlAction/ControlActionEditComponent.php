@@ -5,6 +5,7 @@ namespace App\Livewire\Private\Psychosocial\ControlAction;
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Psychosocial\HSE\HSEHazard;
 use App\Enums\Psychosocial\HSE\HSERisk;
+use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Enums\Psychosocial\PROART\PROARTRisk;
 use App\Models\ControlActionType;
@@ -34,7 +35,7 @@ class ControlActionEditComponent extends Component
         $this->controlActions = $this->getControlActions();
 
         $this->hazards = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($hazard) => ['label' => $hazard->label(), 'value' => $hazard->value], (session('auth:company')->usesHSE() ? HSEHazard::cases() : PROARTHazard::cases())));
-        $this->risk_levels = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($risk) => ['label' => $risk->label(), 'value' => $risk->value], (session('auth:company')->usesHSE() ? HSERisk::cases() : PROARTRisk::cases())));
+        $this->risk_levels = array_merge([['label' => 'Todos', 'value' => '']], array_map(fn ($risk) => ['label' => session('auth:company')->usesHSE() && session('auth:company')->risk_matrix == HSERiskMatrix::AIHA ? $risk->aiha() : $risk->default(), 'value' => $risk->value], (session('auth:company')->usesHSE() ? HSERisk::cases() : PROARTRisk::cases())));
     }
 
     public function filter()

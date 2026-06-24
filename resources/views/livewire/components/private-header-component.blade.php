@@ -14,6 +14,19 @@
     @endif
 
     <div class="flex gap-3">
+        @if(session('auth:company')->hasActiveTrial())
+            @php
+                $diffInDays = now()->diffInDays(session('auth:company')->trial_ends_at);
+                $diffInHours = now()->diffInHours(session('auth:company')->trial_ends_at);
+            @endphp
+            <div class="flex items-center gap-2 py-1 px-4 rounded-full bg-primary-solid/15 border border-primary-solid" data-tippy-content="Seu prazo para testar o sistema de forma gratuita e limitada ({{ session('auth:company')->trial_ends_at->format('d/m/Y') }})">
+                <x-icon icon="clock" class="w-4 h-4 text-primary-text object-scale-down" />
+                <span class="text-sm text-left text-primary-text font-normal">
+                    {{ $diffInDays > 1 ? (floor($diffInDays) . ' dias') : (floor($diffInHours) . ' horas')  }}
+                </span>
+            </div>
+        @endif
+
         @if(session('auth:guard') === 'user')
             <div class="hidden md:block">
                 <livewire:private.user.switch-company-component />
@@ -23,6 +36,7 @@
         <div class="block md:hidden" wire:click="openSidebar">
             <x-actions.nav-item icon="hamburguer" />
         </div>
+
 
         <div wire:click="logout">
             <x-actions.nav-item icon="logout" tooltip="Sair do sistema" tooltipPosition="left" />

@@ -1,0 +1,7 @@
+tunnels:
+  laravel:
+    proto: http
+    addr: 8030 # ou a porta que o PHP está rodando
+  vite:
+    proto: http
+    addr: 5173 # porta padrão do Vite

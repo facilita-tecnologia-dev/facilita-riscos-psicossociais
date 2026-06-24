@@ -23,7 +23,10 @@
 
         @if(session('auth:guard') === 'company')        
             <livewire:private.company.company-reset-password-component />
-            <livewire:private.company.company-cid-config-component />
+        @endif
+            
+        @if(!session('auth:company')->usesExternalBilling())
+            <livewire:subscription.sign-config-component />
         @endif
     </div>
 </div>

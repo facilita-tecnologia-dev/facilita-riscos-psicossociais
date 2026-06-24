@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Enums\Psychosocial\HSE\HSEGravity;
 use App\Enums\Psychosocial\HSE\HSEHazard;
 use App\Enums\Psychosocial\HSE\HSEProbability;
+use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Models\Company;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -86,12 +87,24 @@ class HSEReportDepartmentExport implements FromCollection, WithEvents
 
             foreach ($departmentRisks as $groups) {
                 foreach ($groups as $hazard => $risk) {
+                    $probability = session('auth:company')->risk_matrix == HSERiskMatrix::AIHA 
+                                        ? HSEProbability::from($risk['risk']['probability'])->aiha()
+                                        : HSEProbability::from($risk['risk']['probability'])->default();
+
+                    $severity = session('auth:company')->risk_matrix == HSERiskMatrix::AIHA 
+                                        ? HSEGravity::from($risk['risk']['gravity'])->aiha()
+                                        : HSEGravity::from($risk['risk']['gravity'])->default();
+
+                    $finalRisk = session('auth:company')->risk_matrix == HSERiskMatrix::AIHA 
+                                        ? $risk['risk']['evaluated']->aiha()
+                                        : $risk['risk']['evaluated']->default();
+
                     $rows->push([
                         'Perigo Psicossocial: ' . HSEHazard::from($hazard)->label(),
                         '',
-                        'Severidade: ' . HSEGravity::from($risk['risk']['gravity'])->label(),
-                        'Probabilidade: ' . HSEProbability::from($risk['risk']['probability'])->label(),
-                        'Risco Identificado: ' . $risk['risk']['evaluated']->label()
+                        'Severidade: ' . $severity,
+                        'Probabilidade: ' . $probability,
+                        'Risco Identificado: ' . $finalRisk
                     ]);
 
                     $this->riskRows[] = [

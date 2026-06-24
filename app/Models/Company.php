@@ -16,6 +16,7 @@ use App\Models\BaseCollection;
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Campaign\CollectionType;
 use App\Enums\Campaign\CollectionCategory;
+use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Enums\Subscription\AccessStatus;
 use App\Enums\Subscription\SubscriptionStatus;
 use App\Enums\Subscription\TrialExpiredReason;
@@ -36,7 +37,81 @@ class Company extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'trial_started_at' => 'datetime',
+            'trial_ends_at' => 'datetime',
+            'trial_expired_at' => 'datetime',
+            'subscription_status' => SubscriptionStatus::class,
+            'access_status' => AccessStatus::class,
+            'trial_expired_reason' => TrialExpiredReason::class,
+            'has_cids' => 'boolean',
+            'billing_managed_externally' => 'boolean',
+            'risk_matrix' => HSERiskMatrix::class,
         ];
+    }
+
+    
+    /* --- AUX --- */
+    public function hasActiveTrial(): bool
+    {
+        if ($this->trial_started_at === null || $this->trial_ends_at === null) {return false;}
+        if ($this->trial_expired_at !== null) {return false;}
+        return now()->lessThanOrEqualTo($this->trial_ends_at);
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscription_status === SubscriptionStatus::ACTIVE;
+    }
+
+    public function canAccessSystem(): bool
+    {
+        if ($this->access_status === AccessStatus::BLOCKED) {return false;}
+        if ($this->hasActiveSubscription()) {return true;}
+        if ($this->hasActiveTrial()) {return true;}
+        return false;
+    }
+
+    public function expireTrial(TrialExpiredReason $reason): void {
+        $this->update([
+            'trial_expired_at' => now(),
+            'trial_expired_reason' => $reason,
+            'access_status' => AccessStatus::BLOCKED,
+        ]);
+    }
+
+    public function hasFullyConsumedTrial(): bool
+    {
+        return
+            $this->hasReachedTrialEmployeeLimit()
+            && $this->hasReachedTrialCampaignLimit()
+            && $this->hasReachedTrialTestLimit()
+            && $this->hasReachedTrialAbsenceLimit()
+            && $this->hasReachedTrialPsychosocialReportLimit();
+    }
+
+    public function hasReachedTrialEmployeeLimit(): bool
+    {
+        return $this->allUsers()->count() >= 1;
+    }
+
+    public function hasReachedTrialCampaignLimit(): bool
+    {
+        return $this->campaigns()->count() >= 1;
+    }
+
+    public function hasReachedTrialTestLimit(): bool
+    {
+        return $this->userCollections()->count() >= 1;
+    }
+
+    public function hasReachedTrialAbsenceLimit(): bool
+    {
+        return $this->CIDAbsences()->count() >= 1;
+    }
+
+    public function hasReachedTrialPsychosocialReportLimit(): bool
+    {
+        return !!$this->actionPlan->file_path;
     }
 
     /* --- Relations --- */
@@ -229,6 +304,11 @@ class Company extends Authenticatable
                     )
                     ->sortByDesc('start_date')
                     ->first();
+    }
+
+    public function usesExternalBilling(): bool
+    {
+        return Company::find($this->id)->billing_managed_externally;
     }
 
     public function sendPasswordResetNotification($token)
