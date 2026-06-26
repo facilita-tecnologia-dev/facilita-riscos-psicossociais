@@ -4,6 +4,7 @@ namespace App\Livewire\Cms\Private\Psychosocial\Company;
 
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Psychosocial\HSE\HSERiskMatrix;
+use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Enums\Subscription\AccessStatus;
 use App\Enums\Subscription\SubscriptionStatus;
 use App\Models\BaseControlAction;
