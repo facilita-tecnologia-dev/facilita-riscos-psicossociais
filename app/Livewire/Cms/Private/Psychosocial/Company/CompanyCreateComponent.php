@@ -6,7 +6,10 @@ use App\Enums\Campaign\MetodologyType;
 use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Enums\Subscription\AccessStatus;
 use App\Enums\Subscription\SubscriptionStatus;
+use App\Models\BaseControlAction;
 use App\Models\Company;
+use App\Models\CompanyReport;
+use App\Models\Organizationalndicator;
 use App\Services\Subscription\CompanyNotificationService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -86,6 +89,10 @@ class CompanyCreateComponent extends Component
             'trial_expired_reason' => null,
         ]);
 
+        $this->createIndicators($company);
+        $this->createReports($company);
+        $this->createActionPlan($company);
+
         if($this->logo){
             $this->logo = $s3->temporaryUrl($path, now()->addMinutes(5));
         }
@@ -95,5 +102,35 @@ class CompanyCreateComponent extends Component
         $this->dispatch('alert:success', 'Empresa cadastrada!');
 
         return redirect()->to(route('cms.psychosocial.company.show', $company));
+    }
+
+    private function createIndicators(Company $company)
+    {
+        Organizationalndicator::each(fn($indicator) => $company->organizationalIndicators()->create(['indicator_id' => $indicator->id]));
+    }
+    
+    private function createReports(Company $company)
+    {
+        CompanyReport::insert([
+            ['company_id' => $company->id, 'type' => PROARTHazard::MORAL_HARASSMENT->value],
+            ['company_id' => $company->id, 'type' => PROARTHazard::SEXUAL_HARASSMENT->value],
+            ['company_id' => $company->id, 'type' => PROARTHazard::DISCRIMINATION->value],
+            ['company_id' => $company->id, 'type' => PROARTHazard::OTHER_FORMS_OF_VIOLENCE->value],
+        ]);
+    }
+
+    private function createActionPlan(Company $company)
+    {
+        $actionPlan = $company->actionPlan()->create();
+
+        BaseControlAction::all()->each(fn($controlAction) => 
+            $actionPlan->controlActions()->create([
+                'action_plan_id' => $actionPlan->id,
+                'hazard_id' => $controlAction->hazard_id,
+                'control_action_type_id' => $controlAction->control_action_type_id,
+                'gravity' => $controlAction->gravity,
+                'content' => $controlAction->content,
+            ])
+        );
     }
 }
