@@ -49,8 +49,9 @@ Route::middleware(GuestMiddleware::class)->group(function() {
 Route::middleware(AuthMiddleware::class)->group(function() {
     Route::middleware(EnsureCompanyCanCreateSubscription::class)->group(function(){
         Route::get('/assinatura', [CompanyController::class, 'subscription'])->name('company.subscription.index');
-        Route::view('/assinatura/sucesso', 'subscription.company.success')->name('company.subscription.success');
     });
+
+    Route::view('/assinatura/sucesso', 'subscription.company.success')->name('company.subscription.success');
 
 
     Route::middleware(EnsureCompanyHasAccess::class)->group(function(){
