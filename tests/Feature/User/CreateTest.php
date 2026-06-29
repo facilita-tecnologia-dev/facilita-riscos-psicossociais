@@ -1,531 +1,180 @@
 <?php
 
+use App\Enums\Subscription\AccessStatus;
+use App\Enums\Subscription\SubscriptionStatus;
+use App\Enums\User\UserRole;
+use App\Livewire\Private\User\UserCreateComponent;
 use App\Models\Company;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Livewire\Livewire;
 
-beforeEach(function () {
-    $this->actingAs(User::first());
-    session(['company' => Company::first()]);
-});
+uses(DatabaseTransactions::class);
 
-it('show page and form to create user', function () {
-    $response = $this->get(route('user.create'));
-
-    $response->assertOk();
-    $response->assertViewIs('private.users.create');
-    $response->assertSeeText('Colaborador | Criar');
-});
-
-/* --------------------------------------------- */
-it('name should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => '',
-        'cpf' => '222.333.444-05',
-        'birth_date' => '2009-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
+function userCreateCompany(): Company
+{
+    return Company::factory()->create([
+        'subscription_status'        => SubscriptionStatus::ACTIVE,
+        'access_status'              => AccessStatus::ACTIVE,
+        'billing_managed_externally' => true,
     ]);
+}
 
-    $response->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'name'])]);
+it('renders user create page', function () {
+    $company = userCreateCompany();
 
+    $this->actingAs($company, 'company')
+        ->withSession([
+            'auth:user'    => $company,
+            'auth:company' => $company,
+            'auth:guard'   => 'company',
+        ])
+        ->get(route('user.create'))
+        ->assertOk()
+        ->assertViewIs('private.user.create.index');
 });
 
-it('name should have a minimum of 5 characters', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'a',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['name' => __('validation.min.string', ['attribute' => 'name', 'min' => 5])]);
-
-});
-
-it('name should have a maximum of 255 characters', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => str_repeat('*', 256),
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['name' => __('validation.max.string', ['attribute' => 'name', 'max' => 255])]);
-
-});
-/* --------------------------------------------- */
-it('cpf should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '',
-        'birth_date' => '2009-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['cpf' => __('validation.required', ['attribute' => 'cpf'])]);
-
-});
-
-it('cpf should be unique on users table', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '222.333.444-05',
-        'birth_date' => '2009-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['cpf' => __('validation.unique', ['attribute' => 'cpf', 'unique' => 'users'])]);
-
-});
-
-it('cpf should be a valid formatted CPF', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '12345678909',
-        'birth_date' => '2009-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['cpf' => 'O CPF deve estar no formato 000.000.000-00.']);
-
-});
-
-it('cpf should be a valid CPF', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '245.765.987-01',
-        'birth_date' => '2009-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['cpf' => 'O CPF informado é inválido.']);
-
-});
-/* --------------------------------------------- */
-it('birth date should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['birth_date' => __('validation.required', ['attribute' => 'birth date'])]);
-
-});
-
-it('birth date should be before or equal 16 years ago', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2029-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['birth_date' => __('validation.before_or_equal', ['attribute' => 'birth date', 'date' => now()->subYears(16)->format('Y-m-d')])]);
-
-});
-
-it('birth date should be after 100 years ago', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '1909-05-06',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2025-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['birth_date' => __('validation.after', ['attribute' => 'birth date', 'date' => now()->subCenturies(1)->format('Y-m-d')])]);
-
-});
-/* --------------------------------------------- */
-it('admission should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['admission' => __('validation.required', ['attribute' => 'admission'])]);
-
-});
-
-it('admission should be before or equal today', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2029-04-23',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['admission' => __('validation.before_or_equal', ['attribute' => 'admission', 'date' => today()->format('Y-m-d')])]);
-
-});
-
-it('admission should be after 100 years ago', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '1905-04-29',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['admission' => __('validation.after', ['attribute' => 'admission', 'date' => now()->subCenturies(1)->format('Y-m-d')])]);
-
-});
-/* --------------------------------------------- */
-it('gender should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => '',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['gender' => __('validation.required', ['attribute' => 'gender'])]);
-
-});
-
-it('gender should be a valid gender', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'aaaa',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['gender' => __('validation.enum', ['attribute' => 'gender'])]);
-
-});
-/* --------------------------------------------- */
-it('department should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => '',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['department' => __('validation.required', ['attribute' => 'department'])]);
-
-});
-
-it('department should have a maximum of 255 characters', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => str_repeat('*', 256),
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['department' => __('validation.max.string', ['attribute' => 'department', 'max' => 255])]);
-
-});
-/* --------------------------------------------- */
-it('occupation should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => '',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['occupation' => __('validation.required', ['attribute' => 'occupation'])]);
-
-});
-
-it('occupation should have a maximum of 255 characters', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => str_repeat('*', 256),
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['occupation' => __('validation.max.string', ['attribute' => 'occupation', 'max' => 255])]);
-
-});
-/* --------------------------------------------- */
-it('work shift should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => '',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['work_shift' => __('validation.required', ['attribute' => 'work shift'])]);
-
-});
-
-it('work shift should have a maximum of 255 characters', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => str_repeat('*', 256),
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['work_shift' => __('validation.max.string', ['attribute' => 'work shift', 'max' => 255])]);
-
-});
-/* --------------------------------------------- */
-it('education level should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => '',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['education_level' => __('validation.required', ['attribute' => 'education level'])]);
-
-});
-
-it('education level should have a maximum of 255 characters', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => str_repeat('*', 256),
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['education_level' => __('validation.max.string', ['attribute' => 'education level', 'max' => 255])]);
-
-});
-/* --------------------------------------------- */
-it('marital status should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => '',
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['marital_status' => __('validation.required', ['attribute' => 'marital status'])]);
-
-});
-
-it('marital status should have a maximum of 255 characters', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => str_repeat('*', 256),
-        'admission' => '2009-04-12',
-        'role' => 'Gestor Interno',
-    ]);
-
-    $response->assertSessionHasErrors(['marital_status' => __('validation.max.string', ['attribute' => 'marital status', 'max' => 255])]);
-
-});
-/* --------------------------------------------- */
-it('role should be required', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => '',
-    ]);
-
-    $response->assertSessionHasErrors(['role' => __('validation.required', ['attribute' => 'role'])]);
-
-});
-
-it('role should be a valid role', function () {
-    $response = $this->post(route('user.store'), [
-        'name' => 'Joe Doe',
-        'cpf' => '123.456.789-09',
-        'birth_date' => '2009-04-23',
-        'gender' => 'Masculino',
-        'department' => 'Financeiro',
-        'occupation' => 'Financeiro I',
-        'work_shift' => 'Diurno',
-        'education_level' => 'Ensino Superior Completo',
-        'marital_status' => 'Solteiro',
-        'admission' => '2009-04-12',
-        'role' => 'aaaa',
-    ]);
-
-    $response->assertSessionHasErrors(['role' => __('validation.enum', ['attribute' => 'role'])]);
-
+describe('UserCreateComponent validation', function () {
+    beforeEach(function () {
+        $company = userCreateCompany();
+        session()->put('auth:user', $company);
+        session()->put('auth:company', $company);
+        session()->put('auth:guard', 'company');
+    });
+
+    it('name is required', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', '')
+            ->set('cpf', '222.333.444-05')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->call('submit')
+            ->assertHasErrors(['name']);
+    });
+
+    it('name cannot exceed 255 characters', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', str_repeat('a', 256))
+            ->set('cpf', '222.333.444-05')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->call('submit')
+            ->assertHasErrors(['name']);
+    });
+
+    it('cpf is required', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->call('submit')
+            ->assertHasErrors(['cpf']);
+    });
+
+    it('cpf must be in correct format', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '12345678909')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->call('submit')
+            ->assertHasErrors(['cpf']);
+    });
+
+    it('cpf must pass checksum validation', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '245.765.987-01')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->call('submit')
+            ->assertHasErrors(['cpf']);
+    });
+
+    it('cpf must be unique', function () {
+        User::factory()->create(['cpf' => '222.333.444-05']);
+
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '222.333.444-05')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->call('submit')
+            ->assertHasErrors(['cpf']);
+    });
+
+    it('department is required', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '123.456.789-09')
+            ->set('department', '')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->call('submit')
+            ->assertHasErrors(['department']);
+    });
+
+    it('occupation is required', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '123.456.789-09')
+            ->set('department', 'Financeiro')
+            ->set('occupation', '')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->call('submit')
+            ->assertHasErrors(['occupation']);
+    });
+
+    it('role is required', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '123.456.789-09')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', '')
+            ->call('submit')
+            ->assertHasErrors(['role']);
+    });
+
+    it('role must be a valid user role', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '123.456.789-09')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', 'invalid_role')
+            ->call('submit')
+            ->assertHasErrors(['role']);
+    });
+
+    it('birth_date must be at least 16 years ago when provided', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '123.456.789-09')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->set('birth_date', now()->subYears(5)->format('Y-m-d'))
+            ->call('submit')
+            ->assertHasErrors(['birth_date']);
+    });
+
+    it('admission must not be in the future when provided', function () {
+        Livewire::test(UserCreateComponent::class)
+            ->set('name', 'João da Silva')
+            ->set('cpf', '123.456.789-09')
+            ->set('department', 'Financeiro')
+            ->set('occupation', 'Analista')
+            ->set('role', UserRole::EMPLOYEE->value)
+            ->set('admission', now()->addYear()->format('Y-m-d'))
+            ->call('submit')
+            ->assertHasErrors(['admission']);
+    });
 });

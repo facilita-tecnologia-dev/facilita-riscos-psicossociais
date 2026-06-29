@@ -6,11 +6,14 @@ use App\Enums\Subscription\PaymentStatus;
 use App\Enums\Subscription\PaymentType;
 use App\Enums\Subscription\SubscriptionStatus;
 use App\Services\Subscription\SubscriptionPricingService;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Subscription extends Model
 {
+    use HasFactory;
+
     protected $table = 'subscriptions';
 
     protected function casts(): array

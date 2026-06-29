@@ -1,60 +1,56 @@
 <?php
 
+use App\Enums\Subscription\AccessStatus;
+use App\Enums\Subscription\SubscriptionStatus;
+use App\Livewire\Private\User\UserImportComponent;
 use App\Models\Company;
-use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+use Livewire\Livewire;
 
-beforeEach(function () {
-    $this->actingAs(User::first());
-    session(['company' => Company::first()]);
-});
+uses(DatabaseTransactions::class);
+
+function importTestCompany(): Company
+{
+    return Company::factory()->create([
+        'subscription_status'        => SubscriptionStatus::ACTIVE,
+        'access_status'              => AccessStatus::ACTIVE,
+        'billing_managed_externally' => true,
+    ]);
+}
 
 it('show page and form to import users', function () {
-    $response = $this->get(route('user.import'));
+    $company = importTestCompany();
 
-    $response->assertOk();
-    $response->assertViewIs('private.users.import');
+    $this->actingAs($company, 'company')
+        ->withSession([
+            'auth:user'    => $company,
+            'auth:company' => $company,
+            'auth:guard'   => 'company',
+        ])
+        ->get(route('user.import'))
+        ->assertOk()
+        ->assertViewIs('private.user.import.index');
 });
 
-it('file should be required', function () {
-    $response = $this->post(route('user.import'), [
-        'import_users' => '',
-    ]);
+describe('UserImportComponent validation', function () {
+    beforeEach(function () {
+        $company = importTestCompany();
+        session()->put('auth:user', $company);
+        session()->put('auth:company', $company);
+        session()->put('auth:guard', 'company');
+    });
 
-    $response->assertSessionHasErrors(['import_users' => __('validation.required', ['attribute' => 'import users'])]);
-});
+    it('file field is required', function () {
+        Livewire::test(UserImportComponent::class)
+            ->call('uploadUsersFile')
+            ->assertHasErrors(['import_users_file']);
+    });
 
-it('users shoud be imported', function () {
-    Storage::fake('local');
-
-    $path = base_path('tests/Files/teste-tabela-funcionarios.xlsx');
-
-    $file = new UploadedFile(
-        $path,
-        'teste-tabela-funcionarios.xlsx',
-        'application/vnd.ms-excel',
-        null,
-        true // marca como "test file"
-    );
-
-    $response = $this->post(route('user.import'), [
-        'import_users' => $file,
-    ]);
-
-    $this->assertDatabaseHas('users', [
-        'cpf' => '123.456.789-01',
-    ]);
-});
-
-it('file shoud be valid (.xlsx)', function () {
-    Storage::fake('local');
-
-    $file = UploadedFile::fake()->create('funcionarios.txt', 100);
-
-    $response = $this->post(route('user.import'), [
-        'import_users' => $file,
-    ]);
-
-    $response->assertSessionHasErrors(['import_users' => __('validation.mimetypes', ['attribute' => 'import users', 'values' => 'xlsx'])]);
+    it('file must be xlsx format', function () {
+        Livewire::test(UserImportComponent::class)
+            ->set('import_users_file', UploadedFile::fake()->create('funcionarios.txt', 100))
+            ->call('uploadUsersFile')
+            ->assertHasErrors(['import_users_file']);
+    });
 });

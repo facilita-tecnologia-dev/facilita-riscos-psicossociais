@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\Enums\Subscription\PaymentKind;
 use App\Enums\Subscription\PaymentStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
+    use HasFactory;
+
     protected $table = 'payments';
 
     protected function casts(): array
