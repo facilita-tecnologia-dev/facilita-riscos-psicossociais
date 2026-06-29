@@ -28,7 +28,7 @@ class GenerateSubscriptionRenewalsCommand extends Command
             try {
                 $result = SubscriptionRenewalService::generateRenewal($subscription);
 
-                if ($result['checkout_url'] !== null) {
+                if ($result['created']) {
                     $generated++;
 
                     $this->info("Renewal generated for subscription #{$subscription->id}");

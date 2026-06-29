@@ -5,7 +5,7 @@ namespace App\Rules;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class validateCPF implements ValidationRule
+class ValidateCPF implements ValidationRule
 {
     /**
      * Run the validation rule.

@@ -6,6 +6,7 @@ use App\Enums\User\UserRole;
 use App\Models\Company;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Rules\ValidateCPF;
 use Error;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +51,7 @@ class UserCreateComponent extends Component
     {
         $validatedData = $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'cpf' => ['required', 'max:18', 'cpf', 'unique:users'],
+            'cpf' => ['required', 'max:18', new ValidateCPF, 'unique:users'],
             'email' => ['nullable', 'email', 'max:100'],
             'department' => ['required', 'string', 'max:255'],
             'occupation' => ['required', 'string', 'max:255'],
@@ -82,7 +83,7 @@ class UserCreateComponent extends Component
     public function checkUserAlreadyExists()
     {
         $this->validate([
-            'cpf' => ['required', 'max:18', 'cpf'],
+            'cpf' => ['required', 'max:18', new ValidateCPF],
         ]);
 
         $user = User::firstWhere('cpf', $this->cpf);

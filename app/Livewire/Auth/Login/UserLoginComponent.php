@@ -4,6 +4,7 @@ namespace App\Livewire\Auth\Login;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Rules\ValidateCPF;
 use App\Services\Auth\AuthenticationService;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
@@ -42,7 +43,7 @@ class UserLoginComponent extends Component
     public function submitCPF()
     {
         $credentials = $this->validate([
-            'cpf' => ['required', 'max:14', 'cpf'],
+            'cpf' => ['required', 'max:14', new ValidateCPF],
         ]);
 
         $user = User::firstWhere('cpf', $credentials['cpf']);

@@ -7,6 +7,7 @@ use App\Enums\User\UserStatus;
 use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;
+use App\Rules\ValidateCPF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -63,7 +64,7 @@ class UserShowComponent extends Component
     {
         $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'cpf' => ['required', 'max:18', 'cpf', Rule::unique('users', 'cpf')->ignore($this->user->id)],
+            'cpf' => ['required', 'max:18', new ValidateCPF, Rule::unique('users', 'cpf')->ignore($this->user->id)],
             'email' => ['nullable', 'email', 'max:100'],
             'department' => ['required', 'string', 'max:255'],
             'occupation' => ['required', 'string', 'max:255'],

@@ -106,4 +106,6 @@
             </x-actions.button>
         @endif
     </div>
+
+    <livewire:subscription.subscription-payment-modal-component />
 </div>

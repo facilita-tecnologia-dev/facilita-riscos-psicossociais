@@ -4,6 +4,21 @@ namespace App\Services\Subscription;
 
 class SubscriptionPricingService
 {
+    public static function tiers(): array
+    {
+        return [
+            ['value' => 50,   'label' => '1 - 50'],
+            ['value' => 100,  'label' => '51 - 100'],
+            ['value' => 200,  'label' => '101 - 200'],
+            ['value' => 300,  'label' => '201 - 300'],
+            ['value' => 400,  'label' => '301 - 400'],
+            ['value' => 500,  'label' => '401 - 500'],
+            ['value' => 750,  'label' => '501 - 750'],
+            ['value' => 1000, 'label' => '751 - 1000'],
+            ['value' => 1001, 'label' => '1000+'],
+        ];
+    }
+
     public static function pricing(int $employees): array
     {
         return match (true) {

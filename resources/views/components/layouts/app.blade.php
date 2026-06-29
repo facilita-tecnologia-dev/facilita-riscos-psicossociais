@@ -18,5 +18,6 @@
         </main>
 
         <livewire:subscription.subscription-modal-component />
+        @stack('scripts')
     </body>
 </html>

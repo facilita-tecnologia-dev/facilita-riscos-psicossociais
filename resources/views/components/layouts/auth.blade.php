@@ -8,5 +8,6 @@
 
     <body class="bg-main-background relative flex h-screen items-center justify-center overflow-hidden">
         {{ $slot }}
+        @stack('scripts')
     </body>
 </html>

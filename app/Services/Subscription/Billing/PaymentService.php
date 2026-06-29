@@ -81,6 +81,19 @@ class PaymentService
         SubscriptionEventService::log($payment->subscription, SubscriptionEvent::PAYMENT_PAID->value, $payload);
     }
 
+    public static function markAsPaidFromDirectCharge(Payment $payment, array $chargeData): void {
+        $payment->update([
+            'status'       => PaymentStatus::PAID,
+            'paid_at'      => now(),
+            'paid_amount'  => $chargeData['amount']['value'] ?? $payment->amount,
+            'gateway_status' => $chargeData['status'] ?? null,
+            'gateway_payload' => $chargeData,
+            'checkout_url' => null,
+        ]);
+
+        SubscriptionEventService::log($payment->subscription, SubscriptionEvent::PAYMENT_PAID->value, $chargeData);
+    }
+
     public static function markAsFailed(Payment $payment, array $payload = []): void {
         $payment->update([
             'status' => PaymentStatus::FAILED,

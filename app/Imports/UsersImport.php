@@ -5,7 +5,7 @@ namespace App\Imports;
 use App\Enums\User\UserStatus;
 use App\Models\Company;
 use App\Models\User;
-use App\Rules\validateCPF;
+use App\Rules\ValidateCPF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -87,7 +87,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
     {
         return [
             'nome_completo' => ['required', 'string', 'min:5', 'max:255'],
-            'cpf' => ['required', 'string', new validateCPF],
+            'cpf' => ['required', 'string', new ValidateCPF],
             'email' => ['nullable', 'email'],
             'data_de_nascimento' => ['nullable'],
             'setor' => ['required', 'string' ,'max:255'],

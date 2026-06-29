@@ -4,7 +4,7 @@ namespace App\Services\Subscription\Billing;
 
 use App\Models\Company;
 use App\Models\Payment;
-use App\Models\Subscription;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class PagSeguroService
@@ -55,6 +55,101 @@ class PagSeguroService
             'gateway_payment_id' => $data['id'],
             'gateway_status' => 'PENDING',
         ];
+    }
+
+    public static function getPublicKey(): string
+    {
+        return Cache::remember('pagseguro.public_key', 86400, function () {
+            $response = Http::withToken(config('services.pagseguro.token'))
+                ->acceptJson()
+                ->get(self::baseUrl() . '/public-keys/card');
+
+            if (! $response->successful()) {
+                throw new \Exception('PagSeguro public key error: ' . $response->body());
+            }
+
+            return $response->json('public_key');
+        });
+    }
+
+    public static function createCardCharge(Company $company, Payment $payment, string $encryptedCard): array
+    {
+        $response = Http::withToken(config('services.pagseguro.token'))
+            ->acceptJson()
+            ->post(self::baseUrl() . '/charges', [
+                'reference_id' => $payment->external_reference,
+                'description' => 'Assinatura - Facilita Riscos Psicossociais',
+                'amount' => ['value' => $payment->amount, 'currency' => 'BRL'],
+                'payment_method' => [
+                    'type' => 'CREDIT_CARD',
+                    'installments' => 1,
+                    'capture' => true,
+                    'card' => ['encrypted' => $encryptedCard, 'store' => false],
+                ],
+                'notification_urls' => [config('app.url') . '/webhooks/pagseguro'],
+            ]);
+
+        if (! $response->successful()) {
+            throw new \Exception('PagSeguro card charge error: ' . $response->body());
+        }
+
+        $data = $response->json();
+
+        return [
+            'gateway'            => 'pagseguro',
+            'gateway_payment_id' => $data['id'],
+            'gateway_status'     => $data['status'],
+            'status'             => $data['status'],
+            'payload'            => $data,
+        ];
+    }
+
+    public static function createPixCharge(Company $company, Payment $payment): array
+    {
+        $expiresAt = now()->addHours(24);
+
+        $response = Http::withToken(config('services.pagseguro.token'))
+            ->acceptJson()
+            ->post(self::baseUrl() . '/orders', [
+                'reference_id'     => $payment->external_reference,
+                'customer'         => [
+                    'name'    => $company->name,
+                    'email'   => $company->email,
+                    'tax_id'  => preg_replace('/\D/', '', $company->cnpj),
+                ],
+                'items'            => [[
+                    'reference_id' => $payment->external_reference,
+                    'name'         => 'Assinatura - Facilita Riscos Psicossociais',
+                    'quantity'     => 1,
+                    'unit_amount'  => $payment->amount,
+                ]],
+                'qr_codes'         => [[
+                    'amount'          => ['value' => $payment->amount],
+                    'expiration_date' => $expiresAt->toIso8601String(),
+                ]],
+                'notification_urls'=> [config('app.url') . '/webhooks/pagseguro'],
+            ]);
+
+        if (! $response->successful()) {
+            throw new \Exception('PagSeguro PIX error: ' . $response->body());
+        }
+
+        $data   = $response->json();
+        $qrCode = $data['qr_codes'][0] ?? [];
+
+        return [
+            'gateway'            => 'pagseguro',
+            'gateway_payment_id' => $data['id'],
+            'gateway_status'     => $data['status'] ?? 'WAITING',
+            'qr_code_text'       => $qrCode['text'] ?? null,
+            'qr_code_image'      => collect($qrCode['links'] ?? [])->firstWhere('media', 'image/png')['href'] ?? null,
+            'expires_at'         => $qrCode['expiration_date'] ?? $expiresAt->toIso8601String(),
+        ];
+    }
+
+    public static function sdkUrl(): string
+    {
+        return 'https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js';
     }
 
     private static function baseUrl(): string
