@@ -22,25 +22,6 @@
             </label>
         @endforeach
 
-        {{-- @foreach ($departmentLabels as $slug => $label)
-            <label class="flex items-center cursor-pointer">
-                <input
-                    type="checkbox"
-                    wire:model="departmentScopes.{{ $slug }}"
-                    value="1"
-                    @disabled($slug === $userDepartmentSlug)
-                    class="hidden peer"
-                >
-
-                <div class="bg-secondary-background border-borders peer-checked:border-primary-solid flex items-center gap-2 w-full cursor-pointer rounded-sm border p-3 transition hover:brightness-95">
-                    <p class="font-medium text-sm md:text-base text-gray-800">{{ $label }}</p>
-
-                    @if ($slug === $userDepartmentSlug)
-                        <span class="text-xs text-gray-500">(Setor do usuário)</span>
-                    @endif
-                </div>
-            </label>
-        @endforeach --}}
     </div>
 
     <x-actions.button class="lg:col-span-2">

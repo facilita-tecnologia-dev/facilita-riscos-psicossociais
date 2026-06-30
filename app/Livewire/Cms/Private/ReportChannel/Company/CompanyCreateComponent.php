@@ -59,13 +59,8 @@ class CompanyCreateComponent extends Component
             return;
         }
 
-        // dd($response->json());
-
-        // $logoPath = $this->logo instanceof TemporaryUploadedFile ? $this->logo->store('images', 'public') : $this->logo;
-
         $this->dispatch('alert:success', 'Empresa cadastrada!');
 
-        // return redirect()->to(route('cms.report-channel.company.show', $company));
         return redirect()->to(route('cms.report-channel.company.index'));
     }
 }

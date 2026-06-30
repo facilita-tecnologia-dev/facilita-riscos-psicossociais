@@ -46,10 +46,12 @@
             @endif
 
             @if ($currentStep === 'import-users')
+                <p class="text-main-text text-left text-sm font-normal md:text-base">Os funcionários são os participantes das campanhas de pesquisa. Você pode importar uma lista em planilha ou cadastrar manualmente, um por vez.</p>
                 <livewire:private.home.company-home-import-users-component />
             @endif
 
             @if ($currentStep === 'schedule-campaign')
+                <p class="text-main-text text-left text-sm font-normal md:text-base">Uma campanha define o período em que os funcionários responderão aos questionários de avaliação. Ela tem data de início, data de encerramento e um tipo de formulário — que determina o que será avaliado. @if(session('auth:company')->can_access_organizational)O sistema oferece duas avaliações: <span class="font-semibold">Riscos Psicossociais</span> (fatores do ambiente de trabalho que afetam a saúde mental) e <span class="font-semibold">Clima Organizacional</span> (percepção dos funcionários sobre a empresa).@else O sistema avalia <span class="font-semibold">Riscos Psicossociais</span> — fatores do ambiente de trabalho que afetam a saúde e o bem-estar dos funcionários.@endif</p>
                 <livewire:private.home.company-home-schedule-campaign-component />
             @endif
         </div>

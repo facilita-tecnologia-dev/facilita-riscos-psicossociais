@@ -260,33 +260,18 @@ class TestShowComponent extends Component
     {
         $this->applyLocale();
 
-        // $collection = $this->campaign->collection();
-        // $collection->load('questions.translations');
-        
-        // $questions = session('auth:company')->hasActiveTrial()
-        //             ? $this->campaign->collection()->questions->values()->take(5)->toArray()
-        //             : $this->campaign->collection()->questions->shuffle()->values()->toArray();
-
-        // return $questions;
         $questions = $this->campaign
             ->collection()
             ->questions()
             ->with('translations')
             ->get();
 
-        // if (! session('auth:company')->hasActiveTrial()) {
         $orderMap = array_flip($this->questionIds);
         $questions = $questions->sortBy(fn ($question) => $orderMap[$question->id])->values();
-        // $questions = $questions->sortBy(fn ($question) => array_search($question->id, $this->questionIds))->values();
-        // }
 
         return session('auth:company')->hasActiveTrial()
             ? $questions->take(5)->values()->toArray()
             : $questions->values()->toArray();
-
-        // $this->questions = session('auth:company')->hasActiveTrial()
-        //             ? $questions->values()->take(5)->toArray()
-        //             : $questions->shuffle()->values()->toArray();
                     
     }
 }

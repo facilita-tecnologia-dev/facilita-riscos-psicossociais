@@ -39,7 +39,6 @@ class CompanyAccessConfigComponent extends Component
         if($response->status() === 200){
             $this->company['subscription_type'] = ReportChannelCompanySubscriptionTypes::FREE_TRIAL_EXPIRED->value;
             $this->dispatch('alert:success', "Acesso bloqueado com sucesso!");
-            // $this->refresh();
         } else {
             $this->dispatch('alert:danger', "Erro ao bloquear acesso!");
         }

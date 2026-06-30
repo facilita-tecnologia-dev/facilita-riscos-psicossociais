@@ -142,6 +142,12 @@
                     <span class="font-semibold">utilize os cards disponíveis à direita</span>
                     .
                 </p>
+
+                @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('create', [\App\Models\Campaign::class]))
+                    <x-actions.button :href="route('campaign.create')" class="w-full">
+                        <span class="font-heading text-main-background text-center text-sm font-semibold">Agendar campanha</span>
+                    </x-actions.button>
+                @endif
             </div>
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('psychosocialIndicators', [\App\Models\User::class]))

@@ -195,15 +195,6 @@ class ReportChannelService
         return $response;
     }
     
-    // public static function userCompanies(string $userID, array $formData)
-    // {
-    //     $response = Http::withHeaders([
-    //         'Accept' => 'application/json',
-    //     ])->put(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID . '/companies', $formData); 
-
-    //     return $response;
-    // }
-
     public static function userCompanies(string $userID)
     {
         $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID . "/companies"); 

@@ -8,6 +8,26 @@
             <span class="text-sm sm:text-base text-center text-main-text font-normal">
                 Confirmamos o seu cadastro no sistema. A partir de agora, seu acesso à plataforma está liberado. Clique no botão abaixo para ser direcionado ao ambiente da empresa.
             </span>
+
+            <div class="w-full flex flex-col gap-3">
+                <p class="text-sm font-semibold text-main-text text-left">O que vem a seguir:</p>
+                <ol class="flex flex-col gap-2">
+                    <li class="flex items-start gap-3">
+                        <span class="bg-primary-solid text-main-background text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center shrink-0 mt-0.5">1</span>
+                        <span class="text-sm text-main-text font-normal">Adicionar a <span class="font-semibold">logomarca</span> da empresa para personalizar relatórios</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="bg-primary-solid text-main-background text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center shrink-0 mt-0.5">2</span>
+                        <span class="text-sm text-main-text font-normal"><span class="font-semibold">Importar os funcionários</span> que participarão das pesquisas</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="bg-primary-solid text-main-background text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center shrink-0 mt-0.5">3</span>
+                        <span class="text-sm text-main-text font-normal"><span class="font-semibold">Agendar a primeira campanha</span> de avaliação de riscos psicossociais.</span>
+                    </li>
+                </ol>
+                <p class="text-xs text-secondary-text text-left">O sistema irá guiá-lo por cada uma dessas etapas assim que você acessar.</p>
+            </div>
+
             <span class="text-sm sm:text-base text-center text-secondary-text font-normal">
                 Atenção: Esta página de confirmação não será exibida novamente.
             </span>

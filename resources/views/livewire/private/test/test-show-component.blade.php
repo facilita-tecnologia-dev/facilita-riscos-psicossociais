@@ -4,31 +4,6 @@
         __('test.breadcrumb_current') => null
     ]" />
 
-    {{-- <div class="bg-secondary-background border-borders flex flex-col items-center gap-2 rounded-lg border px-6 py-4 shadow-sm sm:flex-row">
-        <div class="flex flex-1 flex-col items-center gap-2 sm:items-start sm:gap-0.5">
-            <h2 class="font-heading text-main-text text-center text-base font-semibold sm:text-left sm:text-lg">Tradução</h2>
-            <span class="font-text text-main-text text-center text-xs font-normal sm:text-left sm:text-sm">Deseja traduzir esta página para outros idiomas? Defina o idioma desejado através dos botões ao lado.</span>
-        </div>
-
-        <div class="flex gap-2">
-            <button wire:click="changeLocale('pt_BR')" class="p-2 bg-secondary-background border border-borders rounded-md hover:brightness-95 transition cursor-pointer">
-                🇧🇷 Português
-            </button>
-
-            <button wire:click="changeLocale('en')" class="p-2 bg-secondary-background border border-borders rounded-md hover:brightness-95 transition cursor-pointer">
-                🇪🇸 English
-            </button>
-
-            <button wire:click="changeLocale('es')" class="p-2 bg-secondary-background border border-borders rounded-md hover:brightness-95 transition cursor-pointer">
-                🇪🇸 Español
-            </button>
-
-            <button wire:click="changeLocale('fr')" class="p-2 bg-secondary-background border border-borders rounded-md hover:brightness-95 transition cursor-pointer">
-                🇫🇷 Français
-            </button>
-        </div>
-    </div> --}}
-
     <div class="ml-auto w-fit flex border border-borders rounded-md">
         <button wire:click="changeLocale('pt_BR')" class="flex items-center gap-2 {{ $locale === 'pt_BR' ? 'bg-primary-solid/30' : 'bg-main-background' }} rounded-l-md cursor-pointer px-3 py-2 text-sm font-normal transition hover:brightness-95" class="text-secondary-text">
             <img src="https://flagcdn.com/w20/br.png" width="20" alt="Brazil" class="rounded-xs">

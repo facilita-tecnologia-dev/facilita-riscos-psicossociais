@@ -61,8 +61,36 @@
                     @endforeach
                 </div>
             @else
-                <div class="flex w-full">
-                    <p class="text-secondary-text font-heading text-center text-sm font-normal sm:text-base">Você ainda não agendou nenhuma campanha no ano atual.</p>
+                <div class="bg-secondary-background border-borders flex flex-col gap-4 rounded-lg border p-6">
+                    <div class="flex items-center gap-3">
+                        <x-icon icon="calendar-clock" class="text-primary-solid h-6 w-6 object-scale-down shrink-0" />
+                        <h3 class="text-main-text font-heading text-left text-base font-semibold">Nenhuma campanha agendada este ano</h3>
+                    </div>
+                    <p class="text-main-text text-left text-sm font-normal md:text-base">Uma campanha define o período em que os funcionários responderão aos questionários de avaliação. Após o encerramento, os resultados ficam disponíveis no dashboard para análise.</p>
+                    @if(session('auth:company')->can_access_organizational)
+                        <div class="flex flex-col gap-2">
+                            <p class="text-main-text text-left text-sm font-semibold">Tipos de campanha disponíveis:</p>
+                            <ul class="flex flex-col gap-1.5 pl-1">
+                                <li class="flex items-start gap-2 text-sm text-main-text font-normal">
+                                    <x-icon icon="brain" class="text-primary-solid h-4 w-4 object-scale-down shrink-0 mt-0.5" />
+                                    <span><span class="font-semibold">Riscos Psicossociais</span> — avalia fatores do ambiente de trabalho que afetam a saúde mental e o bem-estar dos funcionários</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-sm text-main-text font-normal">
+                                    <x-icon icon="cloud" class="text-primary-solid h-4 w-4 object-scale-down shrink-0 mt-0.5" />
+                                    <span><span class="font-semibold">Clima Organizacional</span> — mede a percepção dos funcionários sobre o ambiente, liderança, comunicação e cultura da empresa</span>
+                                </li>
+                            </ul>
+                        </div>
+                    @else
+                        <p class="text-main-text text-left text-sm font-normal">A campanha de <span class="font-semibold">Riscos Psicossociais</span> avalia fatores do ambiente de trabalho que afetam a saúde mental e o bem-estar dos funcionários, gerando um relatório detalhado por setor e função.</p>
+                    @endif
+                    @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('create', [\App\Models\Campaign::class]))
+                        <div>
+                            <x-actions.button :href="route('campaign.create')" fitSize>
+                                <span class="text-main-background text-center text-sm font-semibold">Agendar primeira campanha</span>
+                            </x-actions.button>
+                        </div>
+                    @endif
                 </div>
             @endif
         </div>

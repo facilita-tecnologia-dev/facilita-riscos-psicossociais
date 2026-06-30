@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Notifications\ResetPassword;
 use App\Policies\UserPolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

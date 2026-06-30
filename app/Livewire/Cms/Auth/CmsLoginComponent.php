@@ -26,22 +26,11 @@ class CmsLoginComponent extends Component
         $CmsUser = CmsUser::firstWhere('user', $credentials['user']);
 
         if($CmsUser){
-            // $isInvalidSubscription = $company->subscription_type === CompanySubscriptionTypes::FREE_TRIAL_EXPIRED;
-            
-            // if($isInvalidSubscription){
-            //     session()->flash('login:free-trial-expired', true);
-            //     return;
-            // }
-
             if($redirectRoute = AuthenticationService::attempt('cms', $credentials)){
                 return redirect()->intended($redirectRoute);
             }
         } else{
             session()->flash('login:incorrect', 'Este CNPJ não está cadastrado no sistema');
         }
-        
-        // session()->flash('login:incorrect', 'Credenciais incorretas');
-
-        // return back();
     }
 }

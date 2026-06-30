@@ -22,13 +22,6 @@ class ControlActionItemComponent extends Component
 
     public function mount(array $action)
     {
-        // $this->action = CustomControlAction::find($action['id']);
-        // $this->content = $action['content'];
-        
-        // if($action['deadline']) $this->deadline = $action['deadline'];
-        // if($action['assignee']) $this->assignee = $action['assignee'];
-        // if($action['status']) $this->status = $action['status'];
-
         $this->action = CustomControlAction::findOrFail($action['id']);
 
         $this->content  = $this->action->content ?? '';

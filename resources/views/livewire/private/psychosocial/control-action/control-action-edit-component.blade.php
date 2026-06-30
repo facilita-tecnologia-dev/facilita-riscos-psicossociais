@@ -1,6 +1,11 @@
 <div class="contents">
     <x-structure.page-header icon="brain" label="Medidas de Controle" :breadcrumbs="['Medidas de Controle' => null]" />
     
+    <div class="bg-main-background border-borders flex items-start gap-3 rounded-lg border px-4 py-3">
+        <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain shrink-0 mt-0.5" />
+        <span class="text-sm text-secondary-text text-left font-normal">As medidas de controle são <span class="font-semibold">ações preventivas e corretivas</span> associadas a cada perigo psicossocial identificado. Configure-as a qualquer momento — elas são incluídas automaticamente nos relatórios gerados e orientam as equipes de RH e segurança sobre <span class="font-semibold">o que fazer para cada nível de risco</span>.</span>
+    </div>
+
     @if(isset($controlActions) && count($controlActions) > 0)
         <div class="border-borders bg-main-background flex flex-col gap-3 rounded-lg border p-4">
             <form class="flex flex-col md:flex-row md:items-end gap-3 md:gap-4" wire:submit.prevent="filter">

@@ -21,8 +21,6 @@ class MonthlyBusinessReportService
 
     private static function build(): array
     {
-        // $start = now()->subMonth()->startOfMonth();
-        // $end = now()->subMonth()->endOfMonth();
         $start = now()->startOfMonth();
         $end = now()->endOfMonth();
 

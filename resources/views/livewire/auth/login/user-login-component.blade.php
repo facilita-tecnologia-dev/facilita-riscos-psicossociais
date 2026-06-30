@@ -7,8 +7,6 @@
             <form class="grid w-full grid-cols-1 gap-4" wire:submit.prevent="submitCPF">
                 <x-form.input-text wireModel="cpf" name="cpf" label="CPF" placeholder="Digite o cpf..." tooltip="Digite o cpf..." isRequired />
 
-                {{-- <x-form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a senha..." tooltip="Digite a senha..." isRequired isPassword /> --}}
-
                 <x-actions.button class="w-full" type="submit">
                     <div wire:loading wire:target="submitCPF">
                         <x-icon icon="loading" class="text-main-background h-4 w-4 animate-spin object-scale-down" />

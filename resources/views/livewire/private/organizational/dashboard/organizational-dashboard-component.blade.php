@@ -21,6 +21,13 @@
             </div>
 
 
+            @if($organizationalCampaign->status === App\Enums\Campaign\CampaignStatus::ACTIVE)
+                <div class="border-borders bg-main-background flex items-start gap-3 rounded-lg border px-4 py-3">
+                    <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain shrink-0 mt-0.5" />
+                    <span class="text-sm text-secondary-text text-left font-normal">Os resultados são atualizados à medida que os funcionários respondem. O dashboard mostra o <span class="font-semibold">índice de satisfação por dimensão</span> (liderança, comunicação, ambiente, etc.). Ao encerrar a campanha, é possível gerar relatórios e visualizar feedbacks escritos pelos funcionários.</span>
+                </div>
+            @endif
+
             <div id="relevant-infos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-start gap-4">
                 <livewire:private.organizational.dashboard.organizational-campaign-engagement-component :engagement="$engagement" />
 
@@ -191,6 +198,12 @@
                     <span class="font-semibold">através dos cards à direita</span>
                     .
                 </p>
+
+                @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('create', [\App\Models\Campaign::class]))
+                    <x-actions.button :href="route('campaign.create')" class="w-full">
+                        <span class="font-heading text-main-background text-center text-sm font-semibold">Agendar campanha</span>
+                    </x-actions.button>
+                @endif
             </div>
 
             @if(Gate::forUser(App\Services\Auth\AuthenticationService::user())->check('organizationalCustomCollections', [\App\Models\User::class]))
