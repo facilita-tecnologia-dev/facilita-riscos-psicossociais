@@ -15,7 +15,7 @@ class MonthlyBusinessReportService
         $report = self::build();
 
         foreach (self::ownerEmails() as $email) {
-            Mail::to($email)->queue(new MonthlyBusinessReportMail($report));
+            Mail::to($email)->send(new MonthlyBusinessReportMail($report));
         }
     }
 
