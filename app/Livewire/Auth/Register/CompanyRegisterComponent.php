@@ -11,6 +11,7 @@ use App\Models\BaseControlAction;
 use App\Models\Company;
 use App\Models\CompanyReport;
 use App\Models\Organizationalndicator;
+use App\Rules\ValidateCNPJ;
 use App\Services\Auth\AuthenticationService;
 use App\Services\Subscription\SubscriptionService;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,7 @@ class CompanyRegisterComponent extends Component
     {
         $this->validate([
             'name' => ['required', 'string', 'min:6', 'max:255'],
-            'cnpj' => ['required', 'string', 'unique:companies', 'cnpj'],
+            'cnpj' => ['required', 'string', 'unique:companies', new ValidateCNPJ],
             'email' => ['required', 'email'],
             'password' => ['required', 'string', 'max:100', Password::defaults()],
             'password_confirmation' => ['required', 'string', 'same:password', 'max:100'],

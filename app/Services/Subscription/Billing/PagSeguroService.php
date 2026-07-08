@@ -115,7 +115,8 @@ class PagSeguroService
                 'customer'         => [
                     'name'    => $company->name,
                     'email'   => $company->email,
-                    'tax_id'  => preg_replace('/\D/', '', $company->cnpj),
+                    // 'tax_id'  => preg_replace('/\D/', '', $company->cnpj), // fallback: CNPJ numérico (pré CNPJ alfanumérico)
+                    'tax_id'  => preg_replace('/[.\/\-]/', '', strtoupper($company->cnpj)),
                 ],
                 'items'            => [[
                     'reference_id' => $payment->external_reference,

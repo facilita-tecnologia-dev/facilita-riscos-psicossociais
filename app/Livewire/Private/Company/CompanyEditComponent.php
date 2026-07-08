@@ -4,6 +4,7 @@ namespace App\Livewire\Private\Company;
 
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
+use App\Rules\ValidateCNPJ;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -48,7 +49,7 @@ class CompanyEditComponent extends Component
         $validatedData = $this->validate([
             'logo' => ['nullable', Rule::when($this->logo instanceof TemporaryUploadedFile,['image', 'max:5120'])],
             'registerName' => ['required', 'string', 'max:255'],
-            'cnpj' => ['required', 'max:18', 'cnpj'],
+            'cnpj' => ['required', 'max:18', new ValidateCNPJ],
             'email' => ['required', 'email', 'max:100'],
         ]);
 

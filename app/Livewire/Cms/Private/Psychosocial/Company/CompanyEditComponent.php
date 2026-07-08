@@ -5,6 +5,7 @@ namespace App\Livewire\Cms\Private\Psychosocial\Company;
 use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
+use App\Rules\ValidateCNPJ;
 use App\Services\ReportChannel\ReportChannelService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -68,7 +69,7 @@ class CompanyEditComponent extends Component
         $validatedData = $this->validate([
             'logo' => ['nullable', Rule::when($this->logo instanceof TemporaryUploadedFile,['image', 'max:5120'])],
             'registerName' => ['required', 'string', 'max:255'],
-            'cnpj' => ['required', 'max:18', 'cnpj'],
+            'cnpj' => ['required', 'max:18', new ValidateCNPJ],
             'riskMatrix' => ['required', new Enum(HSERiskMatrix::class)],
             'email' => ['required', 'email', 'max:100'],
         ]);
