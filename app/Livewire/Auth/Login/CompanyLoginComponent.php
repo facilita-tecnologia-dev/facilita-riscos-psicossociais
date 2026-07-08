@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth\Login;
 
 use App\Models\Company;
+use App\Rules\ValidateCNPJ;
 use App\Services\Auth\AuthenticationService;
 use Livewire\Component;
 
@@ -19,7 +20,7 @@ class CompanyLoginComponent extends Component
     public function submit()
     {
         $credentials = $this->validate([
-            'cnpj' => ['required', 'cnpj', 'max:100'],
+            'cnpj' => ['required', new ValidateCNPJ, 'max:100'],
             'password' => ['required', 'string', 'max:100'],
         ]);
 

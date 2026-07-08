@@ -11,6 +11,7 @@ use App\Models\BaseControlAction;
 use App\Models\Company;
 use App\Models\CompanyReport;
 use App\Models\Organizationalndicator;
+use App\Rules\ValidateCNPJ;
 use App\Services\Subscription\CompanyNotificationService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -53,7 +54,7 @@ class CompanyCreateComponent extends Component
         $this->validate([
             'logo' => ['nullable', Rule::when($this->logo instanceof TemporaryUploadedFile,['image', 'max:5120'])],
             'registerName' => ['required', 'string', 'max:255'],
-            'cnpj' => ['required', 'max:18', 'cnpj'],
+            'cnpj' => ['required', 'max:18', new ValidateCNPJ],
             'email' => ['required', 'email', 'max:100'],
             'riskMatrix' => ['required', new Enum(HSERiskMatrix::class)],
             'password' => ['required', 'string', 'max:100', Password::defaults()],
@@ -97,9 +98,9 @@ class CompanyCreateComponent extends Component
         if($this->logo){
             $this->logo = $s3->temporaryUrl($path, now()->addMinutes(5));
         }
-        
+
         CompanyNotificationService::notifyExternalCompany($company);
-        
+
         $this->dispatch('alert:success', 'Empresa cadastrada!');
 
         return redirect()->to(route('cms.psychosocial.company.show', $company));
@@ -109,7 +110,7 @@ class CompanyCreateComponent extends Component
     {
         Organizationalndicator::each(fn($indicator) => $company->organizationalIndicators()->create(['indicator_id' => $indicator->id]));
     }
-    
+
     private function createReports(Company $company)
     {
         CompanyReport::insert([
@@ -124,7 +125,7 @@ class CompanyCreateComponent extends Component
     {
         $actionPlan = $company->actionPlan()->create();
 
-        BaseControlAction::all()->each(fn($controlAction) => 
+        BaseControlAction::all()->each(fn($controlAction) =>
             $actionPlan->controlActions()->create([
                 'action_plan_id' => $actionPlan->id,
                 'hazard_id' => $controlAction->hazard_id,
