@@ -5,6 +5,7 @@ namespace App\Services\Psychosocial;
 use App\Enums\Psychosocial\HSE\HSEHazard;
 use App\Enums\Psychosocial\HSE\HSERisk;
 use App\Enums\Campaign\EvaluationTypes;
+use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Evaluators\HSE\chronicTeamConflicts;
 use App\Evaluators\HSE\constantInterruptions;
 use App\Evaluators\HSE\deadlinePressure;
@@ -118,13 +119,26 @@ class HSERiskService
 
     public static function riskMatrix(int $probability, int $severity)
     {
-        $matrix = [
-            1 => [1, 1, 2, 3, 3], // Muito improvável
-            2 => [1, 2, 3, 3, 4], // Improvável
-            3 => [1, 2, 3, 4, 5], // Possível
-            4 => [2, 2, 3, 4, 5], // Provável
-            5 => [2, 3, 4, 5, 5], // Muito provável
-        ];
+        $usesAIHAMatrix = session('auth:company')->risk_matrix == HSERiskMatrix::AIHA;
+
+        if($usesAIHAMatrix){
+            $matrix = [
+                1 => [1, 1, 1, 1, 2], // Muito improvável
+                2 => [1, 2, 2, 3, 3], // Improvável
+                3 => [1, 2, 3, 3, 3], // Possível
+                4 => [1, 2, 3, 4, 4], // Provável
+                5 => [2, 3, 3, 4, 5], // Muito provável
+            ];
+        } else {
+            $matrix = [
+                1 => [1, 1, 2, 3, 3], // Muito improvável
+                2 => [1, 2, 3, 3, 4], // Improvável
+                3 => [1, 2, 3, 4, 5], // Possível
+                4 => [2, 2, 3, 4, 5], // Provável
+                5 => [2, 3, 4, 5, 5], // Muito provável
+            ];
+        }
+        
 
         $risk = HSERisk::from($matrix[$probability][$severity - 1]);
 
