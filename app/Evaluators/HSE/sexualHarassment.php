@@ -18,7 +18,7 @@ class sexualHarassment
         $risk = HSERiskService::riskMatrix($probability['probability'], $gravity);
 
         if(session('auth:company')->has_cids && !$probability['hasCIDAbsences']){
-            $risk = HSERisk::from($risk->value - 1);
+            $risk = HSERisk::from((string) max(1, (int) $risk->value - 1));
         };
         
         return [
