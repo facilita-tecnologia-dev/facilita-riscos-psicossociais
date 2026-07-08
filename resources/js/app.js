@@ -143,16 +143,16 @@ function watchCNPJInputsToLiveFormat() {
         });
     }
 
-    // Format CNPJ
+    // Format CNPJ (aceita letras maiúsculas na raiz/ordem, formato alfanumérico da RFB)
     function formatCNPJ(cnpj) {
-        cnpj = cnpj.replace(/\D/g, "");
+        cnpj = cnpj.toUpperCase().replace(/[^A-Z0-9]/g, "");
 
         cnpj = cnpj.substring(0, 14);
 
-        cnpj = cnpj.replace(/^(\d{2})(\d)/, "$1.$2");
-        cnpj = cnpj.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-        cnpj = cnpj.replace(/\.(\d{3})(\d)/, ".$1/$2");
-        cnpj = cnpj.replace(/(\d{4})(\d)/, "$1-$2");
+        cnpj = cnpj.replace(/^([A-Z0-9]{2})([A-Z0-9])/, "$1.$2");
+        cnpj = cnpj.replace(/^([A-Z0-9]{2})\.([A-Z0-9]{3})([A-Z0-9])/, "$1.$2.$3");
+        cnpj = cnpj.replace(/\.([A-Z0-9]{3})([A-Z0-9])/, ".$1/$2");
+        cnpj = cnpj.replace(/([A-Z0-9]{4})([A-Z0-9])/, "$1-$2");
 
         return cnpj;
     }
