@@ -7,11 +7,19 @@ enum RiskInventoryCoverage: string
     case ALL_RISKS  = 'all_risks';
     case HIGH_RISKS = 'high_risks';
 
-    public function label(): string
+    public function default(): string
     {
         return match ($this) {
             self::ALL_RISKS => 'Todos',
             self::HIGH_RISKS => 'Substanciais e Intoleráveis',
+        };
+    }
+
+    public function aiha(): string
+    {
+        return match ($this) {
+            self::ALL_RISKS => 'Todos',
+            self::HIGH_RISKS => 'Altos e Muito Altos',
         };
     }
 

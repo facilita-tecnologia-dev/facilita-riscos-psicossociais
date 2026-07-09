@@ -119,7 +119,12 @@ class HSERiskService
 
     public static function riskMatrix(int $probability, int $severity)
     {
-        $usesAIHAMatrix = session('auth:company')->risk_matrix == HSERiskMatrix::AIHA;
+        $company = session('auth:company');
+
+        // TODO: temporário — reverter assim que o caso da empresa 47 com a matriz AIHA for resolvido.
+        $forceDefaultMatrix = app()->environment('production') && $company->id === 47;
+
+        $usesAIHAMatrix = $company->risk_matrix == HSERiskMatrix::AIHA && ! $forceDefaultMatrix;
 
         if($usesAIHAMatrix){
             $matrix = [

@@ -35,7 +35,6 @@
                         <div class="bg-borders flex w-full items-center gap-2 rounded-sm p-3">
                             <x-file-icon type="{{ $extension }}" />
                             <span class="font-text text-secondary-text flex-1 truncate text-sm font-normal md:text-base" title="{{ $filename }}">{{ $filename }}</span>
-                            <span class="font-text text-secondary-text truncate text-xs font-normal">{{ round($size / 1024 / 1024, 2) }}MB</span>
                         </div>
 
                         <div class="flex items-center">
@@ -108,9 +107,14 @@
                         </header>
                         <div class="grid w-full grid-cols-2 gap-2">
                             @foreach (App\Enums\Psychosocial\RiskInventoryCoverage::cases() as $coverage)
+                                @php
+                                    $label = session('auth:company')->risk_matrix == App\Enums\Psychosocial\HSE\HSERiskMatrix::AIHA
+                                                ? $coverage->aiha()
+                                                : $coverage->default(); 
+                                @endphp
                                 <label class="border-borders has-checked:bg-primary-solid hover:bg-secondary-background flex cursor-pointer items-center justify-center rounded-md border py-2 transition">
                                     <input type="radio" wire:model="coverage" id="pdf" value="{{ $coverage->value }}" class="peer hidden" />
-                                    <span class="text-main-text peer-checked:text-main-background text-center text-sm font-normal transition">{{ $coverage->label() }}</span>
+                                    <span class="text-main-text peer-checked:text-main-background text-center text-sm font-normal transition">{{ $label }}</span>
                                 </label>
                             @endforeach
                         </div>

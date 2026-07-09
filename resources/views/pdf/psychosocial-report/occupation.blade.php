@@ -104,7 +104,7 @@
                                 <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->aihaColor() }};">Moderado</td>
                                 <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::MODERATE->aihaColor() }};">Moderado</td>
                                 <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::SUBSTANTIAL->aihaColor() }};">Alto</td>
-                                <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::INTOLERABLE->aihaColor() }};">Muito Alto</td>
+                                <td style="background-color: {{ App\Enums\Psychosocial\HSE\HSERisk::INTOLERABLE->aihaColor() }}; color: #FFFFFF;">Muito Alto</td>
                             </tr>
                             <tr>
                                 <td style="background-color: #E0E0E0;">Irreversível</td>
@@ -237,6 +237,10 @@
                                         $riskColor = $company->risk_matrix == App\Enums\Psychosocial\HSE\HSERiskMatrix::AIHA
                                                 ? $risk['risk']['evaluated']->aihaColor()
                                                 : $risk['risk']['evaluated']->defaultColor();
+
+                                        $textColor = $company->risk_matrix == App\Enums\Psychosocial\HSE\HSERiskMatrix::AIHA
+                                                ? ($risk['risk']['evaluated'] === App\Enums\Psychosocial\HSE\HSERisk::INTOLERABLE ? '#FFFFFF' : 'initial')
+                                                : 'initial';
                                         
                                         $message = $company->risk_matrix == App\Enums\Psychosocial\HSE\HSERiskMatrix::AIHA
                                             ? $risk['risk']['evaluated']->aihaMessage()
@@ -257,8 +261,14 @@
                                         <span style="font-weight: bold; margin: 2px">{{ $probability }}</span>
                                     </td>
                                     <td style="width: 20%; background-color: {{ $riskColor }}">
-                                        <p>Risco Identificado:</p>
-                                        <span style="font-weight: bold; margin: 2px">{{ $finalRisk}}</span>
+                                        <p style="color:{{ $textColor }}}}">
+                                            Risco Identificado:
+                                        </p>
+                                        <span 
+                                            style="font-weight: bold; margin: 2px; color:{{ $textColor }}}}"
+                                        >
+                                            {{ $finalRisk }}
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>

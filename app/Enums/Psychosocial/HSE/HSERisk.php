@@ -46,11 +46,11 @@ enum HSERisk: string
     public function aihaColor(): string
     {
         return match ($this) {
-            self::INTOLERABLE => '#8D8484',
-            self::SUBSTANTIAL => '#EB2B20',
-            self::MODERATE => '#F0A23D',
-            self::TOLERABLE => '#E8DD0A',
-            self::TRIVIAL => '#46C41E',
+            self::INTOLERABLE => '#100F0F',
+            self::SUBSTANTIAL => '#F20D0D',
+            self::MODERATE => '#F5A029',
+            self::TOLERABLE => '#F4ED1F',
+            self::TRIVIAL => '#48ED0C',
         };
     }
 
