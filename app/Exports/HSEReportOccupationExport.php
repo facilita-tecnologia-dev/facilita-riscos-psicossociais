@@ -86,15 +86,15 @@ class HSEReportOccupationExport implements FromCollection, WithEvents
 
             foreach ($occupationRisks as $groups) {
                 foreach ($groups as $hazard => $risk) {
-                    $probability = session('auth:company')->risk_matrix == HSERiskMatrix::AIHA 
+                    $probability = $this->company->risk_matrix == HSERiskMatrix::AIHA
                                         ? HSEProbability::from($risk['risk']['probability'])->aiha()
                                         : HSEProbability::from($risk['risk']['probability'])->default();
-                                        
-                    $severity = session('auth:company')->risk_matrix == HSERiskMatrix::AIHA 
+
+                    $severity = $this->company->risk_matrix == HSERiskMatrix::AIHA
                                         ? HSEGravity::from($risk['risk']['gravity'])->aiha()
                                         : HSEGravity::from($risk['risk']['gravity'])->default();
 
-                    $finalRisk = session('auth:company')->risk_matrix == HSERiskMatrix::AIHA 
+                    $finalRisk = $this->company->risk_matrix == HSERiskMatrix::AIHA
                                         ? $risk['risk']['evaluated']->aiha()
                                         : $risk['risk']['evaluated']->default();
 
