@@ -7,8 +7,8 @@
         <nav class="hidden flex-1 flex-shrink-0 items-center justify-center gap-8 lg:flex">
             <x-site.nav-item label="Início" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'hero-section\')' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" />
             <x-site.nav-item label="Como funciona" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'how-it-works\', 112)' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" />
-            <x-site.nav-item label="Assinar" :href="route('company.register')" />
             <x-site.nav-item label="Nossa metodologia" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'our-metodology\', 112)' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" />
+            <x-site.nav-item label="Assinar" :href="route('company.register')" />
         </nav>
 
         <div class="hidden flex-1 justify-end gap-3 lg:flex">
@@ -39,8 +39,8 @@
             <nav class="flex w-full flex-col items-start gap-4">
                 <x-site.nav-item label="Início" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'hero-section\')' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" @click="isMenuMobileOpen = false" />
                 <x-site.nav-item label="Como funciona" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'how-it-works\', 90)' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" @click="isMenuMobileOpen = false" />
-                <x-site.nav-item label="Assinar" :href="route('company.register')" @click="isMenuMobileOpen = false" />
                 <x-site.nav-item label="Nossa metodologia" onclick="{{ request()->routeIs('site.home') ? 'scrollToY(event, \'our-metodology\', 90)' : null }}" :href="request()->routeIs('site.home') ? null : route('site.home')" @click="isMenuMobileOpen = false" />
+                <x-site.nav-item label="Assinar" :href="route('company.register')" @click="isMenuMobileOpen = false" />
             </nav>
 
             <div class="w-full space-y-4">
