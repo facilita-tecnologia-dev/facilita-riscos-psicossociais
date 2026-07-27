@@ -59,7 +59,8 @@
                 <img src="{{ $companyLogo }}" style="height: 90px; margin-bottom:24px;" alt="Logomarca" />
             @endif
 
-            <h2 style="margin-bottom: 18px">{{ $company->name }}</h2>
+            <h2 style="margin-bottom: 4px">{{ $company->name }}</h2>
+            <p style="margin-bottom: 18px; font-size: 12px">CNPJ: {{ $company->cnpj }}</p>
             <h1 style="margin-bottom: 8px; font-size: 32px">Inventário de Riscos Psicossociais</h1>
             <p style="font-size: 16px">Resultado detalhado da avaliação de riscos psicossociais divido por setor.</p>
         </x-pdf.cover>
