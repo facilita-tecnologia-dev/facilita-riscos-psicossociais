@@ -65,6 +65,14 @@ class PagSeguroService
                 ->acceptJson()
                 ->get(self::baseUrl() . '/public-keys/card');
 
+            // A chave pública só existe após ser criada uma vez por conta/ambiente; se ainda não
+            // existir, a consulta retorna 404 e precisamos criá-la antes de seguir.
+            if ($response->status() === 404) {
+                $response = Http::withToken(config('services.pagseguro.token'))
+                    ->acceptJson()
+                    ->post(self::baseUrl() . '/public-keys', ['type' => 'card']);
+            }
+
             if (! $response->successful()) {
                 Log::error('PagSeguro public key error', [
                     'status' => $response->status(),
