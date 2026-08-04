@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PagSeguroService
 {
@@ -65,7 +66,13 @@ class PagSeguroService
                 ->get(self::baseUrl() . '/public-keys/card');
 
             if (! $response->successful()) {
-                throw new \Exception('PagSeguro public key error: ' . $response->body());
+                Log::error('PagSeguro public key error', [
+                    'status' => $response->status(),
+                    'headers' => $response->headers(),
+                    'body' => $response->body(),
+                ]);
+
+                throw new \Exception('PagSeguro public key error: status ' . $response->status() . ' - ' . $response->body());
             }
 
             return $response->json('public_key');
