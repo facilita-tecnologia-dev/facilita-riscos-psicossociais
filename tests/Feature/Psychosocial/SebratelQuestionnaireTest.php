@@ -94,6 +94,23 @@ describe('Company: formulário vs. motor de avaliação', function () {
             ->and($company->psychosocialCollection()->hazards()->count())->toBe(0);
     });
 
+    it('expõe o texto de metodologia correto por formulário', function () {
+        $standard = Company::factory()->create([
+            'psychosocial_collection_type' => MetodologyType::HSE->value,
+            'psychosocial_questionnaire' => PsychosocialQuestionnaire::STANDARD,
+        ]);
+        $sebratel = Company::factory()->create([
+            'psychosocial_collection_type' => MetodologyType::HSE->value,
+            'psychosocial_questionnaire' => PsychosocialQuestionnaire::SB_BASED_ON_HSE,
+        ]);
+
+        expect($standard->psychosocialMethodologyStatement())->toContain('HSE-IT (Health and Safety Executive');
+        expect($sebratel->psychosocialMethodologyStatement())
+            ->toContain('baseada nos HSE Management Standards')
+            ->toContain('GRO/NR-01')
+            ->not->toContain('HSE-IT');
+    });
+
     it('só permite trocar o formulário enquanto a conta não tem campanhas', function () {
         $company = Company::factory()->create([
             'psychosocial_collection_type' => MetodologyType::HSE->value,

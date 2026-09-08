@@ -222,6 +222,20 @@ class Company extends Authenticatable
     }
 
     /**
+     * Texto de metodologia para documentos/telas com contexto de empresa.
+     * Único ponto a alterar quando a redação legal mudar.
+     */
+    public function psychosocialMethodologyStatement(): string
+    {
+        return ($this->psychosocial_questionnaire ?? PsychosocialQuestionnaire::STANDARD)->methodologyStatement();
+    }
+
+    public function psychosocialMethodologyName(): string
+    {
+        return ($this->psychosocial_questionnaire ?? PsychosocialQuestionnaire::STANDARD)->methodologyName();
+    }
+
+    /**
      * O formulário só pode ser trocado enquanto a conta não tiver nenhuma
      * campanha — trocar depois misturaria formulários entre respondentes e
      * reinterpretaria dados já coletados.

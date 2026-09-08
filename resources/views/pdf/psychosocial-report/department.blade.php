@@ -77,12 +77,7 @@
             <div style="margin-bottom: 24px">
                 <h2 style="margin-bottom: 16px">Metodologia</h2>
 
-                @if($company->usesSebratelQuestionnaire())
-                    {{-- TODO(jurídico): revisar a redação abaixo antes de liberar o formulário Sebratel em produção. --}}
-                    <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">A avaliação dos riscos psicossociais é realizada a partir de um questionário próprio (Sebratel), estruturado nos grupos de fatores psicossociais reconhecidos internacionalmente para a análise de riscos no ambiente de trabalho. As respostas são coletadas por meio de formulários padronizados e tratadas de forma agregada, permitindo a avaliação de contextos organizacionais — por setor e função — e não de indivíduos. Um mecanismo técnico classifica os resultados conforme critérios específicos para cada tipo de perigo, podendo considerar informações complementares de saúde ocupacional quando disponíveis, assegurando coerência normativa e consistência técnica na identificação dos níveis de risco, em conformidade com a NR-1.</p>
-                @else
-                    <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">A metodologia adotada para a avaliação dos riscos psicossociais é baseada no modelo HSE-IT (Health and Safety Executive - Indicator Tool), reconhecido internacionalmente para a análise de fatores psicossociais no ambiente de trabalho. Ela se fundamenta na organização e análise estruturada das respostas coletadas por meio de formulários padronizados, considerando grupos de perigos previamente definidos e fatores organizacionais como setor e função. Os dados são tratados de forma agregada, permitindo a avaliação de contextos organizacionais, e não de indivíduos. A partir dessa estrutura, um mecanismo técnico realiza a análise dos resultados conforme critérios específicos para cada tipo de perigo, podendo considerar informações complementares de saúde ocupacional quando disponíveis, assegurando coerência normativa, consistência técnica e maior precisão na identificação dos níveis de risco.</p>
-                @endif
+                <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">{{ $company->psychosocialMethodologyStatement() }}</p>
             </div>
 
             <div style="margin-bottom: 24px">
