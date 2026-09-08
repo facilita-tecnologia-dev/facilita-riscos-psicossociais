@@ -15,9 +15,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('companies', function (Blueprint $table) {
+            // Sem ->after() de propósito: adicionar no fim da tabela permite
+            // ALGORITHM=INSTANT no MySQL/MariaDB, evitando lock em produção.
             $table->enum('psychosocial_questionnaire', PsychosocialQuestionnaire::values())
-                ->default(PsychosocialQuestionnaire::STANDARD->value)
-                ->after('psychosocial_collection_type');
+                ->default(PsychosocialQuestionnaire::STANDARD->value);
         });
     }
 
