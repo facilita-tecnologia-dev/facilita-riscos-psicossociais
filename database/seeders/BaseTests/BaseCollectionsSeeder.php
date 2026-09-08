@@ -11,6 +11,7 @@ use Database\Seeders\BaseTests\HSEQuestions\DemandsSeeder;
 use Database\Seeders\BaseTests\HSEQuestions\RelationshipsSeeder;
 use Database\Seeders\BaseTests\HSEQuestions\RoleSeeder;
 use Database\Seeders\BaseTests\HSEQuestions\SupportSeeder;
+use Database\Seeders\BaseTests\SBHSEQuestions\SBHSECollectionSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\CommunicationAndInformationSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\DevelopmentCarreerRecognitionSeeder;
 use Database\Seeders\BaseTests\OrganizationalQuestions\EngagementAndPrideSeeder;
@@ -62,7 +63,10 @@ class BaseCollectionsSeeder extends Seeder
             RelationshipsSeeder::class,
             RoleSeeder::class,
             ChangeSeeder::class,
-            
+
+            // HSE - formulário Sebratel (avaliado pelo motor HSE)
+            SBHSECollectionSeeder::class,
+
 
             // Organizational
             WorkConditionsSeeder::class,

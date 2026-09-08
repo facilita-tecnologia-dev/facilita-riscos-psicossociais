@@ -17,7 +17,15 @@ class DocumentationIndexComponent extends Component
         /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
         $s3 = Storage::disk('s3');
         
-        $file_path = config('app.aws-documentation-path') . '/' . (session('auth:company')->usesHSE() ? 'metodologia/riscos-psicossociais-hse.pdf' : 'metodologia/riscos-psicossociais-proart.pdf');;
+        $company = session('auth:company');
+
+        $metodologyFile = match (true) {
+            $company->usesSebratelQuestionnaire() => 'metodologia/riscos-psicossociais-sebratel.pdf',
+            $company->usesHSE() => 'metodologia/riscos-psicossociais-hse.pdf',
+            default => 'metodologia/riscos-psicossociais-proart.pdf',
+        };
+
+        $file_path = config('app.aws-documentation-path') . '/' . $metodologyFile;
 
         if (! $s3->exists($file_path)) {
             $this->dispatch('alert:danger', 'Arquivo não encontrado, tente novamente mais tarde.');

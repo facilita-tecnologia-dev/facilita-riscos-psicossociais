@@ -77,7 +77,7 @@
             <div style="margin-bottom: 24px">
                 <h2 style="margin-bottom: 16px">Metodologia</h2>
 
-                <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">A metodologia adotada para a avaliação dos riscos psicossociais é baseada no modelo HSE-IT (Health and Safety Executive - Indicator Tool), reconhecido internacionalmente para a análise de fatores psicossociais no ambiente de trabalho. Ela se fundamenta na organização e análise estruturada das respostas coletadas por meio de formulários padronizados, considerando grupos de perigos previamente definidos e fatores organizacionais como setor e função. Os dados são tratados de forma agregada, permitindo a avaliação de contextos organizacionais, e não de indivíduos. A partir dessa estrutura, um mecanismo técnico realiza a análise dos resultados conforme critérios específicos para cada tipo de perigo, podendo considerar informações complementares de saúde ocupacional quando disponíveis, assegurando coerência normativa, consistência técnica e maior precisão na identificação dos níveis de risco.</p>
+                <p style="font-size: 1rem; line-height: 1.4em; color: #333; text-align: justify;">{{ $company->psychosocialMethodologyStatement() }}</p>
             </div>
 
             <div style="margin-bottom: 24px">

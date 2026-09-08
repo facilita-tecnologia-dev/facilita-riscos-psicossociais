@@ -36,8 +36,11 @@ class PsychosocialDashboardComponent extends Component
                                         ->get();
 
         // 1° pegar campanhas do HSE dividido por ano
-        $HSEBaseCollection = $basePsychosocialCollections->where('key', MetodologyType::HSE)?->first();
-        $HSECampaigns = $psychosocialCampaigns->where('collection_id', $HSEBaseCollection->id)->groupBy(fn($campaign) => $campaign->start_date->format('Y'));
+        // Inclui o formulário Sebratel (sb-based-on-hse), que é avaliado pelo motor HSE.
+        $HSECollectionIds = $basePsychosocialCollections
+            ->whereIn('key', [MetodologyType::HSE->value, MetodologyType::SB_BASED_ON_HSE->value])
+            ->pluck('id');
+        $HSECampaigns = $psychosocialCampaigns->whereIn('collection_id', $HSECollectionIds)->groupBy(fn($campaign) => $campaign->start_date->format('Y'));
         $HSECampaignsByYear = $years->mapWithKeys(fn($year) => [$year => $HSECampaigns->get($year, collect())]);
 
         // 2° pegar campanhas do PROART dividido por ano

@@ -10,7 +10,7 @@
 
     @include('cms.private.psychosocial.dashboard.info-card.index', [
         'title' => 'Campanhas de Psicossociais (HSE)',
-        'tooltip' => 'Esse card mostra a quantidade de Campanhas de Riscos Psicossociais realizadas no sistema utilizando a metodologia HSE.',
+        'tooltip' => 'Esse card mostra a quantidade de Campanhas de Riscos Psicossociais realizadas no sistema avaliadas pelo motor HSE (formulário HSE padrão + formulário Sebratel).',
         'main' => ['label' => 'Total', 'value' => $HSECampaigns['total']],
         'years' => $HSECampaigns['lastYears'],
     ])
@@ -33,7 +33,7 @@
 
     @include('cms.private.psychosocial.dashboard.info-card.index', [
         'title' => 'Usuários Avaliados  (HSE)',
-        'tooltip' => 'Esse card mostra a quantidade de usuários cujos riscos psicossociais foram avaliados utilizando a metodologia HSE.',
+        'tooltip' => 'Esse card mostra a quantidade de usuários cujos riscos psicossociais foram avaliados pelo motor HSE (formulário HSE padrão + formulário Sebratel).',
         'main' => ['label' => 'Total', 'value' => $HSEEvaluatedUsers['total']],
         'years' => $HSEEvaluatedUsers['lastYears'],
     ])

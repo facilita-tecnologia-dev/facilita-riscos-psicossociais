@@ -5,6 +5,7 @@ namespace App\Livewire\Cms\Private\Psychosocial\Company;
 use App\Enums\Campaign\MetodologyType;
 use App\Enums\Psychosocial\HSE\HSERiskMatrix;
 use App\Enums\Psychosocial\PROART\PROARTHazard;
+use App\Enums\Psychosocial\PsychosocialQuestionnaire;
 use App\Enums\Subscription\AccessStatus;
 use App\Enums\Subscription\SubscriptionStatus;
 use App\Models\BaseControlAction;
@@ -33,11 +34,13 @@ class CompanyCreateComponent extends Component
     public ?string $cnpj = null;
     public ?string $email = null;
     public ?string $psychosocialMetodology = MetodologyType::HSE->value;
+    public ?string $psychosocialQuestionnaire = PsychosocialQuestionnaire::STANDARD->value;
     public ?string $riskMatrix = HSERiskMatrix::DEFAULT->value;
     public ?string $password = null;
     public ?string $passwordConfirmation = null;
 
     public array $riskMatrixes;
+    public array $psychosocialQuestionnaires;
 
     public function render()
     {
@@ -47,6 +50,10 @@ class CompanyCreateComponent extends Component
     public function mount()
     {
         $this->riskMatrixes = array_map(fn ($userOrderType) => ['label' => $userOrderType->label(), 'value' => $userOrderType->value], HSERiskMatrix::cases());
+        $this->psychosocialQuestionnaires = array_map(
+            fn (PsychosocialQuestionnaire $q) => ['label' => $q->label(), 'value' => $q->value],
+            PsychosocialQuestionnaire::cases()
+        );
     }
 
     public function submit()
@@ -57,6 +64,7 @@ class CompanyCreateComponent extends Component
             'cnpj' => ['required', 'max:18', new ValidateCNPJ],
             'email' => ['required', 'email', 'max:100'],
             'riskMatrix' => ['required', new Enum(HSERiskMatrix::class)],
+            'psychosocialQuestionnaire' => ['required', new Enum(PsychosocialQuestionnaire::class)],
             'password' => ['required', 'string', 'max:100', Password::defaults()],
             'passwordConfirmation' => ['required', 'string', 'same:password', 'max:100'],
         ]);
@@ -77,6 +85,7 @@ class CompanyCreateComponent extends Component
             'email' => $this->email,
             'cnpj' => $this->cnpj,
             'psychosocial_collection_type' => $this->psychosocialMetodology,
+            'psychosocial_questionnaire' => $this->psychosocialQuestionnaire,
             'risk_matrix' => $this->riskMatrix,
             'password' => $this->password,
 

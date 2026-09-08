@@ -10,6 +10,17 @@
             <x-form.select wireModel="riskMatrix" name="riskMatrix" label="Matriz de Risco" placeholder="Selecione a matriz" tooltip="Selecione a matriz de riscos que será utilizada pela empresa" :options="$riskMatrixes" isRequired />
         </div>
 
+        @if ($companyUsesHSE)
+            <div class="col-span-3">
+                @if ($canSwitchQuestionnaire)
+                    <x-form.select wireModel="psychosocialQuestionnaire" name="psychosocialQuestionnaire" label="Formulário do questionário" placeholder="Selecione o formulário" tooltip="Define qual questionário os funcionários respondem. A avaliação de risco continua sendo feita pelo motor HSE. Só pode ser alterado enquanto a conta não tiver nenhuma campanha." :options="$psychosocialQuestionnaires" isRequired />
+                @else
+                    <x-info-item label="Formulário do questionário" :value="$psychosocialQuestionnaireLabel" truncate />
+                    <span class="font-text text-secondary-text mt-1 block text-left text-xs font-normal">Não pode mais ser alterado: a conta já possui campanhas.</span>
+                @endif
+            </div>
+        @endif
+
         <x-info-item label="Qtd. de funcionários ativos" :value="$usersCount . ' funcionários'" truncate />
         <x-info-item label="{{ 'Campanha de Riscos Psicossociais ' . now()->year }}" :value="$psychosocialCampaignStatus" truncate />
         <x-info-item label="Facilita Canal de Denúncias" value="{{ $hasReportChannel ? 'Sim' : 'Não' }}" truncate />

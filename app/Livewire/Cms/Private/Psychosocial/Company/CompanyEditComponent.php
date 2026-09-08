@@ -3,6 +3,7 @@
 namespace App\Livewire\Cms\Private\Psychosocial\Company;
 
 use App\Enums\Psychosocial\HSE\HSERiskMatrix;
+use App\Enums\Psychosocial\PsychosocialQuestionnaire;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
 use App\Rules\ValidateCNPJ;
@@ -36,6 +37,12 @@ class CompanyEditComponent extends Component
 
     public array $riskMatrixes;
 
+    public bool $companyUsesHSE;
+    public bool $canSwitchQuestionnaire;
+    public string $psychosocialQuestionnaire;
+    public string $psychosocialQuestionnaireLabel;
+    public array $psychosocialQuestionnaires;
+
     public function render()
     {
         return view('livewire.cms.private.psychosocial.company.company-edit-component');
@@ -62,6 +69,16 @@ class CompanyEditComponent extends Component
         $this->hasReportChannel = ReportChannelService::hasReportChannel($company);
 
         $this->riskMatrixes = array_map(fn ($userOrderType) => ['label' => $userOrderType->label(), 'value' => $userOrderType->value], HSERiskMatrix::cases());
+
+        $questionnaire = $company->psychosocial_questionnaire ?? PsychosocialQuestionnaire::STANDARD;
+        $this->companyUsesHSE = $company->usesHSE();
+        $this->canSwitchQuestionnaire = $company->canSwitchPsychosocialQuestionnaire();
+        $this->psychosocialQuestionnaire = $questionnaire->value;
+        $this->psychosocialQuestionnaireLabel = $questionnaire->label();
+        $this->psychosocialQuestionnaires = array_map(
+            fn (PsychosocialQuestionnaire $q) => ['label' => $q->label(), 'value' => $q->value],
+            PsychosocialQuestionnaire::cases()
+        );
     }
 
     public function submit()
@@ -71,13 +88,29 @@ class CompanyEditComponent extends Component
             'registerName' => ['required', 'string', 'max:255'],
             'cnpj' => ['required', 'max:18', new ValidateCNPJ],
             'riskMatrix' => ['required', new Enum(HSERiskMatrix::class)],
+            'psychosocialQuestionnaire' => ['required', new Enum(PsychosocialQuestionnaire::class)],
             'email' => ['required', 'email', 'max:100'],
         ]);
+
+        // O formulário só pode ser trocado enquanto a conta não tem campanhas
+        // e a empresa usa o motor HSE. Fora disso, a escolha submetida é ignorada.
+        $canChangeQuestionnaire = $this->companyUsesHSE
+            && $this->canSwitchQuestionnaire
+            && $this->psychosocialQuestionnaire !== $this->company->psychosocial_questionnaire?->value;
+
+        if ($canChangeQuestionnaire && ! $this->company->canSwitchPsychosocialQuestionnaire()) {
+            $this->dispatch('alert:danger', 'O formulário não pode mais ser alterado: a conta já possui campanhas.');
+            return;
+        }
 
         try {
             $this->company = CompanyRepository::update($this->company, $validatedData);
 
             $this->company->update(['risk_matrix' => $this->riskMatrix]);
+
+            if ($canChangeQuestionnaire) {
+                $this->company->update(['psychosocial_questionnaire' => $this->psychosocialQuestionnaire]);
+            }
     
             /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
             $s3 = Storage::disk('s3');

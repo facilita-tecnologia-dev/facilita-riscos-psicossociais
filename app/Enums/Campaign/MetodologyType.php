@@ -11,6 +11,7 @@ enum MetodologyType: string
     case PROART = 'proart';
     case HSE = 'hse';
     case ORGANIZATIONAL = 'organizational-climate';
+    case SB_BASED_ON_HSE = 'sb-based-on-hse';
 
     public function label(): string
     {
@@ -18,6 +19,7 @@ enum MetodologyType: string
             self::PROART => 'PROART',
             self::HSE => 'HSE',
             self::ORGANIZATIONAL => 'Clima Organizacional',
+            self::SB_BASED_ON_HSE => 'Sebratel (baseado no HSE)',
         };
     }
 

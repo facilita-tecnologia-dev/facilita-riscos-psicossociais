@@ -80,7 +80,9 @@ class PsychosocialService
         session('auth:company', [session('auth:company')->load(['actionPlan', 'CIDAbsences', 'organizationalIndicators.indicator'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
-        $hazards = $campaign->collection()->hazards->groupBy('group');
+        // Os perigos vêm sempre da coleção de avaliação (HSE), mesmo quando o
+        // formulário respondido é o Sebratel (coleção sb-based-on-hse, sem perigos).
+        $hazards = session('auth:company')->evaluationCollection()->hazards->groupBy('group');
 
         $risks = $campaign->collection()
                         ->questions()
@@ -175,7 +177,9 @@ class PsychosocialService
         session('auth:company', [session('auth:company')->load(['actionPlan', 'CIDAbsences', 'organizationalIndicators.indicator'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
-        $hazards = $campaign->collection()->hazards->groupBy('group');
+        // Os perigos vêm sempre da coleção de avaliação (HSE), mesmo quando o
+        // formulário respondido é o Sebratel (coleção sb-based-on-hse, sem perigos).
+        $hazards = session('auth:company')->evaluationCollection()->hazards->groupBy('group');
 
         $risks = $campaign->collection()
                         ->questions()
@@ -275,7 +279,9 @@ class PsychosocialService
         session('auth:company', [session('auth:company')->load(['organiaztionalIndicators', 'actionPlan'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
-        $hazards = $campaign->collection()->hazards->groupBy('group');
+        // Os perigos vêm sempre da coleção de avaliação (HSE), mesmo quando o
+        // formulário respondido é o Sebratel (coleção sb-based-on-hse, sem perigos).
+        $hazards = session('auth:company')->evaluationCollection()->hazards->groupBy('group');
 
         $risks = $campaign->collection()
                         ->questions()
@@ -371,7 +377,9 @@ class PsychosocialService
         session('auth:company', [session('auth:company')->load(['organiaztionalIndicators', 'actionPlan'])]);
         session('auth:company')->setRelation('reports', session('auth:company')->getReports());
 
-        $hazards = $campaign->collection()->hazards->groupBy('group');
+        // Os perigos vêm sempre da coleção de avaliação (HSE), mesmo quando o
+        // formulário respondido é o Sebratel (coleção sb-based-on-hse, sem perigos).
+        $hazards = session('auth:company')->evaluationCollection()->hazards->groupBy('group');
 
         $risks = $campaign->collection()
                         ->questions()
