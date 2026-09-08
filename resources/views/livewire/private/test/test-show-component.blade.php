@@ -113,7 +113,7 @@
                         <div class="flex flex-col gap-2">
                             @php
                                 $collection = $campaign->collection();
-                                $options = ($collection->type->value == 'psychosocial-risks' ?  ($collection->key == 'hse' 
+                                $options = ($collection->type->value == 'psychosocial-risks' ?  (in_array($collection->key, ['hse', 'sb-based-on-hse'], true)
                                         ? array_map(fn($option) => ['label' => $option->label(), 'value' => $questions[$current]['inverted'] ? $option->inverted() : $option->value] , App\Enums\Psychosocial\HSE\HSEOption::cases())
                                         : array_map(fn($option) => ['label' => $option->label(), 'value' => $questions[$current]['inverted'] ? $option->inverted() : $option->value] , App\Enums\Psychosocial\PROART\PROARTOption::cases())
                                     )

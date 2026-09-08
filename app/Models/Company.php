@@ -17,6 +17,7 @@ use App\Enums\Campaign\MetodologyType;
 use App\Enums\Campaign\CollectionType;
 use App\Enums\Campaign\CollectionCategory;
 use App\Enums\Psychosocial\HSE\HSERiskMatrix;
+use App\Enums\Psychosocial\PsychosocialQuestionnaire;
 use App\Enums\Subscription\AccessStatus;
 use App\Enums\Subscription\SubscriptionStatus;
 use App\Enums\Subscription\TrialExpiredReason;
@@ -30,6 +31,7 @@ class Company extends Authenticatable
     protected $table = 'companies';
 
     protected BaseCollection $psychosocialCollection;
+    protected BaseCollection $evaluationCollection;
     protected BaseCollection $organizationalCollection;
 
     // Get the attributes that should be cast.
@@ -46,6 +48,7 @@ class Company extends Authenticatable
             'has_cids' => 'boolean',
             'billing_managed_externally' => 'boolean',
             'risk_matrix' => HSERiskMatrix::class,
+            'psychosocial_questionnaire' => PsychosocialQuestionnaire::class,
         ];
     }
 
@@ -182,13 +185,50 @@ class Company extends Authenticatable
 
     /* --- End Relations --- */
 
+    /**
+     * Coleção do FORMULÁRIO respondido pelos funcionários. Pode ser o formulário
+     * padrão da metodologia (HSE/PROART) ou o formulário Sebratel — este último
+     * ainda avaliado pelo motor HSE (ver evaluationCollection()).
+     */
     public function psychosocialCollection()
     {
         if(!isset($this->psychosocialCollection)){
-            $this->psychosocialCollection = BaseCollection::firstWhere('key', $this->psychosocial_collection_type);
+            $questionnaire = $this->psychosocial_questionnaire ?? PsychosocialQuestionnaire::STANDARD;
+            $key = $questionnaire->collectionKey($this->psychosocial_collection_type);
+
+            $this->psychosocialCollection = BaseCollection::firstWhere('key', $key);
         }
-     
+
         return $this->psychosocialCollection;
+    }
+
+    /**
+     * Coleção que define o MOTOR DE AVALIAÇÃO (perigos, evaluators, matriz).
+     * Sempre segue psychosocial_collection_type, independentemente do formulário
+     * respondido. Usada pelo PsychosocialService para carregar os perigos.
+     */
+    public function evaluationCollection()
+    {
+        if(!isset($this->evaluationCollection)){
+            $this->evaluationCollection = BaseCollection::firstWhere('key', $this->psychosocial_collection_type);
+        }
+
+        return $this->evaluationCollection;
+    }
+
+    public function usesSebratelQuestionnaire(): bool
+    {
+        return ($this->psychosocial_questionnaire ?? PsychosocialQuestionnaire::STANDARD) === PsychosocialQuestionnaire::SB_BASED_ON_HSE;
+    }
+
+    /**
+     * O formulário só pode ser trocado enquanto a conta não tiver nenhuma
+     * campanha — trocar depois misturaria formulários entre respondentes e
+     * reinterpretaria dados já coletados.
+     */
+    public function canSwitchPsychosocialQuestionnaire(): bool
+    {
+        return $this->campaigns()->doesntExist();
     }
 
     public function organizationalCollection()
