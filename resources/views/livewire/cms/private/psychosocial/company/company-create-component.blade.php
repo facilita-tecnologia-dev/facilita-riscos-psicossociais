@@ -23,6 +23,8 @@
 
             <x-form.select wireModel="riskMatrix" name="riskMatrix" label="Matriz de Risco" placeholder="Selecione a matriz" tooltip="Selecione a matriz de riscos que será utilizada pela empresa" :options="$riskMatrixes" isRequired />
 
+            <x-form.select wireModel="psychosocialQuestionnaire" name="psychosocialQuestionnaire" label="Formulário do questionário" placeholder="Selecione o formulário" tooltip="Define qual questionário os funcionários respondem. A avaliação de risco continua sendo feita pelo motor HSE. Depois de a conta ter campanhas, não pode mais ser alterado." :options="$psychosocialQuestionnaires" isRequired />
+
             <x-form.input-text wireModel="password" name="password" label="Senha" placeholder="Digite a senha..." tooltip="Crie uma senha de 8 a 30 caracteres, com pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial para maior segurança" isRequired isPassword />
             <x-form.input-text wireModel="passwordConfirmation" name="passwordConfirmation" label="Confirme a senha" placeholder="Confirme a senha..." tooltip="Confirme a senha que você criou" isRequired isPassword />
         </div>

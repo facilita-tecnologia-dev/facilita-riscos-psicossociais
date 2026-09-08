@@ -26,7 +26,7 @@ enum PsychosocialQuestionnaire: string
     public function label(): string
     {
         return match ($this) {
-            self::STANDARD => 'Padrão',
+            self::STANDARD => 'HSE Original',
             self::SB_BASED_ON_HSE => 'Sebratel (baseado no HSE)',
         };
     }
