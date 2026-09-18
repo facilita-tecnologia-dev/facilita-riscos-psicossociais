@@ -22,7 +22,7 @@
                     </div>
                 </header>
 
-                @if($report->file_path && Storage::disk('s3')->exists($report->file_path))
+                @if($report?->file_path && Storage::disk('s3')->exists($report->file_path))
                     <div class="space-y-2">            
                         @php
                             $s3 = Storage::disk('s3');
