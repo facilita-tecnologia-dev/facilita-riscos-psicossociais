@@ -21,7 +21,7 @@
             </div>
 
 
-            @if($organizationalCampaign->status === App\Enums\Campaign\CampaignStatus::ACTIVE)
+            @if($organizationalCampaign->status === App\Enums\Campaign\CampaignStatus::IN_PROGRESS)
                 <div class="border-borders bg-main-background flex items-start gap-3 rounded-lg border px-4 py-3">
                     <x-icon icon="circle-question-mark" class="text-secondary-text h-5 w-5 object-contain shrink-0 mt-0.5" />
                     <span class="text-sm text-secondary-text text-left font-normal">Os resultados são atualizados à medida que os funcionários respondem. O dashboard mostra o <span class="font-semibold">índice de satisfação por dimensão</span> (liderança, comunicação, ambiente, etc.). Ao encerrar a campanha, é possível gerar relatórios e visualizar feedbacks escritos pelos funcionários.</span>
