@@ -54,4 +54,9 @@ return [
 
             'token' => env('PAGSEGURO_TOKEN'),
     ],
+    // Chave da API do Canal de Denúncias (Bearer), a mesma CANAL_API_TOKEN do Canal.
+    'report_channel' => [
+        'token' => env('REPORT_CHANNEL_TOKEN'),
+    ],
+
 ];

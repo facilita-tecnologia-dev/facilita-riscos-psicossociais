@@ -4,14 +4,21 @@ namespace App\Services\ReportChannel;
 
 use App\Enums\Psychosocial\PROART\PROARTHazard;
 use App\Models\Company;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class ReportChannelService
 {
+    /** O Canal só responde com a chave da API (CANAL_API_TOKEN lá, REPORT_CHANNEL_TOKEN aqui). */
+    private static function http(): PendingRequest
+    {
+        return Http::withToken((string) config('services.report_channel.token'));
+    }
+
     public static function reports(Company $company)
     {
-        $response = Http::post(env('REPORT_CHANNEL_URL') . '/api/company/reports', [
+        $response = self::http()->post(env('REPORT_CHANNEL_URL') . '/api/company/reports', [
             'cnpj' => $company->cnpj,
         ]); 
 
@@ -27,7 +34,7 @@ class ReportChannelService
     public static function hasReportChannel(Company $company)
     {
         try {
-        $response = Http::post(env('REPORT_CHANNEL_URL') . '/api/company/check', [
+        $response = self::http()->post(env('REPORT_CHANNEL_URL') . '/api/company/check', [
             'cnpj' => $company->cnpj,
         ]); 
 
@@ -50,25 +57,25 @@ class ReportChannelService
 
     public static function allReports()
     {
-        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/report/all'); 
+        $response = self::http()->get(env('REPORT_CHANNEL_URL') . '/api/data/report/all'); 
         return $response->json();
     }
 
     public static function companies(?array $filters = null)
     {
-        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/company', $filters); 
+        $response = self::http()->get(env('REPORT_CHANNEL_URL') . '/api/data/company', $filters); 
         return $response->json();
     }
 
     public static function company(string $companyID)
     {
-        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID); 
+        $response = self::http()->get(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID); 
         return $response->json();
     }
 
     public static function companyCreate(array $formData)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->post(env('REPORT_CHANNEL_URL') . '/api/data/company/create', $formData); 
 
@@ -77,7 +84,7 @@ class ReportChannelService
 
     public static function companyUpdate(string $companyID, array $formData)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/update', $formData); 
 
@@ -86,7 +93,7 @@ class ReportChannelService
 
     public static function companyAccessConfig(string $companyID, array $formData)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/access', $formData); 
 
@@ -95,7 +102,7 @@ class ReportChannelService
 
     public static function companyCommittee(string $companyID)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->get(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/committee'); 
 
@@ -104,7 +111,7 @@ class ReportChannelService
 
     public static function companyCommitteeAttach(string $companyID, string $userID, array $formData)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID .  "/committee/" . $userID . "/attach", $formData); 
 
@@ -113,7 +120,7 @@ class ReportChannelService
 
     public static function companyCommitteeDetach(string $companyID, string $userID)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID .  "/committee/" . $userID . "/detach"); 
 
@@ -122,7 +129,7 @@ class ReportChannelService
 
     public static function companyDepartments(string $companyID)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->get(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department'); 
 
@@ -131,7 +138,7 @@ class ReportChannelService
 
     public static function companyDepartmentCreate(string $companyID, array $formData)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->post(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department/create', $formData); 
 
@@ -140,7 +147,7 @@ class ReportChannelService
 
     public static function companyDepartmentSoftDelete(string $companyID, string $departmentID)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->delete(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department/' . $departmentID . '/soft-delete'); 
 
@@ -149,7 +156,7 @@ class ReportChannelService
 
     public static function companyDepartmentForceDelete(string $companyID, string $departmentID)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->delete(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department/' . $departmentID . '/force-delete'); 
 
@@ -158,7 +165,7 @@ class ReportChannelService
 
     public static function companyDepartmentRestore(string $companyID, string $departmentID)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->put(env('REPORT_CHANNEL_URL') . '/api/data/company/' . $companyID . '/department/' . $departmentID . '/restore'); 
 
@@ -167,19 +174,19 @@ class ReportChannelService
 
     public static function users(array $filters)
     {
-        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/user', $filters); 
+        $response = self::http()->get(env('REPORT_CHANNEL_URL') . '/api/data/user', $filters); 
         return $response->json();
     }
 
     public static function user(string $userID)
     {
-        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID); 
+        $response = self::http()->get(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID); 
         return $response->json();
     }
 
     public static function userCreate(array $formData)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->post(env('REPORT_CHANNEL_URL') . '/api/data/user/create', $formData); 
 
@@ -188,7 +195,7 @@ class ReportChannelService
     
     public static function userUpdate(string $userID, array $formData)
     {
-        $response = Http::withHeaders([
+        $response = self::http()->withHeaders([
             'Accept' => 'application/json',
         ])->put(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID . '/update', $formData); 
 
@@ -197,7 +204,7 @@ class ReportChannelService
     
     public static function userCompanies(string $userID)
     {
-        $response = Http::get(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID . "/companies"); 
+        $response = self::http()->get(env('REPORT_CHANNEL_URL') . '/api/data/user/' . $userID . "/companies"); 
         return $response->json();
     }
 }
