@@ -18,6 +18,7 @@ use App\Http\Middleware\CmsGuestMiddleware;
 use App\Http\Middleware\EnsureCompanyCanCreateSubscription;
 use App\Http\Middleware\EnsureCompanyHasAccess;
 use App\Http\Middleware\GuestMiddleware;
+use App\Http\Middleware\MigrationNoticeMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'site.home.index')->name('site.home');
@@ -46,7 +47,7 @@ Route::middleware(GuestMiddleware::class)->group(function() {
     });
 });
 
-Route::middleware(AuthMiddleware::class)->group(function() {
+Route::middleware([AuthMiddleware::class, MigrationNoticeMiddleware::class])->group(function() {
     Route::middleware(EnsureCompanyCanCreateSubscription::class)->group(function(){
         Route::get('/assinatura', [CompanyController::class, 'subscription'])->name('company.subscription.index');
     });
